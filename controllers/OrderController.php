@@ -5216,10 +5216,11 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $postData=file_get_contents("php://input");
+        $postData=Yii::$app->request->post();
+
         if (!$postData)
         {
-            $postData=Yii::$app->request->post();
+            $postData=file_get_contents("php://input");
         }
         if ( is_array($postData) )
         {

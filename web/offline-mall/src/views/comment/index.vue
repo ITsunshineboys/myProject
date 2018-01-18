@@ -8,10 +8,12 @@
         <tab-item @on-item-click="tabHandler('poor')">差评 （{{count.poor}}）</tab-item>
       </tab>
     <divider></divider>
-    <usercomment v-for="item in comment_details" :key="item.id"
-                 :userIcon="item.icon || user_icon" :commentLevel="item.score" :commentDate="item.create_time"
-                 :userName="item.name" :content="item.content" :images="item.images"
-                 :reply="item.replies"></usercomment>
+    <scroller :on-infinite="infinite">
+      <usercomment v-for="item in comment_details" :key="item.id"
+                   :userIcon="item.icon || user_icon" :commentLevel="item.score" :commentDate="item.create_time"
+                   :userName="item.name" :content="item.content" :images="item.images"
+                   :reply="item.replies"></usercomment>
+    </scroller>
   </div>
 </template>
 
@@ -65,6 +67,18 @@
           this.comment_details = res.data.goods_comments.details
         })
       }
+    },
+    // 下拉加载
+    infinite: function (done) {
+      var self = this
+      setTimeout(function () {
+        var start = self.bottom + 1
+        for (var i = start; i < start + 10; i++) {
+          self.items.push(i + ' - 欲穷千里目，更上一层楼.')
+        }
+        self.bottom = self.bottom + 10
+        done()
+      }, 1500)
     }
   }
 </script>
@@ -79,5 +93,4 @@
     font-size: 12px;
     color: rgba(34, 34, 34, 1);
   }
-
 </style>

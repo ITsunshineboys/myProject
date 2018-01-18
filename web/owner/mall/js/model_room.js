@@ -487,18 +487,26 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                });
            })
        }*/
-    let swiper
+    let mySwiper
     $scope.showAll = function () {
-        if(swiper!==undefined){
-            swiper.destroy(true,true)
+        if(mySwiper!==undefined){
+            mySwiper.destroy(true,true)
         }
         $timeout(function () {
-             swiper = new Swiper(".swiper-container", {
+            mySwiper = new Swiper(".swiper-container", {
                 autoplay: 3000,
                 loop: true,
-                pagination: ".swiper-pagination"
+                pagination: ".swiper-pagination",
+                 observer:true,//修改swiper自己或子元素时，自动初始化swiper
+                 observeParents:true,//修改swiper的父元素时，自动初始化swiper
+                 onSlideChangeEnd: function(swiper){
+                     swiper.update(true);
+                     // mySwiper.startAutoplay();
+                     // mySwiper.reLoop();
+                 }
             })
-            swiper.reLoop()
+            mySwiper.startAutoplay()
+            mySwiper.reLoop()
         },300)
     }
     //初始化
@@ -851,8 +859,8 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
             style:$scope.params.style,
             type:1,
             requirement:$scope.special_request,
-            original_price:$scope.total_prices,
-            sale_price:$scope.special_offer
+            original_price:$scope.total_prices==''?0:$scope.total_prices,
+            sale_price:$scope.special_offer==''?0:$scope.special_offer
         }
         for(let [key,value] of $scope.materials.entries()){
             for(let [key1,value1] of value.second_level.entries()){
@@ -875,8 +883,8 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                 $uibModalInstance.close()
             }
             $scope.viewDetails = function () {
+                $uibModalInstance.close()
                 window.AndroidWebView.skipZhuangXiu()
-                // $uibModalInstance.close()
             }
         }
         all_modal.$inject = ['$scope', '$uibModalInstance']
@@ -900,25 +908,25 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
         let status = false//材料是否存在下架
         //整合申请样板间所需传值
         let obj = {
-            province_code:$scope.active_case.province,
-            city_code:$scope.active_case.city,
+            province_code:$scope.active_case.province_code,
+            city_code:$scope.active_case.city_code,
             street:$scope.toponymy.address,
             toponymy:$scope.toponymy.name,
-            sittingRoom_diningRoom:$scope.active_case.hall,
+            sittingRoom_diningRoom:$scope.active_case.sittingRoom_diningRoom,
             window:$scope.active_case.window,
             bedroom:$scope.active_case.bedroom,
             area:$scope.active_case.area,
             high:$scope.active_case.high,
             toilet:$scope.active_case.toilet,
             kitchen:$scope.active_case.kitchen,
-            stair_id:$scope.active_case.stairway_id,
-            stairway:$scope.params.stairway,
-            series:$scope.params.series,
-            style:$scope.params.style,
+            stair_id:$scope.params.stair == 0?0:$scope.params.stair.id,
+            stairway:$scope.active_case.stairway,
+            series:$scope.params.series.id,
+            style:$scope.params.style.id,
             type:0,
             requirement:$scope.special_request,
-            original_price:$scope.total_prices,
-            sale_price:$scope.special_offer
+            original_price:$scope.total_prices==''?0:$scope.total_prices,
+            sale_price:$scope.special_offer == ''?0:$scope.special_offer
         }
         for(let [key,value] of $scope.materials.entries()){
             for(let [key1,value1] of value.second_level.entries()){
@@ -960,8 +968,8 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                 $uibModalInstance.close()
             }
             $scope.viewDetails = function () {
+                $uibModalInstance.close()
                 window.AndroidWebView.skipZhuangXiu()
-                // $uibModalInstance.close()
             }
         }
         all_modal1.$inject = ['$scope', '$uibModalInstance']

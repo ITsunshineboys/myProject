@@ -65,6 +65,7 @@ class ShippingCart extends \yii\db\ActiveRecord
             ->where(['uid'=>$user->id])
             ->andWhere(['role_id'=>$user->last_role_id_app])
             ->asArray()
+            ->groupBy('goods_id')
             ->all();
         if (!$data)
         {
@@ -105,6 +106,7 @@ class ShippingCart extends \yii\db\ActiveRecord
         $mix=[];
         foreach ($supIds as $supId)
         {
+            //,sum(s.goods_num) as num
             $Goods=(new Query())
                 ->from(self::tableName().' as s')
                 ->select("g.id,g.cover_image,g.title,g.{$money},g.left_number,s.goods_num,g.status,g.subtitle")
@@ -113,6 +115,7 @@ class ShippingCart extends \yii\db\ActiveRecord
                 ->andWhere(['s.role_id'=>$user->last_role_id_app])
                 ->andWhere(['g.supplier_id'=>$supId])
                 ->andWhere('g.status =2')
+                ->groupBy('s.goods_id')
                 ->all();
             foreach ($Goods as &$list)
             {

@@ -38,6 +38,7 @@
       <group>
         <cell-box is-link class="choose-count" @click.native="showCount('count')">
           选择数量
+
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -80,14 +81,17 @@
         <flexbox slot="content" justify="space-between" class="shop-intro">
           <div>
             <span>{{good_detail.supplier.goods_number}}</span><br/>商品数
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.follower_number}}</span><br/>粉丝数
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
+
           </div>
         </flexbox>
         <flexbox slot="footer" justify="center" class="view-shop-btn">
@@ -148,14 +152,17 @@
 
       <!--底部按钮-->
       <flexbox class="bottom-tabbar">
-        <flexbox-item @click.native="contactStore" :span="155/375">
+        <flexbox-item @click.native="contact" :span="155/375">
           <i class="iconfont icon-service"></i><br/>联系商家
+
         </flexbox-item>
         <flexbox-item @click.native="showCount('cart')" :span="110/375">
           加入购物车
+
         </flexbox-item>
         <flexbox-item @click.native="showCount('now')" :span="110/375">
           立即购买
+
         </flexbox-item>
       </flexbox>
     </div>
@@ -175,15 +182,18 @@
             <i class="iconfont icon-close" @click="showCount('all')"></i>
           </div>
           <group>
-            <x-number class="buy-count" title="购买数量" v-model="count" :fillable="true" :max="good_detail.left_number" :min="1" width="34px"></x-number>
+            <x-number class="buy-count" title="购买数量" v-model="count" :fillable="true" :max="good_detail.left_number"
+                      :min="1" width="34px"></x-number>
           </group>
         </group>
         <flexbox class="count-bottom-btn">
           <flexbox-item alt="cart" v-if="count_cart||default_count" @click.native="addCart">
             加入购物车
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
+
           </flexbox-item>
         </flexbox>
       </div>
@@ -397,16 +407,13 @@
       androidShare () {
         window.AndroidWebView.share('我在【艾特生活】分享了一款好物给你，点击链接查看详情【' + this.good_detail.title + '　　' + this.good_detail.subtitle + '】' + location.href)
       },
-      // 联系商家
-      contactStore () {
-        /* params
-         * 商家对应用户ID 角色ID
-         * */
-        window.AndroidWebView.ConnetionStore(this.good_detail.supplier.uid, this.role_id)
-      },
       // 跳转消息中心
       skipMessageCenter () {
         window.AndroidWebView.skipMessageCenter()
+      },
+      // 联系商家
+      contact () {
+        this.contactStore(this.good_detail.supplier.uid, this.role_id)
       }
     }
   }
@@ -731,7 +738,7 @@
 
   .good-container .bottom-tabbar > div {
     height: 48px;
-    margin-left: 0!important;
+    margin-left: 0 !important;
   }
 
   .good-container .bottom-tabbar i {
@@ -1006,7 +1013,5 @@
     font-size: 16px;
     color: rgba(255, 255, 255, 1);
   }
-
-
 </style>
 

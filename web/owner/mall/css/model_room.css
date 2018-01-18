@@ -647,3 +647,6 @@ button {
         top: 0;
     }
 }
+.swiper-container-horizontal{
+    height: 16rem!important;
+}

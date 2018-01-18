@@ -93,7 +93,7 @@ style_index.controller("style_index", function ($rootScope, $scope, $http, $stat
         $scope.showstyle = false;
         $scope.showattr = false;
         $scope.ser_time_img = 'lib/images/sort_down.png';
-        _ajax.get('/mall/series-time-sort', {sort: 0}, function (res) {
+        _ajax.get('/mall/series-time-sort', {}, function (res) {
             $scope.series_arr = res.list;
         });
     };
@@ -131,7 +131,7 @@ style_index.controller("style_index", function ($rootScope, $scope, $http, $stat
     /************************系列开始*******************************/
 
 //	系列——展示数据
-    _ajax.get('/mall/series-time-sort', {sort: 0}, function (res) {
+    _ajax.get('/mall/series-time-sort', {}, function (res) {
         $scope.series_arr = res.list;
     })
     //开启操作
@@ -166,19 +166,19 @@ style_index.controller("style_index", function ($rootScope, $scope, $http, $stat
         })
     };
     //系类时间排序
-    $scope.ser_time_img = 'lib/images/sort_down.png';
-    $scope.ser_time_sort = function () {
-        if ($scope.ser_time_img == 'lib/images/sort_down.png') {
-            $scope.ser_time_img = 'lib/images/sort_up.png';
-            $scope.ser_sort_num = 1;
-        } else {
-            $scope.ser_time_img = 'lib/images/sort_down.png';
-            $scope.ser_sort_num = 0;
-        }
-        _ajax.get('/mall/series-time-sort', {sort: $scope.ser_sort_num}, function (res) {
-            $scope.series_arr = res.list;
-        })
-    };
+    // $scope.ser_time_img = 'lib/images/sort_down.png';
+    // $scope.ser_time_sort = function () {
+    //     if ($scope.ser_time_img == 'lib/images/sort_down.png') {
+    //         $scope.ser_time_img = 'lib/images/sort_up.png';
+    //         $scope.ser_sort_num = 1;
+    //     } else {
+    //         $scope.ser_time_img = 'lib/images/sort_down.png';
+    //         $scope.ser_sort_num = 0;
+    //     }
+    //     _ajax.get('/mall/series-time-sort', {sort: $scope.ser_sort_num}, function (res) {
+    //         $scope.series_arr = res.list;
+    //     })
+    // };
     /******************************系列结束******************************/
 
     /*********************************风格开始*******************************/

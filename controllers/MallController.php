@@ -3037,8 +3037,9 @@ class MallController extends Controller
         $categoryId = (int)Yii::$app->request->get('category_id', 0);
         $fields = Yii::$app->request->get('fields', []);
         $fromAddGoodsPage = (int)Yii::$app->request->get('from_add_goods_page', 0);
+        $fromBrandUsageApplyPage = (int)Yii::$app->request->get('from_brand_usage_apply_page', 0);
 
-        $brandsStylesSeries = GoodsCategory::brandsStylesSeriesByCategoryId($categoryId, $fields, $fromAddGoodsPage);
+        $brandsStylesSeries = GoodsCategory::brandsStylesSeriesByCategoryId($categoryId, $fields, $fromAddGoodsPage, $fromBrandUsageApplyPage);
         if (!is_array($brandsStylesSeries)) {
             return Json::encode([
                 'code' => $brandsStylesSeries,
@@ -3287,17 +3288,6 @@ class MallController extends Controller
             ]);
         }
 
-        if (Yii::$app->session[User::LOGIN_ROLE_ID] == Yii::$app->params['lhzzRoleId']
-            && $goods->status == Goods::STATUS_WAIT_ONLINE
-            && !BrandCategory::cateHasBrand($goods->category_id)
-        ) {
-            $code = 1094;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $postData = Yii::$app->request->post();
         $goods->sanitize($user, $postData);
         $goods->attributes = $postData;
@@ -3462,6 +3452,16 @@ class MallController extends Controller
         if (!$goods
             || !$goods->canEdit($user)
         ) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if ($goods->status == Goods::STATUS_WAIT_ONLINE
+            && !BrandCategory::cateHasBrand($goods->category_id)
+        ) {
+            $code = 1094;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -3866,6 +3866,14 @@ class MallController extends Controller
             ->one();
 
         if (!$goods) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!BrandCategory::cateHasBrand($goods->category_id)) {
+            $code = 1094;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -4636,10 +4644,10 @@ class MallController extends Controller
 
     public function actionSeriesTimeSort()
     {
-        $sort = trim(Yii::$app->request->get('sort', ''));
+//        $sort = trim(Yii::$app->request->get('sort', ''));
         $pages = trim(Yii::$app->request->get('page', '1'));
         $size = trim(Yii::$app->request->get('size', '12'));
-        $series = Series::findByTimeSort($sort, $pages, $size);
+        $series = Series::findByTimeSort($pages, $size);
         return Json::encode([
             'code'=>200,
             'msg'=>'ok',
@@ -4891,6 +4899,7 @@ class MallController extends Controller
      */
     public function actionStyleStatus()
     {
+
         $code = 1000;
         $post = Yii::$app->request->post();
         $series = new Style();
@@ -4935,7 +4944,7 @@ class MallController extends Controller
                     ]);
                 }
 
-                Goods::disableGoodsByStyleId($series_edit->id, $operator);
+                Goods::disableGoodsBySeriesId($series_edit->id, $operator);
             }
 
             $tran->commit();

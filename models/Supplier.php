@@ -104,6 +104,7 @@ class Supplier extends ActiveRecord
         'reject_reason',
     ];
     const FIELDS_VIEW_MALL_MODEL = [
+        'id',
         'icon',
         'shop_no',
         'shop_name',
@@ -993,6 +994,14 @@ class Supplier extends ActiveRecord
 
         if (isset($data['support_offline_shop'])) {
             $data['support_offline_shop'] = Yii::$app->params['desc']['support'][$data['support_offline_shop']];
+        }
+
+        if (isset($data['id']))
+        {
+            $lineSupplier=LineSupplier::find()->where(['supplier_id'=>$data['id']])->one();
+            $data['is_line_supplier']=$lineSupplier?1:2;
+            $data['line_supplier_mobile']=$lineSupplier?$lineSupplier['mobile']:'';
+            $data['district']=$lineSupplier?LogisticsDistrict::GetLineDistrictByDistrictCode($lineSupplier['district_code']).$lineSupplier['address']:'';
         }
     }
 

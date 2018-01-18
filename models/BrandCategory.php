@@ -140,21 +140,27 @@ class BrandCategory extends ActiveRecord
      *
      * @param  int $categoryId category id
      * @param  int $fromAddGoodsPage if from "add goods" page default 0
+     * @param  int $fromBrandUsageApplyPage if from "apply for using brand" page default 0
      * @return array
      */
-    public static function brandsByCategoryId($categoryId, $fromAddGoodsPage = 0)
+    public static function brandsByCategoryId($categoryId, $fromAddGoodsPage = 0, $fromBrandUsageApplyPage = 0)
     {
         $categoryId = (int)$categoryId;
         if ($categoryId <= 0) {
             return [];
         }
 
-        $isSupplier = false;
+//        $isSupplier = false;
         $user = Yii::$app->user->identity;
-        if ($fromAddGoodsPage && $user) {
-            $userRole = UserRole::roleUser($user, Yii::$app->params['supplierRoleId']);
-            if ($userRole) {
-                $isSupplier = true;
+        $fromBrandUsageApplyPageFlg = $fromAddGoodsPageFlg = 0;
+        if ($fromBrandUsageApplyPage || $fromAddGoodsPage) {
+            if ($user) {
+                $userRole = UserRole::roleUser($user, Yii::$app->params['supplierRoleId']);
+                if ($userRole) {
+                    $fromAddGoodsPage && $fromAddGoodsPageFlg = 1;
+                    $fromBrandUsageApplyPage && $fromBrandUsageApplyPageFlg = 1;
+//                    $isSupplier = true;
+                }
             }
         }
 
@@ -162,11 +168,17 @@ class BrandCategory extends ActiveRecord
         $from = " from {{%" . self::tableName() . "}} bc
             ,{{%" . GoodsBrand::tableName() . "}} b
             ,{{%" . GoodsCategory::tableName() . "}} c";
-        if (!$isSupplier) {
-            $from .= ",{{%" . Goods::tableName() . "}} g";
-        } else {
+        if ($fromAddGoodsPageFlg) {
             $from .= ",{{%" . BrandApplication::tableName() . "}} ba";
+        } elseif (!$fromBrandUsageApplyPageFlg) {
+            $from .= ",{{%" . Goods::tableName() . "}} g";
         }
+
+//        if (!$fromBrandUsageApplyPageFlg) {
+//            $from .= ",{{%" . Goods::tableName() . "}} g";
+//        } else {
+//            $from .= ",{{%" . BrandApplication::tableName() . "}} ba";
+//        }
         $sql .= $from;
 
         $where = " where bc.brand_id = b.id 
@@ -174,12 +186,19 @@ class BrandCategory extends ActiveRecord
             and b.status = " . GoodsBrand::STATUS_ONLINE . " 
             and c.deleted = 0
             and bc.category_id = {$categoryId}";
-        if (!$isSupplier) {
-            $where .= " and g.brand_id = b.id and g.category_id = c.id and g.status = " . Goods::STATUS_ONLINE;
-        } else {
+        if ($fromAddGoodsPageFlg) {
             $where .= " and ba.brand_id = b.id and ba.review_status = " . ModelService::REVIEW_STATUS_APPROVE
                 . " and ba.supplier_id = " . $userRole->id;
+        } elseif (!$fromBrandUsageApplyPageFlg) {
+            $where .= " and g.brand_id = b.id and g.category_id = c.id and g.status = " . Goods::STATUS_ONLINE;
         }
+
+//        if (!$isSupplier) {
+//            $where .= " and g.brand_id = b.id and g.category_id = c.id and g.status = " . Goods::STATUS_ONLINE;
+//        } else {
+//            $where .= " and ba.brand_id = b.id and ba.review_status = " . ModelService::REVIEW_STATUS_APPROVE
+//                . " and ba.supplier_id = " . $userRole->id;
+//        }
 
         $sql .= $where;
         $orderBy = " order by convert(b.name using gbk) asc";
