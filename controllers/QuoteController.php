@@ -2266,7 +2266,7 @@ class QuoteController extends Controller
         $effect_id=explode(',',$effect_ids);
         $data=[];
         foreach ($effect_id as $item){
-           $a=Effect::find()
+           $a[]=Effect::find()
                ->select('id,particulars')
                ->asArray()
                ->where(['id'=>$item,'type'=>1])
