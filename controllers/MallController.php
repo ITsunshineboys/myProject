@@ -3175,7 +3175,7 @@ class MallController extends Controller
             ]);
         }
 
-        $goods->sku = $goods->category_id . $goods->id;
+        $goods->sku = $goods->category_id . ModelService::SEPARATOR_SKU . $goods->id;
         if (!$goods->save()) {
             $code = 500;
             return Json::encode([
