@@ -538,7 +538,7 @@ class Goods extends ActiveRecord
 
 //            $one_goods['style_name'] = implode(',',$goods_style);
             $one_goods['series_name'] = $one_goods['series_id'];
-//            var_dump($one_goods['style_name']);
+            var_dump($one_goods['style_name']);
             unset($one_goods['series_id']);
             unset($one_goods['style_id']);
 //            if (
