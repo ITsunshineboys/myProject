@@ -1609,7 +1609,7 @@ class BasisDecorationService
        foreach ($a as &$value){
            foreach ($value as $v){
                $v['goods_quantity'] += $v['goods_quantity'];
-               $oneArray = $a;
+               $oneArray = $value;
            }
 
 
