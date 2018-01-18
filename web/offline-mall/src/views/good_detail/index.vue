@@ -39,6 +39,7 @@
         <cell-box is-link class="choose-count" @click.native="showCount('count')">
           选择数量
 
+
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -49,20 +50,20 @@
       </group>
       <divider></divider>
       <!--评价-->
-      <div v-if="!good_detail.comments.total?true:false">
-        <router-link to="/all-comment">
+      <div v-if="good_detail.comments.total!=='0'?true:false">
+        <router-link :to="'/all-comment/' + good_id">
           <flexbox justify="flex-start" class="comment-count">
             <span class="sum-comment">评价</span>
             <span>({{good_detail.comments.total}})</span>
           </flexbox>
         </router-link>
-        <router-link to="/all-comment">
+        <router-link :to="'/all-comment/' + good_id">
           <comment :userName="user_name" :userIcon="good_detail.comments.latest.icon || user_icon"
                    :commentDate="good_detail.comments.latest.create_time"
                    :content="good_detail.comments.latest.content"></comment>
         </router-link>
         <flexbox justify="center" class="view-all">
-          <router-link to="/all-comment">
+          <router-link :to="'/all-comment/' + good_id">
            <span>
             查看全部评价
           </span>
@@ -82,15 +83,18 @@
           <div>
             <span>{{good_detail.supplier.goods_number}}</span><br/>商品数
 
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.follower_number}}</span><br/>粉丝数
 
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
+
 
           </div>
         </flexbox>
@@ -152,16 +156,19 @@
 
       <!--底部按钮-->
       <flexbox class="bottom-tabbar">
-        <flexbox-item @click.native="contact" :span="155/375">
+        <flexbox-item @click.native="contactShop" :span="155/375">
           <i class="iconfont icon-service"></i><br/>联系商家
+
 
         </flexbox-item>
         <flexbox-item @click.native="showCount('cart')" :span="110/375">
           加入购物车
 
+
         </flexbox-item>
         <flexbox-item @click.native="showCount('now')" :span="110/375">
           立即购买
+
 
         </flexbox-item>
       </flexbox>
@@ -190,9 +197,11 @@
           <flexbox-item alt="cart" v-if="count_cart||default_count" @click.native="addCart">
             加入购物车
 
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
+
 
           </flexbox-item>
         </flexbox>
@@ -241,7 +250,7 @@
     <!--</popup>-->
 
     <!--线下商品介绍弹窗-->
-    <offlinealert :offlineInfo=offlineInfo :show="show" :isOffline="false" @isShow=showOfflineAlert></offlinealert>
+    <offlinealert :offlineInfo="offlineInfo" :show="show" :isOffline="false" @isShow="showOfflineAlert"></offlinealert>
 
     <!--加入购物车成功提示-->
     <toast v-model="cart_success" width="200px" position="middle" :time="2000" :is-show-mask="true">
@@ -333,7 +342,8 @@
     activated () {
       this.good_id = this.$route.params.id // 商品id
       this.isShow = false
-      this.axios.get('/mall/goods-view', {id: this.good_id}, (res) => {
+      this.axios.get('/mall/goods-view', {id: 390}, (res) => {
+        console.log(res)
         this.good_detail = res.data.goods_view
         // 用户名处理
         if (this.good_detail.comments.total !== '0') {
@@ -412,7 +422,7 @@
         window.AndroidWebView.skipMessageCenter()
       },
       // 联系商家
-      contact () {
+      contactShop () {
         this.contactStore(this.good_detail.supplier.uid, this.role_id)
       }
     }

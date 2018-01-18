@@ -33,8 +33,9 @@
         previewerList: []
       }
     },
-    created () {
+    mounted () {
       // 用户评价图片处理
+//      if (typeof this.images === 'undefined') return
       this.previewerList = this.images.map((item) => ({
         src: item
       }))
@@ -48,6 +49,8 @@
     filters: {
       // 用户名称字符截取过滤器
       stringSubstr (value) {
+//        if (typeof value === 'undefined') return
+//        console.log(value, '用户名称字符截取')
         if (value.length <= 10) {
           return value
         } else {

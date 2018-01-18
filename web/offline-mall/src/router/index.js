@@ -36,7 +36,7 @@ export default new Router({
       name: 'GoodDetail',
       component: GoodDetail
     }, {
-      path: '/all-comment',
+      path: '/all-comment/:id',
       name: 'AllComment',
       component: AllComment
     }, {

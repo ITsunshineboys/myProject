@@ -1,12 +1,12 @@
 <template>
   <div>
     <headercommon search="false" headTitle="全部评价" pop="true" :backWay="false"></headercommon>
-      <tab defaultColor="#999" active-color="#222" bar-active-color="#222" custom-bar-width="50px" class="tab">
-        <tab-item selected @on-item-click="tabHandler('all')">全部 （{{count.good + count.medium + count.poor}}）</tab-item>
-        <tab-item @on-item-click="tabHandler('good')">好评 （{{count.good}}）</tab-item>
-        <tab-item @on-item-click="tabHandler('medium')">中评 （{{count.medium}}）</tab-item>
-        <tab-item @on-item-click="tabHandler('poor')">差评 （{{count.poor}}）</tab-item>
-      </tab>
+    <tab defaultColor="#999" active-color="#222" bar-active-color="#222" custom-bar-width="50px" class="tab">
+      <tab-item selected @on-item-click="tabHandler('all')">全部 （{{count.good + count.medium + count.poor}}）</tab-item>
+      <tab-item @on-item-click="tabHandler('good')">好评 （{{count.good}}）</tab-item>
+      <tab-item @on-item-click="tabHandler('medium')">中评 （{{count.medium}}）</tab-item>
+      <tab-item @on-item-click="tabHandler('poor')">差评 （{{count.poor}}）</tab-item>
+    </tab>
     <divider></divider>
     <scroller :on-infinite="infinite">
       <usercomment v-for="item in comment_details" :key="item.id"
@@ -40,12 +40,17 @@
           poor: 0     // 差评数
         },
         user_icon: require('../../assets/images/user_icon_default.png'), // 默认用户头像
-        comment_details: '',
-        last_tab: ''
+        comment_details: [],
+        last_tab: '',
+        params: {
+          id: 390,
+          page: 1,
+          level_score: ''
+        }
       }
     },
     created () {
-      this.axios.get('/mall/goods-comments', {id: 332}, (res) => {
+      this.axios.get('/mall/goods-comments', {id: 390}, (res) => {
         this.count.good = Number(res.data.goods_comments.stat.good)
         this.count.medium = Number(res.data.goods_comments.stat.medium)
         this.count.poor = Number(res.data.goods_comments.stat.poor)
@@ -63,22 +68,21 @@
         }
       },
       tabContent: function (obj) {
-        this.axios.get('/mall/goods-comments', {id: 332, level_score: obj === 'all' ? '' : obj}, (res) => {
+        this.axios.get('/mall/goods-comments', {id: 390, level_score: obj === 'all' ? '' : obj}, (res) => {
           this.comment_details = res.data.goods_comments.details
         })
+      },
+      // 下拉加载
+      infinite: function (done) {
+        let self = this
+        setTimeout(function () {
+          self.params.page++
+          self.axios.get('/mall/goods-comments', self.params, (res) => {
+            self.comment_details = self.comment_details.concat(res.data.goods_comments.details)
+          })
+          done()
+        }, 1500)
       }
-    },
-    // 下拉加载
-    infinite: function (done) {
-      var self = this
-      setTimeout(function () {
-        var start = self.bottom + 1
-        for (var i = start; i < start + 10; i++) {
-          self.items.push(i + ' - 欲穷千里目，更上一层楼.')
-        }
-        self.bottom = self.bottom + 10
-        done()
-      }, 1500)
     }
   }
 </script>
