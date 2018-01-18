@@ -538,9 +538,9 @@ class Goods extends ActiveRecord
 
             $one_goods['style_name'] = implode(',',$goods_style);
             $one_goods['series_name'] = $one_goods['series_id'];
-            var_dump($one_goods['style_name']);
-//            unset($one_goods['series_id']);
-//            unset($one_goods['style_id']);
+//            var_dump($one_goods['style_name']);
+            unset($one_goods['series_id']);
+            unset($one_goods['style_id']);
 //            if (
 //                isset($one_goods['series_name'])
 //                && $one_goods['series_name'] != 0
@@ -554,23 +554,23 @@ class Goods extends ActiveRecord
 //            }else{
 //                $one_goods['series_name'] = '';
 //            }
-//
-//            if (
-//                isset($one_goods['style_name'])
-//                && $one_goods['style_name'] != 0
-//            ){
-//
-//                $where_ = "id in (".$one_goods['style_name'].")";
-//                $series = Style::find()->select('id,style')->where($where_)->all();
-//                foreach ($series as $one_series){
-//                    $one_goods['style_name'] = $one_series['style'];
-//                }
-//            }else{
-//                $one_goods['style_name'] = '';
-//            }
-        }
 
-        die;
+            if (
+                isset($one_goods['style_name'])
+                && $one_goods['style_name'] != 0
+            ){
+
+                $where_ = "id in (".$one_goods['style_name'].")";
+                $series = Style::find()->select('id,style')->where($where_)->all();
+                var_dump($series);
+                foreach ($series as $one_series){
+                    $one_goods['style_name'] = $one_series['style'];
+                }
+            }else{
+                $one_goods['style_name'] = '';
+            }
+        }
+die;
         return $all;
     }
 
