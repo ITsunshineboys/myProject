@@ -2271,8 +2271,11 @@ class QuoteController extends Controller
                ->asArray()
                ->where(['id'=>$item,'type'=>1])
                ->one();
+            if($data==null){
+                unset($item);
+            }
        }
-       var_dump($data);die;
+        var_dump($data);die;
         return Json::encode([
             'code' => 200,
             'msg'  => 'ok',
