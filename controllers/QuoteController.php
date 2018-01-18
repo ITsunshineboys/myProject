@@ -1201,9 +1201,6 @@ class QuoteController extends Controller
                     }
                 }
 
-
-
-                $effect_ids=[];
                 //  案例修改
                 if (isset($house['id'])) {
 
