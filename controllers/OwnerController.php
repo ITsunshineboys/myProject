@@ -1641,7 +1641,8 @@ class OwnerController extends Controller
                 unset($one_['worker_price']);
             }
         }
-        $data = WorksData::find()->asArray()->select('effect_id,goods_first,goods_second,goods_three,three_category_id as id,goods_code,goods_quantity')->where(['effect_id'=>$id])->all();
+        $data = WorksData::find()->asArray()->select('effect_id,goods_first,goods_second,goods_three,three_category_id as id,goods_code,sum(goods_quantity) as goods_quantity')->where(['effect_id'=>$id])->groupBy(['goods_code'])->all();
+        var_dump($data);die;
 
         if (!$data){
             return Json::encode([

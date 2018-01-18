@@ -1606,7 +1606,7 @@ class BasisDecorationService
 
        $effect = Effect::array_group_by($array,'goods_code');
        $a = array_values($effect);
-       foreach ($a as &$value){
+       foreach ($a as $value){
            foreach ($value as $v){
                $v['goods_quantity'] += $v['goods_quantity'];
                $oneArray = $value;
