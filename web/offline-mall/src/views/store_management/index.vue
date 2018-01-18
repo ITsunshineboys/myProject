@@ -49,7 +49,7 @@
     <div class="store-home" v-if="tabActive == 0">
       <swiper :list="carousel" :show-desc-mask="false" dots-position="center" dots-class="dots" :loop="true" :auto="true" height="145px"></swiper>
       <div class="store-goods-list" flex>
-        <router-link class="store-goods-item" v-for="obj in recommendGoods" :to="'/good-detail/' + obj.url" tag="div">
+        <router-link class="store-goods-item" v-for="obj in recommendGoods" :key="obj.id" :to="'/good-detail/' + obj.url" tag="div">
           <img :src="obj.image">
           <p class="store-goods-title">{{obj.title}}</p>
           <p class="store-goods-desc">{{obj.description}}</p>
