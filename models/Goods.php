@@ -506,6 +506,41 @@ class Goods extends ActiveRecord
      * @param int $city
      * @return mixed
      */
+    public static function priceDetail($level, $title, $city = self::DEFAULT_CITY)
+    {
+        //TODO 缺少market_price sku left_number
+        $select = 'goods.left_number,goods.sku,goods.market_price,goods.supplier_id,goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image,supplier.shop_name,goods.title as goods_name,goods.status';
+        //TODO 修改
+        if(is_array($title)){
+            $where=['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['in', 'gc.id', $title],['in','goods.status', self::STATUS_ONLINE_OFFLINE]];
+        }else{
+            $where=['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['gc.id'=>$title], ['in','goods.status', self::STATUS_ONLINE_OFFLINE]];
+        }
+
+        $all = self::find()
+            ->asArray()
+            ->select($select)
+            ->leftJoin('goods_brand', 'goods.brand_id = goods_brand.id')
+            ->leftJoin('goods_category AS gc', 'goods.category_id = gc.id')
+            ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
+            ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
+            ->leftJoin('supplier', 'goods.supplier_id = supplier.id')
+            ->where($where)
+            ->all();
+
+
+        foreach ($all as &$one_goods) {
+            $one_goods['platform_price'] =  $one_goods['platform_price'] / 100;
+            $one_goods['supplier_price'] =  $one_goods['supplier_price'] / 100;
+            $one_goods['market_price']   =  $one_goods['market_price'] / 100;
+            $one_goods['purchase_price_decoration_company'] =  $one_goods['purchase_price_decoration_company'] / 100;
+        }
+
+        $row = BasisDecorationService::style($all);
+
+        return $row;
+    }
+
     /**
      * @param $level
      * @param $title
