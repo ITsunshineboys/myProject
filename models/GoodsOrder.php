@@ -3705,38 +3705,7 @@ class GoodsOrder extends ActiveRecord
     }
 
 
-    public  static  function  CalculationAppBuyFreight($goods_id,$goods_num)
-    {
-//        $data=(new Query())
-//            ->select('c.goods_id,c.goods_num')
-//            ->from(ShippingCart::tableName().' as c')
-//            ->leftJoin(Supplier::tableName().' as s','s.supplier_id =g.supplier_id')
-//            ->leftJoin(Goods::tableName().' as g ','g.id=c.goods_id')
-//            ->where(['s.supplier_id'=>$Supplier->id])
-//            ->andWhere(['c.uid'=>$user->id])
-//            ->andWhere(['c.role_id'=>$user->last_role_id_app])
-//            ->all();
-//        if (!$data)
-//        {
-//            return null;
-//        }
-//        $total=0;
-//        foreach ($data as &$list)
-//        {
-//            $freight=self::CalculationFreight([$list]);
-//            $total+=$freight;
-//            $freight_list[]=$freight;
-//            if ($freight*0.01==0)
-//            {
-//                $freight=0;
-//            }
-//        }
-//        if ($total==$total_freight)
-//        {
-//
-//        }
 
-    }
 
 
 
@@ -3757,17 +3726,17 @@ class GoodsOrder extends ActiveRecord
                   || $one['goods_num'] !=null
               )
               {
-                  $goods_ [] = $one;
+                  $goodsList [] = $one;
               }
           }
-          foreach ($goods_ as  $k =>$v)
+          foreach ($goodsList as  $k =>$v)
           {
-              $Good[$k]=Goods::find()
+              $Good[$k]['id']=Goods::find()
                       ->select('logistics_template_id')
-                      ->where(['id'=>$goods_[$k]['goods_id']])
+                      ->where(['id'=>$goodsList[$k]['goods_id']])
                       ->one()->logistics_template_id;
-              $Good[$k]['goods_id']=$goods_[$k]['goods_id'];
-              $Good[$k]['goods_num']=$goods_[$k]['goods_num'];
+              $Good[$k]['goods_id']=$goodsList[$k]['goods_id'];
+              $Good[$k]['goods_num']=$goodsList[$k]['goods_num'];
           }
           $templates=[];
           foreach ($Good as &$wuliu){
