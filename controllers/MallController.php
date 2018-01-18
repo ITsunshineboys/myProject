@@ -4644,10 +4644,10 @@ class MallController extends Controller
 
     public function actionSeriesTimeSort()
     {
-        $sort = trim(Yii::$app->request->get('sort', ''));
+//        $sort = trim(Yii::$app->request->get('sort', ''));
         $pages = trim(Yii::$app->request->get('page', '1'));
         $size = trim(Yii::$app->request->get('size', '12'));
-        $series = Series::findByTimeSort($sort, $pages, $size);
+        $series = Series::findByTimeSort($pages, $size);
         return Json::encode([
             'code'=>200,
             'msg'=>'ok',
