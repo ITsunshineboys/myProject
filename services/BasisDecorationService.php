@@ -1606,6 +1606,7 @@ class BasisDecorationService
         foreach ($array as $oneArray){
            $value[] = $oneArray;
         }
+
         var_dump($value);die;
         return $array;
     }
