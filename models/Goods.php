@@ -533,9 +533,11 @@ class Goods extends ActiveRecord
             $one_goods['supplier_price'] =  $one_goods['supplier_price'] / 100;
             $one_goods['market_price']   =  $one_goods['market_price'] / 100;
             $one_goods['purchase_price_decoration_company'] =  $one_goods['purchase_price_decoration_company'] / 100;
+            $goods_style = GoodsStyle::styleIdsByGoodsId($one_goods['id']);
+            $goods_style[] =  $one_goods['style_id'];
 
+            $one_goods['style_name'] = implode('、',$goods_style);
             $one_goods['series_name'] = $one_goods['series_id'];
-            $one_goods['style_name'] = $one_goods['style_id'];
             unset($one_goods['series_id']);
             unset($one_goods['style_id']);
             if (
