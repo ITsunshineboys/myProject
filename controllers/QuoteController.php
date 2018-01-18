@@ -2271,10 +2271,11 @@ class QuoteController extends Controller
                ->asArray()
                ->where(['id'=>$item,'type'=>1])
                ->one();
-            if($data[$k]==null){
-                unset($data[$k]);
-            }
+
        }
+        if($data[$k]==null){
+            unset($data[$k]);
+        }
         return Json::encode([
             'code' => 200,
             'msg'  => 'ok',
