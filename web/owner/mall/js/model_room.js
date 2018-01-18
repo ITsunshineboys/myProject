@@ -494,7 +494,7 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                 loop: true,
                 pagination: ".swiper-pagination"
             })
-        },0)
+        },300)
     }
     //初始化
     $scope.special_request = ''
@@ -585,10 +585,8 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                     let index = res.effect.case_picture.findIndex(function (item) {
                         return item.series_id == $scope.params.series.id && item.style_id == $scope.params.style.id
                     })
-                    console.log(index);
                     if(index!=-1){
                         $scope.roomPic = res.effect.case_picture[index]
-                        $scope.showAll()
                     }else{
                         $scope.roomPic = ''
                     }
@@ -609,7 +607,6 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                             value['procurement'] = 0
                         }
                         $scope.roomPic = res.effect.case_picture[index]
-                        $scope.showAll()
                         //整合二级
                         for (let [key, value] of res.goods.entries()) {
                             for (let [key1, value1] of $scope.materials.entries()) {
