@@ -281,11 +281,10 @@ class EffectEarnest extends \yii\db\ActiveRecord
                 }
 
             }
-            if($post['name'] && $post['phone']){
+            if($item==0 && $post['type']==0){
                 $name=$post['name'];
                 $phone=$post['phone'];
-            }
-            if($post['type']==0 ){
+            }elseif ($item==1 && $post['type']==0){
                 $user=User::find()->where(['id'=>$uid])->select('nickname,mobile')->asArray()->one();
                 $name=$user['nickname'];
                 $phone=$user['mobile'];
