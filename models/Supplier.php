@@ -128,6 +128,7 @@ class Supplier extends ActiveRecord
         'open_shop_time',
     ];
     const FIELDS_SHOP_INDEX_MODEL = [
+        'id',
         'icon',
         'shop_name',
         'follower_number',
