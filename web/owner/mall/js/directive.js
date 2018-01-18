@@ -258,13 +258,24 @@ app.directive('water', function ($timeout) {
             link: function (scope, element, attrs) {
                 console.log(scope.roomPic);
                 let status = false
-                scope.$watch('roomPic',function (newVal,oldVal) {
-                    if(JSON.stringify(newVal) === JSON.stringify(oldVal)){
-                        status = true
-                    }else{
-                        status = false
-                    }
-                },true)
+                if(scope.cur_style == undefined){
+                    scope.$watch('roomPic',function (newVal,oldVal) {
+                        if(JSON.stringify(newVal) === JSON.stringify(oldVal)){
+                            status = true
+                        }else{
+                            status = false
+                        }
+                    },true)
+                }
+                if(scope.roomPic == undefined){
+                    scope.$watch('cur_style',function (newVal,oldVal) {
+                        if(JSON.stringify(newVal) === JSON.stringify(oldVal)){
+                            status = true
+                        }else{
+                            status = false
+                        }
+                    },true)
+                }
                 if (scope.$last || status) {
                         scope.$eval(attrs.repeatDone);
                 }

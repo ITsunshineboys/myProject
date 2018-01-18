@@ -4,18 +4,25 @@ app.controller('nodata_ctrl', function ($timeout,$uibModal,$http, _ajax, $state,
     $scope.special_request = ''
     $scope.materials = []
     $scope.worker_list = []
-    let swiper
+    let mySwiper
     $scope.showAll = function () {
-        if(swiper!==undefined){
-            swiper.destroy(true,true)
+        if(mySwiper!==undefined){
+            mySwiper.destroy(true,true)
         }
         $timeout(function () {
-            swiper = new Swiper(".swiper-container", {
+            mySwiper = new Swiper(".swiper-container", {
                 autoplay: 3000,
                 loop: true,
-                pagination: ".swiper-pagination"
+                pagination: ".swiper-pagination",
+                observer:true,//修改swiper自己或子元素时，自动初始化swiper
+                observeParents:true,//修改swiper的父元素时，自动初始化swiper
+                onSlideChangeEnd: function(swiper){
+                    swiper.update();
+                    // mySwiper.startAutoplay();
+                    // mySwiper.reLoop();
+                }
             })
-            swiper.reLoop()
+            mySwiper.reLoop()
         },300)
     }
     //监听滚动
