@@ -1602,9 +1602,16 @@ class BasisDecorationService
 
     public static function identicalSku($array)
     {
-        var_dump($array);die;
 
-        var_dump($array);die;
+
+       $effect = Effect::array_group_by($array,'goods_code');
+       $a = array_values($effect);
+       var_dump($a);die;
+       foreach ($a as &$value){
+           $value['goods_quantity'] += $value['goods_quantity'];
+
+       }
+
         return $array;
     }
 
