@@ -8,6 +8,7 @@
 
 namespace app\models;
 
+use app\services\BasisDecorationService;
 use app\services\StringService;
 use app\services\ModelService;
 use Yii;
@@ -533,44 +534,12 @@ class Goods extends ActiveRecord
             $one_goods['supplier_price'] =  $one_goods['supplier_price'] / 100;
             $one_goods['market_price']   =  $one_goods['market_price'] / 100;
             $one_goods['purchase_price_decoration_company'] =  $one_goods['purchase_price_decoration_company'] / 100;
-            $goods_style = GoodsStyle::styleIdsByGoodsId($one_goods['id']);
-            $goods_style[] =  $one_goods['style_id'];
-
-//            $one_goods['style_name'] = implode(',',$goods_style);
-            $one_goods['series_name'] = $goods_style;
-            var_dump($one_goods['style_name']);
-            unset($one_goods['series_id']);
-            unset($one_goods['style_id']);
-//            if (
-//                isset($one_goods['series_name'])
-//                && $one_goods['series_name'] != 0
-//            ){
-//
-//                $where_ = "id in (".$one_goods['series_name'].")";
-//                    $series = Series::find()->select('id,series')->where($where_)->all();
-//                    foreach ($series as $one_series){
-//                        $one_goods['series_name'] = $one_series['series'];
-//                    }
-//            }else{
-//                $one_goods['series_name'] = '';
-//            }
-
-            if (
-                isset($one_goods['style_name'])
-                && $one_goods['style_name'] != 0
-            ){
-
-                $where_ = "id in (".$one_goods['style_name'].")";
-                $series = Style::find()->asArray()->select('id,style')->where(['in','id',$one_goods['series_name']])->all();
-                foreach ($series as $one_series){
-                    $one_goods['style_name'] = $one_series['style'];
-                }
-            }else{
-                $one_goods['style_name'] = '';
-            }
         }
-die;
-        return $all;
+
+        $row = BasisDecorationService::style($all);
+        var_dump($row);die;
+
+        return $row;
     }
 
     /**
