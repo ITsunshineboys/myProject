@@ -119,9 +119,16 @@ class EffectToponymy extends \yii\db\ActiveRecord
                 ->where(['id'=>$effect_id])
                 ->asArray()
                 ->one();
+            $a=[];
+            foreach ($data as $v){
+                if($v!=null){
+                    $a[]=$v;
+                }
+            }
         }
-        $data=self::arraySequence($data,'sort_id');
-        return $data;
+
+        $a=self::arraySequence($data,'sort_id');
+        return $a;
 
     }
 }
