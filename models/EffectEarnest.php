@@ -327,7 +327,6 @@ class EffectEarnest extends \yii\db\ActiveRecord
             $tran->commit();
             return true;
         }catch (Exception $e){
-            var_dump($e);die;
             $tran->rollBack();
             return false;
         }
