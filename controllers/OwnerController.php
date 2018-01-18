@@ -1642,7 +1642,6 @@ class OwnerController extends Controller
             }
         }
         $data = WorksData::find()->asArray()->select('effect_id,goods_first,goods_second,goods_three,three_category_id as id,goods_code,sum(goods_quantity) as goods_quantity')->where(['effect_id'=>$id])->groupBy(['goods_code'])->all();
-        var_dump($data);die;
 
         if (!$data){
             return Json::encode([
@@ -1654,8 +1653,6 @@ class OwnerController extends Controller
             ]);
         }
 
-        $workerData = BasisDecorationService::identicalSku($data);
-        die;
 
         $sku = [];
         foreach ($data as $one_data){
