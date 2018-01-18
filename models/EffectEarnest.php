@@ -195,7 +195,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
      * @param $post
      * @return bool|string
      */
-    public static function appAddEffect($uid,$post){
+    public static function appAddEffect($uid,$post,$item){
 
         $effects=Effect::find()
             ->select('sort_id')
@@ -305,7 +305,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
             $effect_earnest->original_price=$post['original_price']*100;
             $effect_earnest->sale_price=$post['sale_price']*100;
             $effect_earnest->type=$post['type'];
-            $effect_earnest->item=Effect::TYPE_ITEM;
+            $effect_earnest->item=$item;
             if(!$effect_earnest->save(false)){
                 $tran->rollBack();
                 return false;
@@ -319,7 +319,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
                 return false;
             }
             $tran->commit();
-            return $id;
+            return true;
         }catch (Exception $e){
             $tran->rollBack();
             return false;

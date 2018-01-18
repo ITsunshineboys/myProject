@@ -301,10 +301,12 @@ class EffectController extends Controller
         }
         if (!$user){
             $uid='';
+            $item=0;
         }else{
             $uid=$user->getId();
+            $item=1;
         }
-        $code=EffectEarnest::appAddEffect($uid,$post);
+        $code=EffectEarnest::appAddEffect($uid,$post,$item);
         if(!$code){
             $code=500;
             return Json::encode([
