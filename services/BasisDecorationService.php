@@ -1602,13 +1602,8 @@ class BasisDecorationService
 
     public static function identicalSku($array)
     {
-        foreach ($array as $key => $row)
-        {
-            $volume[$key]  = $row['goods_code'];
-            $edition[$key] = $row;
-        }
+        var_dump($array);die;
 
-        array_multisort($volume, SORT_DESC, $edition, SORT_ASC, $array);
         var_dump($array);die;
         return $array;
     }
