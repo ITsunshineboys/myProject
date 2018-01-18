@@ -927,7 +927,13 @@ class QuoteController extends Controller
         $topnymy_datas=EffectToponymy::find()->where(['id'=>$plot_id])->asArray()->one();
 
         $data= EffectToponymy::PlotView($plot_id);
-        $data=EffectToponymy::arraySequence($data,'sort_id');
+        $a=[];
+        foreach ($data as $v){
+            if($v!=null){
+                $a[]=$v;
+            }
+        }
+        $data=EffectToponymy::arraySequence($a,'sort_id');
         $public_message['street'] =  $topnymy_datas['street'];
         $public_message['toponymy'] =  $topnymy_datas['toponymy'];
         $public_message['district_code'] =  $topnymy_datas['district_code'];
@@ -1238,7 +1244,7 @@ class QuoteController extends Controller
                         $flat_area = $house['flattop_area'];
                         $balcony_area = $house['balcony_area'];
                         (new DecorationParticulars())->plotEdit($other_id, $hall_area, $hall_perimeter, $bedroom_area, $bedroom_perimeter, $toilet_area, $toilet_perimeter, $kitchen_area, $kitchen_perimeter, $modelling_length, $flat_area, $balcony_area);
-
+                        $effect_id[]=$house['id'];
                         if (!empty($house['drawing_list'])) {
                             foreach ($house['drawing_list'] as $images) {
                                 if (!empty($images['id'])) {
@@ -1283,6 +1289,7 @@ class QuoteController extends Controller
                         $house_image            = $house['cur_imgSrc'];
                         $type                   = $house['is_ordinary'];
                         $sort_id                = $house['sort_id'];
+                        $effect_id[]=$house['id'];
                         if ($stairway != 1) {
                             $stair_id = 0;
                         } else {
@@ -1367,12 +1374,17 @@ class QuoteController extends Controller
 //                        }
                     }
                 }
+                if(is_array($effect_id)){
+                    $effect_id = implode(',',$effect_id);
+                }
                 $toponymy_edit=EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
                 $toponymy_edit->province_code=$request['province_code'];
                 $toponymy_edit->city_code=$request['city_code'];
                 $toponymy_edit->district_code=$request['district_code'];
                 $toponymy_edit->street=$request['address'];
+                $toponymy_edit->effect_id=$effect_id;
                 $toponymy_edit->toponymy=$request['house_name'];
+
                 if(!$toponymy_edit->save(false)){
                     $transaction->rollBack();
                     $code = 500;
