@@ -257,6 +257,7 @@ class SupplierController extends Controller
             ? Goods::pagination($where, $select, $page, $size, $orderBy)
             : Goods::pagination($where, $select, $page, $size);
         $ret['data']['supplier_goods'] = $supplierGoods;
+        $ret['data']['total'] = Goods::find()->where($where)->count();
         return Json::encode($ret);
     }
 
