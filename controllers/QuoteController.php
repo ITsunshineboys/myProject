@@ -1209,7 +1209,7 @@ class QuoteController extends Controller
 
                     if ($house['is_ordinary'] == 0) {
                         //普通户型修改
-                        array_push($effect_ids[],$house['id']);
+                        $effect_ids[]=array_push($effect_ids[],$house['id']);
                         $house_id = $house['id'];
                         $bedroom = $house['cur_room'];
                         $sittingRoom_diningRoom = $house['cur_hall'];
@@ -1268,7 +1268,7 @@ class QuoteController extends Controller
 
                     if ($house['is_ordinary'] == 1){
                         // 案例修改
-                        array_push($effect_ids[],$house['id']);
+                        $effect_ids[]=array_push($effect_ids[],$house['id']);
                         $house_id               = $house['id'];
                         $bedroom                = $house['cur_room'];
                         $sittingRoom_diningRoom = $house['cur_hall'];
