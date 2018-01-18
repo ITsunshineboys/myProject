@@ -935,13 +935,17 @@ class OwnerController extends Controller
         $finishing_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['emulsion_varnish_surface'],'');
         $wire_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['concave_line'],'长');
         $land_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['land_plaster'],'');
+        var_dump($putty_attr);
+        var_dump($undercoat_attr);
+        var_dump($finishing_attr);
+        var_dump($wire_attr);
+        var_dump($land_attr);die;
 
 
 
 
 //        腻子费用   底漆费用  面漆费用   阴角线费用   石膏粉费用
         $material_total[] = BasisDecorationService::paintedCost(1,$putty_area,$putty,$putty_attr);
-        var_dump($material_total);die;
         $material_total[] = BasisDecorationService::paintedCost(1,$primer_area,$undercoat,$undercoat_attr);
         $material_total[] = BasisDecorationService::paintedCost(1,$finishing_coat_area,$finishing,$finishing_attr);
         $material_total[] = BasisDecorationService::paintedCost(1,$concave_line_length,$wire,$wire_attr);
