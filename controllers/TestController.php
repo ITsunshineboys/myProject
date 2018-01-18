@@ -720,8 +720,7 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
-        $user_agent = getallheaders();
-        return Json::encode($user_agent);
+        return Json::encode(getallheaders());
 
     }
 
