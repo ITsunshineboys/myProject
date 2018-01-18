@@ -1409,7 +1409,7 @@ class BasisDecorationService
                 foreach ($style as $one_style){
                     $style_[] = $one_style['style'];
                 }
-                $one_goods['style_name'] = implode(',',$style_);
+                $one_goods['style_name'] = implode('、',$style_);
                 unset($one_goods['style_id']);
             }else{
                 $one_goods['style_name'] = '';
@@ -1423,7 +1423,7 @@ class BasisDecorationService
                 foreach ($style as $one_style){
                     $style_[] = $one_style['series'];
                 }
-                $one_goods['series_name'] = implode(',',$style_);
+                $one_goods['series_name'] = implode('、',$style_);
                 unset($one_goods['series_id']);
             }else{
                 $one_goods['series_name'] = '';
