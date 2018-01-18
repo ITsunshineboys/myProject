@@ -1607,7 +1607,8 @@ class BasisDecorationService
            $value[] = $oneArray;
         }
 
-        var_dump($value);die;
+        var_dump($value);
+        die;
         return $array;
     }
 
