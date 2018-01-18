@@ -1267,6 +1267,7 @@ class QuoteController extends Controller
                     }
 
                     if ($house['is_ordinary'] == 1){
+                        $effect_ids[]=$house['id'];
                         // 案例修改
                         $house_id               = $house['id'];
                         $bedroom                = $house['cur_room'];
