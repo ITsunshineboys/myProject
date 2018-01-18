@@ -927,6 +927,7 @@ class QuoteController extends Controller
         $topnymy_datas=EffectToponymy::find()->where(['id'=>$plot_id])->asArray()->one();
 
         $data= EffectToponymy::PlotView($plot_id);
+        var_dump($data);die;
         $data=EffectToponymy::arraySequence($data,'sort_id');
         $public_message['street'] =  $topnymy_datas['street'];
         $public_message['toponymy'] =  $topnymy_datas['toponymy'];
