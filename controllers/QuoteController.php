@@ -2269,7 +2269,7 @@ class QuoteController extends Controller
            $data[]=Effect::find()
                ->select('id,particulars')
                ->asArray()
-               ->where(['id'=>$item])
+               ->where(['id'=>$item,'type'=>1])
                ->one();
        }
         return Json::encode([
