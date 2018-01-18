@@ -291,6 +291,7 @@ class EffectController extends Controller
         $user = Yii::$app->user->identity;
 
         $post=Yii::$app->request->post();
+        var_dump($user);die;
         if(!isset($user) && $post['type']==1){
             $code=403;
             return Json::encode([
