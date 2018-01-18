@@ -494,7 +494,7 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                 loop: true,
                 pagination: ".swiper-pagination"
             })
-        },300)
+        },0)
     }
     //初始化
     $scope.special_request = ''
@@ -585,6 +585,7 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                     let index = res.effect.case_picture.findIndex(function (item) {
                         return item.series_id == $scope.params.series.id && item.style_id == $scope.params.style.id
                     })
+                    console.log(index);
                     if(index!=-1){
                         $scope.roomPic = res.effect.case_picture[index]
                     }else{
@@ -895,18 +896,18 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
         let status = false//材料是否存在下架
         //整合申请样板间所需传值
         let obj = {
-            province_code:$scope.params.province,
-            city_code:$scope.params.city,
+            province_code:$scope.active_case.province,
+            city_code:$scope.active_case.city,
             street:$scope.toponymy.address,
             toponymy:$scope.toponymy.name,
-            sittingRoom_diningRoom:$scope.params.hall,
-            window:$scope.params.window,
-            bedroom:$scope.params.bedroom,
-            area:$scope.params.area,
-            high:$scope.params.high,
-            toilet:$scope.params.toilet,
-            kitchen:$scope.params.kitchen,
-            stair_id:$scope.params.stairway_id,
+            sittingRoom_diningRoom:$scope.active_case.hall,
+            window:$scope.active_case.window,
+            bedroom:$scope.active_case.bedroom,
+            area:$scope.active_case.area,
+            high:$scope.active_case.high,
+            toilet:$scope.active_case.toilet,
+            kitchen:$scope.active_case.kitchen,
+            stair_id:$scope.active_case.stairway_id,
             stairway:$scope.params.stairway,
             series:$scope.params.series,
             style:$scope.params.style,
