@@ -900,7 +900,8 @@ class OwnerController extends Controller
         $putty_day = BasisDecorationService::algorithm(6,$putty_area,$putty);
 
 
-        $goods = Goods::priceDetail(self::WALL_SPACE, self::LATEX_MATERIAL);
+        $goods = Goods::priceDetail(self::WALL_SPACE, self::LATEX_MATERIAL,$get['city']);
+        var_dump($goods);die;
         $judge = BasisDecorationService::judge($goods,$get);
 
 
