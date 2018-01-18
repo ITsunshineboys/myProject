@@ -1375,23 +1375,23 @@ class QuoteController extends Controller
                     }
                 }
                 var_dump($request['effect_id']);
-                var_dump($effect_ids);die;
-                $toponymy_edit=EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
-                $toponymy_edit->province_code=$request['province_code'];
-                $toponymy_edit->city_code=$request['city_code'];
-                $toponymy_edit->district_code=$request['district_code'];
-                $toponymy_edit->street=$request['address'];
-                $toponymy_edit->toponymy=$request['house_name'];
-
-                if(!$toponymy_edit->save(false)){
-                    $transaction->rollBack();
-                    $code = 500;
-                    return json_encode([
-                        'code' => $code,
-                        'msg' => \Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-            }
+                var_dump($effect_ids);
+//                $toponymy_edit=EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
+//                $toponymy_edit->province_code=$request['province_code'];
+//                $toponymy_edit->city_code=$request['city_code'];
+//                $toponymy_edit->district_code=$request['district_code'];
+//                $toponymy_edit->street=$request['address'];
+//                $toponymy_edit->toponymy=$request['house_name'];
+//
+//                if(!$toponymy_edit->save(false)){
+//                    $transaction->rollBack();
+//                    $code = 500;
+//                    return json_encode([
+//                        'code' => $code,
+//                        'msg' => \Yii::$app->params['errorCodes'][$code]
+//                    ]);
+//                }
+            }die;
             $transaction->commit();
         }catch (\Exception $e) {
             $transaction->rollBack();
