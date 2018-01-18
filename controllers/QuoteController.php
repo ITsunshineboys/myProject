@@ -2266,18 +2266,24 @@ class QuoteController extends Controller
         $effect_id=explode(',',$effect_ids);
         $data=[];
         foreach ($effect_id as $item){
-           $a[]=Effect::find()
+            $data[]=Effect::find()
                ->select('id,particulars')
                ->asArray()
                ->where(['id'=>$item,'type'=>1])
                ->one();
+            $a = [];
+            foreach ($data as $value){
+                if ($value != null){
+                    $a[] = $value;
+                }
+            }
 
        }
-         $data[]=$a;
+
         return Json::encode([
             'code' => 200,
             'msg'  => 'ok',
-            'list' => $data,
+            'list' => $a,
         ]);
     }
 
