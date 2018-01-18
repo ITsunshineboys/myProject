@@ -2925,7 +2925,7 @@ class GoodsOrder extends ActiveRecord
         if ($arr) {
             $arr = self::SwitchStatus_desc($arr, $user);
             foreach ($arr as $k => $v) {
-                $amount_order += ($arr[$k]['goods_price'] * $arr[$k]['goods_number']) * 0.01;
+                $amount_order += ($arr[$k]['goods_price'] * $arr[$k]['goods_number'] * 0.01);
                 $supplier_price += $arr[$k]['supplier_price'] * 0.01;
                 $market_price += $arr[$k]['market_price'] * 0.01;
                 $freight += ($arr[$k]['freight'] * 0.01);
@@ -3412,23 +3412,6 @@ class GoodsOrder extends ActiveRecord
     public static  function AppBuy($user,$address_id,$suppliers,$total_amount)
     {
         $total=0;
-        //1:余额支付  2：支付宝app支付  3：微信APP支付
-//        switch ($pay_way)
-//        {
-//            case 1:
-//                $pay_name=PayService::BALANCE_PAY;
-//                break;
-//            case 2:
-//                $pay_name=PayService::ALI_APP_PAY;
-//                break;
-//            case 3:
-//                $pay_name=PayService::WE_CHAT_APP_PAY;
-//                break;
-//        }
-//        if (!$pay_name)
-//        {
-//            $pay_name=PayService::BALANCE_PAY;
-//        }
         $address=UserAddress::findOne($address_id);
         if (!$address)
         {
@@ -3478,7 +3461,12 @@ class GoodsOrder extends ActiveRecord
                         $code=1000;
                         return $code;
                     }
-                    $supplier_number+=$goods['goods_num'];
+                    $freight=self::CalculationFreight([$goods]);
+                    if ($freight!=0)
+                    {
+                        $supplier_number+=$goods['goods_num'];
+                    }
+                    $goods['freight']=$freight;
                 }
                 foreach ($supplier['goods'] as &$goods)
                 {
@@ -3498,21 +3486,9 @@ class GoodsOrder extends ActiveRecord
 //                        }
 //                    }
                     $time=time();
-
                     if ($supplier_number==0)
                     {
                         $supplier_number=1;
-                    }
-                    $freight=$supplier['freight']*($goods['goods_num']/$supplier_number)*100;
-
-                    $goods_freight=self::CalculationFreight([$goods]);
-                    if ($goods_freight*0.01==0)
-                    {
-                        $freight=0;
-                    }
-                    if ($goods_freight*0.01==$supplier['freight'])
-                    {
-                        $freight=$goods_freight;
                     }
                     $Goods=Goods::findOne($goods['goods_id']);
                     if ($Goods->left_number<$goods['goods_num'])
@@ -3528,6 +3504,21 @@ class GoodsOrder extends ActiveRecord
                         $tran->rollBack();
                         $code=500;
                         return $code;
+                    }
+                    $Supplier=Supplier::find()
+                        ->where(['id'=>$Goods->supplier_id])
+                        ->one();
+
+                    if ($goods['freight']==0)
+                    {
+                        $freight=0;
+                    }else if ($goods['freight']*0.01==$supplier['freight'])
+                    {
+                        $freight=$goods['freight'];
+                    }
+                    else
+                    {
+                        $freight=$supplier['freight']*($goods['goods_num']/$supplier_number)*100;
                     }
                     $date=date('Ymd',time());
                     $GoodsStat=GoodsStat::find()
@@ -3615,9 +3606,7 @@ class GoodsOrder extends ActiveRecord
                         return 1083;
                     }
                     $month=date('Ym',$time);
-                    $Supplier=Supplier::find()
-                        ->where(['id'=>$Goods->supplier_id])
-                        ->one();
+
                     $Supplier->sales_volumn_month=$Supplier->sales_volumn_month+$goods['goods_num'];
                     $Supplier->sales_amount_month=$Supplier->sales_amount_month+$Goods->toArray()[$role_money]*$goods['goods_num'];
                     $Supplier->month=$month;
@@ -3654,6 +3643,40 @@ class GoodsOrder extends ActiveRecord
             $code=500;
             return $code;
         }
+    }
+
+
+    public  static  function  CalculationAppBuyFreight($goods_id,$goods_num)
+    {
+//        $data=(new Query())
+//            ->select('c.goods_id,c.goods_num')
+//            ->from(ShippingCart::tableName().' as c')
+//            ->leftJoin(Supplier::tableName().' as s','s.supplier_id =g.supplier_id')
+//            ->leftJoin(Goods::tableName().' as g ','g.id=c.goods_id')
+//            ->where(['s.supplier_id'=>$Supplier->id])
+//            ->andWhere(['c.uid'=>$user->id])
+//            ->andWhere(['c.role_id'=>$user->last_role_id_app])
+//            ->all();
+//        if (!$data)
+//        {
+//            return null;
+//        }
+//        $total=0;
+//        foreach ($data as &$list)
+//        {
+//            $freight=self::CalculationFreight([$list]);
+//            $total+=$freight;
+//            $freight_list[]=$freight;
+//            if ($freight*0.01==0)
+//            {
+//                $freight=0;
+//            }
+//        }
+//        if ($total==$total_freight)
+//        {
+//
+//        }
+
     }
 
 
