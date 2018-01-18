@@ -3872,6 +3872,14 @@ class MallController extends Controller
             ]);
         }
 
+        if (!BrandCategory::cateHasBrand($goods->category_id)) {
+            $code = 1094;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         $goods->reason = trim(Yii::$app->request->post('reason', ''));
 
         if (!$goods->validate()) {
