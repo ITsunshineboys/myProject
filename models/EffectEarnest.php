@@ -281,6 +281,8 @@ class EffectEarnest extends \yii\db\ActiveRecord
                 }
 
             }
+            var_dump($item);
+            var_dump($post['type']);die;
             if($item==0 && $post['type']==0){
                 $name=$post['name'];
                 $phone=$post['phone'];
