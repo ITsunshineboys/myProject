@@ -1374,7 +1374,6 @@ class QuoteController extends Controller
 //                        }
                     }
                 }
-                var_dump($request['effect_id']);
                 var_dump($effect_ids);
 //                $toponymy_edit=EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
 //                $toponymy_edit->province_code=$request['province_code'];
