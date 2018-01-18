@@ -18,6 +18,7 @@ class ModelService
     const SEPARATOR_SORT = ':';
     const SEPARATOR_GENERAL = ',';
     const SEPARATOR_SKU = '0000';
+    const SEPARATOR_GOODS_VIEW = '、';
     const SORT_DIRECTIONS = [
         SORT_DESC => 'DESC',
         SORT_ASC => 'ASC',

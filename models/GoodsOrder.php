@@ -3402,6 +3402,21 @@ class GoodsOrder extends ActiveRecord
         }
         return $data;
     }
+
+    public  static  function  CheckIsInArray($goods,$lists)
+    {
+            foreach ($lists as &$list)
+            {
+                if (in_array($goods,$list))
+                {
+                    $res=true;
+                }else
+                {
+                    $res=false;
+                }
+            }
+            return $res;
+    }
     /**
      * @param $user
      * @param $address_id
@@ -3449,7 +3464,7 @@ class GoodsOrder extends ActiveRecord
                 }
                 $order_no=GoodsOrder::SetOrderNo();
                 $money=0;
-                $supplier_number=0;
+
                 foreach ($supplier['goods'] as &$goods)
                 {
                     if (
@@ -3462,9 +3477,16 @@ class GoodsOrder extends ActiveRecord
                         return $code;
                     }
                     $freight=self::CalculationFreight([$goods]);
-                    if ($freight!=0)
+                    $goods['logistics_template_id']=Goods::find()
+                            ->select('logistics_template_id')
+                            ->where(['id'=>$goods['goods_id']])
+                            ->one()->logistics_template_id;
+                    if (self::CheckIsInArray($goods['logistics_template_id'],$supplier['goods']))
                     {
-                        $supplier_number+=$goods['goods_num'];
+                        $goods['logistics_template_number']+=$goods['goods_num'];
+                    }else
+                    {
+                        $goods['logistics_template_number']=$goods['goods_num'];
                     }
                     $goods['freight']=$freight;
                 }
@@ -3486,10 +3508,6 @@ class GoodsOrder extends ActiveRecord
 //                        }
 //                    }
                     $time=time();
-                    if ($supplier_number==0)
-                    {
-                        $supplier_number=1;
-                    }
                     $Goods=Goods::findOne($goods['goods_id']);
                     if ($Goods->left_number<$goods['goods_num'])
                     {
@@ -3508,7 +3526,6 @@ class GoodsOrder extends ActiveRecord
                     $Supplier=Supplier::find()
                         ->where(['id'=>$Goods->supplier_id])
                         ->one();
-
                     if ($goods['freight']==0)
                     {
                         $freight=0;
@@ -3518,7 +3535,7 @@ class GoodsOrder extends ActiveRecord
                     }
                     else
                     {
-                        $freight=$supplier['freight']*($goods['goods_num']/$supplier_number)*100;
+                        $freight=$supplier['freight']*($goods['goods_num']/$goods['goods_num'])*100;
                     }
                     $date=date('Ymd',time());
                     $GoodsStat=GoodsStat::find()
@@ -3530,7 +3547,7 @@ class GoodsOrder extends ActiveRecord
                         $GoodsStat=new GoodsStat();
                         $GoodsStat->supplier_id=$Goods->supplier_id;
                         $GoodsStat->sold_number=(int)$goods['goods_num'];
-                        $GoodsStat->amount_sold=($Goods->toArray()[$role_money]*$goods['goods_num']+$freight);
+                        $GoodsStat->amount_sold=($Goods->toArray()[$role_money]*$goods['logistics_template_number']+$freight);
                         $GoodsStat->create_date=$date;
                         if (!$GoodsStat->save(false))
                         {

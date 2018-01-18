@@ -1470,7 +1470,7 @@ class Goods extends ActiveRecord
             'left_number' => $this->left_number,
             'brand_name' => GoodsBrand::findOne($this->brand_id)->name,
             'style_ids' => $styleIds,
-            'style_name' => join(',', Style::findNames(['in', 'id', $styleIds])), // $this->style_id ? Style::findOne($this->style_id)->style : '',
+            'style_name' => join(ModelService::SEPARATOR_GOODS_VIEW, Style::findNames(['in', 'id', $styleIds])), // $this->style_id ? Style::findOne($this->style_id)->style : '',
             'series_name' => $this->series_id ? Series::findOne($this->series_id)->series : '',
             'attrs' => GoodsAttr::frontDetailsByGoodsId($this->id),
             'images' => GoodsImage::imagesByGoodsId($this->id),
