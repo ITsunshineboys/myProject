@@ -1546,7 +1546,6 @@ class BasisDecorationService
     public static function lamp($goods,$get)
     {
 
-        var_dump($goods);die;
         foreach ($goods as &$oneGoods){
             if(strpos($oneGoods[1]['value'],'客厅') !== false) {
                 $oneGoods[0]['quantity'] = (int)ceil($get['hall']);
@@ -1582,10 +1581,6 @@ class BasisDecorationService
             }
         }
 
-var_dump($hallLamp);
-var_dump($bedroomLamp);
-var_dump($toiletLamp);
-var_dump($kitchenLamp);die;
 
         $hallLampAll = isset($hallLamp) ? $hallLamp :[];
         $bedroomLampAll = isset($bedroomLamp) ? $bedroomLamp :[];
