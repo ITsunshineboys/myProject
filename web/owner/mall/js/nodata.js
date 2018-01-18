@@ -4,14 +4,19 @@ app.controller('nodata_ctrl', function ($timeout,$uibModal,$http, _ajax, $state,
     $scope.special_request = ''
     $scope.materials = []
     $scope.worker_list = []
+    let swiper
     $scope.showAll = function () {
+        if(swiper!==undefined){
+            swiper.destroy(true,true)
+        }
         $timeout(function () {
-            var swiper = new Swiper(".swiper-container", {
+            swiper = new Swiper(".swiper-container", {
                 autoplay: 3000,
                 loop: true,
                 pagination: ".swiper-pagination"
             })
-        },0)
+            swiper.reLoop()
+        },300)
     }
     //监听滚动
     // window.addEventListener('scroll',function (event) {

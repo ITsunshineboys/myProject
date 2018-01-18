@@ -256,9 +256,18 @@ app.directive('water', function ($timeout) {
     .directive('repeatDone', function () {
         return {
             link: function (scope, element, attrs) {
-                    if (scope.$last) {
-                        scope.$eval(attrs.repeatDone);
+                console.log(scope.roomPic);
+                let status = false
+                scope.$watch('roomPic',function (newVal,oldVal) {
+                    if(JSON.stringify(newVal) === JSON.stringify(oldVal)){
+                        status = true
+                    }else{
+                        status = false
                     }
+                },true)
+                if (scope.$last || status) {
+                        scope.$eval(attrs.repeatDone);
+                }
             }
         }
     })
