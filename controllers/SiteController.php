@@ -144,6 +144,9 @@ class SiteController extends Controller
         $postData = Yii::$app->request->post();
         $code = 1000;
         if (!$postData) {
+            if (YII_DEBUG) {
+                StringService::writeLog('test', json_encode($postData), 'site-upload');
+            }
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
