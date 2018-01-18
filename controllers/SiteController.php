@@ -1031,7 +1031,9 @@ class SiteController extends Controller
     public function actionUpload()
     {
         $uploadRet = FileService::upload();
-
+        if (YII_DEBUG) {
+            StringService::writeLog('test', $uploadRet, 'site-upload1');
+        }
         if (is_int($uploadRet)) {
             return Json::encode([
                 'code' => $uploadRet,
