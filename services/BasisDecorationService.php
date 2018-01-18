@@ -345,7 +345,7 @@ class BasisDecorationService
     {
 
         $one_goods = [];
-        if (!is_array($goods)){
+        if (is_array($goods)){
             foreach ($goods as $one){
                 if ($one['title'] == $value){
                     $one_goods[] = $one;
