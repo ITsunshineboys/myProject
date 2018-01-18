@@ -4891,12 +4891,12 @@ class MallController extends Controller
      */
     public function actionStyleStatus()
     {
+
         $code = 1000;
         $post = Yii::$app->request->post();
         $series = new Style();
         $series_edit = $series->findOne($post['id']);
         $series_edit->status = $post['status'];
-
         if (!$series_edit->validate()) {
             return Json::encode([
                 'code' => $code,
@@ -4936,7 +4936,7 @@ class MallController extends Controller
                     ]);
                 }
 
-                Goods::disableGoodsByStyleId($series_edit->id, $operator);
+                Goods::disableGoodsBySeriesId($series_edit->id, $operator);
             }
 
             $tran->commit();
@@ -4945,7 +4945,6 @@ class MallController extends Controller
                 'msg'=>'ok'
             ]);
         } catch (\Exception $e) {
-            var_dump($e);
             $tran->rollBack();
             $code = 500;
             return Json::encode([
