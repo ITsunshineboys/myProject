@@ -2266,7 +2266,6 @@ class QuoteController extends Controller
         $effect_id=explode(',',$effect_ids);
         $data=[];
         foreach ($effect_id as $item){
-            var_dump($item);
            $a=Effect::find()
                ->select('id,particulars')
                ->asArray()
@@ -2274,8 +2273,8 @@ class QuoteController extends Controller
                ->one();
 
        }
-       var_dump($a);
-        die;
+       $data[]=$a;
+        var_dump($data);die;
         return Json::encode([
             'code' => 200,
             'msg'  => 'ok',
