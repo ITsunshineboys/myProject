@@ -356,7 +356,7 @@ class BasisDecorationService
         }
 
 
-
+var_dump($one_goods);die;
 
 //        $style = self::style($one_goods);
         //  抓取利润最大的商品

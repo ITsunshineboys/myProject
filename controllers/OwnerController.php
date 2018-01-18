@@ -902,7 +902,6 @@ class OwnerController extends Controller
 
         $goods = Goods::priceDetail(self::WALL_SPACE, self::LATEX_MATERIAL,$get['city']);
         $judge = BasisDecorationService::judge($goods,$get);
-        var_dump($judge);die;
 
 
         //当地工艺
@@ -932,16 +931,11 @@ class OwnerController extends Controller
 
         // 商品属性
         $putty_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['putty'],'');
+        var_dump($putty_attr);die;
         $undercoat_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['emulsion_varnish_primer'],'');
         $finishing_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['emulsion_varnish_surface'],'');
         $wire_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['concave_line'],'长');
         $land_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['land_plaster'],'');
-        var_dump($putty_attr); echo 111;
-        var_dump($undercoat_attr);echo 2221;
-        var_dump($finishing_attr);echo 333;
-        var_dump($wire_attr);echo 44;
-        var_dump($land_attr);die;
-
 
 
 
