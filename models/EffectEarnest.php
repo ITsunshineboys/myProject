@@ -299,7 +299,6 @@ class EffectEarnest extends \yii\db\ActiveRecord
                 $earnest=0;
                 $transaction_no='';
             }
-
             $effect_earnest=new EffectEarnest();
             $effect_earnest->uid=$uid;
             $effect_earnest->effect_id=$id;
