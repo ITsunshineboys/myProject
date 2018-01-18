@@ -2043,7 +2043,6 @@ class GoodsOrder extends ActiveRecord
         $orders=explode(',',$postData['list']);
         if(!is_array($orders))
         {
-            echo 1;die;
             $code=1000;
             return $code;
         }
@@ -2054,7 +2053,6 @@ class GoodsOrder extends ActiveRecord
         }
         $orderAmount=self::CalculationCost($orders);
         if ($postData['total_amount']*100  != $orderAmount){
-          echo $orderAmount;die;
             $code=1000;
             return $code;
         };
