@@ -7,8 +7,8 @@
           <img src="http://service.cdlhzz.cn/static/image/2017/12/18/1513588491053.jpg">
         </div>
         <div class="store-name">
-          <p>森达地板自营店</p>
-          <p class="experience-shop" @click="isShowAlert = true">线下体验店</p>
+          <p>{{storeData.shop_name}}</p>
+          <p class="experience-shop" v-if="storeData.is_line_supplier === 1" @click="isShowAlert = true">线下体验店</p>
         </div>
       </div>
       <div flex>
@@ -18,7 +18,7 @@
         </div>
         <div class="split-line"></div>
         <div class="fans" flex="dir:top main:justify">
-          <span>12k</span>
+          <span>{{storeData.follower_number}}</span>
           <span>粉丝数</span>
         </div>
       </div>
@@ -26,22 +26,22 @@
     <ul class="store-info">
       <li flex="main:justify cross:center">
         <span class="store-title">店铺号</span>
-        <span class="store-msg">12355</span>
+        <span class="store-msg">{{storeData.shop_no}}</span>
       </li>
       <li flex="main:justify cross:center">
         <span class="store-title">开店时间</span>
-        <span class="store-msg">2015-09-22</span>
+        <span class="store-msg">{{storeData.open_shop_time}}</span>
       </li>
     </ul>
 
     <ul class="store-info">
       <li flex="main:justify cross:center">
         <span class="store-title">综合评分</span>
-        <span class="store-score">9.5</span>
+        <span class="store-score">{{storeData.comprehensive_score}}</span>
       </li>
       <li flex="main:justify cross:center">
         <span class="store-title">配送员服务</span>
-        <span class="store-score">9.5</span>
+        <span class="store-score">{{storeData.delivery_service_score}}</span>
       </li>
     </ul>
     <ul class="store-info">
@@ -77,14 +77,26 @@
         isAttention: false,
         offlineInfo: {
           address: '',
-          iphone: '',
-          desc: ''
-        }
+          iphone: ''
+        },
+        storeData: {}
       }
+    },
+    activated () {
+      this.axios.get('/supplier/view', {id: this.$route.params.id}, res => {
+        console.log(res, '店铺简介')
+        let data = res.data.supplier_view
+        this.storeData = data
+        this.offlineInfo.address = data.district
+        this.offlineInfo.iphone = data.line_supplier_mobile
+      })
     },
     methods: {
       isShow (bool) {
         this.isShowAlert = bool
+      },
+      contactShop () {      // 联系商家
+        // do something
       }
     }
   }

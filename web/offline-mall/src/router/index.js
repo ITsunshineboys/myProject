@@ -68,7 +68,7 @@ export default new Router({
       name: 'Store',
       component: StoreHome
     }, {
-      path: '/shop-intro',
+      path: '/shop-intro/:id',
       name: 'ShopIntro',
       component: ShopIntro
     }, {

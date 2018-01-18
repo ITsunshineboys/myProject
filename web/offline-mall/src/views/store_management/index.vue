@@ -8,7 +8,7 @@
         </div>
         <div class="store-name">
           <p>{{storeData.shop_name}}</p>
-          <p class="experience-shop" @click="isShowAlert = true">线下体验店</p>
+          <p class="experience-shop" v-if="storeData.is_line_supplier === 1" @click="isShowAlert = true">线下体验店</p>
         </div>
       </div>
       <div flex>
@@ -30,18 +30,20 @@
           <tab-item @on-item-click="onClickTab">全部商品</tab-item>
         </tab>
         <div class="goods-filter" v-if="tabActive == 1">
-          <div>销量优先</div>
-          <div class="active">
+          <div :class="{active: sortName === 'sold_number'}" @click="tabHandle('sold_number')">销量优先</div>
+          <div :class="{active: sortName === 'platform_price'}" @click="tabHandle('platform_price')">
             <span>价格</span>
             <span class="sort">
-          <span class="iconfont icon-sort-up active"></span><span class="iconfont icon-sort-down"></span>
-        </span>
+              <span :class="{active: platformPriceSortNum === 4 & sortName === 'platform_price'}" class="iconfont icon-sort-up"></span>
+              <span :class="{active: platformPriceSortNum === 3 & sortName === 'platform_price'}" class="iconfont icon-sort-down"></span>
+            </span>
           </div>
-          <div>
+          <div :class="{active: sortName === 'favourable_comment_rate'}" @click="tabHandle('favourable_comment_rate')">
             <span>好评率</span>
             <span class="sort">
-          <span class="iconfont icon-sort-up"></span><span class="iconfont icon-sort-down"></span>
-        </span>
+              <span :class="{active: favourableCommentRateSortNum === 4 & sortName === 'favourable_comment_rate'}" class="iconfont icon-sort-up"></span>
+              <span :class="{active: favourableCommentRateSortNum === 3 & sortName === 'favourable_comment_rate'}" class="iconfont icon-sort-down"></span>
+            </span>
           </div>
         </div>
       </sticky>
@@ -49,7 +51,7 @@
     <div class="store-home" v-if="tabActive == 0">
       <swiper :list="carousel" :show-desc-mask="false" dots-position="center" dots-class="dots" :loop="true" :auto="true" height="145px"></swiper>
       <div class="store-goods-list" flex>
-        <router-link class="store-goods-item" v-for="obj in recommendGoods" :key="obj.id" :to="'/good-detail/' + obj.url" tag="div">
+        <router-link class="store-goods-item" v-for="obj in recommendGoods" :to="'/good-detail/' + obj.url" tag="div" :key="obj.id">
           <img :src="obj.image">
           <p class="store-goods-title">{{obj.title}}</p>
           <p class="store-goods-desc">{{obj.description}}</p>
@@ -59,14 +61,14 @@
     </div>
 
     <div class="all-goods" v-else>
-      <goods-list></goods-list>
+      <goods-list :goods-list="allGoodsData"></goods-list>
     </div>
 
     <div class="btn-group" flex>
-      <router-link :to="{path: '/shop-intro'}" tag="button" type="button">
+      <router-link :to="{path: '/shop-intro/' + $route.params.id}" tag="button" type="button">
         店铺介绍
       </router-link>
-      <button class="" type="button">联系商家</button>
+      <button class="" type="button" @click="contactStore('' ,6)">联系商家</button>
     </div>
 
     <!-- 线下体验店详情弹窗 -->
@@ -99,11 +101,21 @@
         carousel: [],         // 店铺首页轮播
         storeData: {},        // 店铺信息
         recommendGoods: [],   // 推荐商品列表
-        offlineInfo: {
-          address: '成都市金牛区就老是卡死了老是看见',
-          phone: '15932121321',
-          desc: '就是实体店啦傻逼，这也要看一下 ——鲁迅'
-        }
+        offlineInfo: {        // 线下体验店弹窗信息
+          address: '',
+          phone: '',
+          desc: ''
+        },
+        sortName: 'sold_number',              // tab排序名称  sold_number(销量优先)  platform_price(价格) favourable_comment_rate(好评率)
+        platformPriceSortNum: 4,              // 价格排序方式   3：降序 4：升序
+        favourableCommentRateSortNum: 4,      // 好评率排序方式   3：降序 4：升序
+        allGoodsParams: {     // 全部商品请求参数
+          supplier_id: this.$route.params.id,
+          page: 1,
+          'sort[]': 'sold_number:3',
+          size: 12
+        },
+        allGoodsData: []
       }
     },
     activated () {
@@ -118,11 +130,13 @@
             img: item.image
           }
         })
+        this.offlineInfo.address = data.district
+        this.offlineInfo.phone = data.line_supplier_mobile
       })
+      // 请求店铺首页推荐商品
       this.axios.get('supplier/recommend-second', {supplier_id: this.$route.params.id}, res => {
         console.log(res, '店铺推荐商品')
-        let data = res.data.recommend_second
-        this.recommendGoods = data
+        this.recommendGoods = res.data.recommend_second
       })
     },
     methods: {
@@ -134,6 +148,7 @@
         } else {
           // 当 tab 为全部商品，tab 高度最小为 88 像素
           this.tabHeight = 88
+          this.getAllGoodsData()
         }
       },
       /**
@@ -143,6 +158,32 @@
        */
       isShow (bool) {
         this.isShowAlert = bool
+      },
+      getAllGoodsData () {
+        this.axios.get('/supplier/goods', this.allGoodsParams, res => {
+          console.log(res, '全部商品列表')
+          this.allGoodsData = res.data.supplier_goods
+        })
+      },
+      tabHandle (str) {
+        this.sortName = str
+        switch (str) {      // 只有在价格和好评率会做排序
+          case 'platform_price':
+            // 点击价格 tab 默认将默认为降序
+            this.platformPriceSortNum = this.platformPriceSortNum === 4 ? 3 : 4     // 第一次点击价格 tab 为降序：3
+            this.favourableCommentRateSortNum = 4                                   // 将好评率改为升序
+            this.allGoodsParams['sort[]'] = this.sortName + ':' + this.platformPriceSortNum
+            break
+          case 'favourable_comment_rate':
+            // 点击好评率 tab 默认将默认为降序
+            this.favourableCommentRateSortNum = this.favourableCommentRateSortNum === 4 ? 3 : 4     // 第一次点击好评率 tab 为降序：3
+            this.platformPriceSortNum = 4                                                           // 将价格改为升序
+            this.allGoodsParams['sort[]'] = this.sortName + ':' + this.favourableCommentRateSortNum
+            break
+          default:
+            this.allGoodsParams['sort[]'] = this.sortName + ':' + 3
+        }
+        this.getAllGoodsData()
       }
     }
   }
@@ -211,6 +252,7 @@
   .store-goods-list {
     padding: 10px 14px;
     flex-wrap: wrap;
+    background-color: #fff;
   }
 
   .store-goods-item {

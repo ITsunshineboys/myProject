@@ -128,6 +128,9 @@
             this.favourableCommentRateSortNum = this.favourableCommentRateSortNum === 4 ? 3 : 4     // 第一次点击好评率 tab 为降序：3
             this.platformPriceSortNum = 4                                                           // 将价格改为升序
             this.goodsListParams['sort[]'] = this.sortName + ':' + this.favourableCommentRateSortNum
+            break
+          default:
+            this.allGoodsParams['sort[]'] = this.sortName + ':' + 3
         }
         this.getGoodsList()
       },
