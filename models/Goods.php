@@ -536,9 +536,9 @@ class Goods extends ActiveRecord
             $goods_style = GoodsStyle::styleIdsByGoodsId($one_goods['id']);
             $goods_style[] =  $one_goods['style_id'];
 
-            $one_goods['style_name'] = implode(',',$goods_style);
-            $one_goods['series_name'] = $one_goods['series_id'];
-//            var_dump($one_goods['style_name']);
+//            $one_goods['style_name'] = implode(',',$goods_style);
+            $one_goods['series_name'] = $goods_style;
+            var_dump($one_goods['style_name']);
             unset($one_goods['series_id']);
             unset($one_goods['style_id']);
 //            if (
@@ -561,8 +561,7 @@ class Goods extends ActiveRecord
             ){
 
                 $where_ = "id in (".$one_goods['style_name'].")";
-                $series = Style::find()->select('id,style')->where($where_)->all();
-                var_dump($series);
+                $series = Style::find()->asArray()->select('id,style')->where(['in','id',$one_goods['series_name']])->all();
                 foreach ($series as $one_series){
                     $one_goods['style_name'] = $one_series['style'];
                 }
