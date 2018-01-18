@@ -496,7 +496,14 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
              swiper = new Swiper(".swiper-container", {
                 autoplay: 3000,
                 loop: true,
-                pagination: ".swiper-pagination"
+                pagination: ".swiper-pagination",
+                 observer:true,//修改swiper自己或子元素时，自动初始化swiper
+                 observeParents:true,//修改swiper的父元素时，自动初始化swiper
+                 onSlideChangeEnd: function(swiper){
+                     swiper.update(true);
+                     // mySwiper.startAutoplay();
+                     // mySwiper.reLoop();
+                 }
             })
             swiper.reLoop()
         },300)
