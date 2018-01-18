@@ -345,13 +345,13 @@ class BasisDecorationService
     {
 
         $one_goods = [];
-        if (is_array($goods)){
+        if (count($goods) == count($goods, 2)){
             foreach ($goods as $one){
                 if ($one['title'] == $value){
                     $one_goods[] = $one;
                 }
             }
-        }elseif(!is_array($goods)){
+        }elseif(count($goods) == count($goods, 1)){
             $one_goods[] = $goods;
         }
 
