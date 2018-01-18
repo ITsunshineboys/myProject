@@ -351,6 +351,8 @@ class BasisDecorationService
                     $one_goods[] = $one;
                 }
             }
+        }elseif(!is_array($goods)){
+            $one_goods[] = $goods;
         }
 
 

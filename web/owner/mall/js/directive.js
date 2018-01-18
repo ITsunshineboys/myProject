@@ -256,9 +256,11 @@ app.directive('water', function ($timeout) {
     .directive('repeatDone', function () {
         return {
             link: function (scope, element, attrs) {
-                if (scope.$last) {
-                    scope.$eval(attrs.repeatDone);
-                }
+                scope.$watch('roomPic',function (newVal,oldVal) {
+                    if (scope.$last) {
+                        scope.$eval(attrs.repeatDone);
+                    }
+                },true)
             }
         }
     })
