@@ -352,7 +352,7 @@ class BasisDecorationService
                 }
             }
         }elseif(!is_array($goods)){
-            $one_goods = $goods;
+            $one_goods[] = $goods;
         }
 
 
