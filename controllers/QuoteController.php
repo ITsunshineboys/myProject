@@ -3123,7 +3123,7 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-       var_dump(EffectEarnest::find()->where(['id'=>86])->asArray()->one());
+       var_dump(EffectToponymy::find()->asArray()->all());
 
     }
 }
