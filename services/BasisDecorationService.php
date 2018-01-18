@@ -1602,10 +1602,11 @@ class BasisDecorationService
 
     public static function identicalSku($array)
     {
+        var_dump($array);die;
         // 获取去掉重复数据的数组
-        $unique_arr = array_unique ( $array );
+        $unique_arr = array_unique ($array);
         // 获取重复数据的数组
-        $repeat_arr = array_diff_assoc ( $array, $unique_arr );
+        $repeat_arr = array_diff_assoc ($array,$unique_arr );
         var_dump($repeat_arr);die;
         return $array;
     }
