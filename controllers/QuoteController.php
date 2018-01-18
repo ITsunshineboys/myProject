@@ -1209,7 +1209,7 @@ class QuoteController extends Controller
 
                     if ($house['is_ordinary'] == 0) {
                         //普通户型修改
-                       var_dump($house['id']);
+
                         $house_id = $house['id'];
                         $bedroom = $house['cur_room'];
                         $sittingRoom_diningRoom = $house['cur_hall'];
@@ -1269,7 +1269,7 @@ class QuoteController extends Controller
                     if ($house['is_ordinary'] == 1){
 
                         // 案例修改
-                        var_dump($house['id']);
+
                         $house_id               = $house['id'];
                         $bedroom                = $house['cur_room'];
                         $sittingRoom_diningRoom = $house['cur_hall'];
@@ -1377,7 +1377,7 @@ class QuoteController extends Controller
                     }
                 }
 
-
+                    var_dump(array_merge(explode('',$house['id'])));
 //                $toponymy_edit=EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
 //                $toponymy_edit->province_code=$request['province_code'];
 //                $toponymy_edit->city_code=$request['city_code'];
