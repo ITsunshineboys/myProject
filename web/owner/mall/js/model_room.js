@@ -487,13 +487,13 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                });
            })
        }*/
-    let swiper
+    let mySwiper
     $scope.showAll = function () {
-        if(swiper!==undefined){
-            swiper.destroy(true,true)
+        if(mySwiper!==undefined){
+            mySwiper.destroy(true,true)
         }
         $timeout(function () {
-             swiper = new Swiper(".swiper-container", {
+            mySwiper = new Swiper(".swiper-container", {
                 autoplay: 3000,
                 loop: true,
                 pagination: ".swiper-pagination",
@@ -505,7 +505,8 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                      // mySwiper.reLoop();
                  }
             })
-            swiper.reLoop()
+            mySwiper.startAutoplay()
+            mySwiper.reLoop()
         },300)
     }
     //初始化
