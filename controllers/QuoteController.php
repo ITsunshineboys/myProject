@@ -1209,7 +1209,7 @@ class QuoteController extends Controller
 
                     if ($house['is_ordinary'] == 0) {
                         //普通户型修改
-                        $effect_ids[]=array_push($effect_ids[],$house['id']);
+                        $effect_ids[]=array_push($effect_ids,$house['id']);
                         $house_id = $house['id'];
                         $bedroom = $house['cur_room'];
                         $sittingRoom_diningRoom = $house['cur_hall'];
@@ -1259,7 +1259,7 @@ class QuoteController extends Controller
                                     $series_id = $images['series'];
                                     $style_id = $images['style'];
                                     $images_user = $images['drawing_name'];
-                                    $effect_picture = (new EffectPicture())->plotAdd($house_id, $effect_images, $series_id, $style_id, $images_user);
+                                    (new EffectPicture())->plotAdd($house_id, $effect_images, $series_id, $style_id, $images_user);
                                 }
                             }
 
@@ -1268,7 +1268,7 @@ class QuoteController extends Controller
 
                     if ($house['is_ordinary'] == 1){
                         // 案例修改
-                        $effect_ids[]=array_push($effect_ids[],$house['id']);
+                        $effect_ids[]=array_push($effect_ids,$house['id']);
                         $house_id               = $house['id'];
                         $bedroom                = $house['cur_room'];
                         $sittingRoom_diningRoom = $house['cur_hall'];
