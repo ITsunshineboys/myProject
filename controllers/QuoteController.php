@@ -2272,6 +2272,7 @@ class QuoteController extends Controller
                ->where(['id'=>$item,'type'=>1])
                ->one();
        }
+       var_dump($data);die;
         return Json::encode([
             'code' => 200,
             'msg'  => 'ok',
