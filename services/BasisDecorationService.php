@@ -1581,7 +1581,10 @@ class BasisDecorationService
             }
         }
 
-
+var_dump($hallLamp);
+var_dump($bedroomLamp);
+var_dump($toiletLamp);
+var_dump($kitchenLamp);die;
 
         $hallLampAll = isset($hallLamp) ? $hallLamp :[];
         $bedroomLampAll = isset($bedroomLamp) ? $bedroomLamp :[];
