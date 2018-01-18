@@ -127,8 +127,8 @@ class EffectToponymy extends \yii\db\ActiveRecord
             }
         }
 
-        $a=self::arraySequence($data,'sort_id');
-        return $a;
+        $data=self::arraySequence($a,'sort_id');
+        return $data;
 
     }
 }
