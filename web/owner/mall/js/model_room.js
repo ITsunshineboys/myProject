@@ -907,7 +907,6 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
         let materials = []//申请材料项
         let status = false//材料是否存在下架
         //整合申请样板间所需传值
-        console.log($scope.total_prices);
         let obj = {
             province_code:$scope.active_case.province_code,
             city_code:$scope.active_case.city_code,
@@ -926,8 +925,8 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
             style:$scope.params.style.id,
             type:0,
             requirement:$scope.special_request,
-            original_price:$scope.total_prices==''?0:$scope.total_prices,
-            sale_price:$scope.special_offer == ''?0:$scope.special_offer
+            original_price:$scope.total_prices==undefined?0:$scope.total_prices,
+            sale_price:$scope.special_offer == undefined?0:$scope.special_offer
         }
         for(let [key,value] of $scope.materials.entries()){
             for(let [key1,value1] of value.second_level.entries()){
