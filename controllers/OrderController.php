@@ -5334,10 +5334,12 @@ class OrderController extends Controller
         }
 
         $freight=GoodsOrder::CalculationFreight($goods);
-        return Json::encode([
+        return Json::encode
+        ([
             'code'=>200,
             'msg'=>'ok',
-            'data'=>[
+            'data'=>
+            [
                 'list'=>$data,
                 'freight'=> StringService::formatPrice($freight*0.01),
                 'all_money'=> StringService::formatPrice(($all_money+$freight)*0.01),

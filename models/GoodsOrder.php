@@ -2928,7 +2928,13 @@ class GoodsOrder extends ActiveRecord
                 $amount_order += ($arr[$k]['goods_price'] * $arr[$k]['goods_number']) * 0.01;
                 $supplier_price += $arr[$k]['supplier_price'] * 0.01;
                 $market_price += $arr[$k]['market_price'] * 0.01;
-                $freight += $arr[$k]['freight'] * 0.01;
+                $freight += ($arr[$k]['freight'] * 0.01);
+//                if ($arr[$k]['status_code']==self::ORDER_TYPE_UNPAID)
+//                {
+//                    $GoodsOrder=GoodsOrder::FindByOrderNo($arr[$k]['order_no']);
+//
+//
+//                }
                 if (empty($arr[$k]['username'])) {
                     $username = $arr[$k]['consignee'];
                 }else
@@ -3000,7 +3006,16 @@ class GoodsOrder extends ActiveRecord
             $output['freight'] = StringService::formatPrice($freight);
             $output['original_price'] = StringService::formatPrice($market_price * $arr[0]['goods_number']);
             $output['discount_price'] = StringService::formatPrice($amount_order);
-            $output['amount_order'] = StringService::formatPrice($freight + $amount_order);
+
+            if ($arr[$k]['status_code']==self::ORDER_TYPE_UNPAID)
+            {
+                $output['amount_order'] = StringService::formatPrice($arr[0]['amount_order']*0.01);
+
+            }else
+            {
+                $output['amount_order'] = StringService::formatPrice($freight + $amount_order);
+            }
+
             $output['consignee'] = $arr[0]['consignee'];
             $output['district'] = LogisticsDistrict::getdistrict($arr[0]['district_code']) . $arr[0]['region'];
             $output['invoice_information'] = $arr[0]['invoice_content'] . '-' . $arr[0]['invoice_header'];
