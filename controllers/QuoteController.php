@@ -2275,7 +2275,6 @@ class QuoteController extends Controller
                 unset($data[$k]);
             }
        }
-        var_dump($data);die;
         return Json::encode([
             'code' => 200,
             'msg'  => 'ok',
