@@ -1653,6 +1653,10 @@ class OwnerController extends Controller
                 'goods' =>[],
             ]);
         }
+
+        $workerData = BasisDecorationService::identicalSku($data);
+        die;
+
         $sku = [];
         foreach ($data as $one_data){
             $sku [] = $one_data['goods_code'];

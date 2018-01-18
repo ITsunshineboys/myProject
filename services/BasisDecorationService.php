@@ -1599,4 +1599,22 @@ class BasisDecorationService
 
         return $style;
     }
+
+
+    public static function identicalSku($array)
+    {
+        $len = count ( $array );
+        for($i = 0; $i < $len; $i ++) {
+            for($j = $i + 1; $j < $len; $j ++) {
+                if ($array [$i] == $array [$j]) {
+                    $repeat_arr [] = $array [$i];
+                    break;
+                }
+            }
+        }
+
+        var_dump($repeat_arr);die;
+        return $repeat_arr;
+    }
+
 }
