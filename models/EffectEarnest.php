@@ -281,6 +281,10 @@ class EffectEarnest extends \yii\db\ActiveRecord
                 }
 
             }
+            if($post['name'] && $post['phone']){
+                $name=$post['name'];
+                $phone=$post['phone'];
+            }
             if($post['type']==0 ){
                 $user=User::find()->where(['id'=>$uid])->select('nickname,mobile')->asArray()->one();
                 $name=$user['nickname'];
@@ -321,6 +325,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
             $tran->commit();
             return true;
         }catch (Exception $e){
+            var_dump($e);die;
             $tran->rollBack();
             return false;
         }
