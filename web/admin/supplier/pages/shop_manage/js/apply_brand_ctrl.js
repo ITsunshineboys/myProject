@@ -193,6 +193,7 @@ applybrand.controller("applybrand_ctrl", function ($scope, $rootScope, $state, U
         let params = {
             category_id: newVal,
             "fields[]": "brands",
+	          from_brand_usage_apply_page: 1
         };
         _ajax.get('/mall/category-brands-styles-series', params, function (res) {
             let data = res.data;
