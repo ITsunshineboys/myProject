@@ -2054,7 +2054,7 @@ class GoodsOrder extends ActiveRecord
         }
         $orderAmount=self::CalculationCost($orders);
         if ($postData['total_amount']*100  != $orderAmount){
-            echo 2;die;
+          echo $orderAmount;die;
             $code=1000;
             return $code;
         };
