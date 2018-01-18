@@ -3481,7 +3481,7 @@ class GoodsOrder extends ActiveRecord
                             ->select('logistics_template_id')
                             ->where(['id'=>$goods['goods_id']])
                             ->one()->logistics_template_id;
-                    if (self::CheckIsInArray($goods['logistics_template_number'],$supplier['goods']))
+                    if (self::CheckIsInArray($goods['logistics_template_id'],$supplier['goods']))
                     {
                         $goods['logistics_template_number']+=$goods['goods_num'];
                     }else
@@ -3526,7 +3526,6 @@ class GoodsOrder extends ActiveRecord
                     $Supplier=Supplier::find()
                         ->where(['id'=>$Goods->supplier_id])
                         ->one();
-
                     if ($goods['freight']==0)
                     {
                         $freight=0;
