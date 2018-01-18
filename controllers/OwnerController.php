@@ -1438,8 +1438,9 @@ class OwnerController extends Controller
         $lamp = [];
         foreach ($goods as $oneLamp){
             if ($oneLamp['title'] == BasisDecorationService::goodsNames()['lamp'] && $oneLamp['series_id'] == $get['series'] && $oneLamp['style_id'] == $get['style']){
-               $attr = BasisDecorationService::goodsAttr($oneLamp,BasisDecorationService::goodsNames()['lamp'],'适用处',1);
-               $lamp [] = $attr;
+                $array[] = $oneLamp;
+                $attr = BasisDecorationService::goodsAttr($array,BasisDecorationService::goodsNames()['lamp'],'适用处',1);
+                $lamp [] = $attr;
             }
         }
 
