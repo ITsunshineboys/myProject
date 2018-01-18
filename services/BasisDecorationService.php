@@ -748,11 +748,11 @@ class BasisDecorationService
             }
 
             if ($one_goods['style_name'] == null
-                && strpos($one_goods['series_name'],$style->series) !== false){
+                && strpos($one_goods['series_name'],$series->series) !== false){
                 $v[] = $one_goods;
             }
             if (strpos($one_goods['style_name'],$style->style) !== false
-                && strpos($one_goods['series_name'],$style->series) !== false){
+                && strpos($one_goods['series_name'],$series->series) !== false){
                 $v[] = $one_goods;
             }
             if ($one_goods['style_name'] == null
