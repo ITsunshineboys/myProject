@@ -5216,9 +5216,12 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $postData=Yii::$app->request->post();
-
-        if ( is_array($postData) )
+        $postData=file_get_contents("php://input");
+        if (is_null(Json::decode($postData)))
+        {
+            $postData=Yii::$app->request->post();
+        }
+        if (is_array($postData))
         {
             $goods=(array)json_decode($postData['goods']);
             $all_money=0;
@@ -5239,7 +5242,7 @@ class OrderController extends Controller
             }
         }else
         {
-            $postData=file_get_contents("php://input");
+
             $arr=json_decode($postData);
             $goods=$arr->goods;
             $all_money=0;
