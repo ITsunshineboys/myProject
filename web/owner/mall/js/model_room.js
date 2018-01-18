@@ -875,8 +875,8 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                 $uibModalInstance.close()
             }
             $scope.viewDetails = function () {
+                $uibModalInstance.close()
                 window.AndroidWebView.skipZhuangXiu()
-                // $uibModalInstance.close()
             }
         }
         all_modal.$inject = ['$scope', '$uibModalInstance']
@@ -900,21 +900,21 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
         let status = false//材料是否存在下架
         //整合申请样板间所需传值
         let obj = {
-            province_code:$scope.active_case.province,
-            city_code:$scope.active_case.city,
+            province_code:$scope.active_case.province_code,
+            city_code:$scope.active_case.city_code,
             street:$scope.toponymy.address,
             toponymy:$scope.toponymy.name,
-            sittingRoom_diningRoom:$scope.active_case.hall,
+            sittingRoom_diningRoom:$scope.active_case.sittingRoom_diningRoom,
             window:$scope.active_case.window,
             bedroom:$scope.active_case.bedroom,
             area:$scope.active_case.area,
             high:$scope.active_case.high,
             toilet:$scope.active_case.toilet,
             kitchen:$scope.active_case.kitchen,
-            stair_id:$scope.active_case.stairway_id,
-            stairway:$scope.params.stairway,
-            series:$scope.params.series,
-            style:$scope.params.style,
+            stair_id:$scope.params.stair == 0?0:$scope.params.stair.id,
+            stairway:$scope.active_case.stairway,
+            series:$scope.params.series.id,
+            style:$scope.params.style.id,
             type:0,
             requirement:$scope.special_request,
             original_price:$scope.total_prices,
@@ -960,8 +960,8 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                 $uibModalInstance.close()
             }
             $scope.viewDetails = function () {
+                $uibModalInstance.close()
                 window.AndroidWebView.skipZhuangXiu()
-                // $uibModalInstance.close()
             }
         }
         all_modal1.$inject = ['$scope', '$uibModalInstance']

@@ -17,11 +17,12 @@ app.controller('nodata_ctrl', function ($timeout,$uibModal,$http, _ajax, $state,
                 observer:true,//修改swiper自己或子元素时，自动初始化swiper
                 observeParents:true,//修改swiper的父元素时，自动初始化swiper
                 onSlideChangeEnd: function(swiper){
-                    swiper.update();
+                    swiper.update(true);
                     // mySwiper.startAutoplay();
                     // mySwiper.reLoop();
                 }
             })
+            mySwiper.startAutoplay()
             mySwiper.reLoop()
         },300)
     }
@@ -837,8 +838,8 @@ app.controller('nodata_ctrl', function ($timeout,$uibModal,$http, _ajax, $state,
                 $uibModalInstance.close()
             }
             $scope.viewDetails = function () {
+                $uibModalInstance.close()
                 window.AndroidWebView.skipZhuangXiu()
-                // $uibModalInstance.close()
             }
         }
         all_modal.$inject = ['$scope', '$uibModalInstance']
@@ -922,8 +923,8 @@ app.controller('nodata_ctrl', function ($timeout,$uibModal,$http, _ajax, $state,
                 $uibModalInstance.close()
             }
             $scope.viewDetails = function () {
+                $uibModalInstance.close()
                 window.AndroidWebView.skipZhuangXiu()
-                // $uibModalInstance.close()
             }
         }
         all_modal1.$inject = ['$scope', '$uibModalInstance']
