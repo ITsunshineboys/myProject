@@ -3107,7 +3107,7 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-       var_dump(EffectPicture::find()->where(['effect_id'=>252])->all());
+       var_dump(EffectEarnest::find()->where(['id'=>86])->asArray()->one());
 
     }
 }
