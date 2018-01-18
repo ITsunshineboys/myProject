@@ -2271,8 +2271,8 @@ class QuoteController extends Controller
                ->asArray()
                ->where(['id'=>$item,'type'=>1])
                ->one();
-            if($data==null){
-                unset($item[$k]);
+            if($data[$k]==null){
+                unset($data[$k]);
             }
        }
         var_dump($data);die;
