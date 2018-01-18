@@ -2265,17 +2265,17 @@ class QuoteController extends Controller
             ->one()['effect_id'];
         $effect_id=explode(',',$effect_ids);
         $data=[];
-        foreach ($effect_id as $k=>$item){
-           $data[]=Effect::find()
+        foreach ($effect_id as $item){
+            var_dump($item);
+           $a=Effect::find()
                ->select('id,particulars')
                ->asArray()
                ->where(['id'=>$item,'type'=>1])
                ->one();
 
        }
-        if($data[$k]==null){
-            unset($data[$k]);
-        }
+       var_dump($a);
+        die;
         return Json::encode([
             'code' => 200,
             'msg'  => 'ok',
