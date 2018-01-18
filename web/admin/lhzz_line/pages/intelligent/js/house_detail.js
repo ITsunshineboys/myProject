@@ -36,7 +36,7 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
                 region_name:value
             })
         }
-        $scope.params.region_code = $scope.region_options[0].region_code
+        // $scope.params.region_code = $scope.region_options[0].region_code
     })
     if($stateParams.index == 1){//编辑
         _ajax.get('/quote/effect-plot-edit-view',{
