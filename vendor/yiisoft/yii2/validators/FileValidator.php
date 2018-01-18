@@ -354,14 +354,14 @@ class FileValidator extends Validator
 
         $filelog = '/tmp/test.log';
         if (YII_DEBUG) {
-            file_put_contents($filelog, $extension, FILE_APPEND);
+            file_put_contents($filelog, '1' . $extension);
         }
         if ($this->checkExtensionByMimeType) {
 
             $mimeType = FileHelper::getMimeType($file->tempName, null, false);
             if ($mimeType === null) {
                 if (YII_DEBUG) {
-                    file_put_contents($filelog, $mimeType, FILE_APPEND);
+                    file_put_contents($filelog, '2' . $mimeType);
                 }
                 return false;
             }
@@ -370,7 +370,7 @@ class FileValidator extends Validator
 
             if (!in_array($extension, $extensionsByMimeType, true)) {
                 if (YII_DEBUG) {
-                    file_put_contents($filelog, json_encode($extensionsByMimeType), FILE_APPEND);
+                    file_put_contents($filelog, '3' . json_encode($extensionsByMimeType));
                 }
                 return false;
             }
@@ -378,7 +378,7 @@ class FileValidator extends Validator
 
         if (!in_array($extension, $this->extensions, true)) {
             if (YII_DEBUG) {
-                file_put_contents($filelog, json_encode($this->extensions), FILE_APPEND);
+                file_put_contents($filelog, '4' . json_encode($this->extensions));
             }
             return false;
         }

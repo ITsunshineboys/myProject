@@ -76,9 +76,6 @@ class FileService
                 return $code;
             }
 
-            if (YII_DEBUG) {
-                StringService::writeLog('test', json_encode($model->errors) . $model->file->extension, 'site-uploadc');
-            }
             return $code;
         }
 
