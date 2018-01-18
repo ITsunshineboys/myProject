@@ -5218,10 +5218,6 @@ class OrderController extends Controller
         }
         $postData=Yii::$app->request->post();
 
-        if (!$postData)
-        {
-            $postData=file_get_contents("php://input");
-        }
         if ( is_array($postData) )
         {
             $goods=(array)json_decode($postData['goods']);
@@ -5243,6 +5239,7 @@ class OrderController extends Controller
             }
         }else
         {
+            $postData=file_get_contents("php://input");
             $arr=json_decode($postData);
             $goods=$arr->goods;
             $all_money=0;
