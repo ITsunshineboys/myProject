@@ -3287,17 +3287,6 @@ class MallController extends Controller
             ]);
         }
 
-        if (Yii::$app->session[User::LOGIN_ROLE_ID] == Yii::$app->params['lhzzRoleId']
-            && $goods->status == Goods::STATUS_WAIT_ONLINE
-            && !BrandCategory::cateHasBrand($goods->category_id)
-        ) {
-            $code = 1094;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $postData = Yii::$app->request->post();
         $goods->sanitize($user, $postData);
         $goods->attributes = $postData;
@@ -3462,6 +3451,16 @@ class MallController extends Controller
         if (!$goods
             || !$goods->canEdit($user)
         ) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if ($goods->status == Goods::STATUS_WAIT_ONLINE
+            && !BrandCategory::cateHasBrand($goods->category_id)
+        ) {
+            $code = 1094;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
