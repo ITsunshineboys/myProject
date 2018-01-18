@@ -3765,7 +3765,7 @@ class GoodsOrder extends ActiveRecord
               $Good[$k]=Goods::find()
                       ->select('logistics_template_id')
                       ->where(['id'=>$goods_[$k]['goods_id']])
-                      ->one()->logistics_template_id]
+                      ->one()->logistics_template_id;
               $Good[$k]['goods_id']=$goods_[$k]['goods_id'];
               $Good[$k]['goods_num']=$goods_[$k]['goods_num'];
           }
