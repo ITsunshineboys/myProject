@@ -3403,19 +3403,75 @@ class GoodsOrder extends ActiveRecord
         return $data;
     }
 
-    public  static  function  CheckIsInArray($goods,$lists)
+
+    /**
+     * @param $goods
+     * @return mixed
+     */
+    public  static  function decomposeFreight($goods)
     {
-            foreach ($lists as &$list)
+        foreach ($goods as  $k =>$v)
+        {
+            $Good[$k]['id']=Goods::find()
+                ->select('logistics_template_id')
+                ->where(['id'=>$goods[$k]['goods_id']])
+                ->one()->logistics_template_id;
+            $Good[$k]['goods_id']=$goods[$k]['goods_id'];
+            $Good[$k]['goods_num']=$goods[$k]['goods_num'];
+        }
+        $templates=[];
+        foreach ($Good as &$wuliu){
+            if (!in_array($wuliu['id'],$templates))
             {
-                if (in_array($goods,$list))
+
+                $templates[]=$wuliu['id'];
+            };
+        }
+        foreach ($templates as &$templateList)
+        {
+            $costs[]['id']=$templateList;
+        }
+        foreach ($costs as &$cost)
+        {
+            $cost['goods_num']=0;
+            foreach ($Good as &$GoodList)
+            {
+                if ($GoodList['id']==$cost['id'])
                 {
-                    $res=true;
-                }else
-                {
-                    $res=false;
+
+                    $cost['goods_num']+=$GoodList['goods_num'];
                 }
             }
-            return $res;
+        }
+        foreach ($costs as &$cost)
+        {
+            $freight=0;
+            $logistics_template=LogisticsTemplate::find()
+                ->where(['id'=>$cost['id']])
+                ->asArray()
+                ->one();
+            if ($logistics_template['delivery_number_default']>=$cost['goods_num'])
+            {
+                $freight+=$logistics_template['delivery_cost_default'];
+            }else{
+                if ($logistics_template['delivery_number_delta']==0)
+                {
+                    $logistics_template['delivery_number_delta']=1;
+                }
+                $addnum=ceil(($cost['goods_num']-$logistics_template['delivery_number_default'])/$logistics_template['delivery_number_delta']);
+                $money=$logistics_template['delivery_cost_default']+$addnum*$logistics_template['delivery_cost_delta'];
+                $freight+=$money;
+            }
+            foreach ($Good as &$GoodList)
+            {
+                if ($GoodList['id']==$cost['id'])
+                {
+                    $GoodList['freight']=$freight*($GoodList['goods_num']/$cost['goods_num']);
+                }
+            }
+        }
+        return  $Good;
+
     }
     /**
      * @param $user
@@ -3464,6 +3520,7 @@ class GoodsOrder extends ActiveRecord
                 }
                 $order_no=GoodsOrder::SetOrderNo();
                 $money=0;
+                $supplier['goods']=self::decomposeFreight($supplier['goods']);
 
                 foreach ($supplier['goods'] as &$goods)
                 {
@@ -3476,22 +3533,6 @@ class GoodsOrder extends ActiveRecord
                         $code=1000;
                         return $code;
                     }
-                    $freight=self::CalculationFreight([$goods]);
-                    $goods['logistics_template_id']=Goods::find()
-                            ->select('logistics_template_id')
-                            ->where(['id'=>$goods['goods_id']])
-                            ->one()->logistics_template_id;
-                    if (self::CheckIsInArray($goods['logistics_template_id'],$supplier['goods']))
-                    {
-                        $goods['logistics_template_number']+=$goods['goods_num'];
-                    }else
-                    {
-                        $goods['logistics_template_number']=$goods['goods_num'];
-                    }
-                    $goods['freight']=$freight;
-                }
-                foreach ($supplier['goods'] as &$goods)
-                {
 //                    $shoppingCart= ShippingCart::find()
 //                        ->where(['uid'=>$user->id])
 //                        ->andWhere(['role_id'=>$user->last_role_id_app])
@@ -3526,17 +3567,18 @@ class GoodsOrder extends ActiveRecord
                     $Supplier=Supplier::find()
                         ->where(['id'=>$Goods->supplier_id])
                         ->one();
-                    if ($goods['freight']==0)
-                    {
-                        $freight=0;
-                    }else if ($goods['freight']*0.01==$supplier['freight'])
-                    {
-                        $freight=$goods['freight'];
-                    }
-                    else
-                    {
-                        $freight=$supplier['freight']*($goods['goods_num']/$goods['goods_num'])*100;
-                    }
+//                    if ($goods['freight']==0)
+//                    {
+//                        $freight=0;
+//                    }else if ($goods['freight']*0.01==$supplier['freight'])
+//                    {
+//                        $freight=$goods['freight'];
+//                    }
+//                    else
+//                    {
+//                        $freight=$supplier['freight']*($goods['goods_num']/$goods['goods_num'])*100;
+//                    }
+                    $freight=$goods['freight'];
                     $date=date('Ymd',time());
                     $GoodsStat=GoodsStat::find()
                         ->where(['supplier_id'=>$Goods->supplier_id])
@@ -3720,13 +3762,10 @@ class GoodsOrder extends ActiveRecord
           }
           foreach ($goods_ as  $k =>$v)
           {
-              $Good[$k]=LogisticsTemplate::find()
-                  ->where(['id'=>Goods::find()
+              $Good[$k]=Goods::find()
                       ->select('logistics_template_id')
                       ->where(['id'=>$goods_[$k]['goods_id']])
-                      ->one()->logistics_template_id])
-                  ->asArray()
-                  ->one();
+                      ->one()->logistics_template_id]
               $Good[$k]['goods_id']=$goods_[$k]['goods_id'];
               $Good[$k]['goods_num']=$goods_[$k]['goods_num'];
           }
