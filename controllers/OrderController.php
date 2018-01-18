@@ -5217,7 +5217,7 @@ class OrderController extends Controller
             ]);
         }
         $postData=file_get_contents("php://input");
-       if (!ShippingCart::isJson($postData))
+       if (!ShippingCart::isJson($postData) && isset(Yii::$app->request->post()['goods']))
        {
             $postData=Yii::$app->request->post();
             $goods=(array)json_decode($postData['goods']);
