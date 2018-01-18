@@ -907,6 +907,7 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
         let materials = []//申请材料项
         let status = false//材料是否存在下架
         //整合申请样板间所需传值
+        console.log($scope.total_prices);
         let obj = {
             province_code:$scope.active_case.province_code,
             city_code:$scope.active_case.city_code,
