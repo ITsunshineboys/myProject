@@ -281,11 +281,12 @@ class EffectEarnest extends \yii\db\ActiveRecord
                 }
 
             }
-            var_dump($item);
-            var_dump($post['type']);die;
+
             if($item==0 && $post['type']==0){
                 $name=$post['name'];
                 $phone=$post['phone'];
+                $earnest=self::INSET_EARNST;
+                $transaction_no= GoodsOrder::SetTransactionNo($phone);
             }elseif ($item==1 && $post['type']==0){
                 $user=User::find()->where(['id'=>$uid])->select('nickname,mobile')->asArray()->one();
                 $name=$user['nickname'];
