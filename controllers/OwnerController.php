@@ -1826,7 +1826,8 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-        var_dump(GoodsCategory::find()->asArray()->all());
+        $goods = Goods::priceDetail('3','130');
+        var_dump($goods);
     }
 
 }
