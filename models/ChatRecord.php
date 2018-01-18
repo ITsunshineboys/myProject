@@ -41,11 +41,6 @@ class ChatRecord extends \yii\db\ActiveRecord
 
     public static function userlog($u_id,$role_id){
 
-
-//        $sql="SELECT * FROM( SELECT a.to_uid as lxr,a.*  FROM chat_record as a  WHERE  (a.send_uid = $u_id)  and  (a.to_uid <> $u_id)  UNION
-//    SELECT a.send_uid as lxr ,a.* FROM chat_record as a  WHERE (a.send_uid <> $u_id)  and (a.to_uid = $u_id) ORDER BY send_time DESC
-//  ) as b  WHERE send_role_id =$role_id OR to_role_id =$role_id GROUP BY lxr";
-
         $sql_log="select * from (
 select * from (
 SELECT to_uid uid, to_role_id role_id,id,content,`type`,send_time,status,del_status FROM (select * from chat_record  where send_role_id=$role_id and send_uid=$u_id order by id desc) tmp group by to_uid,to_role_id

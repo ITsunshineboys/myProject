@@ -51,21 +51,6 @@ class UserChat extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'u_id' => '用户id',
-            'role_id' => '角色id',
-            'chat_username' => '环信用户名',
-            'create_time' => '创建时间',
-            'login_time' => '最后登录时间',
-            'status' => '状态  0:封禁 1:正常 ',
-        ];
-    }
 
     public function beforeSave($insert)
     {
