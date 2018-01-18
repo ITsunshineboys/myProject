@@ -935,10 +935,10 @@ class OwnerController extends Controller
         $finishing_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['emulsion_varnish_surface'],'');
         $wire_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['concave_line'],'长');
         $land_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['land_plaster'],'');
-        var_dump($putty_attr);
-        var_dump($undercoat_attr);
-        var_dump($finishing_attr);
-        var_dump($wire_attr);
+        var_dump($putty_attr); echo 111;
+        var_dump($undercoat_attr);echo 2221;
+        var_dump($finishing_attr);echo 333;
+        var_dump($wire_attr);echo 44;
         var_dump($land_attr);die;
 
 
