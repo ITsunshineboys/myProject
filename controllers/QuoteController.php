@@ -2273,8 +2273,7 @@ class QuoteController extends Controller
                ->one();
 
        }
-       $data[]=$a;
-        var_dump($data);die;
+         $data[]=$a;
         return Json::encode([
             'code' => 200,
             'msg'  => 'ok',
