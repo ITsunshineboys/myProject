@@ -1206,7 +1206,7 @@ class QuoteController extends Controller
                 $effect_ids=[];
                 //  案例修改
                 if (isset($house['id'])) {
-                    $effect_ids[]=array_push($effect_ids,$house['id']);
+                    $effect_ids[]=$house['id'];
                     if ($house['is_ordinary'] == 0) {
                         //普通户型修改
 
