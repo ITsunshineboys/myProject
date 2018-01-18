@@ -15,7 +15,7 @@
         <i style="font-size:24px;" class="iconfont icon-messages-blue"></i>
       </flexbox-item>
     </flexbox>
-    <swiper dots-position="center" :list="banner_list" loop auto height="171px" :aspect-ratio="375/171"></swiper>
+    <swiper dots-position="center" :list="banner_list" loop auto height="171px" :aspect-ratio="375/171" :show-desc-mask="false"></swiper>
     <flexbox :gutter="0" class="category" wrap="wrap">
       <flexbox-item style="text-align: center;padding: 12px 0;" :span="1/4" v-for="(item,index) in category_list"
                     :key="index">
