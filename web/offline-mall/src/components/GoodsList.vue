@@ -1,6 +1,6 @@
 <template>
   <div class="goods-list">
-    <div class="goods-item" v-for="obj in goodsList">
+    <router-link class="goods-item" v-for="obj in goodsList"  :key="obj.id" :to="'/good-detail/' + obj.id" tag="div">
       <div class="goods-item-img">
         <img :src="obj.cover_image">
       </div>
@@ -12,19 +12,19 @@
         </p>
         <p class="goods-item-price">￥{{obj.platform_price}}</p>
       </div>
-    </div>
+    </router-link>
   </div>
 </template>
 
 <script>
-    export default {
-      props: {
-        goodsList: {
-          type: Array,
-          default: []
-        }
+  export default {
+    props: {
+      goodsList: {
+        type: Array,
+        default: []
       }
     }
+  }
 </script>
 
 <style scoped>

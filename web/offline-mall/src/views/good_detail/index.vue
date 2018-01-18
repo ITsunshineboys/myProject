@@ -40,6 +40,7 @@
           选择数量
 
 
+
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -84,16 +85,19 @@
             <span>{{good_detail.supplier.goods_number}}</span><br/>商品数
 
 
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.follower_number}}</span><br/>粉丝数
 
 
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
+
 
 
           </div>
@@ -155,23 +159,26 @@
       </div>
 
       <!--底部按钮-->
-      <flexbox>
-        <flexbox-item>
+      <flexbox class="bottom-tabbar">
+        <flexbox-item @click.native="contactStore" :span="155/375">
+          <i class="iconfont icon-service"></i><br/>联系商家
 
         </flexbox-item>
-        <flexbox-item>
+        <flexbox-item @click.native="showCount('cart')" :span="110/375">
+          加入购物车
 
         </flexbox-item>
-        <flexbox-item>
+        <flexbox-item @click.native="showCount('now')" :span="110/375">
+          立即购买
 
         </flexbox-item>
       </flexbox>
 
-      <div class="bottom-tabbar">
-        <div @click="contactStore"><i class="iconfont icon-service"></i><br/>联系商家</div>
-        <div @click="showCount('cart')">加入购物车</div>
-        <div @click="showCount('now')">立即购买</div>
-      </div>
+      <!--<div>-->
+        <!--<div><i class="iconfont icon-service"></i><br/>联系商家</div>-->
+        <!--<div>加入购物车</div>-->
+        <!--<div></div>-->
+      <!--</div>-->
     </div>
 
     <!-- 选择数量弹窗 -->
@@ -189,9 +196,7 @@
             <i class="iconfont icon-close" @click="showCount('all')"></i>
           </div>
           <group>
-            <x-number class="buy-count" title="购买数量" v-model="count" :fillable="true" :max="good_detail.left_number"
-                      :min="1"
-                      width="34px"></x-number>
+            <x-number class="buy-count" title="购买数量" v-model="count" :fillable="true" :max="good_detail.left_number" :min="1" width="34px"></x-number>
           </group>
         </group>
         <flexbox class="count-bottom-btn">
@@ -334,7 +339,6 @@
           {image: require('../../assets/images/qq.png'), title: 'QQ'},
           {image: require('../../assets/images/qzone.png'), title: 'QQ空间'}
         ]
-
       }
     },
     activated () {
@@ -747,22 +751,13 @@
   }
 
   .good-container .bottom-tabbar > div {
-    float: left;
     height: 48px;
+    margin-left: 0!important;
   }
 
   .good-container .bottom-tabbar i {
     display: inline-block;
     margin-top: 2px;
-  }
-
-  .good-container .bottom-tabbar > span {
-    display: inline-block;
-    float: left;
-    width: 2px;
-    height: 20px;
-    margin-top: 15px;
-    background: #CDD3D7;
   }
 
   .good-container .bottom-tabbar > div:first-child {
