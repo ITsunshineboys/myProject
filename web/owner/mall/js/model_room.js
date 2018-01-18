@@ -487,17 +487,15 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                });
            })
        }*/
-    let swiper;
-    $scope.showAll = function () {
-        $timeout(function () {
-            var swiper = new Swiper(".swiper-container", {
-                autoplay: 3000,
-                loop: true,
-                pagination: ".swiper-pagination"
-            })
-        },300)
-    }
+    // $scope.showAll = function () {
+    //      var swiper = new Swiper(".swiper-container", {
+    //             autoplay: 3000,
+    //             loop: true,
+    //             pagination: ".swiper-pagination"
+    //         })
+    // }
     //初始化
+    let swiper;
     $scope.special_request = ''
     $scope.roomPic = ''
     //一级、二级分类数据请求
@@ -591,12 +589,20 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                     })
                     if(index!=-1){
                         $scope.roomPic = res.effect.case_picture[index]
-                        var swiper = new Swiper(".swiper-container", {
-                            autoplay: 3000,
-                            loop: true,
-                            pagination: ".swiper-pagination"
-                        })
-                        swiper.reLoop()
+                        if(swiper!==undefined){
+                            swiper = new Swiper(".swiper-container", {
+                                autoplay: 3000,
+                                loop: true,
+                                pagination: ".swiper-pagination"
+                            })
+                            swiper.reLoop()
+                        }else{
+                            swiper = new Swiper(".swiper-container", {
+                                autoplay: 3000,
+                                loop: true,
+                                pagination: ".swiper-pagination"
+                            })
+                        }
                     }else{
                         $scope.roomPic = ''
                     }
@@ -617,12 +623,21 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                             value['procurement'] = 0
                         }
                         $scope.roomPic = res.effect.case_picture[index]
-                        var swiper = new Swiper(".swiper-container", {
-                            autoplay: 3000,
-                            loop: true,
-                            pagination: ".swiper-pagination"
-                        })
-                        swiper.reLoop()
+                        if(swiper!==undefined){
+                            swiper = new Swiper(".swiper-container", {
+                                autoplay: 3000,
+                                loop: true,
+                                pagination: ".swiper-pagination"
+                            })
+                            swiper.reLoop()
+                        }else{
+                            swiper = new Swiper(".swiper-container", {
+                                autoplay: 3000,
+                                loop: true,
+                                pagination: ".swiper-pagination"
+                            })
+                            swiper.reLoop()
+                        }
                         //整合二级
                         for (let [key, value] of res.goods.entries()) {
                             for (let [key1, value1] of $scope.materials.entries()) {
