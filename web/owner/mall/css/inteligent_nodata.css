@@ -975,7 +975,6 @@ button[disabled]{
 .house_tips{
     position: absolute;
     right:4.6rem;
-    /*bottom: 0rem;*/
     font-size:1rem!important;
     margin-top:.5rem!important;
     margin-bottom: 1rem;
