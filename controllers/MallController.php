@@ -4204,9 +4204,16 @@ class MallController extends Controller
             $where .= " and score >= {$min} and score <= {$max}";
         }
 
-        $ret['data']['goods_comments']['stat'] = GoodsComment::statByGoodsId($goodsId);
-        $ret['data']['goods_comments']['details'] = GoodsComment::pagination($where, GoodsComment::FIELDS_APP, $page, $size);
-        return Json::encode($ret);
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'goods-comments' => [
+                    'stat' => GoodsComment::statByGoodsId($goodsId),
+                    'details' => GoodsComment::pagination($where, GoodsComment::FIELDS_APP, $page, $size)
+                ],
+            ],
+        ]);
     }
 
     /**
