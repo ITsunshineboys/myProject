@@ -1604,7 +1604,7 @@ class BasisDecorationService
     {
         $value = [];
         foreach ($array as $oneArray){
-            $value[$oneArray['goods_code']] = $oneArray;
+           $value[] = $oneArray;
         }
         var_dump($value);die;
         return $array;
