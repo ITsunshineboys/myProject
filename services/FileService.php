@@ -62,10 +62,6 @@ class FileService
 
         $code = 1000;
         if (!$model->file || !$model->file->extension) {
-            if (YII_DEBUG) {
-                StringService::writeLog('test', json_encode($model->file), 'site-uploada');
-                StringService::writeLog('test', json_encode($model->file->extension), 'site-uploadb');
-            }
             return $code;
         }
 
@@ -80,6 +76,9 @@ class FileService
                 return $code;
             }
 
+            if (YII_DEBUG) {
+                StringService::writeLog('test', json_encode($model->errors), 'site-uploadc');
+            }
             return $code;
         }
 
