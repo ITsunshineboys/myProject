@@ -1603,12 +1603,8 @@ class BasisDecorationService
 
     public static function identicalSku($array)
     {
-        var_dump($array);die;
-        foreach ($array as $oneArray){
-        }
 
-        var_dump($repeat_arr);die;
-        return $repeat_arr;
+        return $array;
     }
 
 }

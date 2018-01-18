@@ -1654,8 +1654,8 @@ class OwnerController extends Controller
             ]);
         }
 
-        $workerData = BasisDecorationService::identicalSku($data);
-        die;
+//        $workerData = BasisDecorationService::identicalSku($data);
+//        die;
 
         $sku = [];
         foreach ($data as $one_data){
