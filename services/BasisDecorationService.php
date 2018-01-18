@@ -1604,8 +1604,8 @@ class BasisDecorationService
     {
         foreach ($array as $key => $row)
         {
-            $volume[$key]  = $row['volume'];
-            $edition[$key] = $row['edition'];
+            $volume[$key]  = $row['goods_code'];
+            $edition[$key] = $row;
         }
 
         array_multisort($volume, SORT_DESC, $edition, SORT_ASC, $array);
