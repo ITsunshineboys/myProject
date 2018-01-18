@@ -3037,8 +3037,9 @@ class MallController extends Controller
         $categoryId = (int)Yii::$app->request->get('category_id', 0);
         $fields = Yii::$app->request->get('fields', []);
         $fromAddGoodsPage = (int)Yii::$app->request->get('from_add_goods_page', 0);
+        $fromBrandUsageApplyPage = (int)Yii::$app->request->get('from_brand_usage_apply_page', 0);
 
-        $brandsStylesSeries = GoodsCategory::brandsStylesSeriesByCategoryId($categoryId, $fields, $fromAddGoodsPage);
+        $brandsStylesSeries = GoodsCategory::brandsStylesSeriesByCategoryId($categoryId, $fields, $fromAddGoodsPage, $fromBrandUsageApplyPage);
         if (!is_array($brandsStylesSeries)) {
             return Json::encode([
                 'code' => $brandsStylesSeries,

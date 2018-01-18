@@ -511,9 +511,10 @@ class GoodsCategory extends ActiveRecord
      * @param $categoryId category id
      * @param array $fields data fields
      * @param int $fromAddGoodsPage if from "add goods" page default 0
+     * @param int $fromBrandUsageApplyPage if from "apply for using brand" page default 0
      * @return array|int
      */
-    public static function brandsStylesSeriesByCategoryId($categoryId, array $fields, $fromAddGoodsPage = 0)
+    public static function brandsStylesSeriesByCategoryId($categoryId, array $fields, $fromAddGoodsPage = 0, $fromBrandUsageApplyPage = 0)
     {
         $brandsStylesSeries = [];
 
@@ -533,7 +534,7 @@ class GoodsCategory extends ActiveRecord
 
             foreach ($fields as $field) {
                 if ($field == 'brands') {
-                    $brandsStylesSeries[$field] = BrandCategory::brandsByCategoryId($categoryId, $fromAddGoodsPage);
+                    $brandsStylesSeries[$field] = BrandCategory::brandsByCategoryId($categoryId, $fromAddGoodsPage, $fromBrandUsageApplyPage);
                 } elseif ($field == 'styles') {
                     $brandsStylesSeries[$field] = $styles;
                 } else {
