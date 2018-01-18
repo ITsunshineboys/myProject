@@ -720,28 +720,15 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
-        $get = Yii::$app->request->get();
-
-        // 有资料 计算公式
-        $goods = Goods::assortList([17,52,35,80,61,62,63,75,121,123,106,108,117,119,130,170,144,140,146,152],$get['city']);
-        $lamp = [];
-        foreach ($goods as $oneLamp){
-            if ($oneLamp['title'] == BasisDecorationService::goodsNames()['lamp'] && $oneLamp['series_id'] == $get['series'] && $oneLamp['style_id'] == $get['style']){
-                $attr = BasisDecorationService::goodsAttr($oneLamp,BasisDecorationService::goodsNames()['lamp'],'适用处',1);
-                $lamp [] = $attr;
-            }
-        }
-
-        $material[] = BasisDecorationService::lamp($lamp,$get);
-        var_dump($material);echo 123;die;
-        return Json::encode($data);
+        $user_agent = getallheaders();
+        return Json::encode($user_agent);
 
     }
 
     public  static  function  actionTest1()
     {
        $orderGoods=GoodsOrder::FindByOrderNo('0115186634');
-       var_dump($orderGoods);
+
     }
 
 
