@@ -38,9 +38,6 @@
       <group>
         <cell-box is-link class="choose-count" @click.native="showCount('count')">
           选择数量
-
-
-
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -83,23 +80,14 @@
         <flexbox slot="content" justify="space-between" class="shop-intro">
           <div>
             <span>{{good_detail.supplier.goods_number}}</span><br/>商品数
-
-
-
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.follower_number}}</span><br/>粉丝数
-
-
-
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
-
-
-
           </div>
         </flexbox>
         <flexbox slot="footer" justify="center" class="view-shop-btn">
@@ -162,23 +150,14 @@
       <flexbox class="bottom-tabbar">
         <flexbox-item @click.native="contactStore" :span="155/375">
           <i class="iconfont icon-service"></i><br/>联系商家
-
         </flexbox-item>
         <flexbox-item @click.native="showCount('cart')" :span="110/375">
           加入购物车
-
         </flexbox-item>
         <flexbox-item @click.native="showCount('now')" :span="110/375">
           立即购买
-
         </flexbox-item>
       </flexbox>
-
-      <!--<div>-->
-        <!--<div><i class="iconfont icon-service"></i><br/>联系商家</div>-->
-        <!--<div>加入购物车</div>-->
-        <!--<div></div>-->
-      <!--</div>-->
     </div>
 
     <!-- 选择数量弹窗 -->
