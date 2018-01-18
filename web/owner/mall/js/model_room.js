@@ -487,9 +487,10 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                });
            })
        }*/
+    var swiper;
     $scope.showAll = function () {
         $timeout(function () {
-            var swiper = new Swiper(".swiper-container", {
+            swiper = new Swiper(".swiper-container", {
                 autoplay: 3000,
                 loop: true,
                 pagination: ".swiper-pagination"
@@ -546,6 +547,7 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
     })
     //获取案例材料和价格数据
     $scope.getMaterials = function (obj,item,result) {
+        swiper.destroy()
         $scope.active_case = obj
         if(item!=undefined){
             $scope.params[item] = result
@@ -587,6 +589,7 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                     })
                     if(index!=-1){
                         $scope.roomPic = res.effect.case_picture[index]
+                        swiper.reLoop()
                     }else{
                         $scope.roomPic = ''
                     }
@@ -607,6 +610,7 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                             value['procurement'] = 0
                         }
                         $scope.roomPic = res.effect.case_picture[index]
+                        swiper.reLoop()
                         //整合二级
                         for (let [key, value] of res.goods.entries()) {
                             for (let [key1, value1] of $scope.materials.entries()) {
