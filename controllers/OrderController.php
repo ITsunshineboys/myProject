@@ -5231,22 +5231,38 @@ class OrderController extends Controller
             $all_money=0;
             foreach ($goods as &$good)
             {
-                $Good=Goods::findOne($good->goods_id);
-                if (!$Good)
+                if (is_array($good))
                 {
-                    $code=1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'  => Yii::$app->params['errorCodes'][$code]
-                    ]);
+                    $Good=Goods::findOne($good['goods_id']);
+                    if (!$Good)
+                    {
+                        $code=1000;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg'  => Yii::$app->params['errorCodes'][$code]
+                        ]);
+                    }
+                    $Good=$Good->toArray();
+                    $Good['goods_num']=$good['goods_num'];
+                    $Goods[]=$Good;
+                }else
+                {
+                    $Good=Goods::findOne($good->goods_id);
+                    if (!$Good)
+                    {
+                        $code=1000;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg'  => Yii::$app->params['errorCodes'][$code]
+                        ]);
+                    }
+                    $Good=$Good->toArray();
+                    $Good['goods_num']=$good->goods_num;
+                    $Goods[]=$Good;
                 }
-                $Good=$Good->toArray();
-                $Good['goods_num']=$good->goods_num;
-                $Goods[]=$Good;
             }
         }else
         {
-
             $arr=json_decode($postData);
             $goods=$arr->goods;
             $all_money=0;
