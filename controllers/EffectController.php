@@ -158,9 +158,10 @@ class EffectController extends Controller
                 'msg'=>Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $remark= $request->post('remark','');
+        $remark= $request->post('remark','0');
+        var_dump($remark);die;
 
-        if ($effect_enst_id && !isset($remark)) {
+        if ($effect_enst_id && $remark==0) {
             $effect_id=EffectEarnest::find()->asArray()->where(['id'=>$effect_enst_id])->select('effect_id')->one()['effect_id'];
             $data = Effect::geteffectdata($effect_id);
             return Json::encode([
@@ -169,7 +170,7 @@ class EffectController extends Controller
                 'data'=>$data
             ]);
 
-        }elseif( ($remark==''|| isset($remark)) && isset($effect_enst_id)){
+        }elseif(isset($remark) && isset($effect_enst_id)){
 
             $effect_view=Effectearnest::find()->where(['id'=>$effect_enst_id])->one();
             $effect_view->remark=$remark;
