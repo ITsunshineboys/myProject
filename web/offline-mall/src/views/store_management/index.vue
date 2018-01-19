@@ -144,7 +144,6 @@
         this.axios.get('/supplier/index', {supplier_id: this.$route.params.id}, res => {
           console.log(res, '店铺首页数据')
           let data = res.data.index
-          alert(JSON.stringify(data))
           this.storeData = data
           this.carousel = data.carousel.map(item => {
             return {
@@ -198,9 +197,7 @@
           status: this.storeData.is_follow === 1 ? 0 : 1
         }
         this.axios.post('/user-follow/user-follow-shop', params, res => {
-          alert('进来了！！')
           window.AndroidWebView.clearCache()
-          alert('清除了缓存')
           this.getStoreData()
         })
       }
