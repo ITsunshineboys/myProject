@@ -159,6 +159,7 @@ class UserFollowController extends Controller
 
     /**
      * @return string
+     * @throws \yii\db\Exception
      */
     public  function  actionUserFollowShop()
     {
