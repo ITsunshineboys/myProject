@@ -1376,7 +1376,6 @@ class GoodsOrder extends ActiveRecord
             }
             if ($list['pay_status']==0 && $list['order_status']==0)
             {
-                var_dump($list['order_status']);die;
                 $list['status']=self::PAY_STATUS_DESC_UNPAID;
             }else{
                 switch ($list['order_status']){
