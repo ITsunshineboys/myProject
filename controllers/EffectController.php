@@ -152,6 +152,7 @@ class EffectController extends Controller
         $code = 1000;
         $request = new Request();
         $effect_enst_id = (int)trim($request->post('id', ''));
+        $res= htmlspecialchars(trim($request->post('remark',''),''));
         if(!$effect_enst_id){
             return json_encode([
                 'code' => $code,
@@ -159,17 +160,17 @@ class EffectController extends Controller
 
             ]);
         }
-        $remark=Effectearnest::findOne(['id'=>$effect_enst_id]);
-        if(!$remark){
+        $effect_view=Effectearnest::findOne(['id'=>$effect_enst_id]);
+        if(!$effect_view){
             return json_encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        $res= htmlspecialchars(trim($request->post('remark',''),''));
-        if($res){
-            $remark->remark=$res;
-            if(!$remark->save()){
+
+        if(isset($res) && $effect_enst_id){
+            $effect_view->remark=$res;
+            if(!$effect_view->save()){
                 $code=500;
                 return Json::encode([
                     'code' => $code,
