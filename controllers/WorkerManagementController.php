@@ -763,20 +763,20 @@ class WorkerManagementController extends Controller
 
     public function actionAuditingList()
     {
-        $auditing = trim(\Yii::$app->request->get());
-        switch ($auditing){
-            case $auditing == 'pass':
-                if ($auditing){
-                    $where = "";
-                    $select = "user.legal_person,user.mobile,user.aite_cube_no,worker.create_time,worker_type.worker_name,user.nickname";
-                    $worker = Worker::AuditingMessage($select,$where);
-                }
-                break;
-            case $auditing == 'await':
-                break;
-            case $auditing == 'not_pass':
-                break;
-        }
+//        $auditing = trim(\Yii::$app->request->get());
+//        switch ($auditing){
+//            case $auditing == 'pass':
+//                if ($auditing){
+//                    $where = "";
+//                    $select = "user.legal_person,user.mobile,user.aite_cube_no,worker.create_time,worker_type.worker_name,user.nickname";
+//                    $worker = Worker::AuditingMessage($select,$where);
+//                }
+//                break;
+//            case $auditing == 'await':
+//                break;
+//            case $auditing == 'not_pass':
+//                break;
+//        }
     }
 
 
