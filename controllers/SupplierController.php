@@ -350,6 +350,8 @@ class SupplierController extends Controller
         $data['district']=$lineSupplier?LogisticsDistrict::GetLineDistrictByDistrictCode($lineSupplier['district_code']).$lineSupplier['address']:'';
         $data['carousel'] = GoodsRecommendSupplier::carousel($supplierId);
         $data['is_follow']=UserFollow::CheckIsFollow($supplierId);
+        $data['supplier_uid']=$supplier->uid;
+        $data['supplier_role_id']=Yii::$app->params['supplierRoleId'];
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
