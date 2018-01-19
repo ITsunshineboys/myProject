@@ -990,6 +990,7 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                     sessionStorage.setItem('payParams',JSON.stringify(obj))
                     $state.go('deposit')
                 }else if(res.code == 200){
+                    obj.materials = materials
                     _ajax.post('/effect/app-apply-effect',obj,function (res) {
                         if(res.code == 200){
                             $uibModal.open({
