@@ -366,7 +366,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
 
         foreach ($data as &$v){
 
-            if($v=!false){
+            if($v!=false){
                 $v['add_time']=date('Y-m-d H:i:s',$v['add_time']);
             $v['style']=$v['series'].'-'.$v['style'];
             unset($v['series']);
