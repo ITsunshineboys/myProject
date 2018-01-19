@@ -1011,9 +1011,10 @@ class BasisDecorationService
      * 有计算公式 单个商品
      * @param $goods
      * @param $post
+     * @param $bedroomRoom
      * @return float|null
      */
-    public static function oneFormula($goods,$post)
+    public static function oneFormula($goods,$post,$bedroomRoom)
     {
 
         switch ($goods){
@@ -1028,7 +1029,7 @@ class BasisDecorationService
                     }
                 }
                 $area = round($length * $breadth,2);
-                $quantity = ceil($post['bedroom_area'] / $area);
+                $quantity = ceil($bedroomRoom / $area);
                 break;
             case $goods['title'] == self::goodsNames()['marble']:  // 大理石
                 if ($post['window'] > 1) {
@@ -1454,7 +1455,7 @@ class BasisDecorationService
      * 腻子 底漆 面漆 阴角线  自流平 的默认数量
      * @param $goods
      * @param $get
-     * @return float|int
+     * @return array
      */
     public static function count($goods,$get)
     {
@@ -1550,7 +1551,7 @@ class BasisDecorationService
                 break;
         }
 
-        return $value;
+        return [$value,$hall_[1]];
     }
 
 
