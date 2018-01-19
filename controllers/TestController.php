@@ -720,7 +720,10 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
-        return Json::encode(getallheaders());
+       $data=OrderGoods::find()
+           ->where('order_no=0119156773')
+           ->asArray()->all();
+       var_dump($data);
 
     }
 
