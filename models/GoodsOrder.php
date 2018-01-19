@@ -185,6 +185,7 @@ class GoodsOrder extends ActiveRecord
             ->one();
         return $data;
     }
+
     /**
      * 添加表数据
      * @param $order_no
@@ -198,7 +199,10 @@ class GoodsOrder extends ActiveRecord
      * @param $buyer_message
      * @param $address
      * @param $invoice
+     * @param $user_id
+     * @param $role_id
      * @return int
+     * @throws yii\db\Exception
      */
     public  static  function  AddNewPayOrderData($order_no,$amount_order,$supplier_id,$pay_status,$create_time,$order_refer,$return_insurance=0,$pay_name,$buyer_message,$address,$invoice,$user_id,$role_id)
     {
@@ -248,11 +252,13 @@ class GoodsOrder extends ActiveRecord
                 return 500;
         }
     }
+
     /**
      * 支付宝线下商城数据库操作
      * @param $arr
      * @param $post
      * @return bool
+     * @throws yii\db\Exception
      */
     public static function AliPayLineNotifyDataBase($arr,$post)
     {
@@ -266,7 +272,10 @@ class GoodsOrder extends ActiveRecord
         $return_insurance=$arr[7];
         $buyer_message=$arr[8];
         $Goods=Goods::findOne($goods_id);
-        if ( !$Goods ||($freight*100+$return_insurance*100+$Goods->platform_price*$goods_num)!=$post['total_amount']*100)
+        if ( 
+            !$Goods 
+            ||($freight*100+$return_insurance*100+$Goods->platform_price*$goods_num)!=$post['total_amount']*100
+        )
         {
             return false;
         }
