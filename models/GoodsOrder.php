@@ -2944,7 +2944,7 @@ class GoodsOrder extends ActiveRecord
                 $amount_order += ($arr[$k]['goods_price'] * $arr[$k]['goods_number'] * 0.01);
                 $supplier_price += $arr[$k]['supplier_price'] * 0.01;
                 $market_price += ($arr[$k]['market_price'] * $arr[$k]['goods_number'] )* 0.01;
-                $freight += ($arr[$k]['freight'] * 0.01);
+                $freight += ($arr[$k]['freight']);
 //                if ($arr[$k]['status_code']==self::ORDER_TYPE_UNPAID)
 //                {
 //                    $GoodsOrder=GoodsOrder::FindByOrderNo($arr[$k]['order_no']);
@@ -3019,7 +3019,7 @@ class GoodsOrder extends ActiveRecord
             $output['paytime'] = date('Y-m-d H:i', $arr[0]['paytime']);
 
             $output['pay_term'] = $arr[0]['pay_term'];
-            $output['freight'] = StringService::formatPrice($freight);
+            $output['freight'] = StringService::formatPrice($freight*0.01);
             $output['original_price'] = StringService::formatPrice($market_price);
             $output['discount_price'] = StringService::formatPrice($amount_order);
 
