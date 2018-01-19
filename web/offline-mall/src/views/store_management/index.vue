@@ -196,7 +196,7 @@
         // 关注店铺
         let params = {
           supplier_id: this.$route.params.id,
-          status: this.startDate.is_follow === 1 ? 0 : 1
+          status: this.storeData.is_follow === 1 ? 0 : 1
         }
         this.axios.post('/user-follow/user-follow-shop', params, res => {
           console.log(res, '关注')
