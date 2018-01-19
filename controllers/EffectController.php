@@ -152,41 +152,24 @@ class EffectController extends Controller
         $code = 1000;
         $request = new Request();
         $effect_enst_id = (int)trim($request->post('id', ''));
-        $res= htmlspecialchars(trim($request->post('remark',''),''));
+        if(!$effect_enst_id){
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $remark= htmlspecialchars(trim($request->post('remark',''),''));
         $model = new Effect();
         $effect_id=EffectEarnest::find()->asArray()->where(['id'=>$effect_enst_id])->select('effect_id')->one()['effect_id'];
         $data = $model->geteffectdata($effect_id);
-        if (isset($effect_id) && !isset($res)) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-
-            ]);
-        }else{
+        if (isset($effect_id) && !isset($remark)) {
             return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
                 'data'=>$data
             ]);
-        }
-
-
-        if(!$effect_enst_id){
-            return json_encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-
-            ]);
-        }
-        $effect_view=Effectearnest::findOne(['id'=>$effect_enst_id]);
-        if(!$effect_view){
-            return json_encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        if(isset($res) && $effect_enst_id){
+        }elseif(isset($res) && $effect_enst_id){
+            $effect_view=Effectearnest::findOne(['id'=>$effect_enst_id]);
             $effect_view->remark=$res;
             if(!$effect_view->save()){
                 $code=500;
@@ -195,11 +178,31 @@ class EffectController extends Controller
                     'msg' => \Yii::$app->params['errorCodes'][$code],
                 ]);
             }
-                    return Json::encode([
-                    'code' => 200,
-                    'msg' => 'ok',
-                ]);
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'ok',
+            ]);
         }
+
+
+
+//        if(!$effect_enst_id){
+//            return json_encode([
+//                'code' => $code,
+//                'msg' => \Yii::$app->params['errorCodes'][$code],
+//
+//            ]);
+//        }
+//
+//        if(!$effect_view){
+//            return json_encode([
+//                'code' => $code,
+//                'msg' => \Yii::$app->params['errorCodes'][$code],
+//            ]);
+//        }
+//
+//        if(isset($res) && $effect_enst_id){
+//
 
 
 
