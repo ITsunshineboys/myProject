@@ -40,6 +40,7 @@
           选择数量
 
 
+
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -84,16 +85,19 @@
             <span>{{good_detail.supplier.goods_number}}</span><br/>商品数
 
 
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.follower_number}}</span><br/>粉丝数
 
 
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
+
 
 
           </div>
@@ -160,14 +164,17 @@
           <i class="iconfont icon-service"></i><br/>联系商家
 
 
+
         </flexbox-item>
         <flexbox-item @click.native="showCount('cart')" :span="110/375">
           加入购物车
 
 
+
         </flexbox-item>
         <flexbox-item @click.native="showCount('now')" :span="110/375">
           立即购买
+
 
 
         </flexbox-item>
@@ -198,9 +205,11 @@
             加入购物车
 
 
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
+
 
 
           </flexbox-item>
