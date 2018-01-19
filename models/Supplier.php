@@ -104,6 +104,7 @@ class Supplier extends ActiveRecord
         'reject_reason',
     ];
     const FIELDS_VIEW_MALL_MODEL = [
+        'id',
         'icon',
         'shop_no',
         'shop_name',
@@ -116,7 +117,6 @@ class Supplier extends ActiveRecord
         'district_name',
         'district_code',
         'address',
-        'quality_guarantee_deposit'
     ];
     const FIELDS_VIEW_APP_EXTRA = [
         'legal_person',
@@ -972,10 +972,7 @@ class Supplier extends ActiveRecord
         if (isset($data['type_shop'])) {
             $data['type_shop'] = self::TYPE_SHOP[$data['type_shop']];
         }
-
-        if (isset($data['sales_amount_month'])) {
-            $data['sales_amount_month'] /= 100;
-        }
+        
 
         $ym = date('Ym');
         if (isset($data['sales_amount_month'])) {
