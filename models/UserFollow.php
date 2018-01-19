@@ -174,11 +174,19 @@ class UserFollow extends \yii\db\ActiveRecord
     /**
      * @param $user
      * @param $supplier_id
+     * @param $status
      * @return int
+     * @throws Exception
      */
     public static  function UserFlowShop($user,$supplier_id,$status)
     {
             $time=time();
+            $supplier=Supplier::findOne($supplier_id);
+            if (!$supplier)
+            {
+                $code=1000;
+                return $code;
+            }
             $tran = Yii::$app->db->beginTransaction();
             try{
                 $follow=self::find()
@@ -187,24 +195,39 @@ class UserFollow extends \yii\db\ActiveRecord
                     ->one();
                 if (!$follow)
                 {
+
                     $follow=new self();
                     $follow->status=$status;
                     $follow->user_id=$user->id;
                     $follow->role_id=$user->last_role_id_app;
                     $follow->follow_id=$supplier_id;
-                    if (!$follow->save(false))
+//                    if (!$follow->save(false))
+//                    {
+//                        $tran->rollBack();
+//                    }
+                }else
+                {
+                    if ($follow->status==$status)
                     {
                         $tran->rollBack();
+                        $code=1000;
+                        return $code;
                     }
+                    $follow->status=$status;
                 }
-                $follow->status=$status;
                 if ($status==self::UN_FOLLOW)
                 {
+                    $supplier->follower_number-=1;
                     $follow->unfollow_time=$time;
                 }else{
+                    $supplier->follower_number+=1;
                     $follow->follow_time=$time;
                 }
                 if (!$follow->save(false))
+                {
+                    $tran->rollBack();
+                }
+                if (!$supplier->save(false))
                 {
                     $tran->rollBack();
                 }
