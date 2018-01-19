@@ -168,6 +168,7 @@ class EffectController extends Controller
                 'msg' => 'ok',
                 'data'=>$data
             ]);
+
         }elseif( ($remark==''|| isset($remark)) && isset($effect_enst_id)){
 
             $effect_view=Effectearnest::find()->where(['id'=>$effect_enst_id])->one();
