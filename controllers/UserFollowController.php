@@ -171,15 +171,14 @@ class UserFollowController extends Controller
     public  function  actionUserFollowShop()
     {
         $user = \Yii::$app->user->identity;
-        $user=User::find()->where('mobile=18108088021')->one();
-//        if (!$user)
-//        {
-//            $code=403;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg' => 200 == $code ? 'OK' : \Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        }
+        if (!$user)
+        {
+            $code=403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => 200 == $code ? 'OK' : \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
 
         $supplier_id=\Yii::$app->request->post('supplier_id');
         $status=\Yii::$app->request->post('status',0);
