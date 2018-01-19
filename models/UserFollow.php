@@ -195,6 +195,12 @@ class UserFollow extends \yii\db\ActiveRecord
                     ->one();
                 if (!$follow)
                 {
+                    if ($status==self::UN_FOLLOW)
+                    {
+                        $tran->rollBack();
+                        $code=1000;
+                        return $code;
+                    }
                     $follow=new self();
                     $follow->status=$status;
                     $follow->user_id=$user->id;
