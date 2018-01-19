@@ -846,7 +846,7 @@ app.controller('nodata_ctrl', function ($timeout,$uibModal,$http, _ajax, $state,
         _ajax.post('/effect/app-apply-effect',obj,function (res) {
             console.log(res);
             if(res.code == 403||res.code == 1052){
-                window.AndroidWebView.skipIntent()
+                window.AndroidWebView.skipNotLogin()
             }else{
                 $uibModal.open({
                     templateUrl: 'cur_model.html',
