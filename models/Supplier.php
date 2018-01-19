@@ -999,6 +999,7 @@ class Supplier extends ActiveRecord
             $data['is_line_supplier']=$lineSupplier?1:2;
             $data['line_supplier_mobile']=$lineSupplier?$lineSupplier['mobile']:'';
             $data['district']=$lineSupplier?LogisticsDistrict::GetLineDistrictByDistrictCode($lineSupplier['district_code']).$lineSupplier['address']:'';
+            $data['is_follow']=UserFollow::CheckIsFollow($data['id']);
         }
 
         if (isset($data['quality_guarantee_deposit']))

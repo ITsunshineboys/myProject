@@ -7,14 +7,11 @@
  */
 
 namespace app\models;
-use app\services\PayService;
 use yii;
 use yii\db\ActiveRecord;
 use yii\db\Query;
-use yii\data\Pagination;
 use app\services\StringService;
 use app\services\SmValidationService;
-use app\services\ModelService;
 class GoodsOrder extends ActiveRecord
 {
     const PAY_STATUS_PAID = 1;
@@ -587,7 +584,9 @@ class GoodsOrder extends ActiveRecord
      * @param int $size
      * @param $sort_time
      * @param $sort_money
+     * @param $type
      * @return array
+     * @throws yii\db\Exception
      */
     public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort_time,$sort_money,$type)
     {
@@ -840,11 +839,11 @@ class GoodsOrder extends ActiveRecord
     }
 
 
-
     /**
      * @param $order_no
      * @param $sku
      * @return array|null
+     * @throws yii\db\Exception
      */
     public static function GetOrderInformation($order_no,$sku){
         $select='a.pay_name,z.order_status,z.customer_service,z.shipping_status,a.pay_status,a.create_time,a.user_id,a.address_id,z.goods_name,a.amount_order,z.goods_number,z.freight,a.order_no,a.create_time,a.paytime,a.user_id,a.address_id,a.return_insurance,z.goods_id,z.goods_attr_id,z.sku,a.address_id,a.invoice_id,supplier_price,z.market_price,b.waybillnumber,b.waybillname,z.shipping_type,z.goods_price,a.order_refer,a.buyer_message,z.comment_id,a.consignee,a.district_code,a.region,a.consignee_mobile,a.invoice_type,a.invoice_header_type,a.invoice_header,a.invoicer_card,a.invoice_content,z.cover_image,a.role_id,z.is_unusual';
@@ -976,14 +975,14 @@ class GoodsOrder extends ActiveRecord
         return $data;
     }
 
-    /**
-     * 去发货
+    /**去发货
      * @param $sku
      * @param $order_no
      * @param $waybillnumber
      * @param $shipping_type
      * @param $supplier_id
      * @return int
+     * @throws yii\db\Exception
      */
     public static function SupplierDelivery($sku,$order_no,$waybillnumber,$shipping_type,$supplier_id)
     {
@@ -1161,7 +1160,6 @@ class GoodsOrder extends ActiveRecord
      * 获取商品信息
      * @param $goods_name
      * @param $goods_id
-     * @param $goods_attr_id
      * @param $order_no
      * @param $sku
      * @return array
@@ -1287,7 +1285,7 @@ class GoodsOrder extends ActiveRecord
         switch ($refund_type)
         {
             case 1:
-                $res='退至顾客钱包 ';
+                $res='退至顾客钱包';
                 break;
             case 2:
                 $res='线下自行退款';
@@ -1318,7 +1316,8 @@ class GoodsOrder extends ActiveRecord
         return $res;
     }
 
-    /**获取平台介入类型
+    /**
+     * 获取平台介入类型
      * @param $handle
      * @return string
      */

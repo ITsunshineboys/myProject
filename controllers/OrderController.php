@@ -54,7 +54,6 @@ use app\services\AuthService;
 
 class OrderController extends Controller
 {
-    const WXPAY_LINE_GOODS='线下店商城';
     /**
      * Actions accessed by logged-in users
      */
@@ -791,8 +790,10 @@ class OrderController extends Controller
             ]);
         }
     }
+
     /**
      * 支付宝线下店商城异步返回操作-购买回调
+     * @throws Exception
      */
     public function actionAliPayLineNotify(){
         $post=Yii::$app->request->post();
