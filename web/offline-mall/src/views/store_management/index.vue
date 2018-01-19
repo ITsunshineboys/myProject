@@ -198,8 +198,9 @@
           status: this.storeData.is_follow === 1 ? 0 : 1
         }
         this.axios.post('/user-follow/user-follow-shop', params, res => {
-          console.log(res, '关注')
+          alert('进来了！！')
           window.AndroidWebView.clearCache()
+          alert('清除了缓存')
           this.getStoreData()
         })
       }
