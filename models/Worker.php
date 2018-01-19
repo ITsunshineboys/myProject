@@ -156,7 +156,7 @@ class Worker extends \yii\db\ActiveRecord
             ->leftJoin('worker_rank as wr','wr.id=w.level')
             ->where(['w.uid'=>$uid])
             ->one();
-            $array['worker_type_id']=WorkerType::gettype($array['worker_type_id']);
+            $array['worker_type_id']=WorkerService::getparenttype($array['worker_type_id']);
             $array['examine_status']=self::STATUSES[$array['examine_status']];
             $array['worker_no']=$array['aite_cube_no'];
         if(!$array){
@@ -234,9 +234,10 @@ class Worker extends \yii\db\ActiveRecord
             ->where(['id'=>$worker_id])
             ->one();
         if($array){
-            $array['province']=District::findByCode($array['province_code'])->name;
-            $array['city']=District::findByCode($array['city_code'])->name;
-            $worker_type=WorkerType::getparenttype($array['worker_type_id']);
+            $array['province']=District::findByCode($array['province_code'])['name'];
+            $array['city']=District::findByCode($array['city_code'])['name'];
+            $worker_type=WorkerService::getparenttype($array['worker_type_id']);
+
             $rank=WorkerRank::find()->where(['id'=>$array['level']])->one()->rank_name;
             $array['worker_type_rank']=$rank.$worker_type;
             unset($array['worker_type_id']);
@@ -372,18 +373,5 @@ class Worker extends \yii\db\ActiveRecord
         return $message;
     }
 
-    public static function AuditingMessage($select = [],$where=[])
-    {
-        $select = "user.legal_person,user.mobile,user.aite_cube_no,worker.create_time,worker_type.worker_name,user.nickname";
-        $message = self::find()
-            ->select($select)
-            ->where($where)
-            ->leftJoin([])
-            ->leftJoin([])
-            ->leftJoin([])
-            ->leftJoin([])
-            ->leftJoin([])
-            ->leftJoin([])
-            ->all();
-    }
+
 }

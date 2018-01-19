@@ -1475,10 +1475,10 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
             $worker_type_id = $worker_order->worker_type_id;
 
-            $title = WorkerType::find()
+            $title = WorkerService::find()
                 ->where(['id' => $worker_type_id])
                 ->one();
-            $title && $title = $title->worker_name;
+            $title && $title = $title->service_name;
         }
 
         $worker_works = new WorkerWorks();
@@ -1908,7 +1908,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
             }
             if($order['type']==self::ORDER_NEW){
                 //精准型 修改items数据->新增一条数据
-                switch (WorkerType::gettype($array['worker_type_id'])){
+                switch (WorkerService::getparenttype($array['worker_type_id'])){
                     case '泥工':
                         $items_res=self::saveMuditem($array['items'],$last_id);
                         break;
