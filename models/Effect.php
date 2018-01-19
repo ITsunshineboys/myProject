@@ -363,6 +363,7 @@ class Effect extends ActiveRecord
         ];
 
         $material=EffectMaterial::find()->where(['effect_id'=>$effect_id])->asArray()->all();
+        var_dump($material);die;
         if(!$material){
             $data['material']=null;
         }

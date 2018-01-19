@@ -20,6 +20,7 @@ use app\models\District;
 use app\models\Effect;
 
 use app\models\EffectEarnest;
+use app\models\EffectMaterial;
 use app\models\EffectPicture;
 use app\models\EffectToponymy;
 use app\models\EngineeringCraftName;
@@ -3124,7 +3125,7 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-       var_dump(EffectEarnest::deleteAll(['uid'=>1]));
+       var_dump(EffectMaterial::find()->where(['effect_id'=>122])->asArray()->all());
 
     }
 }
