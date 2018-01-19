@@ -78,7 +78,7 @@
                                             <div class="well">
                                                 <ul class="item_li">
                                                     <li ng-repeat="item in goods_style" ng-class="{'changeColor':style_arr.indexOf(item.id) != -1}" ng-click="filterGoods('style',item)">
-                                                        {{item.style}}
+                                                        {{item.name}}
                                                     </li>
                                                 </ul>
                                             </div>
@@ -98,7 +98,7 @@
                                             <div class="well">
                                                 <ul>
                                                     <li ng-repeat="item in goods_series" ng-class="{'changeColor':series_arr.indexOf(item.id) != -1}" ng-click="filterGoods('series',item)">
-                                                        {{item.series}}
+                                                        {{item.name}}
                                                     </li>
                                                 </ul>
                                             </div>
