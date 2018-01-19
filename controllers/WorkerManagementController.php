@@ -455,13 +455,13 @@ class WorkerManagementController extends Controller
     public function actionWorkerOrderList()
     {
 
-        $page     = (int)trim(\Yii::$app->request->post('page', self::DEFAULT_PAGE));
-        $size     = (int)trim(\Yii::$app->request->post('size', self::DEFAULT_SIZE));
+        $page     = (int)trim(\Yii::$app->request->get('page', self::DEFAULT_PAGE));
+        $size     = (int)trim(\Yii::$app->request->get('size', self::DEFAULT_SIZE));
 
-        $status   = (int)trim(\Yii::$app->request->post('status', ''));
-        $timeType = trim(\Yii::$app->request->post('time', ''));
-        $worker   = trim(\Yii::$app->request->post('worker', ''));
-        $other    = trim(\Yii::$app->request->post('other', ''));
+        $status   = (int)trim(\Yii::$app->request->get('status', ''));
+        $timeType = trim(\Yii::$app->request->get('time', ''));
+        $worker   = trim(\Yii::$app->request->get('worker', ''));
+        $other    = trim(\Yii::$app->request->get('other', ''));
 
         switch ($status || $timeType  || $worker || $other)
         {
@@ -778,5 +778,7 @@ class WorkerManagementController extends Controller
                 break;
         }
     }
+
+
 
 }

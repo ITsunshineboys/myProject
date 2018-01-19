@@ -1847,7 +1847,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
     {
         $offset = ($page - 1) * $size;
 
-        $select = 'worker_order.con_people,worker_order.con_tel,worker_order.order_no,worker_order.create_time,user.aite_cube_no,worker_service.service_name,worker_order.amount,worker_order.status';
+        $select = 'worker_order.id,worker_order.con_people,worker_order.con_tel,worker_order.order_no,worker_order.create_time,user.aite_cube_no,worker_service.service_name,worker_order.amount,worker_order.status';
         $details = self::find()
             ->select($select)
             ->where($where)
