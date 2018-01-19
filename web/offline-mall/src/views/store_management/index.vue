@@ -13,7 +13,7 @@
       </div>
       <div flex>
         <div class="attention" flex="dir:top main:justify" @click="attentionStore">
-          <span class="iconfont" :class="{'icon-heart': isAttention === 0, 'icon-heart-solid': isAttention === 1}"></span>
+          <span class="iconfont" :class="{'icon-heart': storeData.is_follow === 0, 'icon-heart-solid': storeData.is_follow === 1}"></span>
           <span>关注</span>
         </div>
         <div class="split-line"></div>
@@ -95,7 +95,7 @@
     },
     data () {
       return {
-        isAttention: 0,       // 关注图标默认未关注
+        // isAttention: 0,       // 关注图标默认未关注
         tabActive: 0,         // 默认选中店铺首页
         tabHeight: 44,        // tab 默认最小高度为 44 像素
         isShowAlert: false,  // 是否显示线下体验店弹窗
@@ -144,6 +144,7 @@
         this.axios.get('/supplier/index', {supplier_id: this.$route.params.id}, res => {
           console.log(res, '店铺首页数据')
           let data = res.data.index
+          alert(data.is_follow)
           this.storeData = data
           this.carousel = data.carousel.map(item => {
             return {
@@ -153,7 +154,7 @@
           })
           this.offlineInfo.address = data.district
           this.offlineInfo.phone = data.line_supplier_mobile
-          this.isAttention = data.is_follow
+          // this.isAttention = data.is_follow
           this.uid = data.supplier_uid
         })
       },
@@ -195,12 +196,11 @@
         // 关注店铺
         let params = {
           supplier_id: this.$route.params.id,
-          status: this.isAttention === 1 ? 0 : 1
+          status: this.startDate.is_follow === 1 ? 0 : 1
         }
         this.axios.post('/user-follow/user-follow-shop', params, res => {
           console.log(res, '关注')
           this.getStoreData()
-          this.$forceUpdate()
         })
       }
     }
