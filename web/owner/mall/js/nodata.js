@@ -845,7 +845,7 @@ app.controller('nodata_ctrl', function ($timeout,$uibModal,$http, _ajax, $state,
         all_modal.$inject = ['$scope', '$uibModalInstance']
         _ajax.post('/effect/app-apply-effect',obj,function (res) {
             console.log(res);
-            if(res.code == 403){
+            if(res.code == 403||res.code == 1052){
                 window.AndroidWebView.skipIntent()
             }else{
                 $uibModal.open({
@@ -938,7 +938,7 @@ app.controller('nodata_ctrl', function ($timeout,$uibModal,$http, _ajax, $state,
             })
         }else{
             _ajax.get('/site/check-is-login',{},function (res) {
-                if(res.code == 403){
+                if(res.code == 403||res.code == 1052){
                     obj.materials = materials
                     sessionStorage.setItem('payParams',JSON.stringify(obj))
                     $state.go('deposit')

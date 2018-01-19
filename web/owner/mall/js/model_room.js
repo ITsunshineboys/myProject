@@ -892,7 +892,7 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
         all_modal.$inject = ['$scope', '$uibModalInstance']
         _ajax.post('/effect/app-apply-effect',obj,function (res) {
             console.log(res);
-            if(res.code == 403){
+            if(res.code == 403||res.code == 1052){
                 window.AndroidWebView.skipIntent()
             }else{
                 $uibModal.open({
@@ -985,7 +985,7 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
             })
         }else{
             _ajax.get('/site/check-is-login',{},function (res) {
-                if(res.code == 403){
+                if(res.code == 403||res.code == 1052){
                     obj.materials = materials
                     sessionStorage.setItem('payParams',JSON.stringify(obj))
                     $state.go('deposit')
