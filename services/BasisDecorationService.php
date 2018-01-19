@@ -1520,6 +1520,7 @@ class BasisDecorationService
         // 底漆面积
         $hall_ = self::paintedArea($hall_area,$get['area'],$get['high'],$get['hall'],3);
         $bedroom_ = self::paintedArea($bedroom_area,$get['area'],$get['high'],$get['bedroom'],4);
+        var_dump($bedroom_);die;
         $total_area = self::algorithm(5,$hall_[0],$bedroom_[0],$v);
         // 周长
         $bedroom_length = self::paintedPerimeter($bedroom_[1],$get['bedroom'],4);
