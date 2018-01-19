@@ -88,7 +88,7 @@ class UserFollow extends \yii\db\ActiveRecord
      * @param $page_size
      * @return array
      */
-    public static function getFollowList($user_id, $role_id, $page, $page_size)
+    public static function getFollowList($user, $role_id, $page, $page_size)
     {
         $table = self::TABLE_BY_ROLE_ID[$role_id];
         $nickname = 'nickname';
@@ -96,14 +96,14 @@ class UserFollow extends \yii\db\ActiveRecord
             $nickname = 'shop_name';
         }
 
-        $query = (new Query())->from(self::USER_FOLLOW . ' u')
-            ->leftJoin($table . ' f', 'u.follow_id = f.id')
+        $query = (new Query())->from(self::tableName() . ' as  u')
+            ->leftJoin($table . ' as  f', 'u.follow_id = f.id')
             ->select(['u.id', 'u.follow_id', 'u.role_id', 'u.status', 'f.' . $nickname . ' as nickname', 'f.icon', 'f.follower_number'])
-            ->where(['u.role_id' => $role_id, 'u.status' => 1, 'u.user_id' => $user_id]);
-
+            ->where(['u.role_id' => $user->last_role_id_app, 'u.status' => 1, 'u.user_id' => $user->id]);
         $count = $query->count();
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
-        $arr = $query->offset($pagination->offset)
+        $arr = $query
+            ->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
 
