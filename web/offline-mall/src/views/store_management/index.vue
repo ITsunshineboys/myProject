@@ -13,7 +13,7 @@
       </div>
       <div flex>
         <div class="attention" flex="dir:top main:justify" @click="attentionStore">
-          <span class="iconfont" :class="{'icon-heart': isAttention === 0, 'icon-heart-solid': isAttention}"></span>
+          <span class="iconfont" :class="{'icon-heart': isAttention === 0, 'icon-heart-solid': isAttention === 1}"></span>
           <span>关注</span>
         </div>
         <div class="split-line"></div>
