@@ -1352,8 +1352,7 @@ class GoodsOrder extends ActiveRecord
 
     }
 
-    /**
-     * 获取后台订单状态
+    /**获取后台订单状态
      * @param $data
      * @return mixed
      * @throws yii\db\Exception
@@ -2387,11 +2386,12 @@ class GoodsOrder extends ActiveRecord
      * @param $user
      * @param $role
      * @return array
+     * @throws yii\db\Exception
      */
     public  static  function paginationByUserOrderListOne($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $type,$user,$role)
     {
 //        $a="CASE a.pay_status WHEN 0 THEN one";
-        $where.=' GROUP BY IF(a.pay_status=0 ,z.order_no,CONCAT(z.order_no,z.sku,z.create_time))';
+        $where.=' GROUP BY IF(a.pay_status=0 and z.order_status=0,z.order_no,CONCAT(z.order_no,z.sku,z.create_time))';
         $offset = ($page - 1) * $size;
         $OrderList = (new Query())
             ->from(self::tableName().' AS a')

@@ -2271,9 +2271,11 @@ class OrderController extends Controller
             'data' =>$data
         ]);
     }
+
     /**
      * app端  用户获取订单列表
      * @return string
+     * @throws Exception
      */
     public function  actionFindOrder(){
         $user = Yii::$app->user->identity;
