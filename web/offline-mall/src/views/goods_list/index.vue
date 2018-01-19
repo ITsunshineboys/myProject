@@ -22,7 +22,7 @@
         <span class="iconfont icon-filter"></span>
       </div>
     </div>
-    <scroller :on-infinite="init" ref="scrollerDom" style="top: 190px;">
+    <scroller :on-infinite="init" ref="scrollerDom" style="top: 90px;">
       <goods-list :goods-list="goodsListData"></goods-list>
     </scroller>
 
@@ -114,6 +114,7 @@
       }
     },
     activated () {
+      this.goodsListData = []
       this.getGoodsList()
     },
     methods: {
