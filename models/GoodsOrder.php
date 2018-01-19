@@ -2943,7 +2943,7 @@ class GoodsOrder extends ActiveRecord
             foreach ($arr as $k => $v) {
                 $amount_order += ($arr[$k]['goods_price'] * $arr[$k]['goods_number'] * 0.01);
                 $supplier_price += $arr[$k]['supplier_price'] * 0.01;
-                $market_price += $arr[$k]['market_price'] * 0.01;
+                $market_price += ($arr[$k]['market_price'] * $arr[$k]['goods_number'] )* 0.01;
                 $freight += ($arr[$k]['freight'] * 0.01);
 //                if ($arr[$k]['status_code']==self::ORDER_TYPE_UNPAID)
 //                {
@@ -3020,7 +3020,7 @@ class GoodsOrder extends ActiveRecord
 
             $output['pay_term'] = $arr[0]['pay_term'];
             $output['freight'] = StringService::formatPrice($freight);
-            $output['original_price'] = StringService::formatPrice($market_price * $arr[0]['goods_number']);
+            $output['original_price'] = StringService::formatPrice($market_price);
             $output['discount_price'] = StringService::formatPrice($amount_order);
 
             if ($arr[$k]['status_code']==self::ORDER_TYPE_UNPAID)
