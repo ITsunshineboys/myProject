@@ -1,8 +1,14 @@
 app.controller('product_details_ctrl', function ($timeout, _ajax, $scope, $state, $stateParams) {
     //初始化
-    $scope.status = $stateParams.status
-    $scope.materials = JSON.parse(sessionStorage.getItem('copies'))
-    $scope.params = JSON.parse(sessionStorage.getItem('params'))
+    if($stateParams.status){
+        $scope.status = $stateParams.status
+    }
+    if(sessionStorage.getItem('copies')!=null){
+        $scope.materials = JSON.parse(sessionStorage.getItem('copies'))
+    }
+    if(sessionStorage.getItem('params')!=null){
+        $scope.params = JSON.parse(sessionStorage.getItem('params'))
+    }
     $scope.recommend_quantity = ''
      //获取详情数据
     _ajax.get('/mall/goods-view', {
