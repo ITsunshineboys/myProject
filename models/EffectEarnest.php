@@ -365,13 +365,14 @@ class EffectEarnest extends \yii\db\ActiveRecord
 
 
         foreach ($data as &$v){
-            var_dump($v);
-//            if($v==false){
-//                return [];
-//            }
+
+            if($v==false){
+                unset($v);
+            }
 //            $v['add_time']=date('Y-m-d H:i:s',$v['add_time']);
 //            $v['style']=$v['series'].'-'.$v['style'];
 //            unset($v['series']);
+            var_dump($v);
         }die;
        return $data;
     }
