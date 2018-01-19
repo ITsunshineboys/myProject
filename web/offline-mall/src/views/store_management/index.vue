@@ -95,7 +95,7 @@
     },
     data () {
       return {
-        isAttention: false,   // 关注图标默认未关注
+        isAttention: 0,   // 关注图标默认未关注
         tabActive: 0,         // 默认选中店铺首页
         tabHeight: 44,        // tab 默认最小高度为 44 像素
         isShowAlert: false,  // 是否显示线下体验店弹窗

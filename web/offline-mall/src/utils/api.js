@@ -38,8 +38,8 @@ function checkCode (res, callback) {
   // if (res.data && (!res.data.success)) {
   //   // alert(res.data.error_msg)
   // }
-  if (res.code === 403) {
-    console.log('用户没有登陆')
+  if (res.code === 403 || res.code === 1052) {
+    window.AndroidWebView.storeskipIntent()
   } else {
     if (typeof callback === 'function') {
       callback(res)

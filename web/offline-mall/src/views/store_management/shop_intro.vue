@@ -13,7 +13,7 @@
       </div>
       <div flex>
         <div class="attention" flex="dir:top main:justify">
-          <span class="iconfont" :class="{'icon-heart': !isAttention, 'icon-heart-solid': isAttention}"></span>
+          <span class="iconfont" :class="{'icon-heart': isAttention === 0, 'icon-heart-solid': isAttention === 1}"></span>
           <span>关注</span>
         </div>
         <div class="split-line"></div>
@@ -45,16 +45,16 @@
       </li>
     </ul>
     <ul class="store-info">
-      <li flex="main:justify cross:center">
-        <span class="store-title">掌柜名</span>
-        <span class="store-msg" flex="cross:center">
-          <span>冬瓜先生</span>
-          <span class="iconfont icon-service"></span>
-        </span>
-      </li>
+      <!--<li flex="main:justify cross:center">-->
+        <!--<span class="store-title">掌柜名</span>-->
+        <!--<span class="store-msg" flex="cross:center">-->
+          <!--<span>冬瓜先生</span>-->
+          <!--<span class="iconfont icon-service"></span>-->
+        <!--</span>-->
+      <!--</li>-->
       <li flex="main:justify cross:center">
         <span class="store-title">质保金</span>
-        <span class="store-score" style="color: #d9ad65;">5000质保金</span>
+        <span class="store-score" style="color: #d9ad65;">{{storeData.quality_guarantee_deposit}}质保金</span>
       </li>
     </ul>
     <!-- 线下体验店详情弹窗 -->
@@ -74,7 +74,7 @@
     data () {
       return {
         isShowAlert: false,
-        isAttention: false,
+        isAttention: 0,
         offlineInfo: {
           address: '',
           iphone: ''
@@ -89,6 +89,7 @@
         this.storeData = data
         this.offlineInfo.address = data.district
         this.offlineInfo.iphone = data.line_supplier_mobile
+        this.isAttention = data.is_follow
       })
     },
     methods: {
@@ -97,6 +98,16 @@
       },
       contactShop () {      // 联系商家
         // do something
+      },
+      attentionStore () {
+        // 关注店铺
+        let params = {
+          supplier_id: this.$route.params.id,
+          status: this.isAttention === 1 ? 0 : 1
+        }
+        this.axios.post('/user-follow/user-follow-shop', params, res => {
+          console.log(res, '关注')
+        })
       }
     }
   }
