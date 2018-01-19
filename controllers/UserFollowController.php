@@ -99,9 +99,14 @@ class UserFollowController extends Controller
      */
     public function actionFollowList()
     {
-        $user = self::userIdentity();
-        if (!is_int($user)) {
-            return $user;
+        $user = \Yii::$app->user->identity;
+        if (!$user)
+        {
+            $code = 403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
         }
 
         $request = \Yii::$app->request;
@@ -109,7 +114,7 @@ class UserFollowController extends Controller
         $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
         $role_id = (int)$request->get('role_id', '');
 
-        if (!$role_id || !in_array($role_id, array_keys(self::ALLOWED_ROLE_ID))) {
+        if (!$role_id || !in_array($role_id, array_keys(self::ALLOWED_ROLE_ID)))       {
             $code = 1000;
             return Json::encode([
                 'code' => $code,
