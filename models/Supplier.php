@@ -104,7 +104,6 @@ class Supplier extends ActiveRecord
         'reject_reason',
     ];
     const FIELDS_VIEW_MALL_MODEL = [
-        'id',
         'icon',
         'shop_no',
         'shop_name',
@@ -117,6 +116,7 @@ class Supplier extends ActiveRecord
         'district_name',
         'district_code',
         'address',
+        'quality_guarantee_deposit'
     ];
     const FIELDS_VIEW_APP_EXTRA = [
         'legal_person',
@@ -1002,6 +1002,11 @@ class Supplier extends ActiveRecord
             $data['is_line_supplier']=$lineSupplier?1:2;
             $data['line_supplier_mobile']=$lineSupplier?$lineSupplier['mobile']:'';
             $data['district']=$lineSupplier?LogisticsDistrict::GetLineDistrictByDistrictCode($lineSupplier['district_code']).$lineSupplier['address']:'';
+        }
+
+        if (isset($data['quality_guarantee_deposit']))
+        {
+            $data['quality_guarantee_deposit']=StringService::formatPrice($data['quality_guarantee_deposit']*0.01);
         }
     }
 

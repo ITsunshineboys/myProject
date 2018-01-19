@@ -3405,6 +3405,7 @@ class GoodsOrder extends ActiveRecord
 
 
     /**
+     * 分解运费
      * @param $goods
      * @return mixed
      */
@@ -3423,7 +3424,6 @@ class GoodsOrder extends ActiveRecord
         foreach ($Good as &$wuliu){
             if (!in_array($wuliu['id'],$templates))
             {
-
                 $templates[]=$wuliu['id'];
             };
         }
@@ -3521,7 +3521,6 @@ class GoodsOrder extends ActiveRecord
                 $order_no=GoodsOrder::SetOrderNo();
                 $money=0;
                 $supplier['goods']=self::decomposeFreight($supplier['goods']);
-
                 foreach ($supplier['goods'] as &$goods)
                 {
                     if (
@@ -3567,17 +3566,6 @@ class GoodsOrder extends ActiveRecord
                     $Supplier=Supplier::find()
                         ->where(['id'=>$Goods->supplier_id])
                         ->one();
-//                    if ($goods['freight']==0)
-//                    {
-//                        $freight=0;
-//                    }else if ($goods['freight']*0.01==$supplier['freight'])
-//                    {
-//                        $freight=$goods['freight'];
-//                    }
-//                    else
-//                    {
-//                        $freight=$supplier['freight']*($goods['goods_num']/$goods['goods_num'])*100;
-//                    }
                     $freight=$goods['freight'];
                     $date=date('Ymd',time());
                     $GoodsStat=GoodsStat::find()
