@@ -199,6 +199,7 @@
         }
         this.axios.post('/user-follow/user-follow-shop', params, res => {
           console.log(res, '关注')
+          window.AndroidWebView.clearCache()
           this.getStoreData()
         })
       }
