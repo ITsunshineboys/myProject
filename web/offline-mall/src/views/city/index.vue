@@ -70,7 +70,7 @@
       }
     },
     watch: {
-      'cur_city': 'getData'
+      // 'cur_city': 'getData'
     }
   }
 </script>
