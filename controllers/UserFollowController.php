@@ -100,6 +100,7 @@ class UserFollowController extends Controller
     public function actionFollowList()
     {
         $user = \Yii::$app->user->identity;
+        $user=User::findOne('18108088021');
         if (!$user)
         {
             $code = 403;
@@ -129,8 +130,9 @@ class UserFollowController extends Controller
     }
 
     /**
-     * toggle status of follow
-     * @return int|string
+     * @return string
+     * @throws \Exception
+     * @throws \yii\db\Exception
      */
     public function actionToggleStatus()
     {
@@ -170,6 +172,7 @@ class UserFollowController extends Controller
     public  function  actionUserFollowShop()
     {
         $user = \Yii::$app->user->identity;
+        $user=User::findOne('18108088021');
         if (!$user)
         {
             $code=403;
@@ -178,6 +181,7 @@ class UserFollowController extends Controller
                 'msg' => 200 == $code ? 'OK' : \Yii::$app->params['errorCodes'][$code]
             ]);
         }
+
         $supplier_id=\Yii::$app->request->post('supplier_id');
         $status=\Yii::$app->request->post('status',0);
         if (!$supplier_id)

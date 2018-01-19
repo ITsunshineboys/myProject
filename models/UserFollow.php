@@ -263,6 +263,7 @@ class UserFollow extends \yii\db\ActiveRecord
     public static  function CheckIsFollow($supplierId)
     {
         $user = \Yii::$app->user->identity;
+        $user=User::findOne('18108088021');
         if (!$user)
         {
             return self::UN_FOLLOW;
