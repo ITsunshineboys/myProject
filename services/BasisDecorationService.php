@@ -1050,9 +1050,9 @@ class BasisDecorationService
             case $goods['title'] == self::goodsNames()['ventilator']:   //换气扇
                 $quantity = ceil($post['toilet']);
                 break;
-            case $goods['title'] == self::goodsNames()['ceiling_light']:   //吸顶灯
-                $quantity= ceil($post['toilet']);
-                break;
+//            case $goods['title'] == self::goodsNames()['ceiling_light']:   //吸顶灯
+//                $quantity= ceil($post['toilet']);
+//                break;
             case $goods['title'] == self::goodsNames()['tap']:   //水龙头
                 $quantity = ceil($post['toilet'] + $post['kitchen']);
                 break;
