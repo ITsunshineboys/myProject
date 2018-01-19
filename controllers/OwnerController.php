@@ -666,7 +666,6 @@ class OwnerController extends Controller
 
         // 系列系数 风格系数 查询
         $coefficient = EngineeringStandardCarpentryCoefficient::findByAll(['and',['city_code'=>$get['city']],['project'=>$get['series']],['project'=>$get['style']]]);
-        var_dump($coefficient);die;
         foreach ($coefficient as $one_){
 
             // 系列系数2
@@ -1829,7 +1828,7 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-        $goods = Goods::priceDetail('3','130');
+        $goods = EngineeringStandardCarpentryCoefficient::find()->asArray()->all();
         var_dump($goods);
     }
 
