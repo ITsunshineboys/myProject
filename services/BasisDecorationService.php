@@ -720,6 +720,7 @@ class BasisDecorationService
                 $value_ = ceil(self::algorithm(6,$get,$craft1));
                 $value['wall'] = round(self::algorithm(1,$value_,$fare),2);
                 $value['cost'] =  self::algorithm(3,$cost,$value['wall']);
+                break;
 
         }
 
@@ -1115,23 +1116,40 @@ class BasisDecorationService
             }
         }
         foreach ($goods as $goods_value){
-            if ($goods_value['series_id'] == $post['series'] && $goods_value['style_id'] == $post['style']){
+            if (strpos($goods_value['series_id'],$post['series']) !== false
+                && strpos($goods_value['style_id'],$post['style']) !== false
+            ){
                 $series_style_goods[] =  $goods_value;
-            }elseif ($goods_value['series_id'] == $post['series'] && $goods_value['style_id'] == 0){
+            }
+
+            if (strpos($goods_value['series_id'],$post['series']) !== false
+                && $goods_value['style_id'] == 0
+            ){
                 $series_style_goods[] =  $goods_value;
-            }elseif ($goods_value['style_id'] == $post['style'] && $goods_value['series_id'] == 0){
+            }
+
+            if (strpos($goods_value['style_id'],$post['style']) !== false
+                && $goods_value['series_id'] == 0
+            ){
                 $series_style_goods[] =  $goods_value;
-            }elseif ($goods_value['series_id'] == 0 && $goods_value['style_id'] == 0){
+            }
+
+            if ($goods_value['series_id'] == 0
+                && $goods_value['style_id'] == 0
+            ){
                 $series_style_goods[] =  $goods_value;
             }
         }
 
 
         $effect = Effect::array_group_by($series_style_goods,'title');
+
         foreach ($effect as $c){
             $material[] = self::profitMargin($c);
         }
+
         $style = self::style($material);
+
         return $style;
     }
 
