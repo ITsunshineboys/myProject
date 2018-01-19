@@ -195,34 +195,46 @@ class UserFollow extends \yii\db\ActiveRecord
                     ->one();
                 if (!$follow)
                 {
-
                     $follow=new self();
                     $follow->status=$status;
                     $follow->user_id=$user->id;
                     $follow->role_id=$user->last_role_id_app;
                     $follow->follow_id=$supplier_id;
+
+                    if ($status==self::HAVE_FOLLOW)
+                    {
+                        $supplier->follower_number+=1;
+                        $follow->follow_time=$time;
+                    }
 //                    if (!$follow->save(false))
 //                    {
 //                        $tran->rollBack();
 //                    }
                 }else
                 {
+                    $follow->status=$status;
                     if ($follow->status==$status)
                     {
-                        $tran->rollBack();
-                        $code=1000;
-                        return $code;
+                        if ($status==self::UN_FOLLOW)
+                        {
+                            $follow->unfollow_time=$time;
+                        }else{
+                            $follow->follow_time=$time;
+                        }
+                    }else
+                    {
+                        if ($status==self::UN_FOLLOW)
+                        {
+                            $supplier->follower_number-=1;
+                            $follow->unfollow_time=$time;
+                        }else{
+                            $supplier->follower_number+=1;
+                            $follow->follow_time=$time;
+                        }
                     }
-                    $follow->status=$status;
+
                 }
-                if ($status==self::UN_FOLLOW)
-                {
-                    $supplier->follower_number-=1;
-                    $follow->unfollow_time=$time;
-                }else{
-                    $supplier->follower_number+=1;
-                    $follow->follow_time=$time;
-                }
+
                 if (!$follow->save(false))
                 {
                     $tran->rollBack();
