@@ -36,10 +36,8 @@
       </div>
       <divider></divider>
       <group>
-        <cell-box is-link class="choose-count" @click.native="showCount('count')">
+        <cell-box is-link class="choose-count" @click.native="showCount('now')">
           选择数量
-
-
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -156,26 +154,18 @@
 
       <!--底部按钮-->
       <flexbox class="bottom-tabbar">
-        <flexbox-item @click.native="contactShop" :span="155/375">
-          <i class="iconfont icon-service"></i><br/>联系商家
-
-
-        </flexbox-item>
-        <flexbox-item @click.native="showCount('cart')" :span="110/375">
-          加入购物车
-
-
+        <flexbox-item :span="155/375"></flexbox-item>
+        <flexbox-item :span="110/375">
+          匹配小区
         </flexbox-item>
         <flexbox-item @click.native="showCount('now')" :span="110/375">
           立即购买
-
-
         </flexbox-item>
       </flexbox>
     </div>
 
     <!-- 选择数量弹窗 -->
-    <popup v-model="show_count" @on-hide="showCount('all')">
+    <popup v-model="show_count" @on-hide="showCount('close')">
       <div>
         <group>
           <div class="count-top">
@@ -186,7 +176,7 @@
               <p>¥{{good_detail.platform_price}}</p>
               <span>库存{{good_detail.left_number}}件</span>
             </div>
-            <i class="iconfont icon-close" @click="showCount('all')"></i>
+            <i class="iconfont icon-close" @click="showCount('close')"></i>
           </div>
           <group>
             <x-number class="buy-count" title="购买数量" v-model="count" :fillable="true" :max="good_detail.left_number"
@@ -194,15 +184,8 @@
           </group>
         </group>
         <flexbox class="count-bottom-btn">
-          <flexbox-item alt="cart" v-if="count_cart||default_count" @click.native="addCart">
-            加入购物车
-
-
-          </flexbox-item>
-          <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
+          <flexbox-item alt="now"  @click.native="buyNow">
             立即购买
-
-
           </flexbox-item>
         </flexbox>
       </div>
@@ -251,13 +234,6 @@
 
     <!--线下商品介绍弹窗-->
     <offlinealert :offlineInfo="offlineInfo" :show="show" :isOffline="false" @isShow="showOfflineAlert"></offlinealert>
-
-    <!--加入购物车成功提示-->
-    <toast v-model="cart_success" width="200px" position="middle" :time="2000" :is-show-mask="true">
-      <i class="iconfont icon-checkbox-circle-chec"></i>
-      <p>成功添加到购物车</p>
-    </toast>
-
   </div>
 </template>
 
@@ -323,9 +299,6 @@
         },
         show_description: true,       // 显示图文详情
         all_after_sale_services: [],
-        count_cart: false,            // 加入购物车按钮显示
-        count_now: false,             // 立即购买按钮显示
-        default_count: false,         // 两个按钮显示
         checkin: 1,                    // 是否登录默认登录
         afterservice_arr: ['上门维修', '上门退货', '上门换货', '退货', '换货'],
         safeguard_arr: ['提供发票', '上门安装'],
@@ -376,33 +349,16 @@
 
       // 选择数量 弹出层按钮显示处理
       showCount: function (obj) {
-        if (obj === 'all') {
+        if (obj === 'close') {
           this.show_count = false
-          this.count_cart = false
-          this.count_now = false
-          this.default_count = false
           this.count = 1
         } else {
           this.show_count = true
-          obj === 'cart' ? this.count_cart = true : obj === 'now' ? this.count_now = true : this.default_count = true
         }
       },
       // 线下商品弹窗处理
       showOfflineAlert: function (bool) {
         this.show = bool
-      },
-      // 添加购物车
-      addCart () {
-        this.axios.post('/order/add-shipping-cart', {
-          goods_id: this.good_id,
-          goods_num: this.count
-        }, (res) => {
-          if (res.code === 200) {
-            this.showCount('all')
-            this.cart_success = true // 购物车添加成功弹窗显示
-            window.AndroidWebView.showInfoFromJs(res.data)
-          }
-        })
       },
       // 立即购买
       buyNow () {
