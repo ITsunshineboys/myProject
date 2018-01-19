@@ -1074,7 +1074,8 @@ class BasisDecorationService
                 $quantity = ceil($post['bedroom']);
                 break;
             case $goods['title'] == self::goodsNames()['lamp']:   //灯具
-                $quantity = ceil($post['bedroom']);
+                $attr = self::goodsAttr([$goods],BasisDecorationService::goodsNames()['lamp'],'适用处',1);
+                $quantity =  self::lamp($attr,$post);
                 break;
             case $goods['title'] == self::goodsNames()['mattress']:  //床垫
                 $quantity = ceil($post['bedroom']);
