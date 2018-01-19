@@ -369,12 +369,12 @@ class EffectEarnest extends \yii\db\ActiveRecord
             if($v!=false){
                 $a[]=$v;
             }
-            var_dump($a);die;
-            foreach ($a as &$value){
-                $value['add_time']=date('Y-m-d H:i:s',$value['add_time']);
-                $value['style']=$value['series'].'-'.$value['style'];
-                unset($value['series']);
-            }
+            var_dump($a);
+//            foreach ($a as &$value){
+//                $value['add_time']=date('Y-m-d H:i:s',$value['add_time']);
+//                $value['style']=$value['series'].'-'.$value['style'];
+//                unset($value['series']);
+//            }
 
         }
         var_dump($a);die;
