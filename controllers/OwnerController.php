@@ -1451,7 +1451,7 @@ class OwnerController extends Controller
         }
 
         $material[] = BasisDecorationService::lamp($lamp,$get);
-//        $material[]= BasisDecorationService::formula($goods,$get);
+        $material[]= BasisDecorationService::formula($goods,$get);
 
 
         //无计算公式
