@@ -153,6 +153,24 @@ class EffectController extends Controller
         $request = new Request();
         $effect_enst_id = (int)trim($request->post('id', ''));
         $res= htmlspecialchars(trim($request->post('remark',''),''));
+        $model = new Effect();
+        $effect_id=EffectEarnest::find()->asArray()->where(['id'=>$effect_enst_id])->select('effect_id')->one()['effect_id'];
+        $data = $model->geteffectdata($effect_id);
+        if (isset($effect_id) && !isset($res)) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+
+            ]);
+        }else{
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'ok',
+                'data'=>$data
+            ]);
+        }
+
+
         if(!$effect_enst_id){
             return json_encode([
                 'code' => $code,
@@ -181,25 +199,8 @@ class EffectController extends Controller
                     'code' => 200,
                     'msg' => 'ok',
                 ]);
-        }else{
-            $model = new Effect();
-            $effect_id=EffectEarnest::find()->asArray()->where(['id'=>$effect_enst_id])->select('effect_id')->one()['effect_id'];
-            $data = $model->geteffectdata($effect_id);
-            if (!$effect_id) {
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-
-                ]);
-            }else{
-                return json_encode([
-                    'code' => 200,
-                    'msg' => 'ok',
-                    'data' => $data
-
-                ]);
-            }
         }
+
 
 
     }
