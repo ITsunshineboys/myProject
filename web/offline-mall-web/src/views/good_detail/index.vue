@@ -4,22 +4,9 @@
     <div class="guide-icon">
       <i class="iconfont icon-return" @click="$router.go(-1)"></i>
       <i class="iconfont icon-share" @click="androidShare"></i>
-      <i class="iconfont icon-more" @click="isShow=!isShow"></i>
-    </div>
-
-    <!--右上弹窗-->
-    <div v-show="isShow" class="pop-down">
-      <ul>
-        <router-link :to="'/'" tag="li">
-          <span class="iconfont icon-home"></span>
-          <span class="pop-text">商城首页</span>
-        </router-link>
-        <li @click="skipMessageCenter">
-          <span class="iconfont icon-news-circle"></span>
-          <span class="pop-text">消息</span>
-          <span class="pop-dot"></span>
-        </li>
-      </ul>
+      <router-link :to="'/'">
+        <i class="iconfont icon-home"></i>
+      </router-link>
     </div>
 
     <!--轮播-->
@@ -38,6 +25,7 @@
       <group>
         <cell-box is-link class="choose-count" @click.native="showCount('now')">
           选择数量
+
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -82,16 +70,19 @@
             <span>{{good_detail.supplier.goods_number}}</span><br/>商品数
 
 
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.follower_number}}</span><br/>粉丝数
 
 
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
+
 
 
           </div>
@@ -157,9 +148,11 @@
         <flexbox-item :span="155/375"></flexbox-item>
         <flexbox-item :span="110/375">
           匹配小区
+
         </flexbox-item>
         <flexbox-item @click.native="showCount('now')" :span="110/375">
           立即购买
+
         </flexbox-item>
       </flexbox>
     </div>
@@ -184,8 +177,9 @@
           </group>
         </group>
         <flexbox class="count-bottom-btn">
-          <flexbox-item alt="now"  @click.native="buyNow">
+          <flexbox-item alt="now" @click.native="buyNow">
             立即购买
+
           </flexbox-item>
         </flexbox>
       </div>
@@ -365,20 +359,12 @@
         /* params
          * 商品id 购买数量
          * */
+        this.$router.push({name: 'Order', params: {goods_id: this.good_id, goods_num: this.count}})
         this.show_count = false
-        window.AndroidWebView.skipIntent(this.good_id, this.count)
       },
       // 分享
       androidShare () {
         window.AndroidWebView.share('我在【艾特生活】分享了一款好物给你，点击链接查看详情【' + this.good_detail.title + '　　' + this.good_detail.subtitle + '】' + location.href)
-      },
-      // 跳转消息中心
-      skipMessageCenter () {
-        window.AndroidWebView.skipMessageCenter()
-      },
-      // 联系商家
-      contactShop () {
-        this.contactStore(this.good_detail.supplier.uid, this.role_id)
       }
     }
   }
@@ -431,7 +417,7 @@
     right: 54px;
   }
 
-  .good-container .guide-icon .icon-more {
+  .good-container .guide-icon .icon-home {
     right: 14px;
   }
 
