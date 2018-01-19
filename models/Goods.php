@@ -1438,7 +1438,7 @@ class Goods extends ActiveRecord
      * Get view data
      *
      * @param string $ip ip
-     * @return array
+     * @return array|bool
      */
     public function view($ip)
     {
