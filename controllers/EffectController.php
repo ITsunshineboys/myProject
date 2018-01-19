@@ -402,7 +402,7 @@ class EffectController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        var_dump($user);die;
+
         $type=(int)Yii::$app->request->get('type',1);
         $data=EffectEarnest::PlanList($user->getId(),$type);
         return Json::encode([
