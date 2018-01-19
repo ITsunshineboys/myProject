@@ -70,7 +70,7 @@
       <router-link :to="{path: '/shop-intro/' + $route.params.id}" tag="button" type="button">
         店铺介绍
       </router-link>
-      <button class="" type="button" @click="contactStore(1 ,6)">联系商家</button>
+      <button class="" type="button" @click="contactStore(uid ,6)">联系商家</button>
     </div>
     <!-- 线下体验店详情弹窗 -->
     <offline-alert @isShow="isShow" :show="isShowAlert" :offlineInfo="offlineInfo"></offline-alert>
@@ -102,6 +102,7 @@
         carousel: [],         // 店铺首页轮播
         storeData: {},        // 店铺信息
         recommendGoods: [],   // 推荐商品列表
+        uid: null,           // 商家对应用户ID
         offlineInfo: {        // 线下体验店弹窗信息
           address: '',
           phone: '',
@@ -134,6 +135,7 @@
         this.offlineInfo.address = data.district
         this.offlineInfo.phone = data.line_supplier_mobile
         this.isAttention = data.is_follow
+        this.uid = data.supplier_uid
       })
       // 请求店铺首页推荐商品
       this.axios.get('supplier/recommend-second', {supplier_id: this.$route.params.id}, res => {
