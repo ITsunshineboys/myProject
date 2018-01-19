@@ -126,7 +126,7 @@
       toPay () {
         if (!this.consigneeFlag) {      // 已填写收货地址
           this.axios.get('/order/judge-address', {
-            goods_id: 43,
+            goods_id: this.$route.query.goods_id,
             district_code: this.adCode
           }, (res) => {
             console.log(res)
@@ -136,8 +136,8 @@
                   console.log('微信支付')
                   this.axios.post('/order/order-line-wx-pay', {
                     order_price: this.allCost,
-                    goods_id: 43,
-                    goods_num: 10,
+                    goods_id: this.$route.query.goods_id,
+                    goods_num: this.$route.query.goods_num,
                     address_id: sessionStorage.getItem('address_id'),
                     invoice_id: sessionStorage.getItem('invoice_id'),
                     freight: this.freight,
@@ -181,8 +181,8 @@
                   console.log('支付宝支付 ')
                   this.axios.post('/order/order-line-ali-pay', {
                     order_price: this.allCost,
-                    goods_id: 43,
-                    goods_num: 10,
+                    goods_id: this.$route.query.goods_id,
+                    goods_num: this.$route.query.goods_num,
                     address_id: sessionStorage.getItem('address_id'),
                     invoice_id: sessionStorage.getItem('invoice_id  '),
                     freight: this.freight,
@@ -219,8 +219,8 @@
     activated () {
       // 获取线下体验店商品信息
       this.axios.get('/order/get-line-goods-info', {
-        goods_id: 43,
-        goods_num: 10
+        goods_id: this.$route.query.goods_id,
+        goods_num: this.$route.query.goods_num
       }, (res) => {
         console.log(res)
         this.shop_name = res.data.shop_name // 店铺名称
