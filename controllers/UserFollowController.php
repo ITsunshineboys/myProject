@@ -172,7 +172,8 @@ class UserFollowController extends Controller
             ]);
         }
         $supplier_id=\Yii::$app->request->post('supplier_id');
-        if (!$supplier_id)
+        $status=\Yii::$app->request->post('status');
+        if (!$supplier_id || !$status)
         {
             $code=1000;
             return Json::encode([
@@ -180,7 +181,7 @@ class UserFollowController extends Controller
                 'msg' => 200 == $code ? 'OK' : \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $code=UserFollow::UserFlowShop($user,$supplier_id);
+        $code=UserFollow::UserFlowShop($user,$supplier_id,$status);
         return Json::encode([
             'code' => $code,
             'msg' => 200 == $code ? 'OK' : \Yii::$app->params['errorCodes'][$code]

@@ -176,16 +176,43 @@ class UserFollow extends \yii\db\ActiveRecord
      * @param $supplier_id
      * @return int
      */
-    public static  function UserFlowShop($user,$supplier_id)
+    public static  function UserFlowShop($user,$supplier_id,$status)
     {
-//        $tran = Yii::$app->db->beginTransaction();
-//        try{
-//
-//        }catch (Exception $e){
-//            $tran->rollBack();
-//            $code=500;
-//            return $code;
-//        }
+            $time=time();
+            $tran = Yii::$app->db->beginTransaction();
+            try{
+                $follow=self::find()
+                    ->where(['user_id'=>$user->id,'role_id'=>$user->last_role_id_app])
+                    ->andWhere(['follow_id'=>$supplier_id])
+                    ->one();
+                if (!$follow)
+                {
+                    $follow=new self();
+                    $follow->status=$status;
+                    $follow->user_id=$user->id;
+                    $follow->role_id=$user->last_role_id_app;
+                    $follow->follow_id=$supplier_id;
+                    if (!$follow->save(false))
+                    {
+                        $tran->rollBack();
+                    }
+                }
+                $follow->status=$status;
+                if ($status==self::UN_FOLLOW)
+                {
+                    $follow->unfollow_time=$time;
+                }else{
+                    $follow->follow_time=$time;
+                }
+                if (!$follow->save(false))
+                {
+                    $tran->rollBack();
+                }
+            }catch (Exception $e){
+                $tran->rollBack();
+                $code=500;
+                return $code;
+            }
     }
 
 
