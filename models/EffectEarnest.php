@@ -343,7 +343,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
             ->asArray()
             ->all();
 
-
+        var_dump($effect_earnests);die;
         $data=[];
         if(!isset($effect_earnests)){
             $data=[];
@@ -363,7 +363,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
         }
 
 
-        var_dump($data);die;
+
 //        $a=[];
 //        foreach ($data as $v){
 //            if($v!=false){
