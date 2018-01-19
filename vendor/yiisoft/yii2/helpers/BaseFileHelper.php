@@ -147,9 +147,7 @@ class BaseFileHelper
         if ($info) {
             $result = finfo_file($info, $file);
             finfo_close($info);
-            if (YII_DEBUG) {
-                file_put_contents('/tmp/test.log', PHP_EOL . 'c' . $result, FILE_APPEND);
-            }
+
             if ($result !== false) {
                 return $result;
             }

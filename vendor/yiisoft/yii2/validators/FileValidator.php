@@ -352,17 +352,9 @@ class FileValidator extends Validator
     {
         $extension = mb_strtolower($file->extension, 'UTF-8');
 
-        $filelog = '/tmp/test.log';
-        if (YII_DEBUG) {
-            file_put_contents($filelog, '1' . $extension);
-        }
         if ($this->checkExtensionByMimeType) {
 
             $mimeType = FileHelper::getMimeType($file->tempName, null, false);
-            if (YII_DEBUG) {
-                file_put_contents($filelog, PHP_EOL . 'a' . $file->tempName, FILE_APPEND);
-                file_put_contents($filelog, PHP_EOL . '2' . $mimeType, FILE_APPEND);
-            }
             if ($mimeType === null) {
                 return false;
             }
@@ -370,17 +362,11 @@ class FileValidator extends Validator
             $extensionsByMimeType = FileHelper::getExtensionsByMimeType($mimeType);
 
             if (!in_array($extension, $extensionsByMimeType, true)) {
-                if (YII_DEBUG) {
-                    file_put_contents($filelog, PHP_EOL . '3' . json_encode($extensionsByMimeType), FILE_APPEND);
-                }
                 return false;
             }
         }
 
         if (!in_array($extension, $this->extensions, true)) {
-            if (YII_DEBUG) {
-                file_put_contents($filelog, '4' . json_encode($this->extensions));
-            }
             return false;
         }
 

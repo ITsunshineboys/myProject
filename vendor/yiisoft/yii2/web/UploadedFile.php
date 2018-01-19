@@ -183,9 +183,6 @@ class UploadedFile extends Object
      */
     public function getExtension()
     {
-        if (YII_DEBUG) {
-            file_put_contents('/tmp/test1.log', PHP_EOL . 'getExtension:' . $this->name . '|' . pathinfo($this->name, PATHINFO_EXTENSION), FILE_APPEND);
-        }
         return strtolower(pathinfo($this->name, PATHINFO_EXTENSION));
     }
 
