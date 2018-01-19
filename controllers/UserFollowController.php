@@ -186,8 +186,6 @@ class UserFollowController extends Controller
             'code' => $code,
             'msg' => 200 == $code ? 'OK' : \Yii::$app->params['errorCodes'][$code]
         ]);
-
-
     }
 
 
