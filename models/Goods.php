@@ -1443,7 +1443,14 @@ class Goods extends ActiveRecord
     public function view($ip)
     {
         $supplier = Supplier::findOne($this->supplier_id);
+        if (!$supplier) {
+            return false;
+        }
+
         $user = User::findOne($supplier->uid);
+        if (!$user) {
+            return false;
+        }
 
         if ($goodsComment = GoodsComment::find()
             ->select(array_diff(GoodsComment::FIELDS_APP, GoodsComment::FIELDS_EXTRA))

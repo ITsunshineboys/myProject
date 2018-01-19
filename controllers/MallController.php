@@ -4111,6 +4111,14 @@ class MallController extends Controller
         }
 
         $data = $goods->view(Yii::$app->request->userIP);
+        if (false === $data) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         $data = LineSupplierGoods::extraData($data);
 //        $cache->set($cacheKey, $data, Yii::$app->params['goods']['viewCacheTime']);
         return Json::encode([
