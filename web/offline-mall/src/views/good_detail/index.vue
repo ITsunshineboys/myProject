@@ -342,8 +342,7 @@
     activated () {
       this.good_id = this.$route.params.id // 商品id
       this.isShow = false
-      this.axios.get('/mall/goods-view', {id: 390}, (res) => {
-        console.log(res)
+      this.axios.get('/mall/goods-view', {id: this.good_id}, (res) => {
         this.good_detail = res.data.goods_view
         // 用户名处理
         if (this.good_detail.comments.total !== '0') {
