@@ -359,7 +359,7 @@
         /* params
          * 商品id 购买数量
          * */
-        this.$router.push({name: 'Order', params: {goods_id: this.good_id, goods_num: this.count}})
+        this.$router.push({path: '/order', query: {goods_id: this.good_id, goods_num: this.count}})
         this.show_count = false
       },
       // 分享
@@ -420,75 +420,6 @@
   .good-container .guide-icon .icon-home {
     right: 14px;
   }
-
-  /*右上弹窗样式*/
-  .good-container .pop-down {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 200;
-  }
-
-  .good-container .pop-down ul {
-    position: absolute;
-    top: 69px;
-    right: 6px;
-    padding-left: 0;
-    width: 140px;
-    list-style-type: none;
-    background-color: #fff;
-    border: 1px solid #e5e5e5;
-    border-radius: 2px;
-  }
-
-  .good-container .pop-down ul:before {
-    content: "";
-    position: absolute;
-    right: 8px;
-    top: -6px;
-    width: 10px;
-    height: 10px;
-    background-color: #fff;
-    border-style: solid;
-    border-color: #e5e5e5;
-    border-width: 1px 0 0 1px;
-    -webkit-transform: rotate(45deg);
-    transform: rotate(45deg);
-  }
-
-  .good-container .pop-down ul li {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 48px;
-    line-height: 48px;
-  }
-
-  .good-container .pop-down ul li .iconfont {
-    flex: 0 0;
-    padding: 0 14px;
-    font-size: 18px;
-  }
-
-  .good-container .pop-text {
-    flex: 1 1;
-    color: #666;
-    border-bottom: 1px solid #e6e6e6;
-  }
-
-  .good-container .pop-down ul li:last-child .pop-text {
-    border-bottom: none;
-  }
-
-  .good-container .pop-dot {
-    margin-right: 14px;
-    width: 8px;
-    height: 8px;
-    background-color: #d9ad65;
-    border-radius: 50%;
-  }
-
-  /*右上弹窗样式结束*/
 
   .good-container .choose-count {
     border-bottom: 1px solid #E9EDEE;
@@ -681,7 +612,7 @@
     margin-bottom: 50px;
   }
 
-  /*底部选项卡*/
+  /*底部选项卡 开始*/
   .good-container .bottom-tabbar {
     text-align: center;
     height: 48px;
@@ -692,19 +623,7 @@
     margin-left: 0 !important;
   }
 
-  .good-container .bottom-tabbar i {
-    display: inline-block;
-    margin-top: 2px;
-  }
-
-  .good-container .bottom-tabbar > div:first-child {
-    width: 79px;
-    font-size: 12px;
-    color: rgba(153, 153, 153, 1);
-  }
-
   .good-container .bottom-tabbar > div:nth-child(2) {
-    width: 148px;
     font-size: 16px;
     background: rgba(34, 34, 34, 1);
     color: rgba(255, 255, 255, 1);
@@ -712,14 +631,15 @@
   }
 
   .good-container .bottom-tabbar > div:last-child {
-    width: 148px;
     line-height: 48px;
     background: rgba(217, 173, 101, 1);
     font-size: 16px;
     color: rgba(255, 255, 255, 1);
   }
+  /*底部选项卡 结束*/
 
-  /*选择数量弹窗*/
+
+  /*选择数量弹窗 开始*/
   .good-container .count-top {
     overflow: hidden;
     padding: 15px 0 10px 14px;
@@ -752,6 +672,8 @@
     color: rgba(153, 153, 153, 1);
     line-height: 14px;
   }
+  /*选择数量弹窗 结束*/
+
 
   /*购买数量*/
   .good-container .buy-count > div:first-child p {
