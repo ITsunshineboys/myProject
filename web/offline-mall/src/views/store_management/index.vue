@@ -123,7 +123,7 @@
     activated () {
       this.getStoreData()
       // 请求店铺首页推荐商品
-      this.axios.get('supplier/recommend-second', {supplier_id: this.$route.params.id}, res => {
+      this.axios.get('/supplier/recommend-second', {supplier_id: this.$route.params.id}, res => {
         console.log(res, '店铺推荐商品')
         this.recommendGoods = res.data.recommend_second
       })
