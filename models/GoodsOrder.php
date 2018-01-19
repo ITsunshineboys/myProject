@@ -1343,10 +1343,12 @@ class GoodsOrder extends ActiveRecord
         return $res;
 
     }
+
     /**
      * 获取后台订单状态
      * @param $data
      * @return mixed
+     * @throws yii\db\Exception
      */
     public static function  GetOrderStatus($data)
     {
@@ -1519,6 +1521,7 @@ class GoodsOrder extends ActiveRecord
      * @param $supplier_id
      * @param $money
      * @return bool
+     * @throws yii\db\Exception
      */
     public static  function  changeOrderStatus($order_no,$sku,$supplier_id,$money){
         $trans = \Yii::$app->db->beginTransaction();
@@ -1653,12 +1656,15 @@ class GoodsOrder extends ActiveRecord
     }
 
 
-    /**user apply refund
+    /**
+     * user apply refund
      * @param $order_no
      * @param $sku
      * @param $apply_reason
      * @param $user
+     * @param $supplier_user
      * @return int
+     * @throws yii\db\Exception
      */
     public static function  applyRefund($order_no,$sku,$apply_reason,$user,$supplier_user)
     {
@@ -1737,6 +1743,7 @@ class GoodsOrder extends ActiveRecord
      * @param $handle
      * @param $handle_reason
      * @return int
+     * @throws yii\db\Exception
      */
     public  static  function RefundHandle($order_no,$sku,$handle,$handle_reason)
     {
@@ -1753,7 +1760,6 @@ class GoodsOrder extends ActiveRecord
     }
 
 
-
     /**
      * order_refund 表字段status不启用
      * @param $order_no
@@ -1761,6 +1767,7 @@ class GoodsOrder extends ActiveRecord
      * @param $handle
      * @param $handle_reason
      * @return int
+     * @throws yii\db\Exception
      */
     public static function  disAgreeRefundHandle($order_no,$sku,$handle,$handle_reason)
     {
@@ -1824,6 +1831,7 @@ class GoodsOrder extends ActiveRecord
      * @param $order_no
      * @param $sku
      * @return int
+     * @throws yii\db\Exception
      */
     public static function AgreeRefundHandle($order_no,$sku)
     {

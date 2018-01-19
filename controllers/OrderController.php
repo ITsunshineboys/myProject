@@ -2016,9 +2016,11 @@ class OrderController extends Controller
         }
         return $lhzz['id'];
     }
+
     /**
      * user apply refund
      * @return string
+     * @throws Exception
      */
     public  function  actionUserCancelOrder()
     {
@@ -2128,7 +2130,8 @@ class OrderController extends Controller
                 'data'=>$arr
         ]);
     }
-    /**退款处理
+    /**
+     * 退款处理
      * @return string
      */
     public function  actionRefundHandle(){
@@ -2220,8 +2223,9 @@ class OrderController extends Controller
             'msg'  => $code==200?'ok':Yii::$app->params['errorCodes'][$code],
         ]);
     }
-     /**
-      * 获取退款详情
+
+    /**
+     * 获取退款详情
      * @return string
      */
     public function  actionFindRefundDetail()
