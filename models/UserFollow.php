@@ -208,6 +208,8 @@ class UserFollow extends \yii\db\ActiveRecord
                 {
                     $tran->rollBack();
                 }
+                $tran->commit();
+                return 200;
             }catch (Exception $e){
                 $tran->rollBack();
                 $code=500;
