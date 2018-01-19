@@ -3,7 +3,6 @@
     <!-- 顶部icon -->
     <div class="guide-icon">
       <i class="iconfont icon-return" @click="$router.go(-1)"></i>
-      <i class="iconfont icon-share" @click="androidShare"></i>
       <router-link :to="'/'">
         <i class="iconfont icon-home"></i>
       </router-link>
@@ -214,18 +213,6 @@
       </div>
     </popup>
 
-    <!-- 分享弹窗 -->
-    <!--<popup v-model="show_share" class="show_share">-->
-    <!--<div>分享</div>-->
-    <!--<div class="share-icon">-->
-    <!--<div v-for="item in share_content">-->
-    <!--<img :src="item.image" alt=""><br/>-->
-    <!--<span>{{item.title}}</span>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div @click="show_share = false">取消</div>-->
-    <!--</popup>-->
-
     <!--线下商品介绍弹窗-->
     <offlinealert :offlineInfo="offlineInfo" :show="show" :isOffline="false" @isShow="showOfflineAlert"></offlinealert>
   </div>
@@ -361,10 +348,6 @@
          * */
         this.$router.push({path: '/order', query: {goods_id: this.good_id, goods_num: this.count}})
         this.show_count = false
-      },
-      // 分享
-      androidShare () {
-        window.AndroidWebView.share('我在【艾特生活】分享了一款好物给你，点击链接查看详情【' + this.good_detail.title + '　　' + this.good_detail.subtitle + '】' + location.href)
       }
     }
   }
@@ -380,7 +363,7 @@
     bottom: 26px;
   }
 
-  /*图标样式*/
+  /*图标样式 开始*/
   .good-container .guide-icon {
     position: relative;
   }
@@ -413,10 +396,6 @@
     background: rgba(255, 255, 255, 1);
   }
 
-  .good-container .guide-icon .icon-share {
-    right: 54px;
-  }
-
   .good-container .guide-icon .icon-home {
     right: 14px;
   }
@@ -440,11 +419,6 @@
   .good-container .service {
     line-height: 16px;
     margin-right: 25px;
-  }
-
-  .good-container .icon-blue {
-    font-size: 20px;
-    color: #222222;
   }
 
   .good-container .icon-checkbox-circle-line {
