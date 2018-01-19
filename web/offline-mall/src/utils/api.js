@@ -39,7 +39,7 @@ function checkCode (res, callback) {
   //   // alert(res.data.error_msg)
   // }
   if (res.code === 403) {
-
+    console.log('用户没有登陆')
   } else {
     if (typeof callback === 'function') {
       callback(res)

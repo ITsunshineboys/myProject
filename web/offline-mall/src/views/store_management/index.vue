@@ -70,7 +70,7 @@
       <router-link :to="{path: '/shop-intro/' + $route.params.id}" tag="button" type="button">
         店铺介绍
       </router-link>
-      <button class="" type="button" @click="contactStore('' ,6)">联系商家</button>
+      <button class="" type="button" @click="contactStore(1 ,6)">联系商家</button>
     </div>
     <!-- 线下体验店详情弹窗 -->
     <offline-alert @isShow="isShow" :show="isShowAlert" :offlineInfo="offlineInfo"></offline-alert>
@@ -189,8 +189,12 @@
       },
       attentionStore () {
         // 关注店铺
-        this.axios.post('/user-follow/user-follow-shop', res => {
-          // do something
+        let params = {
+          supplier_id: this.$route.params.id,
+          status: this.isAttention === 1 ? 0 : 1
+        }
+        this.axios.post('/user-follow/user-follow-shop', params, res => {
+          console.log(res, '关注')
         })
       }
     }
