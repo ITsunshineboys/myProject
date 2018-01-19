@@ -1029,7 +1029,6 @@ class BasisDecorationService
                     }
                 }
                 $area = round($length * $breadth,2);
-                var_dump($area);die;
                 $quantity = ceil($bedroomRoom / $area);
                 break;
             case $goods['title'] == self::goodsNames()['marble']:  // 大理石
