@@ -2069,6 +2069,7 @@ class OrderController extends Controller
         $supplier_user=User::find()
             ->where(['id'=>$supplier->uid])
             ->one();
+        var_dump($GoodsOrder->pay_status);die;
         if ($GoodsOrder->pay_status==0)
         {
             $code=GoodsOrder::UserCanCelOrder($order_no,$supplier_user);

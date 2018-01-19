@@ -3912,12 +3912,14 @@ class GoodsOrder extends ActiveRecord
                 $code=UserNewsRecord::AddOrderNewRecord($supplier_user,'已取消订单',Yii::$app->params['supplierRoleId'],$content,$order_no,$goods->sku,self::STATUS_DESC_DETAILS);
                 if ($code!=200)
                 {
+                    $trans->rollBack();
                     return $code;
                 }
                 $supplier=Supplier::findOne($GoodsOrder->supplier_id);
                 $code=UserNewsRecord::AddOrderNewRecord(User::findOne($GoodsOrder->user_id),'取消订单反馈',$GoodsOrder->role_id,"您的订单{$order_no},已被{$supplier->shop_name}商家驳回.",$order_no,$goods->sku,self::STATUS_DESC_DETAILS);
                 if ($code!=200)
                 {
+                    $trans->rollBack();
                     return $code;
                 }
                 $trans->commit();
