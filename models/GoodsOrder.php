@@ -3904,6 +3904,7 @@ class GoodsOrder extends ActiveRecord
                 }
                 $goods->order_status=2;
                 if ($goods->save(false)){
+                    echo 1;die;
                     $code=500;
                     $trans->rollBack();
                     return $code;
@@ -3912,6 +3913,7 @@ class GoodsOrder extends ActiveRecord
                 $code=UserNewsRecord::AddOrderNewRecord($supplier_user,'已取消订单',Yii::$app->params['supplierRoleId'],$content,$order_no,$goods->sku,self::STATUS_DESC_DETAILS);
                 if ($code!=200)
                 {
+                    echo 2;die;
                     $trans->rollBack();
                     return $code;
                 }
@@ -3919,6 +3921,7 @@ class GoodsOrder extends ActiveRecord
                 $code=UserNewsRecord::AddOrderNewRecord(User::findOne($GoodsOrder->user_id),'取消订单反馈',$GoodsOrder->role_id,"您的订单{$order_no},已被{$supplier->shop_name}商家驳回.",$order_no,$goods->sku,self::STATUS_DESC_DETAILS);
                 if ($code!=200)
                 {
+                    echo 3;die;
                     $trans->rollBack();
                     return $code;
                 }
