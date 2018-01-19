@@ -2,7 +2,7 @@
   <div>
     <search v-model="search" @on-cancel="cancelSearch" @on-change="getGoods" class="search" cancel-text="取消"
             placeholder="请输入想要购买的商品，如：冰箱" ref="search"></search>
-    <group v-if="good_list.length!=0" v-for="(item,index) of good_list" :key="index"
+    <group @click.native="goDetail(item)" v-if="good_list.length!=0" v-for="(item,index) of good_list" :key="index"
            :class="{hide_margin:index!=0,hide_top:index==0,hide_bottom:index==good_list.length-1}" class="search_list"
            label-width="375" label-align="left">
       <p>{{item.title}}</p>
@@ -42,15 +42,6 @@
     },
     methods: {
       getGoods () {
-        if (this.history_list.indexOf(this.search) === -1) {
-          if (this.history_list.length < 6) {
-            this.history_list.push(this.search)
-          } else {
-            this.history_list.unshift(this.search)
-            this.history_list.shift()
-          }
-        }
-        localStorage.setItem('history_list', JSON.stringify(this.history_list))
         this.axios.get('/mall/search', {
           keyword: this.search
         }, (res) => {
@@ -77,10 +68,19 @@
         this.getGoods()
       },
       goDetail (item) {
-        if(item.pid!=undefined){
-          this.$router.push({name:'GoodsList',params:{id:item.id}})
-        }else{
-          this.$router.push({name:'GoodDetail',params:{id:item.id}})
+        if (this.history_list.indexOf(item.title) === -1) {
+          if (this.history_list.length < 6) {
+            this.history_list.push(item.title)
+          } else {
+            this.history_list.unshift(item.title)
+            this.history_list.shift()
+          }
+        }
+        localStorage.setItem('history_list', JSON.stringify(this.history_list))
+        if (item.pid !== undefined) {
+          this.$router.push({name: 'GoodsList', params: {id: item.pid}})
+        } else {
+          this.$router.push({name: 'GoodDetail', params: {id: item.id}})
         }
       }
     },
