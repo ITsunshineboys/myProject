@@ -173,8 +173,8 @@ class UserFollowController extends Controller
             ]);
         }
         $supplier_id=\Yii::$app->request->post('supplier_id');
-        $status=\Yii::$app->request->post('status');
-        if (!$supplier_id || !$status)
+        $status=\Yii::$app->request->post('status',0);
+        if (!$supplier_id)
         {
             $code=1000;
             return Json::encode([

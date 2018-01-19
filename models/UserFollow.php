@@ -212,7 +212,7 @@ class UserFollow extends \yii\db\ActiveRecord
 //                    }
                 }else
                 {
-                    $follow->status=$status;
+
                     if ($follow->status==$status)
                     {
                         if ($status==self::UN_FOLLOW)
@@ -232,7 +232,7 @@ class UserFollow extends \yii\db\ActiveRecord
                             $follow->follow_time=$time;
                         }
                     }
-
+                    $follow->status=$status;
                 }
 
                 if (!$follow->save(false))
