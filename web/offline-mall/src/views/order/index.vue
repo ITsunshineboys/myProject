@@ -217,6 +217,7 @@
       }
     },
     activated () {
+      // 获取线下体验店商品信息
       this.axios.get('/order/get-line-goods-info', {
         goods_id: 43,
         goods_num: 10
