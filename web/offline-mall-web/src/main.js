@@ -8,13 +8,11 @@ import router from './router/index'
 import './assets/style/common.css'
 import 'animate.css'
 import 'flex.css'
-import comJs from '@/utils/common'
 import scroller from 'vue-scroller'
 
 Vue.prototype.axios = api
 FastClick.attach(document.body)
 Vue.use(scroller)
-Vue.use(comJs)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
