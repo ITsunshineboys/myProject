@@ -111,9 +111,10 @@ class UserFollow extends \yii\db\ActiveRecord
     }
 
     /**
-     * 切换关注状态
      * @param $id
-     * @return int 200 成功 1000 失败
+     * @return int
+     * @throws Exception
+     * @throws \Exception
      */
     public static function toggleStatus($id)
     {
