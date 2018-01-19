@@ -244,7 +244,9 @@ app.controller('basic_ctrl',function ($timeout,$scope,$state,$stateParams,_ajax)
             let index = $scope.worker_list.findIndex(function (item) {
                 return item.worker_kind == '杂工'
             })
-            $scope.worker_list.splice(index,1)
+            if(index != -1){
+                $scope.worker_list.splice(index,1)
+            }
             sessionStorage.removeItem('options')
             sessionStorage.removeItem('other_data')
             sessionStorage.removeItem('copies')
