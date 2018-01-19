@@ -108,12 +108,10 @@ class UserFollowController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-
         $request = \Yii::$app->request;
         $page = (int)$request->get('page', 1);
         $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
-        $role_id = (int)$request->get('role_id', '');
-
+        $role_id = (int)$request->get('role_id', \Yii::$app->params['supplierRoleId']);
         if (!$role_id || !in_array($role_id, array_keys(self::ALLOWED_ROLE_ID)))       {
             $code = 1000;
             return Json::encode([
@@ -122,7 +120,6 @@ class UserFollowController extends Controller
                 'data' => null
             ]);
         }
-
         $data = UserFollow::getFollowList($user, $role_id, $page, $page_size);
         return Json::encode([
             'code' => 200,

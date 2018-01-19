@@ -82,7 +82,7 @@ class UserFollow extends \yii\db\ActiveRecord
     }
 
     /**
-     * @param $user_id
+     * @param $user
      * @param $role_id
      * @param $page
      * @param $page_size
