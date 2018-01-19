@@ -95,7 +95,7 @@
     },
     data () {
       return {
-        isAttention: 0,   // 关注图标默认未关注
+        isAttention: 0,       // 关注图标默认未关注
         tabActive: 0,         // 默认选中店铺首页
         tabHeight: 44,        // tab 默认最小高度为 44 像素
         isShowAlert: false,  // 是否显示线下体验店弹窗
@@ -153,7 +153,6 @@
           })
           this.offlineInfo.address = data.district
           this.offlineInfo.phone = data.line_supplier_mobile
-          alert(typeof data.is_follow)
           this.isAttention = data.is_follow
           this.uid = data.supplier_uid
         })
@@ -201,6 +200,7 @@
         this.axios.post('/user-follow/user-follow-shop', params, res => {
           console.log(res, '关注')
           this.getStoreData()
+          this.$forceUpdate()
         })
       }
     }
