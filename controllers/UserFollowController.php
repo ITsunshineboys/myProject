@@ -134,9 +134,14 @@ class UserFollowController extends Controller
      */
     public function actionToggleStatus()
     {
-        $user = self::userIdentity();
-        if (!is_int($user)) {
-            return $user;
+        $user = \Yii::$app->user->identity;
+        if (!$user)
+        {
+            $code = 403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
         }
 
         $request = \Yii::$app->request;
@@ -145,14 +150,13 @@ class UserFollowController extends Controller
             $code = 1000;
             return Json::encode([
                 'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-                'data' => null
+                'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-
         $code = UserFollow::toggleStatus($id);
 
-        return Json::encode([
+        return Json::encode
+        ([
             'code' => $code,
             'msg' => 200 == $code ? 'OK' : \Yii::$app->params['errorCodes'][$code]
         ]);

@@ -96,7 +96,8 @@ class UserFollow extends \yii\db\ActiveRecord
             $nickname = 'shop_name';
         }
 
-        $query = (new Query())->from(self::tableName() . ' as  u')
+        $query = (new Query())
+            ->from(self::tableName() . ' as  u')
             ->leftJoin($table . ' as  f', 'u.follow_id = f.id')
             ->select(['u.id', 'u.follow_id', 'u.role_id', 'u.status', 'f.' . $nickname . ' as nickname', 'f.icon', 'f.follower_number'])
             ->where(['u.role_id' => $user->last_role_id_app, 'u.status' => 1, 'u.user_id' => $user->id]);
@@ -111,9 +112,10 @@ class UserFollow extends \yii\db\ActiveRecord
     }
 
     /**
-     * 切换关注状态
      * @param $id
-     * @return int 200 成功 1000 失败
+     * @return int
+     * @throws Exception
+     * @throws \Exception
      */
     public static function toggleStatus($id)
     {
