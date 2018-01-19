@@ -386,7 +386,7 @@ class EffectController extends Controller
         }
         return Json::encode([
             'code'=>200,
-            'msg'=>'ok'
+            'msg'=>'申请成功,我们会在3天内和您联系,详情请看装修详情'
         ]);
     }
     /**
