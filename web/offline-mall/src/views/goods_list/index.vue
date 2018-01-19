@@ -22,7 +22,9 @@
         <span class="iconfont icon-filter"></span>
       </div>
     </div>
-    <goods-list :goods-list="goodsListData"></goods-list>
+    <scroller :on-infinite="init" ref="scrollerDom" style="top: 190px;">
+      <goods-list :goods-list="goodsListData"></goods-list>
+    </scroller>
 
     <!-- 筛选 -->
     <popup class="modal-filter" position="right" v-model="isModalOpen">
@@ -92,6 +94,7 @@
         seriesData: [],         // 筛选模态框系列数据
         brandData: [],          // 筛选模态框品牌数据
         goodsListData: [],      // 商品列表数据
+        totalPage: 0,               // 商品列表数据总页数
         goodsListParams: {
           district_code: 510100,        // 城市 code
           category_id: null,           // 3级分类ID
@@ -138,7 +141,9 @@
         this.goodsListParams.category_id = this.$route.params.id      // 获取三级分类ID
         this.axios.get('/mall/category-goods', this.goodsListParams, res => {
           console.log(res)
-          this.goodsListData = res.data.category_goods
+          let data = res.data
+          this.goodsListData = this.goodsListData.concat(data.category_goods)
+          this.totalPage = Math.ceil(data.total / 12)
         })
       },
       filterModalData () {      // 模态框数据请求
@@ -176,6 +181,19 @@
         this.goodsListParams.series_id = null               // 系列id
         this.isModalOpen = false      // 隐藏模态框
         this.getGoodsList()           // 请求商品列表数据
+      },
+      init (done) {
+        let vm = this
+        if (vm.goodsListParams.page >= vm.totalPage) {
+          this.$refs.scrollerDom.finishInfinite(2)
+          console.log(this.$refs)
+          return
+        }
+        setTimeout(() => {
+          vm.goodsListParams.page ++
+          vm.getGoodsList()
+          done()
+        }, 1500)
       }
     }
   }
@@ -212,7 +230,7 @@
   }
 
   .goods-list {
-    margin-top: 100px;
+    /*margin-top: 100px;*/
     background-color: #fff;
   }
 
