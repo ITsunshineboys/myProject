@@ -153,6 +153,7 @@
           })
           this.offlineInfo.address = data.district
           this.offlineInfo.phone = data.line_supplier_mobile
+          alert(typeof data.is_follow)
           this.isAttention = data.is_follow
           this.uid = data.supplier_uid
         })
