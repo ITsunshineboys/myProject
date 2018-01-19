@@ -217,7 +217,7 @@ class Effect extends ActiveRecord
      * @param int $effect_id
      * @return array
      */
-    public function geteffectdata($effect_id){
+    public static function geteffectdata($effect_id){
         $data=[];
         $query=new Query();
         $array= $query->from('effect_earnest As ea')

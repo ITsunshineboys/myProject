@@ -159,18 +159,18 @@ class EffectController extends Controller
             ]);
         }
         $remark= htmlspecialchars(trim($request->post('remark',''),''));
-        $model = new Effect();
-        $effect_id=EffectEarnest::find()->asArray()->where(['id'=>$effect_enst_id])->select('effect_id')->one()['effect_id'];
-        $data = $model->geteffectdata($effect_id);
-        if (isset($effect_id) && !isset($remark)) {
+
+        if ($effect_enst_id && !$remark) {
+            $effect_id=EffectEarnest::find()->asArray()->where(['id'=>$effect_enst_id])->select('effect_id')->one()['effect_id'];
+            $data = Effect::geteffectdata($effect_id);
             return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
                 'data'=>$data
             ]);
-        }elseif(isset($res) && $effect_enst_id){
+        }elseif(isset($remark) && isset($effect_enst_id)){
             $effect_view=Effectearnest::findOne(['id'=>$effect_enst_id]);
-            $effect_view->remark=$res;
+            $effect_view->remark=$remark;
             if(!$effect_view->save()){
                 $code=500;
                 return Json::encode([
