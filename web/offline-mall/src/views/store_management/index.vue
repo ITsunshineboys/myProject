@@ -144,7 +144,7 @@
         this.axios.get('/supplier/index', {supplier_id: this.$route.params.id}, res => {
           console.log(res, '店铺首页数据')
           let data = res.data.index
-          alert(data.rand)
+          alert(JSON.stringify(data))
           this.storeData = data
           this.carousel = data.carousel.map(item => {
             return {
@@ -199,23 +199,7 @@
         }
         this.axios.post('/user-follow/user-follow-shop', params, res => {
           console.log(res, '关注')
-          // this.getStoreData()
-
-          this.axios.get('/supplier/index', {supplier_id: this.$route.params.id}, res => {
-            console.log(res, '店铺首页数据')
-            let data = res.data.index
-            alert(JSON.stringify(data))
-            this.storeData = data
-            this.carousel = data.carousel.map(item => {
-              return {
-                url: '/good-detail/' + item.url,
-                img: item.image
-              }
-            })
-            this.offlineInfo.address = data.district
-            this.offlineInfo.phone = data.line_supplier_mobile
-            this.uid = data.supplier_uid
-          })
+          this.getStoreData()
         })
       }
     }
