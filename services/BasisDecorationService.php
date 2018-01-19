@@ -1543,7 +1543,7 @@ class BasisDecorationService
                 $value = ceil(self::algorithm(4,$total_length,$wire,$goods_attr['value']));
                 break;
             case $goods['category_id']  == 36: // 自流平
-                $value = ceil(self::algorithm(4,$hall_[0],$self_leveling,$goods_attr['value']));
+                $value = ceil(self::algorithm(4,$hall_[1],$self_leveling,$goods_attr['value']));
                 break;
             default: // 自流平
                 $value = 0;
