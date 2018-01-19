@@ -2390,7 +2390,7 @@ class GoodsOrder extends ActiveRecord
     public  static  function paginationByUserOrderListOne($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $type,$user,$role)
     {
 //        $a="CASE a.pay_status WHEN 0 THEN one";
-        $where.=' GROUP BY IF(a.pay_status=0,z.order_no,CONCAT(z.order_no,z.sku,z.create_time))';
+        $where.=' GROUP BY IF(a.pay_status=0 and z.order_status=2,z.order_no,CONCAT(z.order_no,z.sku,z.create_time))';
         $offset = ($page - 1) * $size;
         $OrderList = (new Query())
             ->from(self::tableName().' AS a')
@@ -3866,10 +3866,10 @@ class GoodsOrder extends ActiveRecord
 
 
     /**
-     * 用户取消订单
      * @param $order_no
      * @param $supplier_user
      * @return int
+     * @throws yii\db\Exception
      */
     public static  function  UserCanCelOrder($order_no,$supplier_user)
     {
