@@ -1544,15 +1544,12 @@ class BasisDecorationService
                 break;
             case $goods['category_id']  == 36: // 自流平
                 $value = ceil(self::algorithm(4,$hall_[0],$self_leveling,$goods_attr['value']));
-                var_dump($hall_);
-                var_dump($self_leveling);
-                var_dump($goods_attr['value']);
                 break;
             default: // 自流平
                 $value = 0;
                 break;
         }
-die;
+
         return $value;
     }
 
