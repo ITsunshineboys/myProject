@@ -173,12 +173,12 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	/*---------------------------------属性获取开始---------------------------------*/
 	$scope.goods_input_attrs=[];//普通文本框
 	$scope.merchant_add_attrs = [] ; // 商家自己添加的属性
-	$scope.goods_select_attrs=[];//下拉框
+	$scope.goods_select_attrs=[];// 下拉框
 	$scope.goods_check_attrs = []; // 复选框
-	$scope.goods_select_value=[];//下拉框的值
+	$scope.goods_select_attrs_value=[];//下拉框的值
 	$scope.pass_attrs_name=[];//名称
 	$scope.pass_attrs_value=[];//值
-  $scope.goods_select_attrs_value=[];
+	$scope.goods_select_flag = false ; // 属性下拉框
   _ajax.get('/mall/goods-attrs-admin',{goods_id:+$scope.goods_id},function (res) {
 	  $scope.goods_all_attrs=res.data.goods_attrs_admin;
 	  //循环所有获取到的属性值，判断是普通文本框还是下拉框
@@ -201,6 +201,24 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	  //循环下拉框的value
 	  for(let [key,value] of $scope.goods_select_attrs.entries()){
 		  $scope.goods_select_attrs_value.push(value.value);//下拉框的值
+	  }
+		// 判断下拉框的属性，是否被大后台删除
+	  for(let obj of $scope.goods_select_attrs){
+	  	console.log(obj)
+		  for(let arr of obj.value){
+				if(obj.selected == arr){
+					$scope.goods_select_flag = true
+					break
+				}else{
+					$scope.goods_select_flag = false
+				}
+		  }
+	  }
+	  // 下拉框change事件
+	  $scope.goods_select_change=function (value) {
+		  if(value!=undefined){
+			  $scope.goods_select_flag = true
+		  }
 	  }
   });
 	// 复选框 点击事件
@@ -424,7 +442,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 			$scope.attrs_check_flag=true
 		}
 		// 判断 input框不能为空、封面图 物流模板、无重复属性名、价格、有品牌、属性输入规则符合标准、属性复选框
-		if(valid && $scope.upload_cover_src &&$scope.logistics_status && $scope.own_submitted && !$scope.price_flag && !$scope.left_number_flag && $scope.brands_arr.length > 0 && $scope.attr_blur_flag && $scope.attrs_check_flag){
+		if(valid && $scope.upload_cover_src &&$scope.logistics_status && $scope.own_submitted && !$scope.price_flag && !$scope.left_number_flag && $scope.brands_arr.length > 0 && $scope.attr_blur_flag && $scope.attrs_check_flag && $scope.goods_select_flag){
 			$scope.description = UE.getEditor('editor').getContent();//富文本编辑器
 			$scope.after_sale_services=[];
 			//提供发票

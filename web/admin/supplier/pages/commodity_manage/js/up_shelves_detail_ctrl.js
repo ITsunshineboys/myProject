@@ -188,6 +188,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
     $scope.pass_attrs_name = [];//传的名称
     $scope.pass_attrs_value = [];//传的值
     $scope.goods_select_attrs_value = [];// 属性下拉框的值
+		$scope.goods_select_flag = false ; // 属性下拉框
     /*大后台属性值获取*/
     _ajax.get('/mall/goods-attrs-admin', {goods_id: +$scope.goods_id}, function (res) {
         console.log(res);
@@ -213,6 +214,24 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
         for (let [key, value] of $scope.goods_select_attrs.entries()) {
             $scope.goods_select_attrs_value.push(value.value);//下拉框的值
         }
+	    // 判断下拉框的属性，是否被大后台删除
+	    for(let obj of $scope.goods_select_attrs){
+		    console.log(obj)
+		    for(let arr of obj.value){
+			    if(obj.selected == arr){
+				    $scope.goods_select_flag = true
+				    break
+			    }else{
+				    $scope.goods_select_flag = false
+			    }
+		    }
+	    }
+	    // 下拉框change事件
+	    $scope.goods_select_change=function (value) {
+		    if(value!=undefined){
+			    $scope.goods_select_flag = true
+		    }
+	    }
     });
     //判断属性是否为数字
     $scope.testNumber = function (item) {

@@ -112,7 +112,7 @@
                     <span style="display: inline-block;width: 140px">{{item.name}}</span>
                 </div>
                 <div class="col-sm-3">
-                    <select class="form-control" ng-model="item.selected" ng-options="items for items in goods_select_attrs_value[$index]"></select>
+                    <select class="form-control" ng-change="goods_select_change(item.selected)" ng-model="item.selected" ng-options="items for items in goods_select_attrs_value[$index]"></select>
                 </div>
                 <div class="col-sm-1 control-label">
                     <span class="unit">{{item.unit}}</span>
