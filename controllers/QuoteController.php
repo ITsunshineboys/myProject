@@ -3124,7 +3124,7 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-       var_dump(Effect::find()->where(['id'=>212])->asArray()->all());
+       var_dump(EffectEarnest::deleteAll(['uid'=>1]));
 
     }
 }
