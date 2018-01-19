@@ -360,8 +360,8 @@ class FileValidator extends Validator
 
             $mimeType = FileHelper::getMimeType($file->tempName, null, false);
             if (YII_DEBUG) {
-                file_put_contents($filelog, 'a' . $file->tempName);
-                file_put_contents($filelog, '2' . $mimeType);
+                file_put_contents($filelog, PHP_EOL . 'a' . $file->tempName, FILE_APPEND);
+                file_put_contents($filelog, PHP_EOL . '2' . $mimeType, FILE_APPEND);
             }
             if ($mimeType === null) {
                 return false;
