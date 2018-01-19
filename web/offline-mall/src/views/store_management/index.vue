@@ -121,22 +121,7 @@
       }
     },
     activated () {
-      // 请求店铺数据
-      this.axios.get('/supplier/index', {supplier_id: this.$route.params.id}, res => {
-        console.log(res, '店铺首页数据')
-        let data = res.data.index
-        this.storeData = data
-        this.carousel = data.carousel.map(item => {
-          return {
-            url: '/good-detail/' + item.url,
-            img: item.image
-          }
-        })
-        this.offlineInfo.address = data.district
-        this.offlineInfo.phone = data.line_supplier_mobile
-        this.isAttention = data.is_follow
-        this.uid = data.supplier_uid
-      })
+      this.getStoreData()
       // 请求店铺首页推荐商品
       this.axios.get('supplier/recommend-second', {supplier_id: this.$route.params.id}, res => {
         console.log(res, '店铺推荐商品')
@@ -154,6 +139,23 @@
           this.tabHeight = 88
           this.getAllGoodsData()
         }
+      },
+      getStoreData () {     // 请求店铺数据
+        this.axios.get('/supplier/index', {supplier_id: this.$route.params.id}, res => {
+          console.log(res, '店铺首页数据')
+          let data = res.data.index
+          this.storeData = data
+          this.carousel = data.carousel.map(item => {
+            return {
+              url: '/good-detail/' + item.url,
+              img: item.image
+            }
+          })
+          this.offlineInfo.address = data.district
+          this.offlineInfo.phone = data.line_supplier_mobile
+          this.isAttention = data.is_follow
+          this.uid = data.supplier_uid
+        })
       },
       /**
        * 线下体验店弹窗
@@ -197,7 +199,7 @@
         }
         this.axios.post('/user-follow/user-follow-shop', params, res => {
           console.log(res, '关注')
-          this.isAttention = params.status
+          this.getStoreData()
         })
       }
     }

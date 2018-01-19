@@ -83,14 +83,7 @@
       }
     },
     activated () {
-      this.axios.get('/supplier/view', {id: this.$route.params.id}, res => {
-        console.log(res, '店铺简介')
-        let data = res.data.supplier_view
-        this.storeData = data
-        this.offlineInfo.address = data.district
-        this.offlineInfo.iphone = data.line_supplier_mobile
-        this.isAttention = data.is_follow
-      })
+      this.getStoreData()
     },
     methods: {
       isShow (bool) {
@@ -107,7 +100,17 @@
         }
         this.axios.post('/user-follow/user-follow-shop', params, res => {
           console.log(res, '关注')
-          this.isAttention = params.status
+          this.getStoreData()
+        })
+      },
+      getStoreData () {
+        this.axios.get('/supplier/view', {id: this.$route.params.id}, res => {
+          console.log(res, '店铺简介')
+          let data = res.data.supplier_view
+          this.storeData = data
+          this.offlineInfo.address = data.district
+          this.offlineInfo.iphone = data.line_supplier_mobile
+          this.isAttention = data.is_follow
         })
       }
     }
