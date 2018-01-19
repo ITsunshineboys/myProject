@@ -206,16 +206,11 @@ class UserFollow extends \yii\db\ActiveRecord
                     $follow->user_id=$user->id;
                     $follow->role_id=$user->last_role_id_app;
                     $follow->follow_id=$supplier_id;
-
                     if ($status==self::HAVE_FOLLOW)
                     {
                         $supplier->follower_number+=1;
                         $follow->follow_time=$time;
                     }
-//                    if (!$follow->save(false))
-//                    {
-//                        $tran->rollBack();
-//                    }
                 }else
                 {
 
