@@ -100,10 +100,7 @@
         tabHeight: 44,        // tab 默认最小高度为 44 像素
         isShowAlert: false,  // 是否显示线下体验店弹窗
         carousel: [],         // 店铺首页轮播
-        storeData: {          // 店铺信息
-          is_follow: 0,
-          follower_number: 0
-        },
+        storeData: {},        // 店铺信息
         recommendGoods: [],   // 推荐商品列表
         uid: null,           // 商家对应用户ID
         offlineInfo: {        // 线下体验店弹窗信息
@@ -147,7 +144,7 @@
         this.axios.get('/supplier/index', {supplier_id: this.$route.params.id}, res => {
           console.log(res, '店铺首页数据')
           let data = res.data.index
-          alert(data.is_follow)
+          alert(data.rand)
           this.storeData = data
           this.carousel = data.carousel.map(item => {
             return {
@@ -157,7 +154,6 @@
           })
           this.offlineInfo.address = data.district
           this.offlineInfo.phone = data.line_supplier_mobile
-          // this.isAttention = data.is_follow
           this.uid = data.supplier_uid
         })
       },

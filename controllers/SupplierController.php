@@ -352,6 +352,7 @@ class SupplierController extends Controller
         $data['is_follow']=UserFollow::CheckIsFollow($supplierId);
         $data['supplier_uid']=$supplier->uid;
         $data['supplier_role_id']=Yii::$app->params['supplierRoleId'];
+        $data['rand']=rand(1,1000);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
