@@ -12,8 +12,8 @@
         </div>
       </div>
       <div flex>
-        <div class="attention" flex="dir:top main:justify">
-          <span class="iconfont" :class="{'icon-heart': !isAttention, 'icon-heart-solid': isAttention}"></span>
+        <div class="attention" flex="dir:top main:justify" @click="attentionStore">
+          <span class="iconfont" :class="{'icon-heart': isAttention === 0, 'icon-heart-solid': isAttention}"></span>
           <span>关注</span>
         </div>
         <div class="split-line"></div>
@@ -34,15 +34,19 @@
           <div :class="{active: sortName === 'platform_price'}" @click="tabHandle('platform_price')">
             <span>价格</span>
             <span class="sort">
-              <span :class="{active: platformPriceSortNum === 4 & sortName === 'platform_price'}" class="iconfont icon-sort-up"></span>
-              <span :class="{active: platformPriceSortNum === 3 & sortName === 'platform_price'}" class="iconfont icon-sort-down"></span>
+              <span :class="{active: platformPriceSortNum === 4 & sortName === 'platform_price'}"
+                    class="iconfont icon-sort-up"></span>
+              <span :class="{active: platformPriceSortNum === 3 & sortName === 'platform_price'}"
+                    class="iconfont icon-sort-down"></span>
             </span>
           </div>
           <div :class="{active: sortName === 'favourable_comment_rate'}" @click="tabHandle('favourable_comment_rate')">
             <span>好评率</span>
             <span class="sort">
-              <span :class="{active: favourableCommentRateSortNum === 4 & sortName === 'favourable_comment_rate'}" class="iconfont icon-sort-up"></span>
-              <span :class="{active: favourableCommentRateSortNum === 3 & sortName === 'favourable_comment_rate'}" class="iconfont icon-sort-down"></span>
+              <span :class="{active: favourableCommentRateSortNum === 4 & sortName === 'favourable_comment_rate'}"
+                    class="iconfont icon-sort-up"></span>
+              <span :class="{active: favourableCommentRateSortNum === 3 & sortName === 'favourable_comment_rate'}"
+                    class="iconfont icon-sort-down"></span>
             </span>
           </div>
         </div>
@@ -59,18 +63,15 @@
         </router-link>
       </div>
     </div>
-
     <div class="all-goods" v-else>
       <goods-list :goods-list="allGoodsData"></goods-list>
     </div>
-
     <div class="btn-group" flex>
       <router-link :to="{path: '/shop-intro/' + $route.params.id}" tag="button" type="button">
         店铺介绍
       </router-link>
       <button class="" type="button" @click="contactStore('' ,6)">联系商家</button>
     </div>
-
     <!-- 线下体验店详情弹窗 -->
     <offline-alert @isShow="isShow" :show="isShowAlert" :offlineInfo="offlineInfo"></offline-alert>
   </div>
@@ -132,6 +133,7 @@
         })
         this.offlineInfo.address = data.district
         this.offlineInfo.phone = data.line_supplier_mobile
+        this.isAttention = data.is_follow
       })
       // 请求店铺首页推荐商品
       this.axios.get('supplier/recommend-second', {supplier_id: this.$route.params.id}, res => {
@@ -184,6 +186,12 @@
             this.allGoodsParams['sort[]'] = this.sortName + ':' + 3
         }
         this.getAllGoodsData()
+      },
+      attentionStore () {
+        // 关注店铺
+        this.axios.post('/user-follow/user-follow-shop', res => {
+          // do something
+        })
       }
     }
   }
