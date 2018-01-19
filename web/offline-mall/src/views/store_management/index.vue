@@ -100,7 +100,10 @@
         tabHeight: 44,        // tab 默认最小高度为 44 像素
         isShowAlert: false,  // 是否显示线下体验店弹窗
         carousel: [],         // 店铺首页轮播
-        storeData: {},        // 店铺信息
+        storeData: {          // 店铺信息
+          is_follow: 0,
+          follower_number: 0
+        },
         recommendGoods: [],   // 推荐商品列表
         uid: null,           // 商家对应用户ID
         offlineInfo: {        // 线下体验店弹窗信息
