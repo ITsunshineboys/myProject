@@ -1792,7 +1792,8 @@ class OwnerController extends Controller
             ->asArray()
             ->one();
 
-        $change_goods = BasisDecorationService::count($goods,$get);
+        $changeGoods = BasisDecorationService::count($goods,$get);
+        $change_goods = $changeGoods[0];
         if ($change_goods != 0){
             return Json::encode([
                 'code' => 200,
@@ -1814,7 +1815,7 @@ class OwnerController extends Controller
 
         // 有计算公式
         if ($value == true){
-            $material = BasisDecorationService::oneFormula($goods,$get);
+            $material = BasisDecorationService::oneFormula($goods,$get,$changeGoods[1]);
             $change_goods = $material;
         }
 
