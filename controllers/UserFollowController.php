@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 
+use app\models\User;
 use app\models\UserFollow;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
@@ -153,6 +154,39 @@ class UserFollowController extends Controller
             'code' => $code,
             'msg' => 200 == $code ? 'OK' : \Yii::$app->params['errorCodes'][$code]
         ]);
+    }
+
+
+    /**
+     * @return string
+     */
+    public  function  actionUserFollowShop()
+    {
+        $user = \Yii::$app->user->identity;
+        if (!$user)
+        {
+            $code=403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => 200 == $code ? 'OK' : \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $supplier_id=\Yii::$app->request->post('supplier_id');
+        if (!$supplier_id)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => 200 == $code ? 'OK' : \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=UserFollow::UserFlowShop($user,$supplier_id);
+        return Json::encode([
+            'code' => $code,
+            'msg' => 200 == $code ? 'OK' : \Yii::$app->params['errorCodes'][$code]
+        ]);
+
+
     }
 
 

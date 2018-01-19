@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\services\StringService;
 use function GuzzleHttp\Psr7\str;
 use Yii;
 use yii\base\Model;
@@ -102,17 +103,18 @@ class Express extends ActiveRecord
       */
     private function getcontent($url)
     {
-        if (function_exists("file_get_contents")) {
-            $file_contents = file_get_contents($url);
-        } else {
-            $ch      = curl_init();
-            $timeout = 5;
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-            $file_contents = curl_exec($ch);
-            curl_close($ch);
-        }
+//        if (function_exists("file_get_contents")) {
+//            $file_contents = file_get_contents($url);
+//        } else {
+//            $ch      = curl_init();
+//            $timeout = 5;
+//            curl_setopt($ch, CURLOPT_URL, $url);
+//            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+//            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+//            $file_contents = curl_exec($ch);
+//            curl_close($ch);
+//        }
+        $file_contents=StringService::httpGet($url);
         return $file_contents;
     }
 
@@ -122,6 +124,7 @@ class Express extends ActiveRecord
     private function expressName($order)
     {
         $name   = json_decode($this->getcontent("http://www.kuaidi100.com/autonumber/auto?num=".$order), true);
+
         if (empty($name)){
             return false;
         }

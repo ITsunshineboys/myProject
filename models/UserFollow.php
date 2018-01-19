@@ -167,4 +167,22 @@ class UserFollow extends \yii\db\ActiveRecord
 
         return 200;
     }
+
+
+    /**
+     * @param $user
+     * @param $supplier_id
+     * @return int
+     */
+    public static  function UserFlowShop($user,$supplier_id)
+    {
+//        $tran = Yii::$app->db->beginTransaction();
+//        try{
+//
+//        }catch (Exception $e){
+//            $tran->rollBack();
+//            $code=500;
+//            return $code;
+//        }
+    }
 }
