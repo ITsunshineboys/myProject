@@ -8,6 +8,7 @@ use app\models\LineSupplierGoods;
 use app\models\LogisticsDistrict;
 use app\models\Role;
 use app\models\User;
+use app\models\UserFollow;
 use app\services\ExceptionHandleService;
 use app\models\Supplier;
 use app\models\Goods;
@@ -348,6 +349,7 @@ class SupplierController extends Controller
         $data['line_supplier_mobile']=$lineSupplier?$lineSupplier['mobile']:'';
         $data['district']=$lineSupplier?LogisticsDistrict::GetLineDistrictByDistrictCode($lineSupplier['district_code']).$lineSupplier['address']:'';
         $data['carousel'] = GoodsRecommendSupplier::carousel($supplierId);
+        $data['is_follow']=UserFollow::CheckIsFollow($supplierId);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',

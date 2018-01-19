@@ -31,6 +31,8 @@ class UserFollow extends \yii\db\ActiveRecord
         5 => self::DECO_COM,
         6 => self::SUPPLIER
     ];
+    const  UN_FOLLOW=0;
+    const  HAVE_FOLLOW=1;
 
     /**
      * @inheritdoc
@@ -184,5 +186,25 @@ class UserFollow extends \yii\db\ActiveRecord
 //            $code=500;
 //            return $code;
 //        }
+    }
+
+
+    /**
+     * @param $supplierId
+     * @return int
+     */
+    public static  function CheckIsFollow($supplierId)
+    {
+        $user = \Yii::$app->user->identity;
+        if (!$user)
+        {
+            return self::UN_FOLLOW;
+        }
+        $follow=self::find()
+            ->where(['user_id'=>$user->id,'role_id'=>$user->last_role_id_app])
+            ->andWhere(['follow_id'=>$supplierId])
+            ->andWhere(['status'=>self::HAVE_FOLLOW])
+            ->one();
+        return $follow?self::HAVE_FOLLOW:self::UN_FOLLOW;
     }
 }
