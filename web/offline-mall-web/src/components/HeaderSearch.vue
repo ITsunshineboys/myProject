@@ -1,6 +1,7 @@
 <template>
   <div>
-    <x-header :left-options="{backText: '', preventGoBack: backWay}" @on-click-back="goHome" class="header-search" :backWay="backWay">
+    <x-header :left-options="{backText: '', preventGoBack: backWay}" @on-click-back="goHome" class="header-search"
+              :backWay="backWay">
 
       <router-link :to="'/search'" v-if="search==='true'">
         <search class="search" placeholder="请输入想购买的商品" cancel-text=""></search>
@@ -8,8 +9,8 @@
 
       <div class="headTitle">{{headTitle}}</div>
 
-      <router-link :to="'/'">
-        <span class="iconfont icon-home" slot="right"></span>
+      <router-link :to="'/'" v-if="pop==='true'" slot="right">
+      <span class="iconfont icon-home"></span>
       </router-link>
     </x-header>
   </div>
@@ -36,6 +37,7 @@
       },
       search: '',     // true 为显示 搜索框
       headTitle: '',  // 标题
+      pop: '',        // true为显示 返回首页
       backWay: ''     // 返回按钮返回方式，true 为 跳转到 goLink 的地址， false 为返回上一页
     },
     data () {
@@ -94,74 +96,9 @@
     display: none !important;
   }
 
-  .pop-down {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 900;
-    margin-top: 0 !important;
-    background-color: transparent;
-  }
-
-  .pop-down ul {
-    position: absolute;
-    top: 45px;
-    right: 9px;
-    padding-left: 0;
-    width: 140px;
-    list-style-type: none;
-    background-color: #fff;
-    border: 1px solid #e5e5e5;
-    border-radius: 2px;
-  }
-
-  .pop-down ul:before {
-    content: "";
-    position: absolute;
-    right: 8px;
-    top: -6px;
-    width: 10px;
-    height: 10px;
-    background-color: #fff;
-    border-style: solid;
-    border-color: #e5e5e5;
-    border-width: 1px 0 0 1px;
-    -webkit-transform: rotate(45deg);
-    transform: rotate(45deg);
-  }
-
-  .pop-down ul li {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 48px;
-    line-height: 48px;
-  }
-
-  .pop-down ul li .iconfont {
-    flex: 0 0;
-    padding: 0 14px;
-    font-size: 18px;
-  }
-
-  .pop-text {
-    flex: 1 1;
-    color: #666;
-    border-bottom: 1px solid #e6e6e6;
-  }
-
-  .pop-down ul li:last-child .pop-text {
-    border-bottom: none;
-  }
-
-  .pop-dot {
-    margin-right: 14px;
-    width: 8px;
-    height: 8px;
-    background-color: #d9ad65;
-    border-radius: 50%;
+  #app .vux-header-right .icon-home {
+    font-size: 22px;
+    color: #000;
   }
 
   .headTitle {
