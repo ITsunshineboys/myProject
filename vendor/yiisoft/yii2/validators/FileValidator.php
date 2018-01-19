@@ -359,10 +359,11 @@ class FileValidator extends Validator
         if ($this->checkExtensionByMimeType) {
 
             $mimeType = FileHelper::getMimeType($file->tempName, null, false);
+            if (YII_DEBUG) {
+                file_put_contents($filelog, 'a' . $file->tempName);
+                file_put_contents($filelog, '2' . $mimeType);
+            }
             if ($mimeType === null) {
-                if (YII_DEBUG) {
-                    file_put_contents($filelog, '2' . $mimeType);
-                }
                 return false;
             }
 
