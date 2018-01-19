@@ -1480,6 +1480,8 @@ class BasisDecorationService
         }
 
         $craft_ = WorkerType::craft(OwnerController::CRAFT_NAME['tiler'],$get['city']);
+        var_dump($craft_);
+        var_dump(OwnerController::ROOM['self_leveling']);
         foreach ($craft_ as $oneValue){
             // 自流平用量
             if ($oneValue['id'] == OwnerController::ROOM['self_leveling']){
@@ -1487,7 +1489,7 @@ class BasisDecorationService
             }
         }
 
-
+var_dump($self_leveling);die;
 
         // 房间百分比查询
         $ratio = ProjectView::findById(68,10000);
