@@ -264,8 +264,8 @@ class EffectEarnest extends \yii\db\ActiveRecord
             }
             $id=\Yii::$app->db->lastInsertID;
             //如果有材料
-            if(array_key_exists('material',$post)){
-                foreach ($post['material'] as $attributes){
+            if(array_key_exists('materials',$post)){
+                foreach ($post['materials'] as $attributes){
                     $res= \Yii::$app->db->createCommand()->insert('effect_material',[
                         'effect_id'=>$id,
                         'count'=>$attributes['count'],
