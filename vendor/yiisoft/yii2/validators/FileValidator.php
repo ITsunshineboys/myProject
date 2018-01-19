@@ -371,7 +371,7 @@ class FileValidator extends Validator
 
             if (!in_array($extension, $extensionsByMimeType, true)) {
                 if (YII_DEBUG) {
-                    file_put_contents($filelog, '3' . json_encode($extensionsByMimeType));
+                    file_put_contents($filelog, PHP_EOL . '3' . json_encode($extensionsByMimeType), FILE_APPEND);
                 }
                 return false;
             }
