@@ -816,7 +816,6 @@ class BasisDecorationService
         foreach ($goods as $one_goods) {
             switch ($one_goods) {
                 case $one_goods['title'] == self::goodsNames()['wood_floor'] && $one_goods['series_id'] == $post['series']: // 木地板
-                    //木地板面积=卧室地面积    卧室地面积=【z】%×（房屋面积） 木地板费用：个数×抓取的商品价格 个数：（木地板面积÷抓取木地板面积）
                     $goods_area = GoodsAttr::findByGoodsIdUnits($one_goods['id'],'');
                     foreach ($goods_area as $one_goods_area) {
                         if ($one_goods_area['name'] == self::UNITS['length']) {
@@ -827,6 +826,7 @@ class BasisDecorationService
                         }
                     }
                     $area = round(self::algorithm(1,$length,$breadth),2);
+                    var_dump($area);
                     $one_goods['quantity'] = (int)ceil(self::algorithm(6,$post['bedroom_area'],$area));
                     $one_goods['cost'] = round(self::algorithm(1,$one_goods['platform_price'],$one_goods['quantity']),2);
                     $one_goods['procurement'] = round(self::algorithm(1,$one_goods['purchase_price_decoration_company'],$one_goods['quantity']),2);
@@ -953,6 +953,7 @@ class BasisDecorationService
                     break;
             }
         }
+        die;
 
         $wf = isset($wood_floor) ? $wood_floor :[];
         $ma = isset($marble) ? $marble :[];
