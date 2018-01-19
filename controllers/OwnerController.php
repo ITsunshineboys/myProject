@@ -1833,7 +1833,7 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-        $goods = EngineeringStandardCarpentryCoefficient::find()->asArray()->all();
+        $goods = WorkerType::craft(OwnerController::CRAFT_NAME['tiler'],$get['city']);
         var_dump($goods);
     }
 
