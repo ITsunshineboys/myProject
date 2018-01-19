@@ -1551,7 +1551,7 @@ class BasisDecorationService
                 break;
         }
 
-        return [$value,$hall_[1]];
+        return [$value,$bedroom_[1]];
     }
 
 
