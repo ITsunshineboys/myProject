@@ -133,97 +133,89 @@ app.controller('commodity_detail', ['_ajax', '$rootScope', '$scope', '$http', '$
     }
 
 
-    // 采购价
+    // 装修公司采购价
     $scope.$watch('allprice.purchase_price_decoration_company', function (value, oldValue) {
-        console.log(value)
-        if (value == undefined) {
-            $scope.price_flag = true;
-            return;
-        }
-        ;
-
-        if (parseFloat(value) < parseFloat($scope.good_detail.supplier_price)) {    // 不能小于供货价
-            $scope.price_flag = true;
+        if (value == undefined || value == '' ||
+            $scope.allprice.purchase_price_manager == undefined ||      // 项目经理采购价
+            $scope.allprice.purchase_price_manager == '' ||             // 项目经理采购价
+            $scope.allprice.purchase_price_designer == undefined ||     // 设计师采购价
+            $scope.allprice.purchase_price_designer == '') {            // 设计师采购价
             return;
         }
 
-        if (parseFloat(value) > parseFloat($scope.allprice.purchase_price_manager) || parseFloat(value) > parseFloat($scope.allprice.purchase_price_designer)) {  // 不能大于项目经理采购价，或者设计师采购价
-            $scope.price_flag = true;
-            return;
-        }
+        let flow1 = flowOne(parseFloat(value), parseFloat($scope.allprice.purchase_price_manager))
+        let flow2 = flowTwo(parseFloat(value), parseFloat($scope.allprice.purchase_price_designer))
 
-        if (parseFloat(value) > parseFloat($scope.good_detail.platform_price)) {    // 不能大于平台价
+        if (flow1 && flow2) {
+            $scope.price_flag = false;
+        } else {
             $scope.price_flag = true;
-            return;
         }
-
-        if (parseFloat(value) > parseFloat($scope.good_detail.market_price)) {  // 不能大于市场价
-            $scope.price_flag = true;
-            return;
-        }
-
-        $scope.price_flag = false;
     });
 
-
+    // 项目经理采购价
     $scope.$watch('allprice.purchase_price_manager', function (value, oldValue) {
-        if (value == undefined) {
-            $scope.price_flag = true;
+        if (value == undefined || value == '' ||
+            $scope.allprice.purchase_price_decoration_company == undefined ||   // 装修公司采购价
+            $scope.allprice.purchase_price_decoration_company == '' ||          // 装修公司采购价
+            $scope.allprice.purchase_price_designer == undefined ||             // 设计师采购价
+            $scope.allprice.purchase_price_designer == '') {                    // 设计师采购价
             return;
         }
 
-        if (parseFloat(value) < parseFloat($scope.good_detail.supplier_price)) {    // 不能小于供货价
-            $scope.price_flag = true;
-            return;
-        }
+        let flow1 = flowOne(parseFloat($scope.allprice.purchase_price_decoration_company), parseFloat(value))
+        let flow2 = flowTwo(parseFloat($scope.allprice.purchase_price_decoration_company), parseFloat($scope.allprice.purchase_price_designer))
 
-        if (parseFloat(value) < parseFloat($scope.allprice.purchase_price_decoration_company)) { // 不能小于装修公司采购价
+        if (flow1 && flow2) {
+            $scope.price_flag = false;
+        } else {
             $scope.price_flag = true;
-            return;
         }
-
-        if (parseFloat(value) > parseFloat($scope.good_detail.platform_price)) {    // 不能大于平台价
-            $scope.price_flag = true;
-            return;
-        }
-
-        if (parseFloat(value) > parseFloat($scope.good_detail.market_price)) {  // 不能大于市场价
-            $scope.price_flag = true;
-            return;
-        }
-
-        $scope.price_flag = false;
     });
 
-
+    // 设计师采购价
     $scope.$watch('allprice.purchase_price_designer', function (value, oldValue) {
-        if (value == undefined) {
-            $scope.price_flag = true
-        }
-
-        if (parseFloat(value) < parseFloat($scope.good_detail.supplier_price)) {    // 不能小于供货价
-            $scope.price_flag = true;
+        if (value == undefined || value == '' ||
+            $scope.allprice.purchase_price_decoration_company == undefined ||   // 装修公司采购价
+            $scope.allprice.purchase_price_decoration_company == '' ||          // 装修公司采购价
+            $scope.allprice.purchase_price_manager == undefined ||              // 项目经理采购价
+            $scope.allprice.purchase_price_manager == '') {                     // 项目经理采购价
             return;
         }
 
-        if (parseFloat(value) < parseFloat($scope.allprice.purchase_price_decoration_company)) { // 不能小于装修公司采购价
-            $scope.price_flag = true;
-            return;
-        }
+        let flow1 = flowOne(parseFloat($scope.allprice.purchase_price_decoration_company), parseFloat($scope.allprice.purchase_price_manager))
+        let flow2 = flowTwo(parseFloat($scope.allprice.purchase_price_decoration_company), parseFloat(value))
 
-        if (parseFloat(value) > parseFloat($scope.good_detail.platform_price)) {    // 不能大于平台价
+        if (flow1 && flow2) {
+            $scope.price_flag = false;
+        } else {
             $scope.price_flag = true;
-            return;
         }
-
-        if (parseFloat(value) > parseFloat($scope.good_detail.market_price)) {  // 不能大于市场价
-            $scope.price_flag = true;
-            return;
-        }
-
-        $scope.price_flag = false;
     });
 
+    /**
+     * 供货价 <= 装修公司采购价 <= 项目经理采购价 <= 平台价 <= 市场价
+     * @param purchase_price_decoration_company type: number 装修公司采购价
+     * @param purchase_price_manager            type: number 项目经理采购价
+     * @returns {Boolean}
+     */
+    function flowOne(purchase_price_decoration_company, purchase_price_manager) {
+        let supplier_price = parseFloat($scope.good_detail.supplier_price), // 供货价
+            platform_price = parseFloat($scope.good_detail.platform_price); // 平台价
+        return supplier_price <= purchase_price_decoration_company && purchase_price_decoration_company <= purchase_price_manager && purchase_price_manager <= platform_price
+    }
+
+    /**
+     * 供货价 <= 装修公司采购价 <= 设计师采购价 <= 平台价 <= 市场价
+     * @param purchase_price_decoration_company type: number 装修公司采购价
+     * @param purchase_price_designer           type: number 设计师采购价
+     * @return {Boolean}
+     */
+    function flowTwo(purchase_price_decoration_company, purchase_price_designer) {
+        let supplier_price = parseFloat($scope.good_detail.supplier_price), // 供货价
+            platform_price = parseFloat($scope.good_detail.platform_price); // 平台价
+        return supplier_price <= purchase_price_decoration_company && purchase_price_decoration_company <= purchase_price_designer && purchase_price_designer <= platform_price
+    }
 
     $scope.saveGoodDetail = function (val, error) {
         if (val && !$scope.price_flag) {
