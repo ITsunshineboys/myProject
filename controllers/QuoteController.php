@@ -3128,7 +3128,7 @@ die;
      */
     public function actionTest()
     {
-       var_dump(EffectMaterial::find()->where(['effect_id'=>122])->asArray()->all());
+       var_dump(Apartment::find()->where(['points_id'=>6])->asArray()->all());
 
     }
 }
