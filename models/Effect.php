@@ -392,7 +392,7 @@ class Effect extends ActiveRecord
                 $value['first_cate_id']='';
             }
             unset($value['effect_id']);
-            unset($value['goods_id']);
+
 
         }
 
