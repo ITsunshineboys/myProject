@@ -3001,11 +3001,16 @@ class QuoteController extends Controller
                 ]);
             }
         }elseif (isset($post['value']) || isset($post['area'])) {
-            //上半部分
-            foreach ($post['value'] as $one_value) {
-                ProjectView::findByUpdate($one_value['coefficient'], $one_value['id']);
+
+            if (isset($post['value'])){
+                //上半部分
+                foreach ($post['value'] as $one_value) {
+                    ProjectView::findByUpdate($one_value['coefficient'], $one_value['id']);
+                }
             }
+
             //下半部分
+
             foreach ($post['area'] as $one_else){
 
                 if (isset($one_else['id'])){
