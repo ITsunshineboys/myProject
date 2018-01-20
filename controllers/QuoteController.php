@@ -3021,7 +3021,6 @@ class QuoteController extends Controller
 
         }
 
-die;
         return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
