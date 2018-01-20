@@ -3009,6 +3009,7 @@ class QuoteController extends Controller
         }elseif (isset($post['area'])){
             //下半部分
             foreach ($post['area'] as $one_else){
+                var_dump($one_else);die;
                 if (isset($one_else['id'])){
                     Apartment::findByUpdate($one_else['value'],$one_else['id']);
                 }
