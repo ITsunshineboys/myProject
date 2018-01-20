@@ -98,8 +98,14 @@ app.controller('commodity_detail', ['_ajax', '$rootScope', '$scope', '$http', '$
     $scope.sureGoodOffline = () => {
         let data = {id: Number($scope.good_detail.id), offline_reason: $scope.offline_reason};
         _ajax.post('/mall/goods-status-toggle', data, function (res) {
-            setTimeout(() =>
-                $state.go("commodity.online", {id: $scope.storeid}), 200);
+            setTimeout(() => {
+                if ($stateParams.storeid) {
+                    $state.go("commodity.online", {id: $scope.storeid});
+                } else {
+                    history.go(-1);
+                }
+
+            }, 200)
         })
     }
 
