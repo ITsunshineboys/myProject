@@ -3011,7 +3011,7 @@ class QuoteController extends Controller
             foreach ($post['area'] as $one_else){
                 if (isset($one_else['id'])){
                     $a = Apartment::findByUpdate($one_else['value'],$one_else['id']);
-                    var_dump($a);die;
+                    var_dump($a);
                 }
                 if (isset($one_else['min_area'])) {
                     Apartment::findByInsert($one_else);
@@ -3019,6 +3019,7 @@ class QuoteController extends Controller
         }
 
         }
+        die;
 
         return Json::encode([
                 'code' => 200,
