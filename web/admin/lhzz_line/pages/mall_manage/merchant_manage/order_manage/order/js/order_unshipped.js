@@ -38,6 +38,11 @@ app.controller('order_unshipped',['$scope', '$stateParams', '_ajax', function ($
         }
     };
 
+    // 搜索-输入框值
+    $scope.search_input = {
+        keyword: ''
+    }
+
     // 时间筛选器
     $scope.$watch('params.time_type', function (value, oldValue) {
         if (value == oldValue) {
@@ -47,6 +52,7 @@ app.controller('order_unshipped',['$scope', '$stateParams', '_ajax', function ($
             return
         }
         if (value != 'custom') {
+            $scope.search_input.keyword = '';  // 搜索输入框值
             $scope.params.keyword = '';        // 关键字查询
             $scope.params.start_time = '';     // 自定义开始时间
             $scope.params.end_time = '';       // 自定义结束时间
@@ -65,6 +71,7 @@ app.controller('order_unshipped',['$scope', '$stateParams', '_ajax', function ($
         $scope.params.sort_money = '';      // 订单金额排序
         $scope.params.sort_time = 2;      // 下单时间排序
         $scope.pageConfig.currentPage = 1;
+        $scope.params.keyword = $scope.search_input.keyword;
         orderList()
     };
 
@@ -75,6 +82,7 @@ app.controller('order_unshipped',['$scope', '$stateParams', '_ajax', function ($
             return
         }
         if ($scope.params.end_time != '') {
+            $scope.search_input.keyword = '';  // 搜索输入框值
             $scope.params.keyword = '';        // 关键字查询
             $scope.params.sort_money = '';      // 订单金额排序
             $scope.params.sort_time = 2;      // 下单时间排序
@@ -88,6 +96,7 @@ app.controller('order_unshipped',['$scope', '$stateParams', '_ajax', function ($
             return
         }
         if ($scope.params.start_time != '') {
+            $scope.search_input.keyword = '';  // 搜索输入框值
             $scope.params.keyword = '';        // 关键字查询
             $scope.params.sort_money = '';      // 订单金额排序
             $scope.params.sort_time = 2;      // 下单时间排序
