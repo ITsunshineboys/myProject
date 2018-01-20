@@ -94,6 +94,7 @@ app.controller('settle_verify_fail', ['$rootScope', '$scope', '$state', '$stateP
         $scope.params.start_time = '';     // 自定义开始时间
         $scope.params.end_time = '';       // 自定义结束时间
         $scope.params['sort[]'] = 'review_apply_time:3'; //申请时间排序
+        $scope.params.keyword = $scope.table.keyword;
         $scope.pageConfig.currentPage = 1;
         tableList();
     };
