@@ -58,6 +58,8 @@ app.controller('searchGood', ['$rootScope', '$scope', '_ajax', function ($rootSc
         }
         $scope.params['sort[]'] = 'sold_number:3';       // 销量排序
         $scope.pageConfig.currentPage = 1;
+        $scope.basic.keyword = '';
+        $scope.params.keyword = '';
         tableList();
     });
 
@@ -72,7 +74,9 @@ app.controller('searchGood', ['$rootScope', '$scope', '_ajax', function ($rootSc
 
     /*搜索*/
     $scope.search = function () {
-        $scope.pageConfig.currentPage
+        $scope.pageConfig.currentPage = 1;
+        $scope.params.status = '4';
+        $scope.params.keyword = $scope.basic.keyword;
         tableList();
     }
 
@@ -93,6 +97,7 @@ app.controller('searchGood', ['$rootScope', '$scope', '_ajax', function ($rootSc
             $scope.offline_reason = '';
             $scope.pageConfig.currentPage = 1;
             $scope.basic.keyword = '';
+            $scope.params.keyword = '';
             tableList()
         })
     }
@@ -124,6 +129,7 @@ app.controller('searchGood', ['$rootScope', '$scope', '_ajax', function ($rootSc
                 $('#up_shelves_modal').modal("hide");
                 $scope.pageConfig.currentPage = 1;
                 $scope.basic.keyword = '';
+                $scope.params.keyword = '';
                 tableList();
             }
         })
@@ -180,6 +186,7 @@ app.controller('searchGood', ['$rootScope', '$scope', '_ajax', function ($rootSc
                 $('#waitup_shelves_modal').modal("hide");
                 $scope.pageConfig.currentPage = 1;
                 $scope.basic.keyword = '';
+                $scope.params.keyword = '';
                 tableList()
             }
         })
@@ -188,7 +195,6 @@ app.controller('searchGood', ['$rootScope', '$scope', '_ajax', function ($rootSc
 
     /*列表数据获取*/
     function tableList() {
-        $scope.params.keyword = $scope.basic.keyword;
         $scope.params.page = $scope.pageConfig.currentPage;
         _ajax.get('/mall/goods-list-search', $scope.params, function (res) {
             $scope.tabledetail = res.data.goods_list_admin.details;
