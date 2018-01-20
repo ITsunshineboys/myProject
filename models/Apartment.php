@@ -24,7 +24,7 @@ class Apartment extends ActiveRecord
     public function rules()
     {
         return [
-            [['min_area','max_area','project_points'],'integer'],
+            [['min_area','max_area'],'integer'],
             [['project_name'],'string']
         ];
     }
