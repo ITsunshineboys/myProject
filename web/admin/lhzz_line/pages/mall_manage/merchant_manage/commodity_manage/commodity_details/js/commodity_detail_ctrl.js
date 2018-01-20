@@ -13,7 +13,7 @@ app.controller('commodity_detail', ['_ajax', '$rootScope', '$scope', '$http', '$
         }, {
             name: '商品详情',
         }];
-    } else if($stateParams.storeid !== null && $stateParams.good_state == null) {
+    } else if ($stateParams.storeid !== null && $stateParams.good_state == null) {
         $rootScope.crumbs = [{
             name: '商城管理',
             icon: 'icon-shangchengguanli',
@@ -27,7 +27,7 @@ app.controller('commodity_detail', ['_ajax', '$rootScope', '$scope', '$http', '$
         }, {
             name: '商品详情',
         }];
-    }else {
+    } else {
         $rootScope.crumbs = [{
             name: '商城管理',
             icon: 'icon-shangchengguanli',
@@ -50,13 +50,13 @@ app.controller('commodity_detail', ['_ajax', '$rootScope', '$scope', '$http', '$
     $rootScope.fromState_name == 'commodity.online' || $stateParams.good_state == 'online' ? $scope.online_btn = true : $scope.online_btn = false;
     $rootScope.fromState_name == 'commodity.offline' || $stateParams.good_state == 'offline' ? $scope.offline_btn = true : $scope.offline_btn = false;
     $rootScope.fromState_name == 'commodity.wait' || $stateParams.good_state == 'wait' ? $scope.wait_btn = true : $scope.wait_btn = false;
-    $rootScope.fromState_name == 'commodity.deleted' || $rootScope.fromState_name == 'case_detail' || $stateParams.good_state == 'deleted'? $scope.deleted_btn = true : $scope.deleted_btn = false;
+    $rootScope.fromState_name == 'commodity.deleted' || $rootScope.fromState_name == 'case_detail' || $stateParams.good_state == 'deleted' ? $scope.deleted_btn = true : $scope.deleted_btn = false;
 
 
     let logistics;
     const afterservice_arr = ['上门维修', '上门退货', '上门换货', '退货', '换货'];
     const safeguard_arr = ['提供发票', '上门安装'];
-    $stateParams.storeid == null ? $scope.show_default = true : $scope.show_default = false;
+    ($stateParams.storeid && $stateParams.good_state == null) && ($stateParams.storeid == null && $stateParams.good_state == true) ? $scope.show_default = true : $scope.show_default = false
     $scope.storeid = $stateParams.storeid;
     $scope.offline_reason = '';
     $scope.alljudgefalse = false;
