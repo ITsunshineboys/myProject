@@ -24,6 +24,11 @@ app.controller('comments', ['$rootScope', '$scope', '$stateParams', '_ajax', fun
         }
     };
 
+    // 搜索-输入框值
+    $scope.search_input = {
+        keyword: ''
+    }
+
     // 请求参数
     $scope.params = {
         supplier_id: $stateParams.id,   // 商家ID
@@ -41,6 +46,7 @@ app.controller('comments', ['$rootScope', '$scope', '$stateParams', '_ajax', fun
         $scope.params.start_time = '';
         $scope.params.end_time = '';
         $scope.pageConfig.currentPage = 1;
+        $scope.params.keyword = $scope.search_input.keyword;
         orderList();
     };
 
@@ -53,6 +59,7 @@ app.controller('comments', ['$rootScope', '$scope', '$stateParams', '_ajax', fun
             return
         }
         if (v != 'custom') {
+            $scope.search_input.keyword = '';
             $scope.params.keyword = '';
             $scope.pageConfig.currentPage = 1;
             orderList();
@@ -66,6 +73,7 @@ app.controller('comments', ['$rootScope', '$scope', '$stateParams', '_ajax', fun
             return
         }
         if ($scope.params.end_time != '') {
+            $scope.search_input.keyword = '';
             $scope.params.keyword = '';        // 关键字查询
             $scope.pageConfig.currentPage = 1;
             orderList()
@@ -77,6 +85,7 @@ app.controller('comments', ['$rootScope', '$scope', '$stateParams', '_ajax', fun
             return
         }
         if ($scope.params.start_time != '') {
+            $scope.search_input.keyword = '';
             $scope.params.keyword = '';        // 关键字查询
             $scope.pageConfig.currentPage = 1;
             orderList()
