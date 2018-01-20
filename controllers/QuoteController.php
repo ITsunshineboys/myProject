@@ -3000,14 +3000,11 @@ class QuoteController extends Controller
                     'msg' => \Yii::$app->params['errorCodes'][$code],
                 ]);
             }
-        }elseif (isset($post['value'])) {
+        }elseif (isset($post['value']) || isset($post['area'])) {
             //上半部分
             foreach ($post['value'] as $one_value) {
                 ProjectView::findByUpdate($one_value['coefficient'], $one_value['id']);
             }
-
-        }elseif (isset($post['area'])){
-            //下半部分
             foreach ($post['area'] as $one_else){
                 var_dump($one_else);
 //                if (isset($one_else['id'])){
@@ -3018,7 +3015,7 @@ class QuoteController extends Controller
 //                    Apartment::findByInsert($one_else);
 //
 //                }
-        }
+            }
 
         }
         die;
