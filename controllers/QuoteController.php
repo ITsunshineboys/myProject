@@ -3010,12 +3010,12 @@ class QuoteController extends Controller
             //下半部分
             foreach ($post['area'] as $one_else){
                 if (isset($one_else['id'])){
-                    $a = Apartment::findByUpdate($one_else['value'],$one_else['id']);
-                    var_dump($a);
+                    Apartment::findByUpdate($one_else['value'],$one_else['id']);
+
                 }
                 if (isset($one_else['min_area'])) {
-                    $b = Apartment::findByInsert($one_else);
-                    var_dump($b);
+                    Apartment::findByInsert($one_else);
+
                 }
         }
 
