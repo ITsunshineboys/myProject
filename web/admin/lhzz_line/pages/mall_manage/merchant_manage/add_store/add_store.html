@@ -37,9 +37,7 @@
             <div class="company_type">
                 <span class="glyphicon glyphicon-asterisk red_mark"></span>
                 <span>店铺名称</span>
-                <input type="text" placeholder="请输入店铺名称" ng-model="params.shop_name" name="storename" id="storename"
-                       required ng-blur="judge=!!storeform.storename.$invalid"
-                       ng-class={'tored':storeform.storename.$invalid&&alljudgefalse||storeform.storename.$error.required&&judge}>
+                <input type="text" placeholder="请输入店铺名称" ng-model="params.shop_name" name="storename" id="storename" maxlength="30" required ng-blur="judge=!!storeform.storename.$invalid" ng-class={'tored':storeform.storename.$invalid&&alljudgefalse||storeform.storename.$error.required&&judge}>
                 <span>{{store_type}}</span>
                 <p ng-if="storename_repeat">
                     <span class="glyphicon glyphicon-asterisk red_mark"></span>
