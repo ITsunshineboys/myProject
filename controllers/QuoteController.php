@@ -2987,7 +2987,7 @@ class QuoteController extends Controller
 //                'msg' => 'ok',
 //            ]);
 //        }
-    //TODO 修改
+
         if (isset($post['apartment_area'])) {
             ApartmentArea::deleteAll([]);
             foreach ($post['apartment_area'] as $apartment_area){
@@ -3000,24 +3000,24 @@ class QuoteController extends Controller
                     'msg' => \Yii::$app->params['errorCodes'][$code],
                 ]);
             }
-        }elseif (isset($post['value']) || isset($post['area'])) {
+        }elseif (isset($post['value'])) {
             //上半部分
             foreach ($post['value'] as $one_value) {
                 ProjectView::findByUpdate($one_value['coefficient'], $one_value['id']);
             }
+
+        }elseif (isset($post['area'])){
             //下半部分
             foreach ($post['area'] as $one_else){
                 if (isset($one_else['id'])){
                     Apartment::findByUpdate($one_else['value'],$one_else['id']);
                 }
-
                 if (isset($one_else['min_area'])) {
                     Apartment::findByInsert($one_else);
                 }
-            }
         }
 
-
+        }
 
         return Json::encode([
                 'code' => 200,
