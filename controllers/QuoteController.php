@@ -3005,20 +3005,20 @@ class QuoteController extends Controller
             foreach ($post['value'] as $one_value) {
                 ProjectView::findByUpdate($one_value['coefficient'], $one_value['id']);
             }
+            //下半部分
             foreach ($post['area'] as $one_else){
-                var_dump($one_else);
-//                if (isset($one_else['id'])){
-//                    Apartment::findByUpdate($one_else['value'],$one_else['id']);
-//
-//                }
-//                if (isset($one_else['min_area'])) {
-//                    Apartment::findByInsert($one_else);
-//
-//                }
+
+                if (isset($one_else['id'])){
+                    Apartment::findByUpdate($one_else['value'],$one_else['id']);
+
+                }
+                if (isset($one_else['min_area'])) {
+                    Apartment::findByInsert($one_else);
+
+                }
             }
 
         }
-        die;
         return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
