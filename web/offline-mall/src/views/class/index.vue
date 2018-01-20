@@ -12,7 +12,7 @@
           <div class="hd">
             <span class="text">{{obj.title}}</span>
           </div>
-          <ul class="list">
+          <ul class="list" flex="">
             <li class="cate-item" v-for="item in obj.children">
               <router-link :to="'/goods-list/' + item.id">
                 <div class="cate-img-wrapper">
@@ -158,7 +158,8 @@
 
   .cate-item {
     display: inline-block;
-    margin-right: 24px;
+    /*margin-right: 24px;*/
+    margin-right: 10%;
     margin-bottom: 30px;
     font-size: 0;
     width: 60px;
@@ -182,5 +183,11 @@
     font-size: 14px;
     color: #999;
     text-align: center;
+  }
+
+  @media screen and (max-width: 374px)  {
+    .cate-item {
+      /*margin-right: 3%*/
+    }
   }
 </style>

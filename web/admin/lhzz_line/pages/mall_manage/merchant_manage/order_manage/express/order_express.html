@@ -14,7 +14,7 @@
         <div class="form-group">
             <label class="col-xs-2 control-label">配送方式</label>
             <div class="col-xs-10">
-                <p class="form-control-static">{{data.waybillname}}</p>
+                <p class="form-control-static" ng-bind="data.waybillname ? data.waybillname : '送货上门'"></p>
             </div>
         </div>
         <div class="form-group" ng-if="data.waybillnumber != ''">
