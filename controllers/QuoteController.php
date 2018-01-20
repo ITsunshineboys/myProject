@@ -3018,10 +3018,10 @@ class QuoteController extends Controller
 //                    Apartment::findByInsert($one_else);
 //
 //                }
-        }die;
-
         }
 
+        }
+        die;
         return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
