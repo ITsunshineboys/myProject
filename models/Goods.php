@@ -864,7 +864,7 @@ class Goods extends ActiveRecord
                 return $code;
             }
 
-            if (!BrandCategory::cateHasBrand($this->category_id)) {
+            if (!$this->validateBrandCategory() || !BrandCategory::cateHasBrand($this->category_id)) {
                 $code = 1093;
                 return $code;
             }
