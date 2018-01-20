@@ -354,6 +354,10 @@ class BasisDecorationService
         }
 
 
+        if (!$one_goods){
+            return null;
+        }
+
 //        $style = self::style($one_goods);
         //  抓取利润最大的商品
         $max_goods = self::profitMargin($one_goods);
@@ -364,6 +368,7 @@ class BasisDecorationService
             case $int == 2 ;
                 $goods_attr = GoodsAttr::findByGoodsIdUnits($max_goods['id'],$name);
         }
+
         return [$max_goods,$goods_attr];
     }
 
