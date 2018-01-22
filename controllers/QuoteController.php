@@ -3090,7 +3090,7 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-       var_dump(Apartment::find()->where(['points_id'=>6])->asArray()->all());
+       var_dump(EffectToponymy::find()->asArray()->all());
 
     }
 }
