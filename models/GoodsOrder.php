@@ -1638,7 +1638,6 @@ class GoodsOrder extends ActiveRecord
 
         return (int)$query->one()[$retKeyName];
     }
-
     /**
      * Get supplier sales volumn
      *
@@ -1665,8 +1664,6 @@ class GoodsOrder extends ActiveRecord
         
         return (int)$query->one()[$retKeyName];
     }
-
-
     /**
      * user apply refund
      * @param $order_no
@@ -1746,8 +1743,6 @@ class GoodsOrder extends ActiveRecord
             return $code;
         }
     }
-
-
     /**
      * @param $order_no
      * @param $sku
@@ -1769,8 +1764,6 @@ class GoodsOrder extends ActiveRecord
             return $code;
         }
     }
-
-
     /**
      * order_refund 表字段status不启用
      * @param $order_no
@@ -2182,11 +2175,7 @@ class GoodsOrder extends ActiveRecord
         $code=200;
         return $code;
     }
-
-
-
     /**
-     *
      * 计算运费
      * @param $orders
      * @return array|int
@@ -2222,7 +2211,7 @@ class GoodsOrder extends ActiveRecord
     public  static  function paginationByUserOrderListOne($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $type,$user,$role)
     {
 //        $a="CASE a.pay_status WHEN 0 THEN one";
-        $where.=' GROUP BY IF(a.pay_status=0 ,z.order_no,CONCAT(z.order_no,z.sku,z.create_time))';
+        $where.=' GROUP BY IF(a.pay_status=0,z.order_no,CONCAT(z.order_no,z.sku,z.create_time))';
         $offset = ($page - 1) * $size;
         $OrderList = (new Query())
             ->from(self::tableName().' AS a')
@@ -2267,7 +2256,8 @@ class GoodsOrder extends ActiveRecord
                 {
                     $arr[$key]['is_support_after_sale']=0;
                 }else{
-                    if (in_array(2,$ar)
+                    if (
+                        in_array(2,$ar)
                         || in_array(3,$ar)
                         || in_array(4,$ar)
                         || in_array(5,$ar)
@@ -2281,7 +2271,8 @@ class GoodsOrder extends ActiveRecord
                 }
                 if (
                     $arr[$key]['status']!=self::ORDER_TYPE_COMPLETED
-                    && $arr[$key]['status']!=self::ORDER_TYPE_UNCOMMENT)
+                    && $arr[$key]['status']!=self::ORDER_TYPE_UNCOMMENT
+                )
                 {
                     $arr[$key]['is_support_after_sale']=0;
                 }
@@ -2289,24 +2280,22 @@ class GoodsOrder extends ActiveRecord
             unset( $arr[$key]['after_sale_services']);
             $create_time[$key]  = $arr[$key]['create_time'];
         }
-            $count = (new Query())
-                ->from(self::tableName().' AS a')
-                ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no')
-                ->select('z.order_no')
-                ->where($where)
-                ->all();
-            $count=count($count);
-             $total_page=ceil($count/$size);
-            $page = $page < 1 ? 1 : $page;
-            $arr = $page > $total_page ? [] : $arr;
-
-            return
-                [
-                    'total_page' =>$total_page,
-                    'count'=>$count,
-                    'details' => $arr
-                ];
-
+        $count = (new Query())
+            ->from(self::tableName().' AS a')
+            ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no')
+            ->select('z.order_no')
+            ->where($where)
+            ->all();
+        $count=count($count);
+        $total_page=ceil($count/$size);
+        $page = $page < 1 ? 1 : $page;
+        $arr = $page > $total_page ? [] : $arr;
+        return
+        [
+            'total_page' =>$total_page,
+            'count'=>$count,
+            'details' => $arr
+        ];
     }
     /**
      * @param $arr
@@ -2538,8 +2527,6 @@ class GoodsOrder extends ActiveRecord
         }
         return $arr;
     }
-
-
 
     /**
      * 切换状态

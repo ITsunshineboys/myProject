@@ -46,7 +46,9 @@ class OrderPlatForm extends ActiveRecord
      * @param $order_no
      * @param $handle_type
      * @param $reason
-     * @return Exception|\Exception|int
+     * @param $sku
+     * @return int
+     * @throws Exception
      */
     public static  function  platformHandleCloseOrderLine($order_no,$handle_type,$reason,$sku)
     {
@@ -132,6 +134,7 @@ class OrderPlatForm extends ActiveRecord
                 return $code;
             }
     }
+
     /**
      * 关闭订单，退款
      * @param $order_no
@@ -139,6 +142,7 @@ class OrderPlatForm extends ActiveRecord
      * @param $reason
      * @param $sku
      * @return int
+     * @throws Exception
      */
     public static function platformHandleCloseOrderRefundToUser($order_no,$handle_type,$reason,$sku)
     {

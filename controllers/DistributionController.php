@@ -832,9 +832,9 @@ class DistributionController extends Controller
         }
     }
 
-    /**
-     * 添加/修改备注
+    /**添加/修改备注
      * @return string
+     * @throws Exception
      */
     public  function  actionAddRemarks()
     {
@@ -848,8 +848,8 @@ class DistributionController extends Controller
         }
         $request = Yii::$app->request;
         $order_no= trim($request->post('order_no'));
-        $remarks= trim($request->post('remarks'));
-        if (!$order_no || !$remarks)
+        $remarks= trim($request->post('remarks',''));
+        if (!$order_no )
         {
             $code=1000;
             return Json::encode([
