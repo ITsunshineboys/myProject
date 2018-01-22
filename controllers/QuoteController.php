@@ -1002,9 +1002,10 @@ class QuoteController extends Controller
 
         $transaction = \Yii::$app->db->beginTransaction();
         try {
+            $ids=[];
             foreach ($request['house_informations'] as $house) {
                 //添加功能
-                $ids=[];
+
                 if (!isset($house['id'])) {
                     if ($house['is_ordinary'] == 0) {
                         //普通户型添加
@@ -1378,10 +1379,11 @@ class QuoteController extends Controller
 
 //
             }
+            var_dump($ids);die;
             if(is_array($ids)){
                 $ids = implode(',',$ids);
             }
-            var_dump($ids);
+
             $toponymy_edit=EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
 //                $toponymy_edit->effect_id=$ids;
 //                $toponymy_edit->province_code=$request['province_code'];
