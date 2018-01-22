@@ -24,6 +24,7 @@ class PayService
     const  BALANCE_PAY='余额支付';
     const  WE_CHAT_PAY='微信支付';
     const  WE_CHAT_APP_PAY='微信APP支付';
+    const  ONLINE_PAY='在线支付';
     /**
      *
      * 网页授权接口微信服务器返回的数据，返回样例如下

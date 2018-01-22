@@ -403,6 +403,7 @@ class OrderGoods extends ActiveRecord
      * @param $is_unusual
      * @param $freight
      * @return int
+     * @throws \yii\db\Exception
      */
     public  static  function  AddNewOrderData($order_no,$goods_num,$time,$goods,$order_status,$shipping_status,$customer_service,$is_unusual,$freight)
     {

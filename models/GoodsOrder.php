@@ -7,6 +7,7 @@
  */
 
 namespace app\models;
+use app\services\PayService;
 use yii;
 use yii\db\ActiveRecord;
 use yii\db\Query;
@@ -2832,7 +2833,7 @@ class GoodsOrder extends ActiveRecord
             $output['buyer_message'] = $arr[0]['buyer_message'];
             if ( $arr[0]['status_type'] ==1)
             {
-                $output['pay_name'] = '在线支付';
+                $output['pay_name'] = PayService::ONLINE_PAY;
             }else{
                 $output['pay_name'] = $arr[0]['pay_name'];
             }
@@ -3503,7 +3504,7 @@ class GoodsOrder extends ActiveRecord
                     $money+=($Goods->toArray()[$role_money]*$goods['goods_num']);
                 }
                 $total+=($money+$supplier['freight']*100);
-                $code=self::AddNewPayOrderData($order_no,$supplier['freight']*100+$money,$supplier['supplier_id'],0,$time,2,0,'在线支付',$supplier['buyer_message'],$address,$supplier,$user->id,$user->last_role_id_app);
+                $code=self::AddNewPayOrderData($order_no,$supplier['freight']*100+$money,$supplier['supplier_id'],0,$time,2,0,PayService::ONLINE_PAY,$supplier['buyer_message'],$address,$supplier,$user->id,$user->last_role_id_app);
                 if ($code!=200)
                 {
                     $tran->rollBack();
