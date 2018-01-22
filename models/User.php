@@ -361,9 +361,7 @@ class User extends ActiveRecord implements IdentityInterface
             if (UserRole::find()->where(['user_id' => $user->id, 'review_status' => Role::AUTHENTICATION_STATUS_APPROVED, 'role_id' => $roleId])->exists()) {
                 if ($roleId == Yii::$app->params['supplierRoleId']) {
                     return 1011;
-                }
-            } else {
-                if ($roleId == Yii::$app->params['ownerRoleId']) {
+                } elseif ($roleId == Yii::$app->params['ownerRoleId']) {
                     return 1092;
                 }
             }
