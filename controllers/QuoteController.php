@@ -622,7 +622,7 @@ class QuoteController extends Controller
     }
 
     /**
-     * TODO 小区列表 优化
+     * 小区列表
      * @return string
      */
 
@@ -683,7 +683,7 @@ class QuoteController extends Controller
 
     }
     /**
-     * TODO 新增接口 优化小区
+     * 小区添加
      * @return string
      */
 
@@ -918,7 +918,7 @@ class QuoteController extends Controller
     }
 
     /**
-     * TODO 新增接口
+     * 小区详情
      * @return string
      */
     public function actionEffectPlotEditView()
@@ -961,7 +961,7 @@ class QuoteController extends Controller
     }
 
     /**
-     * TODO 新增删除小区
+     * 删除小区
      * @return string
      */
     public function actionEffectDelPlot(){
@@ -1183,23 +1183,23 @@ class QuoteController extends Controller
 //                        }
                     }
 
-                    $ids = implode(',',$ids);
-
-                    $effect_plot = EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
-                    $effect_plot->effect_id=$effect_plot['effect_id'].','.$ids;
-                    $effect_plot->toponymy=$request['house_name'];
-                    $effect_plot->province_code=$request['province_code'];
-                    $effect_plot->city_code=$request['city_code'];
-                    $effect_plot->district_code=$request['district_code'];
-                    $effect_plot->street=$request['address'];
-                    if(!$effect_plot->save(false)){
-                        $transaction->rollBack();
-                        $code = 500;
-                        return Json::encode([
-                            'code' => $code,
-                            'msg' => \Yii::$app->params['errorCodes'][$code]
-                        ]);
-                    }
+//                    $ids = implode(',',$ids);
+//
+//                    $effect_plot = EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
+//                    $effect_plot->effect_id=$effect_plot['effect_id'].','.$ids;
+//                    $effect_plot->toponymy=$request['house_name'];
+//                    $effect_plot->province_code=$request['province_code'];
+//                    $effect_plot->city_code=$request['city_code'];
+//                    $effect_plot->district_code=$request['district_code'];
+//                    $effect_plot->street=$request['address'];
+//                    if(!$effect_plot->save(false)){
+//                        $transaction->rollBack();
+//                        $code = 500;
+//                        return Json::encode([
+//                            'code' => $code,
+//                            'msg' => \Yii::$app->params['errorCodes'][$code]
+//                        ]);
+//                    }
                 }
 
                 //  案例修改
@@ -1207,7 +1207,7 @@ class QuoteController extends Controller
 
                     if ($house['is_ordinary'] == 0) {
                         //普通户型修改
-
+                        $ids[]=$house['id'];
                         $house_id = $house['id'];
                         $bedroom = $house['cur_room'];
                         $sittingRoom_diningRoom = $house['cur_hall'];
@@ -1267,7 +1267,7 @@ class QuoteController extends Controller
                     if ($house['is_ordinary'] == 1){
 
                         // 案例修改
-
+                        $ids[]=$house['id'];
                         $house_id               = $house['id'];
                         $bedroom                = $house['cur_room'];
                         $sittingRoom_diningRoom = $house['cur_hall'];
@@ -1374,8 +1374,8 @@ class QuoteController extends Controller
 //                        }
                     }
                 }
-
-//
+                var_dump($ids);die;
+                $ids = implode(',',$ids);
                 $toponymy_edit=EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
                 $toponymy_edit->province_code=$request['province_code'];
                 $toponymy_edit->city_code=$request['city_code'];
