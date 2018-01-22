@@ -611,8 +611,6 @@ class OwnerController extends Controller
         //人工总费用（防水总面积÷【每天做工面积】）×【工人每天费用】
         $laborAll  = ceil(BasisDecorationService::algorithm(6,$total_area,$area));
         $labor_all_cost['price'] = ceil(BasisDecorationService::algorithm(1,$laborAll,$labor_cost['univalence']));
-        var_dump($labor_all_cost);
-        die;
         $labor_all_cost['worker_kind'] = $labor_cost['worker_name'];
 
         // 商品属性
