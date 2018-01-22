@@ -22,7 +22,7 @@
             <p class="cost">{{goods_detail.platform_price | currency:'￥'}}</p>
         </div>
         <!--下拉选择数量-->
-        <div class="standard" ng-if="status!=0" data-toggle="modal" data-target="#myModal">
+        <div class="standard" ng-if="status!=0&&status!=undefined" data-toggle="modal" data-target="#myModal">
             <div class="standard_txt">选择数量</div>
             <div>
                 <img src="images/left_more.png" class="img_size" alt="">
@@ -170,7 +170,7 @@
         </div>
     </div>
     <div style="height: 4.5rem" ng-if="status!=0 || goods_detail.status==0"></div>
-    <div class="foot_tab" ng-if="status!=0">
+    <div class="foot_tab" ng-if="status!=0&&status!=undefined">
         <button class="add" data-toggle="modal" data-target="#myModal">{{status == 1?'更换':'添加'}}</button>
     </div>
     <div class="foot_tab shelves" ng-if="goods_detail.status==0">
