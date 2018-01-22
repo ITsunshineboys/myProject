@@ -2288,7 +2288,7 @@ class OrderController extends Controller
             ]);
         }
         $request = Yii::$app->request;
-        $type=$request->get('type','all');
+        $type=$request->get('type',GoodsOrder::ORDER_TYPE_ALL);
         $page=$request->get('page','1');
         $size=$request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT);
         $role=$request->get('role','user');
@@ -2324,7 +2324,7 @@ class OrderController extends Controller
                 break;
         }
 
-        if ($type=='all')
+        if ($type==GoodsOrder::ORDER_TYPE_ALL)
         {
             $where.=' and z.customer_service=0';
         }
@@ -2351,6 +2351,7 @@ class OrderController extends Controller
     /**
      * 余额支付
      * @return string
+     * @throws Exception
      */
     public  function  actionBalancePay(){
         $user = Yii::$app->user->identity;

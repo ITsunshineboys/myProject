@@ -32,7 +32,7 @@ class OrderRefund extends ActiveRecord
         return 'order_refund';
     }
 
-  /**
+    /**
      * @param $order_no
      * @param $sku
      * @return array|ActiveRecord[]
@@ -207,7 +207,7 @@ class OrderRefund extends ActiveRecord
                     'content'=>'',
                     'time'=>$unreceived['create_time'],
                     'stage'=>$unreceived['order_type'],
-                    'status'=>'in'
+                    'status'=>OrderAfterSale::AFTER_STATUS_IN
                 ];
             }else {
                 $arr2[] = [
@@ -218,7 +218,8 @@ class OrderRefund extends ActiveRecord
                     'stage' => $unreceived['order_type'],
                     'status'=>''
                 ];
-                switch ($unreceived['handle']) {
+                switch ($unreceived['handle'])
+                {
                     case 1:
                         $type = '同意';
                         $reason = '';
@@ -246,7 +247,7 @@ class OrderRefund extends ActiveRecord
                     'content' => '',
                     'time' => $complete_time,
                     'stage' => $unreceived['order_type'],
-                    'status'=>'in'
+                    'status'=>OrderAfterSale::AFTER_STATUS_IN
                 ];
                 if ($unreceived['handle'] == 1) {
                     $arr2[] = [
@@ -255,7 +256,7 @@ class OrderRefund extends ActiveRecord
                         'content' => '',
                         'time' => $complete_time,
                         'stage' => $unreceived['order_type'],
-                        'status'=>'over'
+                        'status'=>OrderAfterSale::AFTER_STATUS_OVER
                     ];
                 }
             }
@@ -287,7 +288,7 @@ class OrderRefund extends ActiveRecord
                 'content'=>'',
                 'time'=>$OrderPlatform->refund_time,
                 'stage'=>'',
-                'status'=>'over'
+                'status'=>OrderAfterSale::AFTER_STATUS_OVER
             ];
 //            $platform=self::object2array(['list'=>$arrp]);
             $platform=(array)$arrp;
@@ -303,7 +304,7 @@ class OrderRefund extends ActiveRecord
      */
     public  static  function object2array($object)
     {
-        $object =  json_decode( json_encode( $object),true);
+        $object =  json_decode(json_encode($object),true);
         return  $object;
     }
 
@@ -315,6 +316,7 @@ class OrderRefund extends ActiveRecord
      * @param $freight
      * @param $sku
      * @return int
+     * @throws \yii\db\Exception
      */
     public  static  function  ReduceSold($supplier_id,$goods_num,$goods_price,$freight,$sku)
     {
@@ -367,8 +369,4 @@ class OrderRefund extends ActiveRecord
             return $code;
         }
     }
-
-
-
-
 }

@@ -287,7 +287,7 @@ class GoodsOrder extends ActiveRecord
         $tran = Yii::$app->db->beginTransaction();
         try{
 
-            $code=self::AddNewPayOrderData($post['out_trade_no'],$post['total_amount'],$Goods->supplier_id,1,$time,1,0,$pay_name,$buyer_message,$address,$invoice->toArray(),0,7);
+            $code=self::AddNewPayOrderData($post['out_trade_no'],$post['total_amount'],$Goods->supplier_id,1,$time,1,0,$pay_name,$buyer_message,$address,$invoice->toArray(),0,\Yii::$app->params['ownerRoleId']);
             if ($code!=200)
             {
                 $tran->rollBack();
@@ -442,7 +442,7 @@ class GoodsOrder extends ActiveRecord
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
         try{
-            $code=self::AddNewPayOrderData($order_no,$msg['total_fee'],$Goods->supplier_id,1,$time,1,0,$pay_name,$buyer_message,$address,$invoice->toArray(),0,7);
+            $code=self::AddNewPayOrderData($order_no,$msg['total_fee'],$Goods->supplier_id,1,$time,1,0,$pay_name,$buyer_message,$address,$invoice->toArray(),0,\Yii::$app->params['ownerRoleId']);
             if ($code!=200)
             {
                 $tran->rollBack();
@@ -680,7 +680,7 @@ class GoodsOrder extends ActiveRecord
             }
             switch ($arr[$k]['role_id'])
             {
-                case 7:
+                case \Yii::$app->params['ownerRoleId']:
                     $arr[$k]['role_id']=OrderGoods::PLATFORM_PRICE_DESC;
                     break;
                 case 6:
@@ -1923,7 +1923,7 @@ class GoodsOrder extends ActiveRecord
             }
 
             //这一步我看不懂
-            if ($GoodsOrder->role_id==7)
+            if ($GoodsOrder->role_id==\Yii::$app->params['ownerRoleId'])
             {
                 $role=User::findOne($GoodsOrder->user_id);
             }else
@@ -2147,14 +2147,14 @@ class GoodsOrder extends ActiveRecord
                 $res=$GoodsOrder->save(false);
                 if ($user->last_role_id_app==0)
                 {
-                    $user->last_role_id_app=7;
+                    $user->last_role_id_app=\Yii::$app->params['ownerRoleId'];
                     $user=User::find()
                         ->where(['id'=>$user->id])
                         ->one();
                 }else{
-                    if ($user->last_role_id_app==7)
+                    if ($user->last_role_id_app==\Yii::$app->params['ownerRoleId'])
                     {
-                        $user->last_role_id_app=7;
+                        $user->last_role_id_app=\Yii::$app->params['ownerRoleId'];
                         $user=User::find()
                             ->where(['id'=>$user->id])
                             ->one();
@@ -2241,12 +2241,12 @@ class GoodsOrder extends ActiveRecord
             $arr[$key]['role']=$role;
             if ($user->last_role_id_app==0)
             {
-                $user->last_role_id_app=7;
+                $user->last_role_id_app=\Yii::$app->params['ownerRoleId'];
                 $arr[$key]['availableamount']= StringService::formatPrice($user->availableamount*0.01);
             }else{
-                if ($user->last_role_id_app==7)
+                if ($user->last_role_id_app==\Yii::$app->params['ownerRoleId'])
                 {
-                    $user->last_role_id_app=7;
+                    $user->last_role_id_app=\Yii::$app->params['ownerRoleId'];
                     $arr[$key]['availableamount']= StringService::formatPrice($user->availableamount*0.01);
                 }else{
                     $arr[$key]['availableamount']= StringService::formatPrice(Role::CheckUserRole($user->last_role_id_app)
@@ -3232,7 +3232,7 @@ class GoodsOrder extends ActiveRecord
                 //供应商
                 $data=self::SUPPLIER_MONEY;
                 break;
-            case 7:
+            case \Yii::$app->params['ownerRoleId']:
                 //业主
                 $data=self::PLAT_MONEY;
                 break;
