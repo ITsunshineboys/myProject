@@ -350,7 +350,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
         }
         foreach ($effect_earnests as $k=>&$effect_earnest){
             $data[]=(new Query())->from('effect as e')
-                ->select('ee.id,e.add_time,st.style,se.series')
+                ->select('ee.id,ee.create_time,st.style,se.series')
                 ->leftJoin('effect_earnest as ee','e.id=ee.effect_id')
                 ->leftJoin('effect_picture as ep','ep.effect_id='.$effect_earnest['effect_id'])
                 ->leftJoin('style as st','st.id=ep.style_id')
@@ -365,7 +365,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
             if($v==false){
                 return [];
             }
-            $v['add_time']=date('Y-m-d H:i:s',$v['add_time']);
+            $v['add_time']=date('Y-m-d H:i:s',$v['create_time']);
             $v['style']=$v['series'].'-'.$v['style'];
             unset($v['series']);
         }
