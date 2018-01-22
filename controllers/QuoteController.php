@@ -1375,11 +1375,14 @@ class QuoteController extends Controller
                     }
                 }
 
-                if(is_array($ids)){
-                    $ids = implode(',',$ids);
-                }
-                var_dump($ids);
-//                $toponymy_edit=EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
+
+//
+            }
+            if(is_array($ids)){
+                $ids = implode(',',$ids);
+            }
+            var_dump($ids);
+            $toponymy_edit=EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
 //                $toponymy_edit->effect_id=$ids;
 //                $toponymy_edit->province_code=$request['province_code'];
 //                $toponymy_edit->city_code=$request['city_code'];
@@ -1395,7 +1398,7 @@ class QuoteController extends Controller
 //                        'msg' => \Yii::$app->params['errorCodes'][$code]
 //                    ]);
 //                }
-            }die;
+
             $transaction->commit();
         }catch (\Exception $e) {
             $transaction->rollBack();
