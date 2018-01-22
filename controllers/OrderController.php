@@ -1500,9 +1500,11 @@ class OrderController extends Controller
             ]);
         }
     }
+
     /**
      * supplier order list
      * @return string
+     * @throws Exception
      */
     public  function actionFindSupplierOrderList(){
         $user = Yii::$app->user->identity;
@@ -1529,7 +1531,6 @@ class OrderController extends Controller
         $keyword = trim($request->get('keyword', ''));
         $timeType = trim($request->get('time_type', ''));
         $type=trim($request->get('type','all'));
-
         if($keyword){
             if ($type=='all')
             {
@@ -1567,21 +1568,15 @@ class OrderController extends Controller
         }else{
             list($startTime, $endTime) = StringService::startEndDate($timeType);
         }
-
-//        if ($timeType=='today')
-//        {
-//            $startTime=date('Y-m-d',time());
-//            $endTime=date('Y-m-d',time()+24*60*60);
-//        }
-                $where .=" and supplier_id={$supplier->id}";
-                if ($startTime) {
-                    $startTime = (int)strtotime($startTime);
-                    $startTime && $where .= " and   a.create_time >= {$startTime}";
-                }
-                if ($endTime) {
-                    $endTime = (int)strtotime($endTime);
-                    $endTime && $where .= " and a.create_time <= {$endTime}";
-                }
+        $where .=" and supplier_id={$supplier->id}";
+        if ($startTime) {
+            $startTime = (int)strtotime($startTime);
+            $startTime && $where .= " and   a.create_time >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = (int)strtotime($endTime);
+            $endTime && $where .= " and a.create_time <= {$endTime}";
+        }
         $sort_money=trim($request->get('sort_money'));
         $sort_time=trim($request->get('sort_time'));
         $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort_time,$sort_money,'supplier');
@@ -2074,7 +2069,6 @@ class OrderController extends Controller
         $supplier_user=User::find()
             ->where(['id'=>$supplier->uid])
             ->one();
-
         if ($GoodsOrder->pay_status==0)
         {
             $code=GoodsOrder::UserCanCelOrder($order_no,$supplier_user);
