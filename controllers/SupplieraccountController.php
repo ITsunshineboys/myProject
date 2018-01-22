@@ -4,6 +4,7 @@ namespace app\controllers;
 
 
 use app\models\BrandCategory;
+use app\models\Gdmap;
 use app\models\GoodsBrand;
 use app\models\GoodsCategory;
 use app\models\OwnerCashManager;
@@ -1622,4 +1623,11 @@ class SupplieraccountController extends  Controller{
     }
 
 
+
+    public function actionTest(){
+        $data=new Gdmap();
+        $a=$data->addgeofence();
+        var_dump($a);
+
+    }
 }
