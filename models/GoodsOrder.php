@@ -2536,18 +2536,6 @@ class GoodsOrder extends ActiveRecord
 
 
     /**
-     * @param $data
-     * @return string
-     */
-    public  static  function  switchMoney($data)
-    {
-        $data=sprintf('%.2f', (float)$data);
-        return $data;
-    }
-
-
-
-    /**
      * 切换状态
      * @param $arr
      * @param $user

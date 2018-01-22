@@ -609,6 +609,7 @@ class DistributionController extends Controller
     /**
      * 添加收益
      * @return string
+     * @throws Exception
      */
     public  function  actionAddProfit()
     {
@@ -622,8 +623,8 @@ class DistributionController extends Controller
         }
         $request = Yii::$app->request;
         $mobile= trim($request->post('mobile'));
-        $profit= trim($request->post('profit'));
-        if (!$mobile || !$profit)
+        $profit= trim($request->post('profit','0'));
+        if (!$mobile )
         {
             $code=1000;
             return Json::encode([
