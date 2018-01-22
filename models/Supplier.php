@@ -847,6 +847,7 @@ class Supplier extends ActiveRecord
             [['nickname', 'shop_name', 'name', 'licence', 'licence_image', 'approve_reason', 'reject_reason', 'shop_name'], 'string'],
             ['name', 'string', 'length' => [1, 30]],
             ['licence', 'string', 'length' => [1, 18]],
+            ['shop_name', 'string', 'length' => [1, 33]],
             ['support_offline_shop', 'in', 'range' => [self::OFFLINE_SHOP_SUPPORT, self::OFFLINE_SHOP_NOT_SUPPORT]],
         ];
     }

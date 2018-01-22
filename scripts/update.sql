@@ -264,4 +264,7 @@ alter table `user_accessdetail` drop column refund_bank_log_id  ;
 --all 2018.1.13 hj
 alter table goods modify `favourable_comment_rate` tinyint unsigned not null default 100 comment '好评率';
 
+--all 2018.1.22 hj
+alter table supplier modify `shop_name` varchar(33) not null DEFAULT '' COMMENT '店铺名称';
+
 
