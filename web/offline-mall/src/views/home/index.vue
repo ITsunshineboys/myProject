@@ -26,7 +26,7 @@
       </flexbox-item>
     </flexbox>
     <card :header="{title:'推荐'}" class="command">
-      <flexbox justify="space-around" align="flex-start" :gutter="0" slot="content" wrap="wrap">
+      <flexbox align="flex-start" :gutter="0" slot="content" wrap="wrap">
 
           <flexbox-item style="margin-left: 20px;" :span="56/125" class="command_list" :class="{odd_col:index%2==0,even_col:index%2==1}"
                         v-for="(item,index) in recommended_list" :key="index">
