@@ -153,11 +153,11 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
                 })
                 if(index != -1){
                     let num = 0
-                    let index1 = $scope.house_informations[index].all_goods.findIndex(function (item) {
+                    let index1 = angular.copy($scope.house_informations[index]).all_goods.reverse().findIndex(function (item) {
                         return item.three_id == value.three_category_id
                     })
                     if(index1!=-1){
-                        num = $scope.house_informations[index].all_goods[index1].index + 1
+                        num = angular.copy($scope.house_informations[index]).all_goods.reverse()[index1].index + 1
                     }
                     $scope.house_informations[index].all_goods.push({
                         id:value.id,
