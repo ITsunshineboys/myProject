@@ -609,11 +609,10 @@ class OwnerController extends Controller
         $craft = WorkerType::craft(self::CRAFT_NAME['waterproof'],$get['city']);
 
         //人工总费用（防水总面积÷【每天做工面积】）×【工人每天费用】
-        $labor_all_cost['price'] = ceil(BasisDecorationService::algorithm(12,$total_area,$area,$labor_cost['univalence']));
+        $laborAll  = ceil(BasisDecorationService::algorithm(6,$total_area,$area));
+        $labor_all_cost['price'] = ceil(BasisDecorationService::algorithm(1,$laborAll,$labor_cost['univalence']));
         var_dump($labor_all_cost);
-        var_dump($total_area);
-        var_dump($area);
-        var_dump($labor_cost['univalence']);die;
+        die;
         $labor_all_cost['worker_kind'] = $labor_cost['worker_name'];
 
         // 商品属性
