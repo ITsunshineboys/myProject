@@ -2941,11 +2941,12 @@ class GoodsOrder extends ActiveRecord
         $freight = 0;
         if ($arr) {
             $arr = self::SwitchStatus_desc($arr, $user);
-            foreach ($arr as $k => $v) {
+            foreach ($arr as $k => $v)
+            {
                 $amount_order += ($arr[$k]['goods_price'] * $arr[$k]['goods_number'] * 0.01);
                 $supplier_price += $arr[$k]['supplier_price'] * 0.01;
                 $market_price += ($arr[$k]['market_price'] * $arr[$k]['goods_number'] )* 0.01;
-                $freight += ($arr[$k]['freight']);
+                $freight += $arr[$k]['freight'];
 //                if ($arr[$k]['status_code']==self::ORDER_TYPE_UNPAID)
 //                {
 //                    $GoodsOrder=GoodsOrder::FindByOrderNo($arr[$k]['order_no']);
@@ -3018,12 +3019,10 @@ class GoodsOrder extends ActiveRecord
             }
             $output['create_time'] = $arr[0]['create_time'];
             $output['paytime'] = date('Y-m-d H:i', $arr[0]['paytime']);
-
             $output['pay_term'] = $arr[0]['pay_term'];
             $output['freight'] = StringService::formatPrice($freight*0.01);
             $output['original_price'] = StringService::formatPrice($market_price);
             $output['discount_price'] = StringService::formatPrice($amount_order);
-
             if ($arr[$k]['status_code']==self::ORDER_TYPE_UNPAID)
             {
                 $output['amount_order'] = StringService::formatPrice($arr[0]['amount_order']*0.01);
