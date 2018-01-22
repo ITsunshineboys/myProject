@@ -2350,9 +2350,9 @@ class OrderController extends Controller
 
 
     /**
-    * 余额支付
-    * @return string
-    */
+     * 余额支付
+     * @return string
+     */
     public  function  actionBalancePay(){
         $user = Yii::$app->user->identity;
         if (!$user){
@@ -2403,9 +2403,11 @@ class OrderController extends Controller
             ]);
         }
     }
+
     /**
      * 获取订单详情
      * @return string
+     * @throws Exception
      */
     public function  actionUserOrderDetails()
     {
@@ -2767,7 +2769,7 @@ class OrderController extends Controller
     {
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -3055,8 +3057,9 @@ class OrderController extends Controller
     {
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
-            return Json::encode([
+            $code=403;
+            return Json::encode
+            ([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);

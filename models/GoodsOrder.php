@@ -409,11 +409,13 @@ class GoodsOrder extends ActiveRecord
         new SmValidationService($sms);
         return true;
     }
+
     /**
      * 微信线下商城数据库操作
      * @param $arr
      * @param $msg
      * @return bool
+     * @throws yii\db\Exception
      */
     public static function  WxPayLineNotifyDataBase($arr,$msg)
     {
