@@ -347,19 +347,25 @@ class User extends ActiveRecord implements IdentityInterface
      * Check role and get user identity
      *
      * @param int $mobile mobile
-     * @return ActiveRecord
+     * @param int $roleId role id default 0
+     * @return ActiveRecord|int
      */
-    public static function checkRoleAndGetIdentityByMobile($mobile)
+    public static function checkRoleAndGetIdentityByMobile($mobile, $roleId = 0)
     {
         $user = self::find()->where(['mobile' => $mobile])->one();
 
         if (!$user) {
-            $code = 1010;
-            return $code;
+            return 1010;
         } else {
-            if (UserRole::find()->where(['user_id' => $user->id, 'review_status' => Role::AUTHENTICATION_STATUS_APPROVED, 'role_id' => Yii::$app->params['supplierRoleId']])->exists()) {
-                $code = 1011;
-                return $code;
+            !$roleId && $roleId = Yii::$app->params['supplierRoleId'];
+            if (UserRole::find()->where(['user_id' => $user->id, 'review_status' => Role::AUTHENTICATION_STATUS_APPROVED, 'role_id' => $roleId])->exists()) {
+                if ($roleId == Yii::$app->params['supplierRoleId']) {
+                    return 1011;
+                }
+            } else {
+                if ($roleId == Yii::$app->params['ownerRoleId']) {
+                    return 1092;
+                }
             }
         }
 
