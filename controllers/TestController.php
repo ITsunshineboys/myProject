@@ -741,36 +741,42 @@ class TestController extends Controller
         $goods[]=
             [
                 'goods_id'=>$goods1->id,
-                'goods_num'=>5
+                'goods_num'=>5,
+                'temp_id'=>$goods1->logistics_template_id
             ];
         $goods[]=
             [
                 'goods_id'=>$goods2->id,
-                'goods_num'=>2
+                'goods_num'=>2,
+                'temp_id'=>$goods2->logistics_template_id
             ];
         $goods[]=
             [
                 'goods_id'=>$goods3->id,
-                'goods_num'=>1
+                'goods_num'=>1,
+                'temp_id'=>$goods3->logistics_template_id
             ];
         $goods[]=
             [
                 'goods_id'=>$goods4->id,
-                'goods_num'=>5
+                'goods_num'=>5,
+                'temp_id'=>$goods4->logistics_template_id
             ];
         $goods[]=
             [
                 'goods_id'=>$goods5->id,
-                'goods_num'=>1
+                'goods_num'=>1,
+                'temp_id'=>$goods5->logistics_template_id
             ];
         $goods[]=
             [
                 'goods_id'=>$goods6->id,
-                'goods_num'=>2
+                'goods_num'=>2,
+                'temp_id'=>$goods6->logistics_template_id
             ];
 //        $data=GoodsOrder::CalculationFreight($goods);
         $data=GoodsOrder::decomposeFreight($goods);
-        var_dump($data);die;
+        var_dump($goods);die;
        $data=OrderGoods::find()
            ->where('order_no=0122174907')
            ->asArray()->all();
