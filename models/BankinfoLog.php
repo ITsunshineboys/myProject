@@ -5,8 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "bankinfo_log".
- *
+ * * This is the model class for table "bankinfo_log"
  * @property integer $id
  * @property string $bankname
  * @property integer $bankcard
