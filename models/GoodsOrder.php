@@ -2706,6 +2706,7 @@ class GoodsOrder extends ActiveRecord
      * 获取订单详情信息
      * @param $postData
      * @return mixed|null
+     * @throws yii\db\Exception
      */
     public  static  function  FindUserOrderDetails($postData)
     {
@@ -2742,7 +2743,8 @@ class GoodsOrder extends ActiveRecord
         return $arr;
     }
 
-    /**获取订单详情信息2
+    /**
+     * 获取订单详情信息2
      * @param array $arr
      * @param $user
      * @return mixed
