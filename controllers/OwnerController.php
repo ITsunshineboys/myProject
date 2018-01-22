@@ -1229,6 +1229,11 @@ class OwnerController extends Controller
         $build_day = BasisDecorationService::wallArea(2,$get,$build_12,$build_24);
         $repair_day = BasisDecorationService::wallArea(3,$get,$repair);
         $total_day = ceil(BasisDecorationService::algorithm(11,$dismantle_day,$build_day,$repair_day,$apartment[0]['project_value']));
+        var_dump($dismantle_day);
+        var_dump($build_day);
+        var_dump($repair_day);
+        var_dump($total_day);
+        die;
 
 
         //当地工艺
