@@ -2844,7 +2844,7 @@ class GoodsOrder extends ActiveRecord
 
             }else
             {
-                $output['amount_order'] = StringService::formatPrice($freight + $amount_order);
+                $output['amount_order'] = StringService::formatPrice($freight*0.01 + $amount_order);
             }
 
             $output['consignee'] = $arr[0]['consignee'];
