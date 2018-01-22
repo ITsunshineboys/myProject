@@ -16,6 +16,7 @@ app.controller('edit_worker_ctrl', function ($uibModal,$state,$stateParams, _aja
         }
     ]
     let obj = JSON.parse(sessionStorage.getItem('area'))
+    console.log(obj);
     _ajax.get('/quote/labor-cost-edit-list',{
         id:$stateParams.id,
         city_code:obj.city,
@@ -43,23 +44,23 @@ app.controller('edit_worker_ctrl', function ($uibModal,$state,$stateParams, _aja
         }
         all_modal.$inject = ['$scope', '$uibModalInstance']
         if(valid){
-            let obj = {
+            let obj1 = {
                 univalence:$scope.basic_data.univalence,
                 city_code:obj.city,
                 province_code:obj.province,
                 else:arr
             }
             if($scope.basic_data.id!=undefined){
-                Object.assign(obj,{
+                Object.assign(obj1,{
                     id:$scope.basic_data.id
                 })
             }else{
-                Object.assign(obj,{
+                Object.assign(obj1,{
                     worker_id:$scope.basic_data.worker_id
                 })
             }
             if (valid) {
-                _ajax.post('/quote/labor-cost-edit', obj, function (res) {
+                _ajax.post('/quote/labor-cost-edit', obj1, function (res) {
                     console.log(res)
                     $uibModal.open({
                         templateUrl: 'pages/intelligent/cur_model.html',

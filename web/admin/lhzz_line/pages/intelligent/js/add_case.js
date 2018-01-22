@@ -20,6 +20,31 @@ app.controller('add_case_ctrl', function ($window,$uibModal,$anchorScroll,$locat
     ]
     $scope.all_num = ['一','二','三','四','五','六','七','八']
     let obj = JSON.parse(sessionStorage.getItem('area'))
+    $scope.house_informations = JSON.parse(sessionStorage.getItem('houseInformation'))
+    $scope.cur_house = $scope.house_informations[$stateParams.cur_index]
+    console.log($scope.cur_house);
+    if($scope.cur_house.house_type_name == ''){
+        Object.assign($scope.cur_house,{
+            area:'',
+            cur_room:1,
+            cur_hall:1,
+            cur_toilet:1,
+            cur_kitchen:1,
+            cur_imgSrc:'',
+            have_stair:1,
+            stair:'',
+            high:2.8,
+            window:'',
+            series:'',
+            style:'',
+            drawing_list:[],
+            worker_list:[],
+            all_goods:[]
+        })
+        console.log($scope.cur_house);
+    }else{
+        console.log($scope.cur_house);
+    }
     //工人信息
     _ajax.get('/quote/labor-list',{},function (res) {
         console.log(res);
@@ -59,7 +84,29 @@ app.controller('add_case_ctrl', function ($window,$uibModal,$anchorScroll,$locat
     },function (res) {
         console.log(res);
         let arr = [],arr2 = []
-        let arr1 = $scope.cur_house.all_goods
+        let arr1 = []
+        if(JSON.stringify($scope.cur_house.all_goods).indexOf('three_id')==-1){
+            for(let [key,value] of angular.copy($scope.cur_house.all_goods).entries()){
+                for(let [key1,value1] of value.two_level.entries()){
+                    for(let [key2,value2] of value1.three_level.entries()){
+                        Object.assign(value2,{
+                            first_id:value.id,
+                            second_id:value1.id
+                        })
+                        arr1.push(value2)
+                    }
+                }
+            }
+        }else{
+            for(let [key,value] of angular.copy($scope.cur_house.all_goods).entries()){
+                arr1.push({
+                    id:value.three_id,
+                    good_code:value.good_code,
+                    good_quantity:value.good_quantity,
+                    index:value.index
+                })
+            }
+        }
         console.log(arr1);
         for(let [key,value] of angular.copy(res.list).entries()){
             let index = res.classify.findIndex(function (item) {
@@ -138,7 +185,7 @@ app.controller('add_case_ctrl', function ($window,$uibModal,$anchorScroll,$locat
             for(let [key1,value1] of value.two_level.entries()){
                 for(let [key2,value2] of value1.three_level.entries()){
                     let index = arr1.findIndex(function (item) {
-                        return item.three_id == value2.id && item.index == value2.index
+                        return item.id == value2.id&&item.index == value2.index
                     })
                     if(index != -1){
                         value2.good_code = arr1[index].good_code
@@ -148,35 +195,11 @@ app.controller('add_case_ctrl', function ($window,$uibModal,$anchorScroll,$locat
                 }
             }
         }
+        console.log(arr1);
         console.log(arr);
         $scope.cur_house.all_goods = arr
         console.log($scope.cur_house.all_goods);
     })
-    $scope.house_informations = JSON.parse(sessionStorage.getItem('houseInformation'))
-    $scope.cur_house = $scope.house_informations[$stateParams.cur_index]
-    console.log($scope.cur_house);
-    if($scope.cur_house.house_type_name == ''){
-        Object.assign($scope.cur_house,{
-            area:'',
-            cur_room:1,
-            cur_hall:1,
-            cur_toilet:1,
-            cur_kitchen:1,
-            cur_imgSrc:'',
-            have_stair:1,
-            stair:'',
-            high:2.8,
-            window:'',
-            series:'',
-            style:'',
-            drawing_list:[],
-            worker_list:[],
-            all_goods:[]
-        })
-        console.log($scope.cur_house);
-    }else{
-
-    }
     //判断商品编号是否填写正确
     $scope.determineGoodsCode = function (item) {
         console.log(item)
