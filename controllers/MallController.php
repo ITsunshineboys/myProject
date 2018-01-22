@@ -4279,20 +4279,19 @@ class MallController extends Controller
         }
 
         $checkRoleRes = User::checkRoleAndGetIdentityByMobile($mobile, Yii::$app->params['ownerRoleId']);
-        $certificatedOwnerCode = 1092;
-        if (is_int($checkRoleRes) && $checkRoleRes != $certificatedOwnerCode) {
+        if ($checkRoleRes == 1010) {
             return Json::encode([
                 'code' => $checkRoleRes,
                 'msg' => Yii::$app->params['errorCodes'][$checkRoleRes],
             ]);
         }
 
-        $model = $checkRoleRes == $certificatedOwnerCode ? Yii::$app->user->identity : new User;
+        is_int($checkRoleRes) && $checkRoleRes = new User;
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'identity' => ModelService::viewModelByFields($model, User::FIELDS_VIEW_IDENTITY),
+                'identity' => ModelService::viewModelByFields($checkRoleRes, User::FIELDS_VIEW_IDENTITY),
             ],
         ]);
     }
