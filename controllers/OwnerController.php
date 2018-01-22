@@ -883,6 +883,7 @@ class OwnerController extends Controller
         $primer_day = BasisDecorationService::algorithm(6,$primer_area,$undercoat);
 
 
+
         //乳胶漆面漆面积  乳胶漆面漆天数
         $finishing_coat_area = BasisDecorationService::algorithm(1,$primer_area,2);
         $finishing_coat_day = BasisDecorationService::algorithm(6,$finishing_coat_area,$finishing_coat);
