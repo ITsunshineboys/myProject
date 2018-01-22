@@ -88,6 +88,7 @@ app.controller('apply_case_ctrl', function ($rootScope,$scope, _ajax, $state) {
             remark:$scope.cur_remark.remark
         },function (res) {
             console.log(res)
+            $scope.Config.currentPage = 1
             tablePages()
         })
     }

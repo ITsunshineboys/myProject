@@ -15,7 +15,7 @@
             <td>{{item.create_time}}</td>
             <td>
                 <div class="col-sm-5" style="padding-left: 0!important;">
-                    <input data-toggle="modal" ng-click="getRemark(item)" data-target="#remarks" type="text" class="form-control" ng-model="item.remarks">
+                    <input data-toggle="modal" readonly ng-click="getRemark(item)" data-target="#remarks" type="text" class="form-control" ng-model="item.remarks">
                 </div>
             </td>
         </tr>
@@ -33,8 +33,8 @@
                     <textarea  ng-model="cur_item.remarks" class="col-md-9" placeholder="请填写备注项" cols="30" rows="10"></textarea>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="other_btn" ng-click="editRemark()" data-dismiss="modal">确认</button>
-                    <button type="button" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" ng-click="editRemark()" data-dismiss="modal">确认</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

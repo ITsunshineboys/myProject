@@ -5,8 +5,7 @@ app.controller('associate_list_ctrl',function ($scope,$rootScope,$state,$statePa
             name:'分销',
             icon:'icon-fenxiao',
             link:function () {
-                $state.go('distribution.index'),
-                    $rootScope.crumbs.splice(1,2)
+                $state.go('home_list')
             }
         },
         {
@@ -41,7 +40,7 @@ app.controller('associate_list_ctrl',function ($scope,$rootScope,$state,$statePa
     };
     //修改备注
     $scope.getRemark = function (item) {
-        $scope.cur_item = item
+        $scope.cur_item = angular.copy(item)
     }
     $scope.editRemark = function () {
         _ajax.post('/distribution/add-remarks',{
@@ -49,6 +48,7 @@ app.controller('associate_list_ctrl',function ($scope,$rootScope,$state,$statePa
             remarks:$scope.cur_item.remarks
         },function (res) {
             console.log(res);
+            $scope.Config.currentPage = 1
             tablePages()
         })
     }
