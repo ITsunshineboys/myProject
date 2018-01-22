@@ -78,7 +78,7 @@
         }
         localStorage.setItem('history_list', JSON.stringify(this.history_list))
         if (item.pid !== undefined) {
-          this.$router.push({name: 'GoodsList', params: {id: item.pid}})
+          this.$router.push({name: 'GoodsList', params: {id: item.id}})
         } else {
           this.$router.push({name: 'GoodDetail', params: {id: item.id}})
         }
