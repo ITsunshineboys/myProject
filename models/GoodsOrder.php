@@ -3246,6 +3246,7 @@ class GoodsOrder extends ActiveRecord
      */
     public  static  function decomposeFreight($goods)
     {
+        $Good=[];
         foreach ($goods as  $k =>$v)
         {
             $Good[$k]['id']=Goods::find()

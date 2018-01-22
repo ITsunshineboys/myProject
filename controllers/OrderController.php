@@ -4663,9 +4663,11 @@ class OrderController extends Controller
             ]);
         }
     }
+
     /**
-     * app购买商品
+     *  app购买商品
      * @return string
+     * @throws Exception
      */
     public function actionAppBuyGoods()
     {

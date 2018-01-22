@@ -721,7 +721,7 @@ class TestController extends Controller
     public  static  function  actionTest()
     {
        $data=OrderGoods::find()
-           ->where('order_no=0119156773')
+           ->where('order_no=0122174907')
            ->asArray()->all();
        var_dump($data);
 
