@@ -1800,7 +1800,8 @@ class GoodsOrder extends ActiveRecord
                 $refunds->handle=$handle;
                 $refunds->handle_reason=$handle_reason;
                 $refunds->handle_time=$time;
-                if(!$refunds->save(false)){
+                if(!$refunds->save(false))
+                {
                     $code=500;
                     $tran->rollBack();
                     return $code;
@@ -3078,7 +3079,7 @@ class GoodsOrder extends ActiveRecord
                 || $type==11
                 || $type==12)
             {
-
+                echo $order_no.' and '.$sku;
                 $refund=OrderRefund::find()
                     ->where(['order_no'=>$order_no,'sku'=>$sku])
                     ->one();
