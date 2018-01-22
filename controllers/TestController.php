@@ -787,7 +787,7 @@ class TestController extends Controller
 
     public  static  function  actionTest1()
     {
-      $data= OrderRefund::find()->where(['order_no'=>0122136022])->one();
+      $data= OrderRefund::find()->where(['order_no'=>'0122191529'])->one();
       var_dump($data);die;
 
     }
