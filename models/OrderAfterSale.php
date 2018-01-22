@@ -2091,6 +2091,7 @@ class OrderAfterSale extends ActiveRecord
      * @param $sku
      * @param $reason
      * @return int
+     * @throws Exception
      */
     public  static  function  CloseOrder($order_no,$sku,$reason)
     {

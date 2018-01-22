@@ -3314,12 +3314,14 @@ class GoodsOrder extends ActiveRecord
         return  $Good;
 
     }
+
     /**
      * @param $user
      * @param $address_id
      * @param $suppliers
      * @param $total_amount
      * @return array|int
+     * @throws yii\db\Exception
      */
     public static  function AppBuy($user,$address_id,$suppliers,$total_amount)
     {

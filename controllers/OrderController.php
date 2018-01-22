@@ -5593,9 +5593,10 @@ class OrderController extends Controller
             }
         }
     }
-    /**
-     * 关闭订单操作
+
+    /**关闭订单操作
      * @return string
+     * @throws Exception
      */
     public function actionCloseOrder()
     {
