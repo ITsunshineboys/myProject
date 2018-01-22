@@ -3079,7 +3079,7 @@ class GoodsOrder extends ActiveRecord
                 || $type==11
                 || $type==12)
             {
-                echo $order_no.' and '.$sku;
+                echo $order_no.' and '.$sku;die;
                 $refund=OrderRefund::find()
                     ->where(['order_no'=>$order_no,'sku'=>$sku])
                     ->one();
