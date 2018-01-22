@@ -5,7 +5,7 @@
     <div class="tab clearfix">
         <ul>
             <li ng-class="{'active':all_flag}" ng-click="tabFunc('all_flag')">全部{{listcount.all}}</li>
-            <li ng-class="{'active':waitpay_flag}" ng-click="tabFunc('waitpay_flag')">三生三世待付款{{listcount.unpaid}}</li>
+            <li ng-class="{'active':waitpay_flag}" ng-click="tabFunc('waitpay_flag')">待付款{{listcount.unpaid}}</li>
             <li ng-class="{'active':waitsend_flag}" ng-click="tabChange('waitsend_flag')">
                 待发货{{listcount.unshipped}}
             </li>
