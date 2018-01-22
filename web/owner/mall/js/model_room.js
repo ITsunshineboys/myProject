@@ -842,24 +842,24 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
     //保存方案
     $scope.saveProgramme = function () {
         let materials = []
-        //整合申请样板间所需传值
+        //整合保存方案所需传值
         let obj = {
-            province_code:$scope.params.province,
-            city_code:$scope.params.city,
+            province_code:$scope.active_case.province_code,
+            city_code:$scope.active_case.city_code,
             street:$scope.toponymy.address,
             toponymy:$scope.toponymy.name,
-            sittingRoom_diningRoom:$scope.params.hall,
-            window:$scope.params.window,
-            bedroom:$scope.params.bedroom,
-            area:$scope.params.area,
-            high:$scope.params.high,
-            toilet:$scope.params.toilet,
-            kitchen:$scope.params.kitchen,
+            sittingRoom_diningRoom:$scope.active_case.sittingRoom_diningRoom,
+            window:$scope.active_case.window,
+            bedroom:$scope.active_case.bedroom,
+            area:$scope.active_case.area,
+            high:$scope.active_case.high,
+            toilet:$scope.active_case.toilet,
+            kitchen:$scope.active_case.kitchen,
             stair_id:$scope.params.stair == 0?0:$scope.params.stair.id,
-            stairway:$scope.params.stairway,
+            stairway:$scope.active_case.stairway,
             series:$scope.params.series.id,
             style:$scope.params.style.id,
-            type:1,
+            type:0,
             requirement:$scope.special_request,
             original_price:$scope.total_prices,
             sale_price:$scope.special_offer
