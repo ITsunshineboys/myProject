@@ -2758,8 +2758,6 @@ class GoodsOrder extends ActiveRecord
 //                if ($arr[$k]['status_code']==self::ORDER_TYPE_UNPAID)
 //                {
 //                    $GoodsOrder=GoodsOrder::FindByOrderNo($arr[$k]['order_no']);
-//
-//
 //                }
                 if (empty($arr[$k]['username'])) {
                     $username = $arr[$k]['consignee'];
