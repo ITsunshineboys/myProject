@@ -1897,6 +1897,7 @@ class GoodsOrder extends ActiveRecord
                         $refunds->handle=OrderRefund::HANDLE_AGREE;
                         $refunds->handle_reason='';
                         $refunds->handle_time=$time;
+                        $refunds->refund_time=$time;
                         if (!$refunds->save(false))
                         {
                             $code=500;
@@ -1907,9 +1908,10 @@ class GoodsOrder extends ActiveRecord
                 }
             }else
             {
-                $order_refund[0]->handle=1;
+                $order_refund[0]->handle=OrderRefund::HANDLE_AGREE;
                 $order_refund[0]->handle_reason='';
                 $order_refund[0]->handle_time=$time;
+                $order_refund[0]->refund_time=$time;
                 if (!$order_refund[0]->save(false)){
                     $code=500;
                     $tran->rollBack();
