@@ -17,6 +17,13 @@ class OrderRefund extends ActiveRecord
     const HANDLE_AGREE=1;
     const HANDLE_DISAGREE=2;
     const HANDLE_UN_HANDLE=0;
+
+    const REFUND_TYPE_LINE=1;
+    const REFUND_TYPE_TO_WALLET=2;
+    const REFUND_TYPE_DESC=[
+        self::REFUND_TYPE_LINE=>'线下已退款',
+        self::REFUND_TYPE_TO_WALLET=>'已退至顾客钱包'
+    ];
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -77,17 +84,18 @@ class OrderRefund extends ActiveRecord
             $code=1000;
            return $code;
         }
+
+
         switch ($GoodsOrder->order_refer)
         {
-            case 1:
-                $refund_type='线下已退款';
+            case self::REFUND_TYPE_LINE:
+                $refund_type=self::REFUND_TYPE_DESC[self::REFUND_TYPE_LINE];
                 break;
-            case 2:
-                $refund_type='已退至顾客钱包';
+            case self::REFUND_TYPE_TO_WALLET:
+                $refund_type=self::REFUND_TYPE_DESC[self::REFUND_TYPE_TO_WALLET];
                 break;
         }
         $data=[];
-
         $unshipped=OrderRefund::find()
             ->where(['order_no'=>$order_no,'sku'=>$sku,'order_type'=>GoodsOrder::ORDER_TYPE_UNSHIPPED])
             ->asArray()

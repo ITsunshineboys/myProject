@@ -2132,12 +2132,14 @@ class OrderController extends Controller
                 'data'=>$arr
         ]);
     }
+
     /**
      * 退款处理
      * @return string
+     * @throws Exception
      */
-    public function  actionRefundHandle(){
-
+    public function  actionRefundHandle()
+    {
         $data=UserRole::VerifyRolePermissions(Yii::$app->params['supplierRoleId']);
         {
             if ($data['code']!=200)
