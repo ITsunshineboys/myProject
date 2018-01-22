@@ -4279,7 +4279,7 @@ class MallController extends Controller
         }
 
         $checkRoleRes = User::checkRoleAndGetIdentityByMobile($mobile, Yii::$app->params['ownerRoleId']);
-        if ($checkRoleRes == 1010) {
+        if (is_int($checkRoleRes) && $checkRoleRes == 1010) {
             return Json::encode([
                 'code' => $checkRoleRes,
                 'msg' => Yii::$app->params['errorCodes'][$checkRoleRes],
