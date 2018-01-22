@@ -3079,11 +3079,9 @@ class GoodsOrder extends ActiveRecord
                 || $type==12)
             {
 
-
                 $refund=OrderRefund::find()
                     ->where(['order_no'=>$order_no,'sku'=>$sku])
                     ->one();
-                var_dump($refund);die;
                 if (!$refund)
                 {
                     return [
