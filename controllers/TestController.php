@@ -768,7 +768,8 @@ class TestController extends Controller
                 'goods_id'=>$goods6->id,
                 'goods_num'=>2
             ];
-        $data=GoodsOrder::CalculationFreight($goods);
+//        $data=GoodsOrder::CalculationFreight($goods);
+        $data=GoodsOrder::decomposeFreight($goods);
         var_dump($data);die;
        $data=OrderGoods::find()
            ->where('order_no=0122174907')
