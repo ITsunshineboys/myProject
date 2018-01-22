@@ -58,8 +58,8 @@ app.controller('searchGood', ['$rootScope', '$scope', '_ajax', function ($rootSc
         }
         $scope.params['sort[]'] = 'sold_number:3';       // 销量排序
         $scope.pageConfig.currentPage = 1;
-        $scope.basic.keyword = '';
-        $scope.params.keyword = '';
+        // $scope.basic.keyword = '';
+        // $scope.params.keyword = '';
         tableList();
     });
 
@@ -75,7 +75,7 @@ app.controller('searchGood', ['$rootScope', '$scope', '_ajax', function ($rootSc
     /*搜索*/
     $scope.search = function () {
         $scope.pageConfig.currentPage = 1;
-        $scope.params.status = '4';
+        // $scope.params.status = '4';
         $scope.params.keyword = $scope.basic.keyword;
         tableList();
     }
