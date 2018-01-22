@@ -3302,7 +3302,7 @@ class GoodsOrder extends ActiveRecord
             {
                 if ($GoodList['id']==$cost['id'])
                 {
-                    $GoodList['freight']=$freight*($GoodList['goods_num']/$cost['goods_num']);
+                    $GoodList['freight']=round($freight*($GoodList['goods_num']/$cost['goods_num']));
                 }
             }
         }

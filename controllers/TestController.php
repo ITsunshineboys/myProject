@@ -776,7 +776,7 @@ class TestController extends Controller
             ];
 //        $data=GoodsOrder::CalculationFreight($goods);
         $data=GoodsOrder::decomposeFreight($goods);
-        var_dump($goods);die;
+        var_dump($data);die;
        $data=OrderGoods::find()
            ->where('order_no=0122174907')
            ->asArray()->all();
