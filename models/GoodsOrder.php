@@ -2966,13 +2966,11 @@ class GoodsOrder extends ActiveRecord
      */
     public  static function  GetRefundData($order_no,$sku,$type,$role_id)
     {
-        var_dump(OrderRefund::find()
-            ->where(['order_no'=>$order_no])->all());die;
             $refund_unshipped=OrderRefund::find()
                 ->where(['order_no'=>$order_no,'sku'=>$sku])
                 ->andWhere(['order_type'=>self::ORDER_TYPE_UNSHIPPED])
                 ->one();
-            if ($type==2  )
+            if ($type==2)
             {
                 if (!$refund_unshipped)
                 {

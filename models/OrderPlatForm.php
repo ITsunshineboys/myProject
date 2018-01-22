@@ -48,7 +48,6 @@ class OrderPlatForm extends ActiveRecord
      * @param $reason
      * @param $sku
      * @return int
-     * @throws Exception
      */
     public static  function  platformHandleCloseOrderLine($order_no,$handle_type,$reason,$sku)
     {
@@ -142,7 +141,6 @@ class OrderPlatForm extends ActiveRecord
      * @param $reason
      * @param $sku
      * @return int
-     * @throws Exception
      */
     public static function platformHandleCloseOrderRefundToUser($order_no,$handle_type,$reason,$sku)
     {
