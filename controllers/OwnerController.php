@@ -963,11 +963,6 @@ class OwnerController extends Controller
 
         //总人工费
         $coating_labor_price['price'] = BasisDecorationService::algorithm(1,$total_day,$labor_costs['univalence']);
-        var_dump($total_day);
-        var_dump($concave_line_day);
-        var_dump($putty_day);
-        var_dump($latex_paint_day);
-        die;
         $coating_labor_price['worker_kind'] = $labor_costs['worker_name'];
 
         return Json::encode([
