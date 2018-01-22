@@ -36,7 +36,6 @@ app.controller('account_user_verify_pass', ['$rootScope', '$scope', '$state', '$
             return
         }
         if (value != 'custom') {
-            console.log(123456);
             $scope.table.keyword = '';         // 关键字查询
             $scope.params.keyword = '';
             $scope.params.start_time = '';     // 自定义开始时间
@@ -83,6 +82,7 @@ app.controller('account_user_verify_pass', ['$rootScope', '$scope', '$state', '$
         $scope.params.end_time = '';       // 自定义结束时间
         $scope.params.sort = 2;            //审核时间排序
         $scope.pageConfig.currentPage = 1;
+        $scope.params.keyword = $scope.table.keyword;
         tableList();
     };
 
