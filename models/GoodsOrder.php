@@ -1688,7 +1688,7 @@ class GoodsOrder extends ActiveRecord
                 ->where(['order_no'=>$order_no])
                 ->andWhere(['sku'=>$sku])
                 ->one();
-            switch ($order->shipping_type)
+            switch ($order->shipping_status)
             {
                 case 0:
                     $shipping_status=self::ORDER_TYPE_UNSHIPPED;
