@@ -22,6 +22,7 @@ use app\models\OrderGoodsImage;
 use app\models\OrderLogisticsDistrict;
 use app\models\OrderLogisticsTemplate;
 use app\models\OrderPlatForm;
+use app\models\OrderRefund;
 use app\models\OrderSeries;
 use app\models\OrderStyle;
 use app\models\ShippingCart;
@@ -786,7 +787,8 @@ class TestController extends Controller
 
     public  static  function  actionTest1()
     {
-       $orderGoods=GoodsOrder::FindByOrderNo('0115186634');
+      $data= OrderRefund::find()->where(['order_no'=>0122136022])->one();
+      var_dump($data);die;
 
     }
 
