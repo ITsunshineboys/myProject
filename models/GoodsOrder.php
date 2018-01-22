@@ -2758,8 +2758,6 @@ class GoodsOrder extends ActiveRecord
 //                if ($arr[$k]['status_code']==self::ORDER_TYPE_UNPAID)
 //                {
 //                    $GoodsOrder=GoodsOrder::FindByOrderNo($arr[$k]['order_no']);
-//
-//
 //                }
                 if (empty($arr[$k]['username'])) {
                     $username = $arr[$k]['consignee'];
@@ -3081,6 +3079,7 @@ class GoodsOrder extends ActiveRecord
                 || $type==12)
             {
 
+                echo 1;die;
                 $refund=OrderRefund::find()
                     ->where(['order_no'=>$order_no,'sku'=>$sku])
                     ->one();
