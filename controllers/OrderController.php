@@ -1592,9 +1592,11 @@ class OrderController extends Controller
             'data'=>$paginationData
         ]);
     }
+
     /**
      * 商家后台获取订单详情
      * @return string
+     * @throws Exception
      */
     public function actionGetsupplierorderdetails(){
         $request=Yii::$app->request;
@@ -1628,9 +1630,11 @@ class OrderController extends Controller
             'data' =>$data
         ]);
     }
+
     /**
      * 去发货--商家后台
      * @return string
+     * @throws Exception
      */
     public function actionSupplierdelivery(){
         $request = Yii::$app->request;
@@ -1908,6 +1912,7 @@ class OrderController extends Controller
             ]);
         }
     }
+
     /**
      * @return string
      */
@@ -4718,9 +4723,11 @@ class OrderController extends Controller
             'data' =>$orders
         ]);
     }
+
     /**
      * 测试收货
-     * @return int|string
+     * @return string
+     * @throws Exception
      */
     public function  actionTestConfirmReceipt()
     {

@@ -946,14 +946,14 @@ class GoodsOrder extends ActiveRecord
             $time=time();
             $pay_term=(strtotime($output['create_time'])+24*60*60);
             if (($pay_term-$time)<0){
-                $res=Yii::$app->db->createCommand()->update(OrderGoods::tableName(), ['order_status' => 2],'order_no='.$output['order_no'].' and sku='.$output['sku'])->execute();
+                \Yii::$app->db->createCommand()->update(OrderGoods::tableName(), ['order_status' => 2],'order_no='.$output['order_no'].' and sku='.$output['sku'])->execute();
                 $output['pay_term']=0;
-                $output['status']='已取消';
+                $output['status']=self::ORDER_TYPE_DESC_CANCEL;
             }else{
                 $output['pay_term']=$pay_term-$time;
             }
         }
-        if ($output['status']=='已取消'){
+        if ($output['status']==self::ORDER_TYPE_DESC_CANCEL){
             $output['pay_term']=0;
         }
         return $output;
@@ -1490,7 +1490,7 @@ class GoodsOrder extends ActiveRecord
                 $time=time();
                 $pay_term=(strtotime($list['create_time'])+24*60*60);
                 if (($pay_term-$time)<=0){
-                    $res=Yii::$app->db
+                    \Yii::$app->db
                         ->createCommand()
                         ->update(OrderGoods::tableName(), ['order_status' => 2],'order_no='.$list['order_no'].' and sku='.$list['sku'])
                         ->execute();
@@ -1982,8 +1982,8 @@ class GoodsOrder extends ActiveRecord
 
     /**
      * 身份验证
-     * check user Jurisdiction
      * @param $order_no
+     * @param $sku
      * @param $user
      * @return int
      */
@@ -2018,7 +2018,6 @@ class GoodsOrder extends ActiveRecord
     }
 
     /**
-     *find order type
      * @param $type
      * @return string
      */
@@ -2054,11 +2053,13 @@ class GoodsOrder extends ActiveRecord
         }
         return $where;
     }
+
     /**
      * 余额支付
      * @param $postData
      * @param $user
      * @return int
+     * @throws yii\db\Exception
      */
     public  static  function  orderBalanceSub($postData,$user){
         $orders=explode(',',$postData['list']);
