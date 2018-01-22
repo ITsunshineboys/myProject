@@ -172,9 +172,10 @@ class GoodsAttr extends ActiveRecord
      * Get attributes(set by supplier) by category id
      *
      * @param int $goodsId goods id
+     * @param string $valueSeparator value separator default ","
      * @return array
      */
-    public static function frontDetailsByGoodsId($goodsId)
+    public static function frontDetailsByGoodsId($goodsId, $valueSeparator = ModelService::SEPARATOR_GENERAL)
     {
         $goodsId = (int)$goodsId;
         if ($goodsId <= 0) {
@@ -190,6 +191,9 @@ class GoodsAttr extends ActiveRecord
             ->queryAll();
 
         foreach ($attrs as &$attr) {
+            if ($valueSeparator != ModelService::SEPARATOR_GENERAL) {
+                $attr['value'] = str_replace(ModelService::SEPARATOR_GENERAL, $valueSeparator, $attr['value']);
+            }
             if ($attr['unit'] > 0) {
                 $attr['value'] .= self::UNITS[$attr['unit']];
             }

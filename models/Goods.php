@@ -1479,7 +1479,7 @@ class Goods extends ActiveRecord
             'style_ids' => $styleIds,
             'style_name' => join(ModelService::SEPARATOR_GOODS_VIEW, Style::findNames(['in', 'id', $styleIds])), // $this->style_id ? Style::findOne($this->style_id)->style : '',
             'series_name' => $this->series_id ? Series::findOne($this->series_id)->series : '',
-            'attrs' => GoodsAttr::frontDetailsByGoodsId($this->id),
+            'attrs' => GoodsAttr::frontDetailsByGoodsId($this->id, ModelService::SEPARATOR_GOODS_VIEW),
             'images' => GoodsImage::imagesByGoodsId($this->id),
             'after_sale_services' => $this->afterSaleServicesReadable(), // explode(',', $this->after_sale_services),
             'purchase_price_decoration_company' => StringService::formatPrice($this->purchase_price_decoration_company / 100),
