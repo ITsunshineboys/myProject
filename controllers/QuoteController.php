@@ -995,7 +995,6 @@ class QuoteController extends Controller
     public function actionEffectEditPlot(){
         $request = \Yii::$app->request->post();
 
-
         $province_chinese = District::findByCode((int)$request['province_code']);
         $city_chinese = District::findByCode((int)$request['city_code']);
         $district_chinese = District::findByCode((int)$request['district_code']);
@@ -1184,23 +1183,6 @@ class QuoteController extends Controller
 //                        }
                     }
 
-//                    $ids = implode(',',$ids);
-//
-//                    $effect_plot = EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
-//                    $effect_plot->effect_id=$effect_plot['effect_id'].','.$ids;
-//                    $effect_plot->toponymy=$request['house_name'];
-//                    $effect_plot->province_code=$request['province_code'];
-//                    $effect_plot->city_code=$request['city_code'];
-//                    $effect_plot->district_code=$request['district_code'];
-//                    $effect_plot->street=$request['address'];
-//                    if(!$effect_plot->save(false)){
-//                        $transaction->rollBack();
-//                        $code = 500;
-//                        return Json::encode([
-//                            'code' => $code,
-//                            'msg' => \Yii::$app->params['errorCodes'][$code]
-//                        ]);
-//                    }
                 }
 
                 //  案例修改
@@ -1376,12 +1358,9 @@ class QuoteController extends Controller
                     }
                 }
 
-
-//
             }
 
                 $ids = implode(',',$ids);
-
 
                 $toponymy_edit=EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
                 $toponymy_edit->effect_id=$ids;
