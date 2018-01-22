@@ -720,6 +720,56 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
+        $goods1=Goods::find()
+            ->where(['sku'=>157465])
+            ->one();
+        $goods2=Goods::find()
+            ->where(['sku'=>135467])
+            ->one();
+    $goods3=Goods::find()
+        ->where(['sku'=>36468])
+        ->one();
+     $goods4=Goods::find()
+         ->where(['sku'=>120470])
+        ->one();
+      $goods5=Goods::find()
+          ->where(['sku'=>500000474])
+        ->one();
+       $goods6=Goods::find()
+        ->where(['sku'=>860000478])
+        ->one();
+        $goods[]=
+            [
+                'goods_id'=>$goods1->id,
+                'goods_num'=>5
+            ];
+        $goods[]=
+            [
+                'goods_id'=>$goods2->id,
+                'goods_num'=>2
+            ];
+        $goods[]=
+            [
+                'goods_id'=>$goods3->id,
+                'goods_num'=>1
+            ];
+        $goods[]=
+            [
+                'goods_id'=>$goods4->id,
+                'goods_num'=>5
+            ];
+        $goods[]=
+            [
+                'goods_id'=>$goods5->id,
+                'goods_num'=>1
+            ];
+        $goods[]=
+            [
+                'goods_id'=>$goods6->id,
+                'goods_num'=>2
+            ];
+        $data=GoodsOrder::CalculationFreight($goods);
+        var_dump($data);die;
        $data=OrderGoods::find()
            ->where('order_no=0122174907')
            ->asArray()->all();
