@@ -1375,7 +1375,9 @@ class QuoteController extends Controller
                     }
                 }
 
-                $ids = implode(',',$ids);
+                if(is_array($ids)){
+                    $ids = implode(',',$ids);
+                }
                 var_dump($ids);
 //                $toponymy_edit=EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
 //                $toponymy_edit->effect_id=$ids;
