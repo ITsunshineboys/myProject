@@ -47,10 +47,11 @@ class OrderGoods extends ActiveRecord
     }
 
     /**
-    * @param $order_no
-    * @param $sku
-    * @return array|null|ActiveRecord
-    */
+     * @param $order_no
+     * @param $sku
+     * @param array $select
+     * @return array|null|ActiveRecord
+     */
     public static  function  FindByOrderNoAndSku($order_no,$sku, $select = []){
         $data=self::find()
             ->where(['order_no'=>$order_no])
@@ -65,6 +66,7 @@ class OrderGoods extends ActiveRecord
      * @param array $postData
      * @param $user
      * @return int
+     * @throws \yii\db\Exception
      */
     public static  function  UserConfirmReceipt($postData=[],$user)
     {
@@ -163,6 +165,7 @@ class OrderGoods extends ActiveRecord
      * 添加样板间操作
      * @param $id
      * @return int
+     * @throws \yii\db\Exception
      */
     public  static  function  AddEffect($id)
     {
@@ -250,6 +253,7 @@ class OrderGoods extends ActiveRecord
      * @param $order_no
      * @param $sku
      * @return array
+     * @throws \yii\db\Exception
      */
     public  static  function  GetOrderDetails($order_no,$sku)
     {
