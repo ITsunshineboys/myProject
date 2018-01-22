@@ -68,22 +68,6 @@ class EffectEarnest extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'effect_id' => 'Effect ID',
-            'phone' => 'Phone',
-            'name' => 'Name',
-            'earnest' => 'Earnest',
-            'remark' => 'Remark',
-            'create_time' => 'Create Time',
-            'transaction_no' => 'Transaction No',
-        ];
-    }
-    /**
-     * @inheritdoc
-     */
     public function beforeSave($insert)
     {
 
