@@ -665,8 +665,7 @@
   }
 
   .good-container .shop-card > div:first-child {
-    padding-top: 10px;
-    padding-left: 14px;
+    padding: 10px 14px 0;
   }
 
   .good-container .shop-card > div:first-child span {

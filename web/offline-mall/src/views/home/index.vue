@@ -98,7 +98,7 @@
         console.log(res)
         const imgList = res.data.carousel
         this.banner_list = imgList.map((item, index) => ({
-          url: item.url,
+          url: '/good-detail/' + item.url,
           img: item.image,
           title: '',
           id: item.id
