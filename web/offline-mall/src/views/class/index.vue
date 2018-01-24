@@ -12,7 +12,7 @@
           <div class="hd">
             <span class="text">{{obj.title}}</span>
           </div>
-          <ul class="list" flex="">
+          <ul class="list">
             <li class="cate-item" v-for="item in obj.children">
               <router-link :to="'/goods-list/' + item.id">
                 <div class="cate-img-wrapper">
@@ -43,7 +43,7 @@
         secondClass: []
       }
     },
-    activated () {
+    created () {
       this.isSelectClass = this.$route.params.id
       this.axios.get('/mall/categories-with-children', '', response => {
         console.log(response)
@@ -185,9 +185,13 @@
     text-align: center;
   }
 
-  @media screen and (max-width: 374px)  {
-    .cate-item {
-      /*margin-right: 3%*/
+  @media screen and (max-width: 320px)  {
+    /*.cate-item {
+      margin-right: 10%
+    }*/
+
+    .cate-item:nth-child(3n) {
+      margin-right: 10%;
     }
   }
 </style>

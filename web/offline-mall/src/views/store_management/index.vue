@@ -120,7 +120,7 @@
         allGoodsData: []
       }
     },
-    activated () {
+    created () {
       this.getStoreData()
       // 请求店铺首页推荐商品
       this.axios.get('/supplier/recommend-second', {supplier_id: this.$route.params.id}, res => {
@@ -343,6 +343,19 @@
 
   .btn-group button:first-child {
     border-right: 1px solid #cdd3d7;
+  }
+
+  @media screen and (max-width: 320px) {
+    .store-goods-item {
+      margin-bottom: 10px;
+      margin-right: 10px;
+      width: 140px;
+    }
+
+    .store-goods-item img {
+      width: 140px;
+      height: 140px;
+    }
   }
 </style>
 

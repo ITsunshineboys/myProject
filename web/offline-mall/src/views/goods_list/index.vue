@@ -113,8 +113,8 @@
         }
       }
     },
-    activated () {
-      this.goodsListData = []
+    created () {
+      // this.goodsListData = []
       this.getGoodsList()
     },
     methods: {
