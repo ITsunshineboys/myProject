@@ -245,7 +245,7 @@
               <div v-for="item in all_after_sale_services" v-if="afterservice_arr.indexOf(item) !== -1"
                    class="after-service-item">
                 <i class="iconfont icon-checkbox-circle-line"></i>
-                <span>{{item}}</span>
+                <sp0an>{{item}}</sp0an>
                 <p>清代性灵派诗人袁枚说过这么一句话：“读书不知味,不如束高阁;蠢鱼尔何如,终日食糟粕”，意思就是读书如果不能明白其中的道理，还不如束之高阁，那些只会死读书的书呆子们，相当于在吞食无用的糟粕。</p>
               </div>
             </div>
@@ -457,10 +457,6 @@
 </script>
 
 <style>
-  .good-container * {
-    touch-action: none;
-  }
-
   .good-container {
     background: rgba(255, 255, 255, 1);
     position: relative;
