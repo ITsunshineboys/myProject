@@ -187,37 +187,85 @@ class EffectController extends Controller
         }
 
 
+    }
 
 
-//        if(!$effect_enst_id){
-//            return json_encode([
-//                'code' => $code,
-//                'msg' => \Yii::$app->params['errorCodes'][$code],
-//
-//            ]);
-//        }
-//
-//        if(!$effect_view){
-//            return json_encode([
-//                'code' => $code,
-//                'msg' => \Yii::$app->params['errorCodes'][$code],
-//            ]);
-//        }
-//
-//        if(isset($res) && $effect_enst_id){
-//
-
-
+    /**
+     * 删除完成的样板间
+     * @return string
+     */
+    public function actionEffectApplyDel(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code = 1000;
+        $id=(int)Yii::$app->request->post('id');
+        if(!$id){
+            Json::encode([
+                'code'=>$code,
+                'msg'=>Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $res=EffectEarnest::deleteAll(['id'=>$id]);
+        if(!$res){
+            $code=500;
+            Json::encode([
+                'code'=>$code,
+                'msg'=>Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+        ]);
 
     }
+    /**
+     * 样板间完成
+     * @return string
+     */
+    public function actionEffectComplete(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $id=(int)Yii::$app->request->post('id');
+        if(!$id){
+            $code=1000;
+            Json::encode([
+                'code'=>$code,
+                'msg'=>Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $res=EffectEarnest::find()->where(['id'=>$id])->one();
+        $res->complete_status=self::PAY_STATUS;
+        if(!$res){
+            $code=500;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok'
+        ]);
+    }
+
     /**
      * 后台样板间列表搜索
      * @return string
      *
      */
-
-
-
     public function actionEffectList()
     {
         $user = Yii::$app->user->identity;
