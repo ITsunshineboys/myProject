@@ -861,8 +861,8 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
             style:$scope.params.style.id,
             type:0,
             requirement:$scope.special_request,
-            original_price:$scope.total_prices,
-            sale_price:$scope.special_offer
+            original_price:$scope.total_prices.toFixed(2),
+            sale_price:$scope.special_offer.toFixed(2)
         }
         for(let [key,value] of $scope.materials.entries()){
             for(let [key1,value1] of value.second_level.entries()){
@@ -927,8 +927,8 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
             style:$scope.params.style.id,
             type:0,
             requirement:$scope.special_request,
-            original_price:$scope.total_prices,
-            sale_price:$scope.special_offer
+            original_price:$scope.total_prices.toFixed(2),
+            sale_price:$scope.special_offer.toFixed(2)
         }
         for(let [key,value] of $scope.materials.entries()){
             for(let [key1,value1] of value.second_level.entries()){
