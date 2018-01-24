@@ -859,7 +859,7 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
             stairway:$scope.active_case.stairway,
             series:$scope.params.series.id,
             style:$scope.params.style.id,
-            type:0,
+            type:1,
             requirement:$scope.special_request,
             original_price:$scope.total_prices.toFixed(2),
             sale_price:$scope.special_offer.toFixed(2)
