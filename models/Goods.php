@@ -274,9 +274,27 @@ class Goods extends ActiveRecord
      */
     public static function disableGoodsByCategoryIds(array $categoryIds, ActiveRecord $operator, $offlineReason = '')
     {
-        foreach ($categoryIds as $categoryId) {
-            self::disableGoodsByCategoryId($categoryId, $operator, $offlineReason);
-        }
+        $where = [
+            'and',
+            ['status' => self::STATUS_ONLINE],
+            ['in', 'category_id', $categoryIds]
+        ];
+        self::updateAll([
+            'status' => self::STATUS_OFFLINE,
+            'offline_time' => time(),
+            'offline_reason' => $offlineReason ? $offlineReason : Yii::$app->params['category']['offline_reason'],
+            'offline_uid' => $operator->id,
+            'offline_person' => $operator->nickname,
+        ], $where);
+
+        $where = [
+            'and',
+            ['status' => self::STATUS_WAIT_ONLINE],
+            ['in', 'category_id', $categoryIds]
+        ];
+        self::updateAll([
+            'reason' => $offlineReason ? $offlineReason : Yii::$app->params['category']['offline_reason'],
+        ], $where);
     }
 
     /**
@@ -469,9 +487,27 @@ class Goods extends ActiveRecord
      */
     public static function disableGoodsByBrandIds(array $brandIds, ActiveRecord $operator)
     {
-        foreach ($brandIds as $brandId) {
-            self::disableGoodsByBrandId($brandId, $operator);
-        }
+        $where = [
+            'and',
+            ['status' => self::STATUS_ONLINE],
+            ['in', 'brand_id', $brandIds]
+        ];
+        self::updateAll([
+            'status' => self::STATUS_OFFLINE,
+            'offline_time' => time(),
+            'offline_reason' => Yii::$app->params['brand']['offline_reason'],
+            'offline_uid' => $operator->id,
+            'offline_person' => $operator->nickname,
+        ], $where);
+
+        $where = [
+            'and',
+            ['status' => self::STATUS_WAIT_ONLINE],
+            ['in', 'brand_id', $brandIds]
+        ];
+        self::updateAll([
+            'reason' => Yii::$app->params['brand']['offline_reason'],
+        ], $where);
     }
 
     /**
