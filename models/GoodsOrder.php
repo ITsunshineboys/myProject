@@ -265,7 +265,7 @@ class GoodsOrder extends ActiveRecord
         $address_id=$arr[2];
         $pay_name=$arr[3];
         $invoice_id=$arr[4];
-        $supplier_id=$arr[5];
+//        $supplier_id=$arr[5];
         $freight=$arr[6];
         $return_insurance=$arr[7];
         $buyer_message=$arr[8];
