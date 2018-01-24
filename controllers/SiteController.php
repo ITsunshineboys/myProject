@@ -1493,7 +1493,10 @@ class SiteController extends Controller
         }
         if (isset($select))
         {
-            $default=$select;
+            if ($select==0 || $select==1)
+            {
+                $default=$select;
+            }
         }
         $code = UserAddress::UserAddressAdd($district_code, $region, $consignee, $mobile, $user->id,$default);
         if ($code == 200) {
@@ -1594,7 +1597,7 @@ class SiteController extends Controller
         $district_code = trim($request->post('district_code'));
         $mobile = trim($request->post('mobile', ''));
         $region = trim($request->post('region', ''));
-        $default=trim($request->post('default', '1'));
+        $default=$request->post('default', '1');
         $select=$request->post('select');
         if (!$consignee || !$address_id || !$district_code || !$mobile || !$region) {
             $code = 1000;
@@ -1605,16 +1608,21 @@ class SiteController extends Controller
         }
         if (isset($select))
         {
-            $default=$select;
+            if ($select==0 || $select==1)
+            {
+                $default=$select;
+            }
         }
         $code = UserAddress::updateAddress($consignee, $address_id, $district_code, $mobile, $region,$default);
         if ($code == 200) {
-            return Json::encode([
+            return Json::encode
+            ([
                 'code' => $code,
                 'msg' => 'ok'
             ]);
         } else {
-            return Json::encode([
+            return Json::encode
+            ([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
