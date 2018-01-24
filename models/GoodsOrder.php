@@ -1184,7 +1184,8 @@ class GoodsOrder extends ActiveRecord
      * @param $handle_type
      * @param $reason
      * @param $sku
-     * @return \Exception|int|\Yii\db\Exception
+     * @return int
+     * @throws \Yii\db\Exception
      */
     public static  function PlatformAdd($order_no,$handle_type,$reason,$sku){
         $OrderPlatForm=OrderPlatForm::find()

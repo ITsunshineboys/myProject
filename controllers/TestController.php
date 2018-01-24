@@ -394,10 +394,8 @@ class TestController extends Controller
 //        {
 //            echo 2;
 //        };
-
         $user=User::find()->all();
         return Json::encode($user);
-
     }
 
     public  function actionSendData(){
@@ -414,14 +412,13 @@ class TestController extends Controller
         $datas['DataSign'] = Express::encrypt($requestData, '0cdb787d-0542-4bef-bd2e-02826d7e52d4');
         $result=Express::sendPost('http://api.kdniao.cc/Ebusiness/EbusinessOrderHandle.aspx', $datas);
         var_dump($result);die;
-        //根据公司业务处理返回的信息......
-
     }
 
 
-     /**
+    /**
      * 添加测试订单数据
-     * @return string
+     * @return bool|string
+     * @throws Exception
      */
     public function actionAddTestOrderData(){
         $request=Yii::$app->request;
@@ -565,14 +562,12 @@ class TestController extends Controller
                     ]);
                 }
             }
-
             $code=OrderStyle::AddNewData($goods->style_id,$order_no,$goods->sku);
             if ($code!=200)
             {
                 $tran->rollBack();
                 return false;
             }
-
             $code=OrderSeries::AddNewData($goods->series_id,$order_no,$goods->sku);
             if ($code!=200)
             {
@@ -612,7 +607,6 @@ class TestController extends Controller
                 $tran->rollBack();
                 return false;
             }
-
             $LogisticTemp=LogisticsTemplate::find()->where(['id'=>$goods->logistics_template_id])->asArray()->one();
             if ($LogisticTemp)
             {
@@ -649,14 +643,11 @@ class TestController extends Controller
                     }
                 }
             }
-
-
             $date=date('Ymd',time());
             $GoodsStat=GoodsStat::find()
                 ->where(['supplier_id'=>$goods->supplier_id])
                 ->andWhere(['create_date'=>$date])
                 ->one();
-
             if (!$GoodsStat)
             {
                 $GoodsStat=new GoodsStat();
@@ -679,7 +670,6 @@ class TestController extends Controller
                     return false;
                 }
             }
-
             if ($goods->left_number<$goods_num)
             {
                 $tran->rollBack();
@@ -692,9 +682,6 @@ class TestController extends Controller
                 $tran->rollBack();
                 return false;
             }
-
-
-
             $orderGoodsdescription=new OrderGoodsDescription();
             $orderGoodsdescription->order_no=$order_no;
             $orderGoodsdescription->sku=$goods->sku;
@@ -777,12 +764,6 @@ class TestController extends Controller
         ];
         $data=GoodsOrder::decomposeFreight($goods);
         var_dump($data);die;
-//       $data=OrderGoods::find()
-//           ->where('order_no=0122174907')
-//           ->asArray()
-//           ->all();
-//       var_dump($data);
-
     }
 
     public  static  function  actionTest1()

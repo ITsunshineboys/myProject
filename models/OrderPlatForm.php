@@ -141,6 +141,7 @@ class OrderPlatForm extends ActiveRecord
      * @param $reason
      * @param $sku
      * @return int
+     * @throws Exception
      */
     public static function platformHandleCloseOrderRefundToUser($order_no,$handle_type,$reason,$sku)
     {
@@ -153,6 +154,7 @@ class OrderPlatForm extends ActiveRecord
         $time=time();
         $tran=\Yii::$app->db->beginTransaction();
         try{
+
             $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
             if (!$OrderGoods)
             {
@@ -169,7 +171,6 @@ class OrderPlatForm extends ActiveRecord
                     $OrderGoods->customer_service=2;
                     break;
             }
-//            $OrderGoods->order_status=2;
             $res2=$OrderGoods->save(false);
             if (!$res2){
                 $code=500;
@@ -191,6 +192,7 @@ class OrderPlatForm extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
+
             if ($OrderGoods->shipping_status==0){
                 $refund_money=$OrderGoods->goods_price*$OrderGoods->goods_number+$OrderGoods->freight;
                 $reduce_money=$OrderGoods->supplier_price*$OrderGoods->goods_number+$OrderGoods->freight;
@@ -217,31 +219,33 @@ class OrderPlatForm extends ActiveRecord
             $supplier=Supplier::find()
                 ->where(['id'=>$GoodsOrder->supplier_id])
                 ->one();
-            $supplier->balance=$supplier->balance-$reduce_money;
-            $supplier->availableamount=$supplier->availableamount-$reduce_money;
-            $res4=$supplier->save(false);
-            if (!$res4){
-                $code=500;
-                $tran->rollBack();
-                return $code;
+            if ($OrderGoods->order_status==1   && $OrderGoods->customer_service!=2)
+            {
+
+                $supplier->balance=$supplier->balance-$reduce_money;
+                $supplier->availableamount=$supplier->availableamount-$reduce_money;
+                if (!$supplier->save(false)){
+                    $code=500;
+                    $tran->rollBack();
+                    return $code;
+                }
+                $transaction_no=GoodsOrder::SetTransactionNo($supplier->id);
+                $supplier_accessdetail=new UserAccessdetail();
+                $supplier_accessdetail->uid=$supplier->uid;
+                $supplier_accessdetail->role_id=6;
+                $supplier_accessdetail->access_type=2;
+                $supplier_accessdetail->access_money=$reduce_money;
+                $supplier_accessdetail->order_no=$order_no;
+                $supplier_accessdetail->sku=$sku;
+                $supplier_accessdetail->create_time=time();
+                $supplier_accessdetail->transaction_no=$transaction_no;
+                if (!$supplier_accessdetail->save(false))
+                {
+                    $code=500;
+                    $tran->rollBack();
+                    return $code;
+                }
             }
-            $transaction_no=GoodsOrder::SetTransactionNo($supplier->id);
-            $supplier_accessdetail=new UserAccessdetail();
-            $supplier_accessdetail->uid=$supplier->uid;
-            $supplier_accessdetail->role_id=6;
-            $supplier_accessdetail->access_type=2;
-            $supplier_accessdetail->access_money=$reduce_money;
-            $supplier_accessdetail->order_no=$order_no;
-            $supplier_accessdetail->sku=$sku;
-            $supplier_accessdetail->create_time=time();
-            $supplier_accessdetail->transaction_no=$transaction_no;
-            $res5=$supplier_accessdetail->save(false);
-            if (!$res5){
-                $code=500;
-                $tran->rollBack();
-                return $code;
-            }
-            //减少销量，减少销售额，增加库存.减少商品销量
             //减少销量，减少销售额，增加库存.减少商品销量
             $code=OrderRefund::ReduceSold($supplier->id,$OrderGoods->goods_number,$OrderGoods->goods_price,$OrderGoods->freight,$sku);
             if ($code!=200)
@@ -250,6 +254,7 @@ class OrderPlatForm extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
+
             //消息推送
             $data=UserNewsRecord::AddOrderNewRecord(User::findOne($GoodsOrder->user_id), '平台介入，关闭订单退款', $GoodsOrder->role_id,"订单号{$order_no},商品编号{$sku}.您的订单已由平台介入关闭，退款金额".StringService::formatPrice($refund_money*0.01)."元已打入您的余额，请注意查看。", $order_no, $sku,GoodsOrder::STATUS_DESC_DETAILS);
             if ($data!=200)
@@ -258,17 +263,20 @@ class OrderPlatForm extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             };
-            $data1=UserNewsRecord::AddOrderNewRecord(User::findOne($supplier->uid), '平台介入，关闭订单退款', \Yii::$app->params['supplierRoleId'],"订单号{$order_no},商品编号{$sku}已进行平台介入关闭并退款，已从您的余额扣除".StringService::formatPrice($reduce_money*0.01)."元,若有疑问请联系客服。", $order_no, $sku,GoodsOrder::STATUS_DESC_DETAILS);
+
+            //退款，已从您的余额扣除
+            $data1=UserNewsRecord::AddOrderNewRecord(User::findOne($supplier->uid), '平台介入，关闭订单退款', \Yii::$app->params['supplierRoleId'],"订单号{$order_no},商品编号{$sku}已进行平台介入关闭并".StringService::formatPrice($reduce_money*0.01)."元,若有疑问请联系客服。", $order_no, $sku,GoodsOrder::STATUS_DESC_DETAILS);
             if ($data1!=200)
             {
                 $code= $data;
                 $tran->rollBack();
                 return $code;
             };
+
             $tran->commit();
             $code=200;
             return $code;
-        }catch(Exception $e){
+        }catch(\Exception $e){
             $code=500;
             $tran->rollBack();
             return $code;
@@ -283,6 +291,7 @@ class OrderPlatForm extends ActiveRecord
      * @param $reason
      * @param $sku
      * @return int
+     * @throws Exception
      */
     public  static  function  platformHandCloseOrder($order_no,$handle_type,$reason,$sku)
     {
