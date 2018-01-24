@@ -19,6 +19,7 @@ app.controller("template_details_ctrl", ['$rootScope',"$scope", "$state", "$stat
     $scope.city = [];   // 城市
     $scope.selectCity = []; // 选中的城市
     $scope.packageMail = true; // 默认不包邮
+    $scope.modalName = false    // 模板名称是否出错
 
     // 物流模板信息
     _ajax.get('/mall/logistics-template-view', {id: id}, function (res) {
@@ -226,10 +227,19 @@ app.controller("template_details_ctrl", ['$rootScope',"$scope", "$state", "$stat
 
     // 保存物流模板详情
     $scope.getReally = function () {
+        let reg = /^[A-Za-z0-9\u4e00-\u9fa5]+$/;
         if($scope.params.name === ''){
             alert('请输入模板名称');
             return
         }
+
+        if (!reg.test($scope.params.name)) {
+            $scope.modalName = true
+            return
+        } else {
+            $scope.modalName = false
+        }
+
         if(cityChecked.length === 0){
             alert('请选择地区');
             return
