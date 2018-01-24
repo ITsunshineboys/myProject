@@ -9,6 +9,8 @@ use yii\db\ActiveRecord;
 class UserAddress extends  ActiveRecord
 {
     const USER_ADDRESS = 'user_address';
+    const ADDRESS_MSG_NORMAL='收货地址正常';
+    const ADDRESS_MSG_ABNORMAL='收货地址异常';
 
     /**
      * @return string 返回该AR类关联的数据表名

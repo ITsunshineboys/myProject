@@ -1862,7 +1862,7 @@ class GoodsOrder extends ActiveRecord
                 $refund_money=$OrderGoods->goods_price*$OrderGoods->goods_number;
             }
             $order_refund=OrderRefund::find()
-                ->where(['order_no'=>$order_no,'sku'=>$sku,'handle'=>0])
+                ->where(['order_no'=>$order_no,'sku'=>$sku,'handle'=>OrderRefund::HANDLE_UN_HANDLE])
                 ->all();
             if (!$order_refund)
             {
@@ -1877,7 +1877,7 @@ class GoodsOrder extends ActiveRecord
                     if ($refunds->order_type=self::ORDER_TYPE_UNRECEIVED)
                     {
                         $order_refund_unshipped=OrderRefund::find()
-                            ->where(['order_no'=>$order_no,'sku'=>$sku,'handle'=>0])
+                            ->where(['order_no'=>$order_no,'sku'=>$sku,'handle'=>OrderRefund::HANDLE_UN_HANDLE])
                             ->andWhere(['order_type'=>self::ORDER_TYPE_UNSHIPPED])
                             ->one();
                         if ($order_refund_unshipped)

@@ -1423,16 +1423,19 @@ class OrderController extends Controller
      * 判断收货地址是否在指定区域内(新)
      * @return string
      */
-    public function actionJudgeAddress(){
+    public function actionJudgeAddress()
+    {
         $request=Yii::$app->request;
         $district_code=trim($request->get('district_code',''));
         $goods_id=trim($request->get('goods_id',''));
         if (
             !$district_code
             || !$goods_id
-        ) {
+        )
+        {
             $code=1000;
-            return Json::encode([
+            return Json::encode
+            ([
                 'code' => $code,
                 'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
@@ -1454,12 +1457,12 @@ class OrderController extends Controller
         if ($data==200){
             return Json::encode([
                 'code' => 200,
-                'msg' =>'收货地址正常',
+                'msg' =>UserAddress::ADDRESS_MSG_NORMAL,
             ]);
         }else{
             return Json::encode([
                 'code' => $data,
-                'msg' => '收货地址异常'
+                'msg' =>UserAddress::ADDRESS_MSG_ABNORMAL
             ]);
         }
     }
