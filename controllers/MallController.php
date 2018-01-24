@@ -2538,8 +2538,10 @@ class MallController extends Controller
                 ]);
             }
 
+            $keyword = trim(Yii::$app->request->get('keyword', ''));
             $where = 'review_status = ' . GoodsBrand::REVIEW_STATUS_APPROVE;
             $where .= " and status = {$status}";
+            $where .= " and name like '%{$keyword}%'";
 
             $pid = (int)Yii::$app->request->get('pid', 0);
             if ($pid > 0) {
