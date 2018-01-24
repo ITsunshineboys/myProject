@@ -820,22 +820,22 @@ class BasisDecorationService
 
         foreach ($goods as $one_goods) {
             switch ($one_goods) {
-//                case $one_goods['title'] == self::goodsNames()['wood_floor'] && $one_goods['series_id'] == $post['series']: // 木地板
-//                    $goods_area = GoodsAttr::findByGoodsIdUnits($one_goods['id'],'');
-//                    foreach ($goods_area as $one_goods_area) {
-//                        if ($one_goods_area['name'] == self::UNITS['length']) {
-//                            $length = $one_goods_area['value'];
-//                        }
-//                        if ($one_goods_area['name'] == self::UNITS['breadth']) {
-//                            $breadth = $one_goods_area['value'];
-//                        }
-//                    }
-//                    $area = round(self::algorithm(1,$length,$breadth),2);
-//                    $one_goods['quantity'] = (int)ceil(self::algorithm(6,$post['bedroom_area'],$area));
-//                    $one_goods['cost'] = round(self::algorithm(1,$one_goods['platform_price'],$one_goods['quantity']),2);
-//                    $one_goods['procurement'] = round(self::algorithm(1,$one_goods['purchase_price_decoration_company'],$one_goods['quantity']),2);
-//                    $wood_floor [] = $one_goods;
-//                    break;
+                case $one_goods['title'] == self::goodsNames()['wood_floor'] && $one_goods['series_id'] == $post['series']: // 木地板
+                    $goods_area = GoodsAttr::findByGoodsIdUnits($one_goods['id'],'');
+                    foreach ($goods_area as $one_goods_area) {
+                        if ($one_goods_area['name'] == self::UNITS['length']) {
+                            $length = $one_goods_area['value'];
+                        }
+                        if ($one_goods_area['name'] == self::UNITS['breadth']) {
+                            $breadth = $one_goods_area['value'];
+                        }
+                    }
+                    $area = round(self::algorithm(1,$length,$breadth),2);
+                    $one_goods['quantity'] = (int)ceil(self::algorithm(6,$post['bedroom_area'],$area));
+                    $one_goods['cost'] = round(self::algorithm(1,$one_goods['platform_price'],$one_goods['quantity']),2);
+                    $one_goods['procurement'] = round(self::algorithm(1,$one_goods['purchase_price_decoration_company'],$one_goods['quantity']),2);
+                    $wood_floor [] = $one_goods;
+                    break;
 //                case $one_goods['title'] == self::goodsNames()['marble']: // 大理石
 //                    if ($post['window'] > 1) {
 //                        $one_goods['quantity'] = $post['window'];
