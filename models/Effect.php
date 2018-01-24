@@ -263,6 +263,7 @@ class Effect extends ActiveRecord
         }
 
         foreach ($material as &$value){
+
             $goods_cate_id=Goods::find()->select('brand_id,category_id')->where(['id'=>$value['goods_id']])->asArray()->one();
             $value['price']= sprintf('%.2f',(float)$value['price']*0.01);
             $value['cate_level3']=GoodsCategory::find()->select('title')
@@ -281,7 +282,6 @@ class Effect extends ActiveRecord
 
 
         }
-
 
         $material_grop=array_values(self::array_group_by($material,'first_cate_id'));
 
