@@ -41,6 +41,7 @@
 
 
 
+
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -86,6 +87,7 @@
 
 
 
+
           </div>
           <span></span>
           <div>
@@ -93,10 +95,12 @@
 
 
 
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
+
 
 
 
@@ -165,15 +169,18 @@
 
 
 
+
         </flexbox-item>
         <flexbox-item @click.native="showCount('cart')" :span="110/375">
           加入购物车
 
 
 
+
         </flexbox-item>
         <flexbox-item @click.native="showCount('now')" :span="110/375">
           立即购买
+
 
 
 
@@ -206,9 +213,11 @@
 
 
 
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
+
 
 
 
