@@ -261,6 +261,7 @@ class Effect extends ActiveRecord
         if(!$material){
             $data['material']=null;
         }
+        var_dump($material);die;
         foreach ($material as &$value){
             $goods_cate_id=Goods::find()->select('brand_id,category_id')->where(['id'=>$value['goods_id']])->asArray()->one();
             $value['price']= sprintf('%.2f',(float)$value['price']*0.01);
@@ -279,7 +280,8 @@ class Effect extends ActiveRecord
                 ->asArray()->one()['title'];
 
         }
-        var_dump($material);die;
+
+
         $material_grop=self::array_group_by($material,'first_cate_id');
 
         $data['material']=$material_grop;
