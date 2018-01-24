@@ -139,8 +139,9 @@
     color: rgba(153, 153, 153, 1);
     line-height: 18px;
   }
-
+</style>
+<style>
   .pswp--supports-fs .pswp__button--fs {
-    display: none;
+    display: none !important;
   }
 </style>
