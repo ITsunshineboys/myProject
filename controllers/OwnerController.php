@@ -1457,13 +1457,13 @@ class OwnerController extends Controller
 
         //无计算公式
         $assort_material = AssortGoods::find()->asArray()->where(['state'=>1])->all();
-        foreach ($assort_material as $one_without_assort){
-            $without_assort_name[] = $one_without_assort['category_id'];
+        if ($assort_material){
+            foreach ($assort_material as $one_without_assort){
+                $without_assort_name[] = $one_without_assort['category_id'];
+            }
+            $_goods = Goods::assortList($without_assort_name,$get['city']);
+            $material[]= BasisDecorationService::withoutAssortGoods($_goods,$assort_material,$get);
         }
-
-        $_goods = Goods::assortList($without_assort_name,$get['city']);
-        $material[]= BasisDecorationService::withoutAssortGoods($_goods,$assort_material,$get);
-
 
 
 
