@@ -32,9 +32,10 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
     }
     $scope.params = {
         page: 1,                        // 当前页数
-        status: '1',                  // 0：已下架，1：已上架
+        status: '1',                   // 0：已下架，1：已上架
         pid: '0',                      // 父分类id，0：全部
-        'sort[]':'online_time:3'
+        'sort[]': 'online_time:3',       // 时间排序
+        keyword: ''                     // 搜索
     };
     let tablePages=function () {
       $scope.params.page=$scope.wjConfig.currentPage;//点击页数，传对应的参数
@@ -81,6 +82,8 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
     $scope.params.status='0';
     $scope.params.pid='0';
     $scope.params['sort[]']='offline_time:3';//下架时间，降序排序
+    $scope.params.keyword = '';
+    $scope.shelves_search_input = '';
   }else if($stateParams.check_flag){
     $scope.on_flag=false;
     $scope.down_flag=false;
@@ -97,6 +100,8 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
     $scope.params.status='1';
     $scope.params.pid='0';
     $scope.params['sort[]']='online_time:3';//上架时间，降序
+    $scope.params.keyword = '';
+    $scope.shelves_search_input = '';
   }
 
 
@@ -114,6 +119,8 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
     $scope.params.status='1';
     $scope.params.pid='0'
     $scope.params['sort[]']='online_time:3';//上架时间，降序
+    $scope.params.keyword = '';
+    $scope.shelves_search_input = '';
     tablePages();
   };
   //已下架
@@ -128,10 +135,11 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
     $scope.table.roles=[];//清空全选状态
     $scope.wjConfig.currentPage=1;
     $scope.time_img='lib/images/sort_down.png';//时间排序图片
-    $scope.params.page=1;
     $scope.params.status='0';
     $scope.params.pid='0'
     $scope.params['sort[]']='offline_time:3';//下架时间，降序排序
+    $scope.params.keyword = '';
+    $scope.shelves_search_input = '';
     tablePages();
   };
 
@@ -310,6 +318,21 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
     })
   };
 
+  // 已上架和已下架--搜索
+  $scope.shelves_brand_search=function () {
+    $scope.params.keyword= $scope.shelves_search_input;
+    $scope.firstselect=0;
+    $scope.two_select_flag=false;
+    $scope.three_select_flag=false;
+    $scope.table.roles=[];//清空全选状态
+    $scope.wjConfig.currentPage=1;
+    $scope.time_img='lib/images/sort_down.png';//时间排序图片
+    $scope.params.status='1';
+    $scope.params.pid='0'
+    $scope.params['sort[]']='online_time:3';//下架时间，降序排序
+    tablePages();
+  }
+
   /*==============================品牌使用审核==================================*/
     /*分页配置*/
     $scope.brand_Config = {
@@ -380,7 +403,7 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
         brand_Pages();
     };
 
-    //搜索
+    //品牌使用审核-搜索
     $scope.brand_search_btn=function () {
        $scope.brand_params.keyword= $scope.search_input_ok;
        $scope.brand_params.review_status=$scope.brand_types_arr[0].id;
