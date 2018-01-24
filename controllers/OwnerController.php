@@ -1402,10 +1402,13 @@ class OwnerController extends Controller
 
         foreach ($coefficient as $one_coefficient) {
             $classify = GoodsCategory::find()->select('id,title')->where(['id' => $one_coefficient['category_id']])->asArray()->one();
-            foreach ($post['list'] as &$materials) {
-                if ($classify['id'] == $materials['category_id']) {
-                    $materials['goods_price'] = $materials['procurement'] / ($one_coefficient['coefficient'] / 100);
-                }
+        }
+
+        foreach ($post['list'] as &$materials) {
+            if ($classify['id'] == $materials['category_id']) {
+                $materials['goods_price'] = $materials['procurement'] / ($one_coefficient['coefficient'] / 100);
+            }elseif ($classify['id'] != $materials['category_id']) {
+                $materials['goods_price'] = $materials['procurement'] ;
             }
         }
 
