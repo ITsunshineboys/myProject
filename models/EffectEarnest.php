@@ -352,6 +352,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
             $v['add_time']=date('Y-m-d H:i:s',$v['create_time']);
             $v['style']=$v['series'].'-'.$v['style'];
             unset($v['series']);
+            unset($v['create_time']);
         }
         return $data;
 
