@@ -56,7 +56,7 @@
             </span>
             <div class="col-sm-10 form-inline">
                 <p>
-                    <input class="form-control" type="text" placeholder="请输入名称"
+                    <input class="form-control" type="text" placeholder="请输入名称" maxlength="8"
                            ng-class="{'reg-error': licensed.isName}" ng-focus="licensed.isName = false" ng-model="licensed.name">
                 </p>
                 <p><img ngf-thumbnail="licensed.file || 'lib/images/default.png'" class="picstyle"></p>
@@ -85,7 +85,7 @@
                     <span class="addpic" style="top:8px;" ng-click="delLicensed($index)">
                         <i class="glyphicon glyphicon-minus"></i>
                     </span>
-                    <input class="form-control" type="text" placeholder="请输入名称"
+                    <input class="form-control" type="text" placeholder="请输入名称" maxlength="8"
                            ng-class="{'reg-error': obj.isName}" ng-focus="obj.isName = false" ng-model="obj.name">
                 </p>
                 <p><img ngf-thumbnail="obj.file || 'lib/images/default.png'" class="picstyle"></p>
