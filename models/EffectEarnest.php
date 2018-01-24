@@ -180,9 +180,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
      * @return bool|string
      */
     public static function appAddEffect($uid,$post,$item){
-        var_dump($post['original_price']);
-        var_dump($post['sale_price']);
-        die;
+
         $effects=Effect::find()
             ->select('sort_id')
             ->asArray()

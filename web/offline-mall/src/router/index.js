@@ -35,6 +35,10 @@ export default new Router({
       path: '/good-detail/:id',
       name: 'GoodDetail',
       component: GoodDetail
+      // meta: {
+      //   title: '列表页',
+      //   keepAlive: false
+      // }
     }, {
       path: '/all-comment/:id',
       name: 'AllComment',
@@ -77,4 +81,11 @@ export default new Router({
       component: Agreement
     }
   ]
+  // scrollBehavior (to, from, savedPosition) {
+  //   if (savedPosition) {
+  //     return savedPosition
+  //   } else {
+  //     return { x: 0, y: to.meta.savedPosition || 0 }
+  //   }
+  // }
 })

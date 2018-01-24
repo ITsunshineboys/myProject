@@ -42,6 +42,7 @@
 
 
 
+
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -88,6 +89,7 @@
 
 
 
+
           </div>
           <span></span>
           <div>
@@ -96,10 +98,12 @@
 
 
 
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
+
 
 
 
@@ -170,6 +174,7 @@
 
 
 
+
         </flexbox-item>
         <flexbox-item @click.native="showCount('cart')" :span="110/375">
           加入购物车
@@ -177,9 +182,11 @@
 
 
 
+
         </flexbox-item>
         <flexbox-item @click.native="showCount('now')" :span="110/375">
           立即购买
+
 
 
 
@@ -214,9 +221,11 @@
 
 
 
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
+
 
 
 
@@ -357,7 +366,8 @@
         ]
       }
     },
-    activated () {
+    created () {
+      console.log(this.$route)
       this.good_id = this.$route.params.id // 商品id
       this.isShow = false
       this.axios.get('/mall/goods-view', {id: this.good_id}, (res) => {
@@ -447,6 +457,10 @@
 </script>
 
 <style>
+  .good-container * {
+    touch-action: none;
+  }
+
   .good-container {
     background: rgba(255, 255, 255, 1);
     position: relative;
@@ -616,7 +630,6 @@
   /*商品名称等内容*/
   .good-container .title-container {
     box-sizing: border-box;
-    height: 120px;
     padding: 15px 14px 20px;
   }
 
