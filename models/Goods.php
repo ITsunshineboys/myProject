@@ -1408,10 +1408,12 @@ class Goods extends ActiveRecord
             $cate->refresh();
             $categoryTitle = $cate->fullTitle();
         }
+        $supplier = Supplier::findOne($this->supplier_id);
         return [
             'id' => $this->id,
             'logistics_template_id' => $this->logistics_template_id,
             'category_title' => $categoryTitle,
+            'shop_name' => $supplier ? $supplier->shop_name : '',
             'title' => $this->title,
             'subtitle' => $this->subtitle,
             'cover_image' => $this->cover_image,
