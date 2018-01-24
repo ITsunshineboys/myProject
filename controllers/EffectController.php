@@ -96,45 +96,6 @@ class EffectController extends Controller
 
 
     /**
-     * 查看样板间备注详情
-     * @return string
-     *
-     */
-    public function actionRemarkView(){
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $code=1000;
-        $request=new Request();
-
-        $effect_id = trim($request->get('id', ''), '');
-        if (!$effect_id) {
-            return json_encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-
-
-            ]);
-        }else{
-
-            $model=Effectearnest::find()->where(['effect_id'=>$effect_id])->one();
-            return json_encode([
-                'code' => 200,
-                'msg' => 'ok',
-                'data'=>$model->remark
-
-            ]);
-        }
-
-
-    }
-
-    /**
      * 查看样板间详情
      * @return string
      *
@@ -392,7 +353,7 @@ class EffectController extends Controller
             ]);
         }
         $code=1000;
-        $effect_enst_id = trim(Yii::$app->request->get('effect_enst_id', ''), '');
+        $effect_enst_id = (int)trim(Yii::$app->request->get('effect_enst_id', ''), '');
         if(!$effect_enst_id){
             return Json::encode([
                 'code' => $code,
@@ -469,48 +430,6 @@ class EffectController extends Controller
     }
 
 
-    /**
-     * 后台样板间列表查看或编辑备注
-     * @return string
-     *
-     */
-    public function actionEditRemark(){
-
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $code=1000;
-        $request=new Request();
-        if($request->isPost){
-            $effect_id=trim($request->post('id',''),'');
-            if(!$effect_id){
-                return json_encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-            $model=Effectearnest::findone(['id'=>$effect_id]);
-            $model->remark=trim($request->post('remark',''),'');
-            $model->save();
-            return json_encode([
-                'code' => 200,
-                'msg' => 'ok',
-            ]);
-        }else{
-            $code=1050;
-            return json_encode([
-                'code'=>$code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-
-    }
 
 
 }
