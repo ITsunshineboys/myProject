@@ -140,4 +140,7 @@
     line-height: 18px;
   }
 
+  .pswp--supports-fs .pswp__button--fs {
+    display: none;
+  }
 </style>
