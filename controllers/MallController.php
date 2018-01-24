@@ -1917,11 +1917,11 @@ class MallController extends Controller
                         ]);
                     }
 
-                    foreach (array_diff($categoryIdsArrOld, $categoryIdsArr) as $cateId) {
-                        if (!BrandCategory::cateHasBrand($cateId)) {
-                            Goods::disableGoodsByCategoryId($cateId, $operator, Yii::$app->params['brandCategory']['offline_reason']);
-                        }
-                    }
+                    Goods::disableGoodsByCategoryIdsBrandIds(
+                        array_diff($categoryIdsArrOld, $categoryIdsArr),
+                        [$brand->id],
+                        $operator
+                    );
                 }
             }
 
