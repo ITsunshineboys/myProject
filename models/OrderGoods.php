@@ -118,8 +118,7 @@ class OrderGoods extends ActiveRecord
                 }
                 $supplier->availableamount+=($OrderGoods->freight+$OrderGoods->supplier_price*$OrderGoods->goods_number);
                 $supplier->balance+=$OrderGoods->freight+$OrderGoods->supplier_price*$OrderGoods->goods_number;
-                $res3=$supplier->save(false);
-                if (!$res3)
+                if (!$supplier->save(false))
                 {
                     $tran->rollBack();
                     $code=500;

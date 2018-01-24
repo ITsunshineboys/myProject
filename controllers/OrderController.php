@@ -3117,9 +3117,10 @@ class OrderController extends Controller
         }
     }
 
-     /**
+    /**
      * 用户确认收货
      * @return string
+     * @throws Exception
      */
     public  function  actionUserConfirmReceipt()
     {
@@ -4271,33 +4272,43 @@ class OrderController extends Controller
         $after=[];
         foreach ($after_sale as &$afterSale)
         {
+
+//            const GOODS_AFTER_SALE_SERVICES = [
+//                0=>'提供发票',
+//                1=> '上门安装',
+//                2=>'上门维修',
+//                3=>'上门退货',
+//                4=>'上门换货',
+//                5=>'退货',
+//                6=>'换货',
+//            ];
             if ($afterSale==0)
             {
-                $guarantee[]='提供发票';
+                $guarantee[]=OrderAfterSale::GOODS_AFTER_SALE_SERVICES[0];
             }
-            if ($afterSale==1)
+            else if ($afterSale==1)
             {
-                $guarantee[]='上门安装';
+                $guarantee[]=OrderAfterSale::GOODS_AFTER_SALE_SERVICES[1];
             }
-            if ($afterSale==2)
+            else if ($afterSale==2)
             {
-                $after[]='上门维修';
+                $after[]=OrderAfterSale::GOODS_AFTER_SALE_SERVICES[2];
             }
-            if ($afterSale==3)
+            else if ($afterSale==3)
             {
-                $after[]='上门退货';
+                $after[]=OrderAfterSale::GOODS_AFTER_SALE_SERVICES[3];
             }
-            if ($afterSale==4)
+            else if ($afterSale==4)
             {
-                $after[]='上门换货';
+                $after[]=OrderAfterSale::GOODS_AFTER_SALE_SERVICES[4];
             }
-            if ($afterSale==5)
+            else  if ($afterSale==5)
             {
-                $after[]='退货';
+                $after[]=OrderAfterSale::GOODS_AFTER_SALE_SERVICES[5];
             }
-            if ($afterSale==6)
+            else if ($afterSale==6)
             {
-                $after[]='换货';
+                $after[]=OrderAfterSale::GOODS_AFTER_SALE_SERVICES[6];
             }
         }
         $qrcode='/'.UploadForm::DIR_PUBLIC . '/' . Goods::GOODS_QR_PREFIX . $Goods->id . '.png';
@@ -4340,9 +4351,11 @@ class OrderController extends Controller
             ]
         ]);
     }
+
     /**
      * 售后发货
      * @return string
+     * @throws Exception
      */
     public function  actionAfterSaleDelivery()
     {
@@ -4501,9 +4514,11 @@ class OrderController extends Controller
 
 
     }
+
     /**
      * 提醒发货接口
      * @return string
+     * @throws Exception
      */
     public function actionRemindSendGoods()
     {
@@ -4562,7 +4577,7 @@ class OrderController extends Controller
                 $content = "订单号{$order_no},{$OrderGoods->goods_name}...";
                 $record=new UserNewsRecord();
                 $record->uid=$supplier_user->id;
-                $record->role_id=6;
+                $record->role_id=Yii::$app->params['supplierRoleId'];
                 $record->title='请尽快发货';
                 $record->content=$content;
                 $record->send_time=time();
