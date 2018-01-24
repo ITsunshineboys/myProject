@@ -31,7 +31,7 @@
           <flexbox-item style="margin-left: 3.46%!important;" :span="56/125" class="command_list" :class="{odd_col:index%2==0,even_col:index%2==1}"
                         v-for="(item,index) in recommended_list" :key="index">
             <router-link :to="'/good-detail/' + item.url">
-            <img width="168px" height="160px" :src="item.image" alt="">
+            <img style="width: 100%;" :src="item.image" alt="">
             <p class="command_title nowrap">{{item.title}}</p>
             <p class="command_description nowrap">{{item.description}}</p>
             <p class="command_price">￥{{item.platform_price}}</p>
