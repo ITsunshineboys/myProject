@@ -28,7 +28,7 @@
     <card :header="{title:'推荐'}" class="command">
       <flexbox align="flex-start" :gutter="0" slot="content" wrap="wrap">
 
-          <flexbox-item style="margin-left: 20px;" :span="56/125" class="command_list" :class="{odd_col:index%2==0,even_col:index%2==1}"
+          <flexbox-item style="margin-left: 20px!important;" :span="56/125" class="command_list" :class="{odd_col:index%2==0,even_col:index%2==1}"
                         v-for="(item,index) in recommended_list" :key="index">
             <router-link :to="'/good-detail/' + item.url">
             <img width="168px" height="160px" :src="item.image" alt="">
@@ -86,7 +86,7 @@
       GridItem
     },
     method: {},
-    activated () {
+    created () {
       if (this.$route.query.cur_city !== undefined) {
         this.cur_city = this.$route.query.cur_city
         let str = JsonData[0][this.cur_city[0]][this.cur_city[1]]

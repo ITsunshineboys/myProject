@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <transition  enter-active-class="animated fadeIn">
-      <keep-alive>
+      <keep-alive :include="/Address|Invoice|Order/">
         <router-view></router-view>
       </keep-alive>
     </transition>
