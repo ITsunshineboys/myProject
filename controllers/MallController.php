@@ -2538,20 +2538,23 @@ class MallController extends Controller
                 ]);
             }
 
-            $keyword = trim(Yii::$app->request->get('keyword', ''));
             $where = 'review_status = ' . GoodsBrand::REVIEW_STATUS_APPROVE;
             $where .= " and status = {$status}";
-            $where .= " and name like '%{$keyword}%'";
 
-            $pid = (int)Yii::$app->request->get('pid', 0);
-            if ($pid > 0) {
-                $categoryIds = GoodsCategory::level23Ids($pid);
-                if (!$categoryIds) {
-                    $where .= ' and 0';
-                } else {
-                    $ids = BrandCategory::brandIdsByCategoryIds($categoryIds);
-                    $where .= ' and id in (' . implode(',', $ids) . ')';
+            $keyword = trim(Yii::$app->request->get('keyword', ''));
+            if (!$keyword) {
+                $pid = (int)Yii::$app->request->get('pid', 0);
+                if ($pid > 0) {
+                    $categoryIds = GoodsCategory::level23Ids($pid);
+                    if (!$categoryIds) {
+                        $where .= ' and 0';
+                    } else {
+                        $ids = BrandCategory::brandIdsByCategoryIds($categoryIds);
+                        $where .= ' and id in (' . implode(',', $ids) . ')';
+                    }
                 }
+            } else {
+                $where .= " and name like '%{$keyword}%'";
             }
         }
 
