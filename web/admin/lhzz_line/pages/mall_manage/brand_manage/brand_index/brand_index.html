@@ -10,13 +10,22 @@
     </div>
 <!--已上架开始-->
     <section ng-if="on_flag==true">
-        <div class="form-inline clearfix operating_div">
-            <button class="btn btn-default"  ng-click="checkAll()">全选</button>
-            <button class="btn btn-default btn_left" data-toggle="modal" data-target="#{{on_modal_v}}" ng-click="batch_down_shelves()">下架</button>
-            <span class="sort_choose">分类选择</span>
-            <select class="form-control" ng-model="myng.firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
-            <select class="form-control" ng-show="two_select_flag" ng-model="myng.secselect" ng-options="item.id as item.title for item in secondclass" ng-change="three_Class(secselect)"></select>
-            <select class="form-control" ng-show="three_select_flag" ng-model="myng.three_select" ng-options="item.id as item.title for item in three_class" ng-change="last_Class(three_select)"></select>
+        <div class="search form-inline clearfix">
+            <div class="form-group pull-left">
+                <button class="btn btn-default"  ng-click="checkAll()">全选</button>
+                <button class="btn btn-default btn_left" data-toggle="modal" data-target="#{{on_modal_v}}" ng-click="batch_down_shelves()">下架</button>
+                <span class="sort_choose">分类选择</span>
+                <select class="form-control" ng-model="myng.firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
+                <select class="form-control" ng-show="two_select_flag" ng-model="myng.secselect" ng-options="item.id as item.title for item in secondclass" ng-change="three_Class(secselect)"></select>
+                <select class="form-control" ng-show="three_select_flag" ng-model="myng.three_select" ng-options="item.id as item.title for item in three_class" ng-change="last_Class(three_select)"></select>
+            </div>
+            <div class="form-group pull-right">
+                <div class="input-group">
+                    <input ng-model="myng.shelves_search_input" class="form-control" type="text" placeholder="搜索品牌名称">
+                    <span class="iconfont icon-search"></span>
+                </div>
+                <button class="btn btn-default" ng-click="shelves_brand_search()">查询</button>
+            </div>
         </div>
             <!--表格-->
             <table class="table table-hover table-responsive">
@@ -78,14 +87,23 @@
 
 <!--已下架 开始-->
     <section ng-if="down_flag==true">
-        <div class="form-inline clearfix operating_div">
-            <button class="btn btn-default" ui-sref="add_brand"><i class="iconfont icon-add"></i> 添加</button>
-            <button class="btn btn-default btn_left" ng-click="checkAll()">全选</button>
-            <button class="btn btn-default btn_left" data-toggle="modal" data-target="#{{down_modal_v}}" ng-click="batch_on_shelves()">上架</button>
-            <span class="sort_choose">分类选择</span>
-            <select class="form-control" ng-model="myng.firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
-            <select class="form-control" ng-show="two_select_flag" ng-model="myng.secselect" ng-options="item.id as item.title for item in secondclass" ng-change="three_Class(secselect)"></select>
-            <select class="form-control" ng-show="three_select_flag" ng-model="myng.three_select" ng-options="item.id as item.title for item in three_class" ng-change="last_Class(three_select)"></select>
+        <div class="search form-inline clearfix">
+            <div class="form-group pull-left">
+                <button class="btn btn-default" ui-sref="add_brand"><i class="iconfont icon-add"></i> 添加</button>
+                <button class="btn btn-default btn_left" ng-click="checkAll()">全选</button>
+                <button class="btn btn-default btn_left" data-toggle="modal" data-target="#{{down_modal_v}}" ng-click="batch_on_shelves()">上架</button>
+                <span class="sort_choose">分类选择</span>
+                <select class="form-control" ng-model="myng.firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
+                <select class="form-control" ng-show="two_select_flag" ng-model="myng.secselect" ng-options="item.id as item.title for item in secondclass" ng-change="three_Class(secselect)"></select>
+                <select class="form-control" ng-show="three_select_flag" ng-model="myng.three_select" ng-options="item.id as item.title for item in three_class" ng-change="last_Class(three_select)"></select>
+            </div>
+            <div class="form-group pull-right">
+                <div class="input-group">
+                    <input ng-model="myng.search_input_ok" class="form-control" type="text" placeholder="搜索商家名称或账户">
+                    <span class="iconfont icon-search"></span>
+                </div>
+                <button class="btn btn-default" ng-click="brand_search_btn()">查询</button>
+            </div>
         </div>
             <!--表格-->
             <table class="table table-hover table-responsive">
