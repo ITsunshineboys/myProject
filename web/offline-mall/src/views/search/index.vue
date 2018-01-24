@@ -69,7 +69,7 @@
       },
       goDetail (item) {
         if (this.history_list.indexOf(item.title) === -1) {
-          if (this.history_list.length < 6) {
+          if (this.history_list.length < 10) {
             this.history_list.push(item.title)
           } else {
             this.history_list.unshift(item.title)
