@@ -294,7 +294,7 @@ class GoodsOrder extends ActiveRecord
                 return false;
             }
 
-            $code=OrderGoods::AddNewOrderData($post['out_trade_no'],$goods_num,$time,$Goods->toArray(),0,0,0,0,$freight*100);
+            $code=OrderGoods::AddNewOrderData($post['out_trade_no'],$goods_num,$time,$Goods->toArray(),0,0,0,0,$freight*100,'platform_price');
             if ($code!=200)
             {
                 $tran->rollBack();
@@ -448,7 +448,7 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
-            $code=OrderGoods::AddNewOrderData($order_no,$goods_num,$time,$Goods->toArray(),0,0,0,0,$freight*100);
+            $code=OrderGoods::AddNewOrderData($order_no,$goods_num,$time,$Goods->toArray(),0,0,0,0,$freight*100,'platform_price');
             if ($code!=200)
             {
                 $tran->rollBack();
@@ -1910,7 +1910,8 @@ class GoodsOrder extends ActiveRecord
                 $order_refund[0]->handle_reason='';
                 $order_refund[0]->handle_time=$time;
                 $order_refund[0]->refund_time=$time;
-                if (!$order_refund[0]->save(false)){
+                if (!$order_refund[0]->save(false))
+                {
                     $code=500;
                     $tran->rollBack();
                     return $code;
@@ -1928,7 +1929,8 @@ class GoodsOrder extends ActiveRecord
             $role->balance+=$refund_money;
             $role->availableamount+=$refund_money;
             $res3=$role->save(false);
-            if (!$res3){
+            if (!$res3)
+            {
                 $code=500;
                 $tran->rollBack();
                 return $code;
@@ -3423,8 +3425,7 @@ class GoodsOrder extends ActiveRecord
                         }
                     }
                     //$order_no,$goods_num,$time,$goods,$order_status,$shipping_status,$customer_service,$is_unusual,$freight
-
-                    $code=OrderGoods::AddNewOrderData($order_no,$goods['goods_num'],$time,$Goods->toArray(),0,0,0,0,$freight);
+                    $code=OrderGoods::AddNewOrderData($order_no,$goods['goods_num'],$time,$Goods->toArray(),0,0,0,0,$freight,$role_money);
                     if ($code!=200)
                     {
                         $tran->rollBack();
@@ -3479,7 +3480,6 @@ class GoodsOrder extends ActiveRecord
                         return 1083;
                     }
                     $month=date('Ym',$time);
-
                     $Supplier->sales_volumn_month=$Supplier->sales_volumn_month+$goods['goods_num'];
                     $Supplier->sales_amount_month=$Supplier->sales_amount_month+$Goods->toArray()[$role_money]*$goods['goods_num'];
                     $Supplier->month=$month;

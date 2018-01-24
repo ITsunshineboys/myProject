@@ -202,15 +202,15 @@ class OrderPlatForm extends ActiveRecord
                 $reduce_money=$OrderGoods->supplier_price*$OrderGoods->goods_number;
             }
             //这一步我看不懂
-            if ($GoodsOrder->role_id==7)
+            if ($GoodsOrder->role_id==Yii::$app->params['ownerRoleId'])
             {
                 $role=User::findOne($GoodsOrder->user_id);
             }else
             {
                 $role=Role::CheckUserRole($GoodsOrder->role_id)->where(['uid'=>$GoodsOrder->user_id])->one();
             }
-            $role->balance=$role->balance+$refund_money;
-            $role->availableamount=$role->balance+$refund_money;
+            $role->balance+=$refund_money;
+            $role->availableamount+=$refund_money;
             $res3=$role->save(false);
             if (!$res3){
                 $code=500;

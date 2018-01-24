@@ -409,7 +409,7 @@ class OrderGoods extends ActiveRecord
      * @return int
      * @throws \yii\db\Exception
      */
-    public  static  function  AddNewOrderData($order_no,$goods_num,$time,$goods,$order_status,$shipping_status,$customer_service,$is_unusual,$freight)
+    public  static  function  AddNewOrderData($order_no,$goods_num,$time,$goods,$order_status,$shipping_status,$customer_service,$is_unusual,$freight,$role_money)
     {
         $LogisTemp=LogisticsTemplate::find()
             ->select('delivery_method')
@@ -423,7 +423,7 @@ class OrderGoods extends ActiveRecord
             $OrderGoods->goods_number=$goods_num;
             $OrderGoods->create_time=$time;
             $OrderGoods->goods_name=$goods['title'];
-            $OrderGoods->goods_price=$goods['platform_price'];
+            $OrderGoods->goods_price=$goods[$role_money];
             $OrderGoods->sku=$goods['sku'];
             $OrderGoods->market_price=$goods['market_price'];
             $OrderGoods->supplier_price=$goods['supplier_price'];
