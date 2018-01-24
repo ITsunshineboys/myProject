@@ -209,7 +209,7 @@ class EffectController extends Controller
         }
         $res=EffectEarnest::find()->where(['id'=>$id])->one();
         $res->complete_status=self::PAY_STATUS;
-        if(!$res){
+        if(!$res->save(false)){
             $code=500;
             return Json::encode([
                 'code'=>$code,
