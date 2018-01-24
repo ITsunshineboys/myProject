@@ -48,6 +48,7 @@ class OrderPlatForm extends ActiveRecord
      * @param $reason
      * @param $sku
      * @return int
+     * @throws Exception
      */
     public static  function  platformHandleCloseOrderLine($order_no,$handle_type,$reason,$sku)
     {
@@ -254,7 +255,6 @@ class OrderPlatForm extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
-
             //消息推送
             $data=UserNewsRecord::AddOrderNewRecord(User::findOne($GoodsOrder->user_id), '平台介入，关闭订单退款', $GoodsOrder->role_id,"订单号{$order_no},商品编号{$sku}.您的订单已由平台介入关闭，退款金额".StringService::formatPrice($refund_money*0.01)."元已打入您的余额，请注意查看。", $order_no, $sku,GoodsOrder::STATUS_DESC_DETAILS);
             if ($data!=200)
@@ -263,7 +263,6 @@ class OrderPlatForm extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             };
-
             //退款，已从您的余额扣除
             $data1=UserNewsRecord::AddOrderNewRecord(User::findOne($supplier->uid), '平台介入，关闭订单退款', \Yii::$app->params['supplierRoleId'],"订单号{$order_no},商品编号{$sku}已进行平台介入关闭并".StringService::formatPrice($reduce_money*0.01)."元,若有疑问请联系客服。", $order_no, $sku,GoodsOrder::STATUS_DESC_DETAILS);
             if ($data1!=200)
@@ -355,13 +354,13 @@ class OrderPlatForm extends ActiveRecord
         }
     }
 
-    /**
-     * 售后平台介入
+    /**售后平台介入
      * @param $order_no
      * @param $handle_type
      * @param $reason
      * @param $sku
      * @return int
+     * @throws Exception
      */
     public  static  function  platformHandReturnGoods($order_no,$handle_type,$reason,$sku)
     {

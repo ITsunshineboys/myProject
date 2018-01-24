@@ -1482,12 +1482,18 @@ class SiteController extends Controller
         $consignee = trim($request->post('consignee', ''));
         $mobile = trim($request->post('mobile', ''));
         $default=trim($request->post('default', '1'));
+
+        $select=$request->post('select');
         if (!$district_code || !$region || !$consignee || !$mobile) {
             $code = 1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
+        }
+        if (isset($select))
+        {
+            $default=$select;
         }
         $code = UserAddress::UserAddressAdd($district_code, $region, $consignee, $mobile, $user->id,$default);
         if ($code == 200) {
@@ -1519,8 +1525,10 @@ class SiteController extends Controller
         }
         $addressList = UserAddress::find()->where(['uid' => $user->id])->asArray()->all();
         foreach ($addressList as &$list) {
+            $list['district_id']=$list['id'];
             $list['district_code'] = $list['district'];
             $list['district'] = LogisticsDistrict::getdistrict($list['district']);
+            $list['select']=$list['default'];
         }
         $code = 200;
         return Json::encode([
@@ -1587,12 +1595,17 @@ class SiteController extends Controller
         $mobile = trim($request->post('mobile', ''));
         $region = trim($request->post('region', ''));
         $default=trim($request->post('default', '1'));
+        $select=$request->post('select');
         if (!$consignee || !$address_id || !$district_code || !$mobile || !$region) {
             $code = 1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
+        }
+        if (isset($select))
+        {
+            $default=$select;
         }
         $code = UserAddress::updateAddress($consignee, $address_id, $district_code, $mobile, $region,$default);
         if ($code == 200) {
