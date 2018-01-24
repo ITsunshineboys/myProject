@@ -317,8 +317,8 @@ class Effect extends ActiveRecord
 
         $array['add_time']=date('Y-m-d H:i:s',$array['add_time']);
         $array['create_time']=date('Y-m-d H:i:s',$array['create_time']);
-        $array['sale_price']=sprintf('%.2f',(float)$array['sale_price']*0.01);
-        $array['original_price']=sprintf('%.2f',(float)$array['original_price']*0.01);
+        $array['sale_price']=sprintf('%.2f',$array['sale_price']*0.01);
+        $array['original_price']=sprintf('%.2f',$array['original_price']*0.01);
         $data['quote']=[
             ['name'=>'原价', 'value'=>'￥'.$array['original_price']],
             [ 'name'=>'优惠后价格', 'value'=>'￥'.$array['sale_price']],
