@@ -2378,7 +2378,8 @@ class OrderController extends Controller
         if ($user->pay_password=='')
         {
             $code=1081;
-            return Json::encode([
+            return Json::encode
+            ([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
@@ -3639,11 +3640,11 @@ class OrderController extends Controller
                 $orders=explode(',',urldecode($post['passback_params']));
                 $total_amount=$post['total_amount'];
                 $orderAmount=GoodsOrder::CalculationCost($orders);
-                    if (!$total_amount*100==$orderAmount)
-                    {
-                        echo 'fail';
-                        exit;
-                    }
+                if (!$total_amount*100==$orderAmount)
+                {
+                    echo 'fail';
+                    exit;
+                }
                 $tran = Yii::$app->db->beginTransaction();
                 try{
                     $Ord= GoodsOrder::find()
@@ -3695,10 +3696,9 @@ class OrderController extends Controller
                             echo 'fail';
                             exit;
                         }
-                        $GoodsOrder->pay_status=1;
+                        $GoodsOrder->pay_status=GoodsOrder::PAY_STATUS_PAID;
                         $GoodsOrder->pay_name=PayService::ALI_APP_PAY;
-                        $res=$GoodsOrder->save(false);
-                        if (!$res)
+                        if (!$GoodsOrder->save(false))
                         {
                             $tran->rollBack();
                             echo 'fail';

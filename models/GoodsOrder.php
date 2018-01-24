@@ -2138,23 +2138,17 @@ class GoodsOrder extends ActiveRecord
                     return $code;
                 }
                 $order_money=$GoodsOrder->amount_order;
-                $GoodsOrder->pay_status=1;
-                $GoodsOrder->pay_name='余额支付';
+                $GoodsOrder->pay_status=self::PAY_STATUS_PAID;
+                $GoodsOrder->pay_name=PayService::BALANCE_PAY;
                 $GoodsOrder->paytime=time();
                 $res=$GoodsOrder->save(false);
                 if ($user->last_role_id_app==0)
                 {
                     $user->last_role_id_app=\Yii::$app->params['ownerRoleId'];
-                    $user=User::find()
-                        ->where(['id'=>$user->id])
-                        ->one();
                 }else{
                     if ($user->last_role_id_app==\Yii::$app->params['ownerRoleId'])
                     {
                         $user->last_role_id_app=\Yii::$app->params['ownerRoleId'];
-                        $user=User::find()
-                            ->where(['id'=>$user->id])
-                            ->one();
                     }else{
                         $user=Role::CheckUserRole($user->last_role_id_app)
                             ->where(['uid'=>$user->id])
