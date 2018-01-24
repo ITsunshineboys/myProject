@@ -1919,7 +1919,7 @@ class MallController extends Controller
 
                     Goods::disableGoodsByCategoryIdsBrandIds(
                         array_diff($categoryIdsArrOld, $categoryIdsArr),
-                        [$brand->id],
+                        $brand->id,
                         $operator
                     );
                 }

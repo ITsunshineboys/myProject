@@ -324,19 +324,17 @@ class Goods extends ActiveRecord
      * Disable goods by category and brand id
      *
      * @param array $categoryIds category id list
-     * @param array $brandIds brand id list
+     * @param int $brandId brand id
      * @param string $offlineReason offline reason default empty
      * @param ActiveRecord $operator operator
      */
-    public static function disableGoodsByCategoryIdsBrandIds(array $categoryIds, array $brandIds, ActiveRecord $operator, $offlineReason = '')
+    public static function disableGoodsByCategoryIdsBrandIds(array $categoryIds, $brandId, ActiveRecord $operator, $offlineReason = '')
     {
         $where = [
             'and',
-            ['status' => self::STATUS_ONLINE],
+            ['status' => self::STATUS_ONLINE, 'brand_id' => $brandId],
             ['in', 'category_id', $categoryIds],
-            ['in', 'brand_id', $brandIds]
         ];
-
         self::updateAll([
             'status' => self::STATUS_OFFLINE,
             'offline_time' => time(),
@@ -347,9 +345,8 @@ class Goods extends ActiveRecord
 
         $where = [
             'and',
-            ['status' => self::STATUS_WAIT_ONLINE],
+            ['status' => self::STATUS_WAIT_ONLINE, 'brand_id' => $brandId],
             ['in', 'category_id', $categoryIds],
-            ['in', 'brand_id', $brandIds]
         ];
         self::updateAll([
             'reason' => $offlineReason ? $offlineReason : Yii::$app->params['brandCategory']['offline_reason'],
