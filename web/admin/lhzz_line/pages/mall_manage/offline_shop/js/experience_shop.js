@@ -80,6 +80,7 @@ app.controller('experience_shop', ['$scope', '$http', '$timeout', '_ajax', funct
             list();
         } else {
             $scope.pageConfig.currentPage = 1;
+            list();
         }
     }
 
