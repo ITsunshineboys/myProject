@@ -1525,7 +1525,7 @@ class SiteController extends Controller
         }
         $addressList = UserAddress::find()->where(['uid' => $user->id])->asArray()->all();
         foreach ($addressList as &$list) {
-            $list['district_id']=$list['id'];
+            $list['address_id']=$list['id'];
             $list['district_code'] = $list['district'];
             $list['district'] = LogisticsDistrict::getdistrict($list['district']);
             $list['select']=$list['default'];
