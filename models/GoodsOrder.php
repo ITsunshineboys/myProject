@@ -3405,7 +3405,7 @@ class GoodsOrder extends ActiveRecord
                         $GoodsStat=new GoodsStat();
                         $GoodsStat->supplier_id=$Goods->supplier_id;
                         $GoodsStat->sold_number=(int)$goods['goods_num'];
-                        $GoodsStat->amount_sold=($Goods->toArray()[$role_money]*$goods['logistics_template_number']+$freight);
+                        $GoodsStat->amount_sold=($Goods->toArray()[$role_money]*$goods['goods_num']+$freight);
                         $GoodsStat->create_date=$date;
                         if (!$GoodsStat->save(false))
                         {
