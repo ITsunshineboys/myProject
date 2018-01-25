@@ -11,7 +11,7 @@
           <search v-model="search" cancel-text="" placeholder="超级无敌地暖片" ref="search"></search>
         </router-link>
       </flexbox-item>
-      <flexbox-item @click.native="goMessage" :span="3/25" style="margin: 0;">
+      <flexbox-item @click.native="goMessage" :span="3/25" style="margin: 0;text-align: center;">
         <i style="font-size:24px;" class="iconfont icon-news-square"></i>
       </flexbox-item>
     </flexbox>
