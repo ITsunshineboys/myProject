@@ -22,9 +22,8 @@
         <span class="iconfont icon-filter"></span>
       </div>
     </div>
-    <scroller :on-infinite="init" ref="scrollerDom" style="top: 90px;">
-      <goods-list :goods-list="goodsListData"></goods-list>
-    </scroller>
+
+    <goods-list :goods-list="goodsListData"></goods-list>
 
     <!-- 筛选 -->
     <popup class="modal-filter" position="right" v-model="isModalOpen">
@@ -119,6 +118,7 @@
     },
     methods: {
       tabHandle (str) {
+        this.goodsListData = []     // 初始化数据
         this.sortName = str
         switch (str) {      // 只有在价格和好评率会做排序
           case 'platform_price':
@@ -133,8 +133,8 @@
             this.platformPriceSortNum = 4                                                           // 将价格改为升序
             this.goodsListParams['sort[]'] = this.sortName + ':' + this.favourableCommentRateSortNum
             break
-          default:
-            this.allGoodsParams['sort[]'] = this.sortName + ':' + 3
+          case 'sold_number':
+            this.goodsListParams['sort[]'] = this.sortName + ':' + 3
         }
         this.getGoodsList()
       },
@@ -165,6 +165,7 @@
         this.goodsListParams.style_id = this.filterParams.styleParams                 // 风格id
         this.goodsListParams.series_id = this.filterParams.seriesParams               // 系列id
         this.isModalOpen = false      // 隐藏模态框
+        this.goodsListData = []       // 数据初始化
         this.getGoodsList()           // 请求商品列表数据
       },
       filterReset () {      // 重置筛选
@@ -181,20 +182,8 @@
         this.goodsListParams.style_id = null                // 风格id
         this.goodsListParams.series_id = null               // 系列id
         this.isModalOpen = false      // 隐藏模态框
+        this.goodsListData = []       // 数据初始化
         this.getGoodsList()           // 请求商品列表数据
-      },
-      init (done) {
-        let vm = this
-        if (vm.goodsListParams.page >= vm.totalPage) {
-          this.$refs.scrollerDom.finishInfinite(2)
-          console.log(this.$refs)
-          return
-        }
-        setTimeout(() => {
-          vm.goodsListParams.page ++
-          vm.getGoodsList()
-          done()
-        }, 1500)
       }
     }
   }
@@ -231,7 +220,7 @@
   }
 
   .goods-list {
-    /*margin-top: 100px;*/
+    margin-top: 100px;
     background-color: #fff;
   }
 

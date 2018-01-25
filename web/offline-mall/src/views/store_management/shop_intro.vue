@@ -82,7 +82,7 @@
         storeData: {}
       }
     },
-    activated () {
+    created () {
       this.getStoreData()
     },
     methods: {

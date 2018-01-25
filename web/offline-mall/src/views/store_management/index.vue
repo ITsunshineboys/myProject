@@ -185,7 +185,7 @@
             this.platformPriceSortNum = 4                                                           // 将价格改为升序
             this.allGoodsParams['sort[]'] = this.sortName + ':' + this.favourableCommentRateSortNum
             break
-          default:
+          case 'sold_number':
             this.allGoodsParams['sort[]'] = this.sortName + ':' + 3
         }
         this.getAllGoodsData()
@@ -273,7 +273,7 @@
 
   .store-goods-item {
     margin-bottom: 10px;
-    margin-right: 10px;
+    margin-right: 3%;
     width: 168px;
   }
 
@@ -288,11 +288,17 @@
 
   .store-goods-title {
     font-size: 14px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   .store-goods-desc {
     font-size: 12px;
     color: #999999;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   .store-goods-price {
@@ -345,9 +351,9 @@
     border-right: 1px solid #cdd3d7;
   }
 
+  /* iphone 5 */
   @media screen and (max-width: 320px) {
     .store-goods-item {
-      margin-bottom: 10px;
       margin-right: 10px;
       width: 140px;
     }
@@ -355,6 +361,31 @@
     .store-goods-item img {
       width: 140px;
       height: 140px;
+    }
+  }
+
+  /* galaxy S5 */
+  @media screen and (min-width: 321px) and (max-width: 360px) {
+    .store-goods-item {
+      width: 160px;
+    }
+
+    .store-goods-item img {
+      width: 160px;
+      height: 160px;
+    }
+  }
+
+  /* iphone 7 plus */
+  @media screen and (min-width: 376px) and (max-width: 414px) {
+    .store-goods-item {
+      width: 180px;
+      margin-right: 6%;
+    }
+
+    .store-goods-item img {
+      width: 180px;
+      height: 180px;
     }
   }
 </style>
