@@ -112,6 +112,7 @@
     font-size: 14px;
     color: rgba(153, 153, 153, 1);
     line-height: 18px;
+    word-break: break-all
   }
 
   /* 评价图片 */

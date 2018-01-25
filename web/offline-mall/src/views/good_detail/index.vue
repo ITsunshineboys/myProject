@@ -43,6 +43,11 @@
 
 
 
+
+
+
+
+
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -90,6 +95,11 @@
 
 
 
+
+
+
+
+
           </div>
           <span></span>
           <div>
@@ -99,10 +109,20 @@
 
 
 
+
+
+
+
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
+
+
+
+
+
 
 
 
@@ -171,25 +191,13 @@
         <flexbox-item @click.native="contactShop" :span="155/375">
           <i class="iconfont icon-service"></i><br/>联系商家
 
-
-
-
-
         </flexbox-item>
-        <flexbox-item @click.native="showCount('cart')" :span="110/375">
+        <flexbox-item @click.native="bottomAdd('cart')" :span="110/375">
           加入购物车
 
-
-
-
-
         </flexbox-item>
-        <flexbox-item @click.native="showCount('now')" :span="110/375">
+        <flexbox-item @click.native="bottomAdd('now')" :span="110/375">
           立即购买
-
-
-
-
 
         </flexbox-item>
       </flexbox>
@@ -218,17 +226,9 @@
           <flexbox-item alt="cart" v-if="count_cart||default_count" @click.native="addCart">
             加入购物车
 
-
-
-
-
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
-
-
-
-
 
           </flexbox-item>
         </flexbox>
@@ -245,7 +245,7 @@
               <div v-for="item in all_after_sale_services" v-if="afterservice_arr.indexOf(item) !== -1"
                    class="after-service-item">
                 <i class="iconfont icon-checkbox-circle-line"></i>
-                <sp0an>{{item}}</sp0an>
+                <span>{{item}}</span>
                 <p>清代性灵派诗人袁枚说过这么一句话：“读书不知味,不如束高阁;蠢鱼尔何如,终日食糟粕”，意思就是读书如果不能明白其中的道理，还不如束之高阁，那些只会死读书的书呆子们，相当于在吞食无用的糟粕。</p>
               </div>
             </div>
@@ -264,18 +264,6 @@
       </div>
     </popup>
 
-    <!-- 分享弹窗 -->
-    <!--<popup v-model="show_share" class="show_share">-->
-    <!--<div>分享</div>-->
-    <!--<div class="share-icon">-->
-    <!--<div v-for="item in share_content">-->
-    <!--<img :src="item.image" alt=""><br/>-->
-    <!--<span>{{item.title}}</span>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div @click="show_share = false">取消</div>-->
-    <!--</popup>-->
-
     <!--线下商品介绍弹窗-->
     <offlinealert :offlineInfo="offlineInfo" :show="show" :isOffline="false" @isShow="showOfflineAlert"></offlinealert>
 
@@ -285,11 +273,32 @@
       <p>成功添加到购物车</p>
     </toast>
 
+    <alert class="goodshort-alert" v-model="show_goodshort_alert" :hide-on-blur="true">
+      <slot name="default" class="alert-content">
+        <div>库存不足请选择其他商品</div>
+        <div @click="goodshortSure()">确认</div>
+      </slot>
+    </alert>
+
   </div>
 </template>
 
 <script>
-  import {Swiper, Group, Cell, CellBox, Flexbox, FlexboxItem, Card, Tab, TabItem, Popup, XNumber, Toast} from 'vux'
+  import {
+    Swiper,
+    Group,
+    Cell,
+    CellBox,
+    Flexbox,
+    FlexboxItem,
+    Card,
+    Tab,
+    TabItem,
+    Popup,
+    XNumber,
+    Toast,
+    Alert
+  } from 'vux'
   import divider from '@/components/Divider'
   import comment from '../good_detail/comment'
   import offlinealert from '@/components/OfflineAlert'
@@ -310,6 +319,7 @@
       Popup,
       XNumber,
       Toast,
+      Alert,
       divider,
       comment,
       offlinealert
@@ -321,6 +331,7 @@
         isShow: false,  // 右上角弹窗
         show: false,    // 线下商品简介
         cart_success: false, // 添加购物车成功toast
+        show_goodshort_alert: false, // 商品不足弹窗
         good_detail: {
           line_goods: {
             is_offline_goods: ''
@@ -343,7 +354,6 @@
         user_name: '',
         show_count: false,            // 选择数量弹窗
         show_after_service: false,    // 售后弹窗
-        show_share: false,            // 分享弹窗
         count: 1,                     // 选择数量默认值
         pop: {
           show_service: false         // 默认不显示售后
@@ -419,26 +429,48 @@
       showOfflineAlert: function (bool) {
         this.show = bool
       },
+      // 底部按钮加入购物车&立即购买
+      bottomAdd: function (obj) {
+        if (!this.good_detail.left_number) {
+          this.show_goodshort_alert = true // 商品不足弹窗
+        } else {
+          this.showCount(obj)
+        }
+      },
+      // 库存不足确认
+      goodshortSure () {
+        this.show_goodshort_alert = false
+      },
       // 添加购物车
       addCart () {
-        this.axios.post('/order/add-shipping-cart', {
-          goods_id: this.good_id,
-          goods_num: this.count
-        }, (res) => {
-          if (res.code === 200) {
-            this.showCount('all')
-            this.cart_success = true // 购物车添加成功弹窗显示
-            window.AndroidWebView.showInfoFromJs(res.data)
-          }
-        })
+        if (!this.good_detail.left_number) {
+          this.showCount('all')  // 关闭当前弹窗
+          this.show_goodshort_alert = true
+        } else {
+          this.axios.post('/order/add-shipping-cart', {
+            goods_id: this.good_id,
+            goods_num: this.count
+          }, (res) => {
+            if (res.code === 200) {
+              this.showCount('all')
+              this.cart_success = true // 购物车添加成功弹窗显示
+              window.AndroidWebView.showInfoFromJs(res.data)
+            }
+          })
+        }
       },
       // 立即购买
       buyNow () {
-        /* params
-         * 商品id 购买数量
-         * */
-        this.show_count = false
-        window.AndroidWebView.skipIntent(this.good_id, this.count)
+        if (!this.good_detail.left_number) {
+          this.showCount('all')  // 关闭当前弹窗
+          this.show_goodshort_alert = true
+        } else {
+          /* params
+           * 商品id 购买数量
+           * */
+          this.showCount('all')  // 关闭当前弹窗
+          window.AndroidWebView.skipIntent(this.good_id, this.count)
+        }
       },
       // 分享
       androidShare () {
@@ -1047,6 +1079,36 @@
     margin-top: 5px;
     font-size: 16px;
     color: rgba(255, 255, 255, 1);
+  }
+
+  /*商品不足弹窗*/
+  .goodshort-alert .weui-dialog__ft,
+  .goodshort-alert .weui-dialog__hd {
+    display: none;
+  }
+
+  .goodshort-alert .weui-dialog {
+    width: 250px;
+    height: 136px;
+    border-radius: 6px;
+  }
+
+  .goodshort-alert .weui-dialog .weui-dialog__bd {
+    text-align: center;
+    padding: 0;
+  }
+
+  .goodshort-alert .weui-dialog .weui-dialog__bd > div:nth-child(1) {
+    line-height: 86px;
+    font-size: 16px;
+    color: rgba(102, 102, 102, 1);
+    border-bottom: 2px solid #CDD3D7;
+  }
+
+  .goodshort-alert .weui-dialog .weui-dialog__bd > div:nth-child(2) {
+    line-height: 48px;
+    font-size: 16px;
+    color: rgba(34, 34, 34, 1);
   }
 </style>
 
