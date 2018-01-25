@@ -2473,7 +2473,7 @@ class MallController extends Controller
                 $endTime && $where .= " and create_time <= {$endTime}";
             }
         } else {
-            $where .= " and (supplier_name like '%{$keyword}%' or mobile like '%{$keyword}%')";
+            $where .= " and (supplier_name like '%{$keyword}%' or mobile like '%{$keyword}%' or brand_name like '%{$keyword}%')";
         }
 
         $page = (int)Yii::$app->request->get('page', 1);
