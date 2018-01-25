@@ -40,14 +40,6 @@
           选择数量
 
 
-
-
-
-
-
-
-
-
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -92,40 +84,13 @@
             <span>{{good_detail.supplier.goods_number}}</span><br/>商品数
 
 
-
-
-
-
-
-
-
-
           </div>
           <span></span>
           <div>
-            <span>{{good_detail.supplier.follower_number}}</span><br/>粉丝数
-
-
-
-
-
-
-
-
-
-
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
-
-
-
-
-
-
-
-
 
 
           </div>
@@ -191,13 +156,28 @@
         <flexbox-item @click.native="contactShop" :span="155/375">
           <i class="iconfont icon-service"></i><br/>联系商家
 
+
+
+
+
+
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('cart')" :span="110/375">
           加入购物车
 
+
+
+
+
+
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('now')" :span="110/375">
           立即购买
+
+
+
+
+
 
         </flexbox-item>
       </flexbox>
@@ -226,9 +206,11 @@
           <flexbox-item alt="cart" v-if="count_cart||default_count" @click.native="addCart">
             加入购物车
 
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
+
 
           </flexbox-item>
         </flexbox>
@@ -273,6 +255,7 @@
       <p>成功添加到购物车</p>
     </toast>
 
+    <!--库存不足弹窗-->
     <alert class="goodshort-alert" v-model="show_goodshort_alert" :hide-on-blur="true">
       <slot name="default" class="alert-content">
         <div>库存不足请选择其他商品</div>
@@ -280,6 +263,11 @@
       </slot>
     </alert>
 
+    <!--商品已下架提示-->
+    <popup class="offline-warning" v-model="show_offline" position="bottom" height="49px" :hide-on-blur="true"
+           :show-mask="false">
+      <div>该商品已下架</div>
+    </popup>
   </div>
 </template>
 
@@ -332,6 +320,13 @@
         show: false,    // 线下商品简介
         cart_success: false, // 添加购物车成功toast
         show_goodshort_alert: false, // 商品不足弹窗
+        show_offline: false, // 商品下架提示
+        show_offline_style: {
+          'background': 'rgba(34,34,34,0.25)',
+          'font-size': '18px',
+          'color': 'rgba(255, 255, 255, 1)',
+          'line-height': '18px'
+        },
         good_detail: {
           line_goods: {
             is_offline_goods: ''
@@ -341,7 +336,8 @@
             latest: {}
           },
           supplier: {},
-          attrs: ''
+          attrs: '',
+          status: 2 // 默认商品状态：已上架
         },
         offlineInfo: {
           address: '大环境的撒谎就开会开会',
@@ -431,11 +427,23 @@
       },
       // 底部按钮加入购物车&立即购买
       bottomAdd: function (obj) {
-        if (!this.good_detail.left_number) {
-          this.show_goodshort_alert = true // 商品不足弹窗
-        } else {
-          this.showCount(obj)
-        }
+        // 判断商品的上下架状态
+        this.axios.get('/mall/goods-view', {id: this.good_id}, (res) => {
+          this.good_detail.status = res.data.goods_view.status
+          this.good_detail.status = 3
+          if (this.good_detail.status !== 2) {
+            this.show_offline = true  // 商品下架提示
+            setTimeout(() => {
+              this.show_offline = false
+            }, 1500)
+          } else {
+            if (!this.good_detail.left_number) {
+              this.show_goodshort_alert = true // 商品不足弹窗
+            } else {
+              this.showCount(obj)
+            }
+          }
+        })
       },
       // 库存不足确认
       goodshortSure () {
@@ -443,34 +451,52 @@
       },
       // 添加购物车
       addCart () {
-        if (!this.good_detail.left_number) {
-          this.showCount('all')  // 关闭当前弹窗
-          this.show_goodshort_alert = true
-        } else {
-          this.axios.post('/order/add-shipping-cart', {
-            goods_id: this.good_id,
-            goods_num: this.count
-          }, (res) => {
-            if (res.code === 200) {
-              this.showCount('all')
-              this.cart_success = true // 购物车添加成功弹窗显示
-              window.AndroidWebView.showInfoFromJs(res.data)
-            }
-          })
-        }
+        this.axios.get('/mall/goods-view', {id: this.good_id}, (res) => {
+          this.good_detail.status = res.data.goods_view.status
+          this.good_detail.status = 3
+          if (this.good_detail.status !== 2) {
+            this.show_offline = true  // 商品下架
+            setTimeout(() => {
+              this.show_offline = false
+            }, 1500)
+          } else if (!this.good_detail.left_number) {   //  库存不足
+            this.showCount('all')
+            this.show_goodshort_alert = true
+          } else {
+            this.axios.post('/order/add-shipping-cart', {
+              goods_id: this.good_id,
+              goods_num: this.count
+            }, (res) => {
+              if (res.code === 200) {
+                this.showCount('all')
+                this.cart_success = true // 购物车添加成功弹窗显示
+                window.AndroidWebView.showInfoFromJs(res.data)
+              }
+            })
+          }
+        })
       },
       // 立即购买
       buyNow () {
-        if (!this.good_detail.left_number) {
-          this.showCount('all')  // 关闭当前弹窗
-          this.show_goodshort_alert = true
-        } else {
-          /* params
-           * 商品id 购买数量
-           * */
-          this.showCount('all')  // 关闭当前弹窗
-          window.AndroidWebView.skipIntent(this.good_id, this.count)
-        }
+        this.axios.get('/mall/goods-view', {id: this.good_id}, (res) => {
+          this.good_detail.status = res.data.goods_view.status
+          this.good_detail.status = 3
+          if (this.good_detail.status !== 2) {
+            this.show_offline = true  // 商品下架
+            setTimeout(() => {
+              this.show_offline = false
+            }, 1500)
+          } else if (!this.good_detail.left_number) { //  库存不足
+            this.showCount('all')
+            this.show_goodshort_alert = true
+          } else {
+            /* params
+             * 商品id 购买数量
+             * */
+            this.showCount('all')
+            window.AndroidWebView.skipIntent(this.good_id, this.count)
+          }
+        })
       },
       // 分享
       androidShare () {
@@ -1109,6 +1135,15 @@
     line-height: 48px;
     font-size: 16px;
     color: rgba(34, 34, 34, 1);
+  }
+
+  /*商品下架弹窗*/
+  .good-container .offline-warning {
+    background: rgb(34, 34, 34);
+    text-align: center;
+    line-height: 49px;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 1);
   }
 </style>
 
