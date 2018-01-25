@@ -1941,12 +1941,12 @@ class User extends ActiveRecord implements IdentityInterface
             return 200;
         }
 
-//        if (!$roleId
-//            || in_array($roleId, [Yii::$app->params['lhzzRoleId']])
-//            || !in_array($roleId, UserRole::findRoleIdsByUserIdAndReviewStatus($this->id))
-//        ) {
-//            return 1000;
-//        }
+        if (!$roleId
+            || in_array($roleId, [Yii::$app->params['lhzzRoleId']])
+            || !in_array($roleId, UserRole::findRoleIdsByUserIdAndReviewStatus($this->id))
+        ) {
+            return 1000;
+        }
 
         $this->last_role_id_app = $roleId;
         return $this->save() ? 200 : 500;
