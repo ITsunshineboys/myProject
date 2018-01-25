@@ -7,7 +7,7 @@
       <i class="iconfont icon-more" @click.passive="showMore"></i>
     </div>
 
-    <!--右上弹窗-->
+    <!--更多弹窗-->
     <div v-show="show_more" class="pop-down">
       <ul>
         <router-link :to="'/'" tag="li">
@@ -38,9 +38,6 @@
       <group>
         <cell-box is-link class="choose-count" @click.native="showCount('count')">
           选择数量
-
-
-
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -83,19 +80,14 @@
         <flexbox slot="content" justify="space-between" class="shop-intro">
           <div>
             <span>{{good_detail.supplier.goods_number}}</span><br/>商品数
-
-
-
           </div>
           <span></span>
           <div>
+            <span>{{good_detail.supplier.follower_number}}</span><br/>粉丝数
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
-
-
-
           </div>
         </flexbox>
         <flexbox slot="footer" justify="center" class="view-shop-btn">
@@ -158,33 +150,12 @@
       <flexbox class="bottom-tabbar">
         <flexbox-item @click.native="contactShop" :span="155/375">
           <i class="iconfont icon-service"></i><br/>联系商家
-
-
-
-
-
-
-
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('cart')" :span="110/375">
           加入购物车
-
-
-
-
-
-
-
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('now')" :span="110/375">
           立即购买
-
-
-
-
-
-
-
         </flexbox-item>
       </flexbox>
     </div>
@@ -211,15 +182,9 @@
         <flexbox class="count-bottom-btn">
           <flexbox-item alt="cart" v-if="count_cart||default_count" @click.native="addCart">
             加入购物车
-
-
-
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
-
-
-
           </flexbox-item>
         </flexbox>
       </div>
@@ -324,7 +289,7 @@
       return {
         good_id: '',                // 商品id
         role_id: 6,                 // 角色id
-        show_more: false,           // 右上角弹窗
+        show_more: false,           // 更多弹窗
         show_count: false,          // 选择数量弹窗
         show_after_service: false,  // 售后弹窗
         pop: {
@@ -435,7 +400,6 @@
         // 判断商品的上下架状态
         this.axios.get('/mall/goods-view', {id: this.good_id}, (res) => {
           this.good_detail.status = res.data.goods_view.status
-          this.good_detail.status = 3
           if (this.good_detail.status !== 2) {
             this.show_offline = true  // 商品下架提示
             setTimeout(() => {
@@ -458,7 +422,6 @@
       addCart () {
         this.axios.get('/mall/goods-view', {id: this.good_id}, (res) => {
           this.good_detail.status = res.data.goods_view.status
-          this.good_detail.status = 3
           if (this.good_detail.status !== 2) {
             this.show_offline = true  // 商品下架
             setTimeout(() => {
@@ -485,7 +448,6 @@
       buyNow () {
         this.axios.get('/mall/goods-view', {id: this.good_id}, (res) => {
           this.good_detail.status = res.data.goods_view.status
-          this.good_detail.status = 3
           if (this.good_detail.status !== 2) {
             this.show_offline = true  // 商品下架
             setTimeout(() => {
@@ -575,7 +537,7 @@
     position: absolute;
     top: 0;
     right: 0;
-    z-index: 200;
+    z-index: 100;
   }
 
   .good-container .pop-down ul {
