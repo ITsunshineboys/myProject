@@ -2918,8 +2918,70 @@ class MallController extends Controller
         $category->attr_number = $attrCnt;
 
         $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if (!$category->save(false)) {
+                $transaction->rollBack();
 
-        if (!$category->save()) {
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $oldAttrs = GoodsAttr::findNecessaryAttrs($categoryId);
+            GoodsAttr::deleteAll(['category_id' => $categoryId, 'goods_id' => 0]);
+
+            foreach ($names as $i => $name) {
+                $goodsAttr = new GoodsAttr;
+                $goodsAttr->name = $name;
+                $goodsAttr->unit = $units[$i];
+                $goodsAttr->addition_type = $additionTypes[$i];
+                $goodsAttr->category_id = $categoryId;
+                $goodsAttr->addition_type != GoodsAttr::ADDITION_TYPE_NORMAL && $goodsAttr->value = $values[$i];
+
+                if (!$goodsAttr->validate()) {
+                    $transaction->rollBack();
+
+                    if (isset($goodsAttr->errors['name'])) {
+                        $customErrCode = ModelService::customErrCode($goodsAttr->errors['name'][0]);
+                        if ($customErrCode !== false) {
+                            $code = $customErrCode;
+                        }
+                    }
+
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+
+                if (!$goodsAttr->save(false)) {
+                    $transaction->rollBack();
+
+                    $code = 500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+            }
+
+            $where = [
+                'and',
+                ['category_id' => $categoryId],
+                ['>', 'goods_id', 0],
+                ['in', 'name', array_diff($oldAttrs, $names)]
+            ];
+            GoodsAttr::deleteAll($where);
+
+            $transaction->commit();
+
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'OK',
+            ]);
+        } catch (\Exception $e) {
             $transaction->rollBack();
 
             $code = 500;
@@ -2928,48 +2990,6 @@ class MallController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
-        GoodsAttr::deleteAll(['category_id' => $categoryId, 'goods_id' => 0]);
-
-        foreach ($names as $i => $name) {
-            $goodsAttr = new GoodsAttr;
-            $goodsAttr->name = $name;
-            $goodsAttr->unit = $units[$i];
-            $goodsAttr->addition_type = $additionTypes[$i];
-            $goodsAttr->category_id = $categoryId;
-            $goodsAttr->addition_type != GoodsAttr::ADDITION_TYPE_NORMAL && $goodsAttr->value = $values[$i];
-
-            if (!$goodsAttr->validate()) {
-                $transaction->rollBack();
-
-                if (isset($goodsAttr->errors['name'])) {
-                    $customErrCode = ModelService::customErrCode($goodsAttr->errors['name'][0]);
-                    if ($customErrCode !== false) {
-                        $code = $customErrCode;
-                    }
-                }
-
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-
-            if (!$goodsAttr->save(false)) {
-                $code = 500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-        }
-
-        $transaction->commit();
-
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'OK',
-        ]);
     }
 
     /**
