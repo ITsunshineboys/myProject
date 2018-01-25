@@ -1096,30 +1096,30 @@
   }
 
   /*商品不足弹窗*/
-  .goodshort-alert .weui-dialog__ft,
-  .goodshort-alert .weui-dialog__hd {
+  .good-container .goodshort-alert .weui-dialog__ft,
+  .good-container .goodshort-alert .weui-dialog__hd {
     display: none;
   }
 
-  .goodshort-alert .weui-dialog {
+  .good-container .goodshort-alert .weui-dialog {
     width: 250px;
     height: 136px;
     border-radius: 6px;
   }
 
-  .goodshort-alert .weui-dialog .weui-dialog__bd {
+  .good-container .goodshort-alert .weui-dialog .weui-dialog__bd {
     text-align: center;
     padding: 0;
   }
 
-  .goodshort-alert .weui-dialog .weui-dialog__bd > div:nth-child(1) {
+  .good-container .goodshort-alert .weui-dialog .weui-dialog__bd > div:nth-child(1) {
     line-height: 86px;
     font-size: 16px;
     color: rgba(102, 102, 102, 1);
     border-bottom: 2px solid #CDD3D7;
   }
 
-  .goodshort-alert .weui-dialog .weui-dialog__bd > div:nth-child(2) {
+  .good-container .goodshort-alert .weui-dialog .weui-dialog__bd > div:nth-child(2) {
     line-height: 48px;
     font-size: 16px;
     color: rgba(34, 34, 34, 1);
