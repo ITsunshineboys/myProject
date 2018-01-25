@@ -70,11 +70,15 @@
       goDetail (item) {
         if (this.history_list.indexOf(item.title) === -1) {
           if (this.history_list.length < 10) {
-            this.history_list.push(item.title)
-          } else {
             this.history_list.unshift(item.title)
-            this.history_list.shift()
+          } else {
+            this.history_list.pop()
+            this.history_list.unshift(item.title)
           }
+        } else {
+          let index = this.history_list.indexOf(item.title)
+          this.history_list.splice(index, 1)
+          this.history_list.unshift(item.title)
         }
         localStorage.setItem('history_list', JSON.stringify(this.history_list))
         if (item.pid !== undefined) {
