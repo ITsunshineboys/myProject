@@ -99,10 +99,10 @@
             </div>
             <div class="form-group pull-right">
                 <div class="input-group">
-                    <input ng-model="myng.search_input_ok" class="form-control" type="text" placeholder="搜索商家名称或账户">
+                    <input ng-model="myng.shelves_search_input" class="form-control" type="text" placeholder="搜索品牌名称">
                     <span class="iconfont icon-search"></span>
                 </div>
-                <button class="btn btn-default" ng-click="brand_search_btn()">查询</button>
+                <button class="btn btn-default" ng-click="shelves_brand_search()">查询</button>
             </div>
         </div>
             <!--表格-->
@@ -223,14 +223,14 @@
             <!--申请-->
             <div class="form-group pull-left">
                 <i class="glyphicon glyphicon-th-large"></i>
-                <span class="apply">{{application_num}}个申请</span>
+                <span class="apply">{{applied_cnt}}个申请</span>
                 <select  name="province" ng-model="brand_params.review_status" ng-change="brand_types()" class="form-control" ng-options="item.id as item.value for item in brand_types_arr"></select>
                 <input  id="start_time"  ng-model="brand_params.start_time" ng-change='brand_time_change()' max-date="{{brand_params.end_time}}" ngc-lay-date  class="form-control" type="text" placeholder="开始时间">
                 <input  id="stop_time"   ng-model="brand_params.end_time" ng-change='brand_time_change()' min-date="{{brand_params.start_time}}" ngc-lay-date  class="form-control" type="text"  placeholder="结束时间">
             </div>
             <div class="form-group pull-right">
               <div class="input-group">
-                <input ng-model="myng.search_input_ok" class="form-control" type="text" placeholder="搜索商家名称或账户">
+                <input ng-model="myng.search_input_ok" class="form-control" type="text" style="width: 245px" placeholder="搜索商家名称、帐户、品牌名称">
                 <span class="iconfont icon-search"></span>
               </div>
                 <button class="btn btn-default" ng-click="brand_search_btn()">查询</button>

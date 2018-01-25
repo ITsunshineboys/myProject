@@ -170,7 +170,8 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
   /*分类选择二级下拉框*/
   $scope.secondclass=[];//二级分类数组
   $scope.subClass = function (pid) {
-    console.log(pid)
+    $scope.params.keyword = ''
+    $scope.shelves_search_input = ''
     $scope.wjConfig.currentPage=1;
     pid!=0?($scope.two_select_flag=true,$scope.three_select_flag=false):($scope.two_select_flag=false,$scope.three_select_flag=false);
     $scope.down_two=pid;
@@ -327,9 +328,13 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
     $scope.table.roles=[];//清空全选状态
     $scope.wjConfig.currentPage=1;
     $scope.time_img='lib/images/sort_down.png';//时间排序图片
-    $scope.params.status='1';
     $scope.params.pid='0'
     $scope.params['sort[]']='online_time:3';//下架时间，降序排序
+    if($scope.on_flag === true){
+      $scope.params.status='1';
+    }else{
+      $scope.params.status='0';
+    }
     tablePages();
   }
 
@@ -358,14 +363,7 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
           console.log(res);
           $scope.brand_review_list=res.data.brand_application_review_list.details;
           $scope.brand_Config.totalItems = res.data.brand_application_review_list.total;
-          if($scope.brand_params.review_status=='0'||$scope.brand_params.review_status=='-1'){
-            $scope.application_num=0;
-            for(let[key,value] of res.data.brand_application_review_list.details.entries()){
-              if(value.review_status==0){
-                $scope.application_num++;
-              }
-            }
-          }
+          $scope.applied_cnt = res.data.brand_application_review_list.applied_cnt
         });
     };
 
