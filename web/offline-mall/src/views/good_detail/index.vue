@@ -39,6 +39,7 @@
         <cell-box is-link class="choose-count" @click.native="showCount('count')">
           选择数量
 
+
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -82,15 +83,18 @@
           <div>
             <span>{{good_detail.supplier.goods_number}}</span><br/>商品数
 
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.follower_number}}</span><br/>粉丝数
 
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
+
 
           </div>
         </flexbox>
@@ -155,13 +159,16 @@
         <flexbox-item @click.native="contactShop" :span="155/375">
           <i class="iconfont icon-service"></i><br/>联系商家
 
+
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('cart')" :span="110/375">
           加入购物车
 
+
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('now')" :span="110/375">
           立即购买
+
 
         </flexbox-item>
       </flexbox>
@@ -190,9 +197,11 @@
           <flexbox-item alt="cart" v-if="count_cart||default_count" @click.native="addCart">
             加入购物车
 
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
+
 
           </flexbox-item>
         </flexbox>
@@ -410,17 +419,16 @@
         // 判断商品的上下架状态
         this.axios.get('/mall/goods-view', {id: this.good_id}, (res) => {
           this.good_detail.status = res.data.goods_view.status
+          this.good_detail.left_number = res.data.goods_view.left_number
           if (this.good_detail.status !== 2) {
             this.show_offline = true  // 商品下架提示
             setTimeout(() => {
               this.show_offline = false
             }, 1500)
+          } else if (!this.good_detail.left_number) {
+            this.show_goodshort_alert = true // 商品不足弹窗
           } else {
-            if (!this.good_detail.left_number) {
-              this.show_goodshort_alert = true // 商品不足弹窗
-            } else {
-              this.showCount(obj)
-            }
+            this.showCount(obj)
           }
         })
       },
@@ -432,6 +440,7 @@
       addCart () {
         this.axios.get('/mall/goods-view', {id: this.good_id}, (res) => {
           this.good_detail.status = res.data.goods_view.status
+          this.good_detail.left_number = res.data.goods_view.left_number
           if (this.good_detail.status !== 2) {
             this.show_offline = true  // 商品下架
             setTimeout(() => {
@@ -458,6 +467,7 @@
       buyNow () {
         this.axios.get('/mall/goods-view', {id: this.good_id}, (res) => {
           this.good_detail.status = res.data.goods_view.status
+          this.good_detail.left_number = res.data.goods_view.left_number
           if (this.good_detail.status !== 2) {
             this.show_offline = true  // 商品下架
             setTimeout(() => {
