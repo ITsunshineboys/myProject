@@ -4,11 +4,11 @@
     <div class="guide-icon">
       <i class="iconfont icon-return" @click="$router.go(-1)"></i>
       <i class="iconfont icon-share" @click="androidShare"></i>
-      <i class="iconfont icon-more" @click="isShow=!isShow"></i>
+      <i class="iconfont icon-more" @click.passive="showMore"></i>
     </div>
 
     <!--右上弹窗-->
-    <div v-show="isShow" class="pop-down">
+    <div v-show="show_more" class="pop-down">
       <ul>
         <router-link :to="'/'" tag="li">
           <span class="iconfont icon-home"></span>
@@ -38,6 +38,7 @@
       <group>
         <cell-box is-link class="choose-count" @click.native="showCount('count')">
           选择数量
+
 
 
         </cell-box>
@@ -84,6 +85,7 @@
             <span>{{good_detail.supplier.goods_number}}</span><br/>商品数
 
 
+
           </div>
           <span></span>
           <div>
@@ -91,6 +93,7 @@
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
+
 
 
           </div>
@@ -161,6 +164,7 @@
 
 
 
+
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('cart')" :span="110/375">
           加入购物车
@@ -170,9 +174,11 @@
 
 
 
+
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('now')" :span="110/375">
           立即购买
+
 
 
 
@@ -207,9 +213,11 @@
             加入购物车
 
 
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
+
 
 
           </flexbox-item>
@@ -247,7 +255,7 @@
     </popup>
 
     <!--线下商品介绍弹窗-->
-    <offlinealert :offlineInfo="offlineInfo" :show="show" :isOffline="false" @isShow="showOfflineAlert"></offlinealert>
+    <offlinealert :offlineInfo="offlineInfo" :show="show_offlinegood" :isOffline="false" @isShow="showOfflineAlert"></offlinealert>
 
     <!--加入购物车成功提示-->
     <toast v-model="cart_success" width="200px" position="middle" :time="2000" :is-show-mask="true">
@@ -314,19 +322,22 @@
     },
     data () {
       return {
-        good_id: '', // 商品id
-        role_id: 6, // 角色id
-        isShow: false,  // 右上角弹窗
-        show: false,    // 线下商品简介
-        cart_success: false, // 添加购物车成功toast
-        show_goodshort_alert: false, // 商品不足弹窗
-        show_offline: false, // 商品下架提示
-        show_offline_style: {
-          'background': 'rgba(34,34,34,0.25)',
-          'font-size': '18px',
-          'color': 'rgba(255, 255, 255, 1)',
-          'line-height': '18px'
+        good_id: '',                // 商品id
+        role_id: 6,                 // 角色id
+        show_more: false,           // 右上角弹窗
+        show_count: false,          // 选择数量弹窗
+        show_after_service: false,  // 售后弹窗
+        pop: {
+          show_service: false       // 默认不显示售后
         },
+        show_offlinegood: false,    // 线下商品简介
+        show_goodshort_alert: false, // 商品不足弹窗
+        show_offline: false,        // 商品下架提示
+        cart_success: false,        // 添加购物车成功toast
+        count_cart: false,          // 加入购物车按钮显示
+        count_now: false,           // 立即购买按钮显示
+        default_count: false,       // 两个按钮显示
+        show_description: true,     // 显示图文详情
         good_detail: {
           line_goods: {
             is_offline_goods: ''
@@ -348,17 +359,8 @@
         goodcookie: '',
         after_sale_services: [],      // 页面售后显示
         user_name: '',
-        show_count: false,            // 选择数量弹窗
-        show_after_service: false,    // 售后弹窗
         count: 1,                     // 选择数量默认值
-        pop: {
-          show_service: false         // 默认不显示售后
-        },
-        show_description: true,       // 显示图文详情
         all_after_sale_services: [],
-        count_cart: false,            // 加入购物车按钮显示
-        count_now: false,             // 立即购买按钮显示
-        default_count: false,         // 两个按钮显示
         checkin: 1,                    // 是否登录默认登录
         afterservice_arr: ['上门维修', '上门退货', '上门换货', '退货', '换货'],
         safeguard_arr: ['提供发票', '上门安装'],
@@ -375,7 +377,6 @@
     created () {
       console.log(this.$route)
       this.good_id = this.$route.params.id // 商品id
-      this.isShow = false
       this.axios.get('/mall/goods-view', {id: this.good_id}, (res) => {
         this.good_detail = res.data.goods_view
         // 用户名处理
@@ -424,6 +425,10 @@
       // 线下商品弹窗处理
       showOfflineAlert: function (bool) {
         this.show = bool
+      },
+      // 更多
+      showMore () {
+        this.show_more = !this.show_more
       },
       // 底部按钮加入购物车&立即购买
       bottomAdd: function (obj) {
