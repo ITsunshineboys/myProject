@@ -1578,8 +1578,28 @@ class SiteController extends Controller
         }
     }
 
+
+    public  function  actionGetDefaultAddress()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Json::encode
+        ([
+            'code' => 200,
+            'msg' => 'ok',
+            'data'=>UserAddress::GetDefaultAddress($user->id)
+        ]);
+    }
+
     /**
      * @return string
+     * @throws \yii\db\Exception
      */
     public function actionUpdateReceiveAddress()
     {

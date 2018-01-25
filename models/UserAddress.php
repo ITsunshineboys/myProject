@@ -270,7 +270,9 @@ class UserAddress extends  ActiveRecord
      * @param $district_code
      * @param $mobile
      * @param $region
+     * @param $default
      * @return int
+     * @throws \yii\db\Exception
      */
     public static  function  updateAddress($consignee,$address_id,$district_code,$mobile,$region,$default)
     {
@@ -383,6 +385,29 @@ class UserAddress extends  ActiveRecord
             return $code;
         }
 
+    }
+
+
+    /**
+     * @param $user_id
+     * @return array|null|ActiveRecord
+     */
+    public  static  function  GetDefaultAddress($user_id)
+    {
+        $address=self::find()
+            ->where(['uid'=>$user_id])
+            ->asArray()
+            ->one();
+        if (!$address)
+        {
+            return [];
+        }
+        return  [
+            'district_code'=>$address['district'],
+            'district'=>LogisticsDistrict::GetVagueDistrictCode($address['district']).'-'.$address['region'],
+            'mobile'=>$address['mobile'],
+            'consignee'=>$address['consignee']
+        ];
     }
 
 
