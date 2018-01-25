@@ -11,9 +11,9 @@
           <search v-model="search" cancel-text="" placeholder="超级无敌地暖片" ref="search"></search>
         </router-link>
       </flexbox-item>
-      <flexbox-item :span="3/25" style="margin: 0;">
-        <i style="font-size:24px;" class="iconfont icon-news-square"></i>
-      </flexbox-item>
+      <!--<flexbox-item :span="3/25" style="margin: 0;">-->
+        <!--<i style="font-size:24px;" class="iconfont icon-news-square"></i>-->
+      <!--</flexbox-item>-->
     </flexbox>
     <swiper dots-position="center" :list="banner_list" loop auto height="171px" :aspect-ratio="375/171" :show-desc-mask="false"></swiper>
     <flexbox :gutter="0" class="category" wrap="wrap">
