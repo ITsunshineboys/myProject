@@ -37,7 +37,8 @@ class GoodsAttr extends ActiveRecord
         self::ADDITION_TYPE_CHECKBOX => '复选框添加'
     ];
 
-    const IDS_QUOTING_PRICE = [];
+    const IDS_QUOTING_PRICE = [1, 2, 3, 6, 8, 9, 10, 11, 17, 20, 29, 30, 31, 32, 33, 34, 35, 39, 1440, 1441, 1442, 1443, 1447, 1448, 1451, 1452, 1475, 1512, 1513, 1678, 1688, 1691
+        , 1694, 1695, 1798, 1820, 1821];
 
     /**
      * Check if has the same attribute name of some goods
@@ -336,38 +337,38 @@ class GoodsAttr extends ActiveRecord
      *  $name  商品属性名称
      * @return array
      */
-    public static function findByGoodsIdUnit($goods_id,$name)
+    public static function findByGoodsIdUnit($goods_id, $name)
     {
         $row = self::find()
             ->select('goods_attr.goods_id,goods_category.title,goods_attr.name,goods_attr.value,goods_attr.unit')
-            ->leftJoin('goods','goods_attr.goods_id = goods.id')
-            ->leftJoin('goods_category','goods.category_id = goods_category.id')
-            ->where(['goods_attr.goods_id'=>$goods_id])
-            ->andwhere(['like','goods_attr.name',$name])
+            ->leftJoin('goods', 'goods_attr.goods_id = goods.id')
+            ->leftJoin('goods_category', 'goods.category_id = goods_category.id')
+            ->where(['goods_attr.goods_id' => $goods_id])
+            ->andwhere(['like', 'goods_attr.name', $name])
             ->asArray()
             ->one();
 
-            if ($row['unit'] == 5){
-                $row['value'] = $row['value'] / 1000;
-            }
+        if ($row['unit'] == 5) {
+            $row['value'] = $row['value'] / 1000;
+        }
 
         return $row;
     }
 
-    public static function findByGoodsIdUnits($goods_id,$name)
+    public static function findByGoodsIdUnits($goods_id, $name)
     {
 
         $row = self::find()
             ->select('goods_attr.goods_id,goods_category.title,goods_attr.name,goods_attr.value,goods_attr.unit')
-            ->leftJoin('goods','goods_attr.goods_id = goods.id')
-            ->leftJoin('goods_category','goods.category_id = goods_category.id')
-            ->where(['goods_attr.goods_id'=>$goods_id])
-            ->andwhere(['like','goods_attr.name',$name])
+            ->leftJoin('goods', 'goods_attr.goods_id = goods.id')
+            ->leftJoin('goods_category', 'goods.category_id = goods_category.id')
+            ->where(['goods_attr.goods_id' => $goods_id])
+            ->andwhere(['like', 'goods_attr.name', $name])
             ->asArray()
             ->all();
 
-        foreach ($row as &$one){
-            if (is_numeric($one['value']) && $one['unit'] == 5){
+        foreach ($row as &$one) {
+            if (is_numeric($one['value']) && $one['unit'] == 5) {
                 $one['value'] = $one['value'] / 1000;
             }
         }
@@ -375,19 +376,19 @@ class GoodsAttr extends ActiveRecord
         return $row;
     }
 
-    public static function goodsIdUnits($goods_id,$name)
+    public static function goodsIdUnits($goods_id, $name)
     {
         $row = self::find()
             ->select('goods_attr.goods_id,goods_category.title,goods_attr.name,goods_attr.value,goods_attr.unit')
-            ->leftJoin('goods','goods_attr.goods_id = goods.id')
-            ->leftJoin('goods_category','goods.category_id = goods_category.id')
-            ->where(['in','goods_attr.goods_id',$goods_id])
-            ->andwhere(['like','goods_attr.name',$name])
+            ->leftJoin('goods', 'goods_attr.goods_id = goods.id')
+            ->leftJoin('goods_category', 'goods.category_id = goods_category.id')
+            ->where(['in', 'goods_attr.goods_id', $goods_id])
+            ->andwhere(['like', 'goods_attr.name', $name])
             ->asArray()
             ->all();
 
-        foreach ($row as &$one){
-            if (is_numeric($one['value'])){
+        foreach ($row as &$one) {
+            if (is_numeric($one['value'])) {
                 $one['value'] = $one['value'] / 100;
             }
         }
