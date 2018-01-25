@@ -94,7 +94,7 @@ class GoodsAttr extends ActiveRecord
             return [];
         }
 
-        $sql = "select id, name, value, unit, addition_type"
+        $sql = "select name, value, unit, addition_type"
             . " from {{%" . self::tableName() . "}}"
             . " where category_id = {$categoryId} and goods_id = 0";
 
