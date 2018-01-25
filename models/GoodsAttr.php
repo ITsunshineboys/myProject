@@ -107,6 +107,7 @@ class GoodsAttr extends ActiveRecord
             $attr['addition_type'] != self::ADDITION_TYPE_NORMAL
             && $attr['value'] = explode(',', $attr['value']);
             $attr['required'] = (int)in_array($attr['id'], self::IDS_QUOTING_PRICE);
+            unset($attr['id']);
         }
 
         return $attrs;
