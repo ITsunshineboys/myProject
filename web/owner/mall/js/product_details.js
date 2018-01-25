@@ -207,7 +207,7 @@ app.controller('product_details_ctrl', function ($timeout, _ajax, $scope, $state
         if($stateParams.status!==undefined){
             history.go(-1)
         }else{
-            window.AndroidWebView.skipZhuangXiu()
+            window.AndroidWebView.finish()
         }
     }
 })
