@@ -37,6 +37,8 @@ class GoodsAttr extends ActiveRecord
         self::ADDITION_TYPE_CHECKBOX => '复选框添加'
     ];
 
+    const IDS_QUOTING_PRICE = [];
+
     /**
      * Check if has the same attribute name of some goods
      *
@@ -92,7 +94,7 @@ class GoodsAttr extends ActiveRecord
             return [];
         }
 
-        $sql = "select name, value, unit, addition_type"
+        $sql = "select id, name, value, unit, addition_type"
             . " from {{%" . self::tableName() . "}}"
             . " where category_id = {$categoryId} and goods_id = 0";
 
