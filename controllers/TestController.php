@@ -781,13 +781,9 @@ class TestController extends Controller
     public  function  actionDelInvalidAddress()
     {
         $user=User::find()->where(['mobile'=>\Yii::$app->request->post('mobile')])->one();
-        $userAddress=UserAddress::find()
-            ->where(['uid'=>$user->id])
-            ->all();
-        foreach ($userAddress as &$list)
-        {
-            $list->delete();
-        }
+
+       $res=UserAddress::deleteAll('uid='.$user->id);
+       var_dump($res);
     }
 
 
