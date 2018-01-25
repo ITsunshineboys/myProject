@@ -1643,9 +1643,10 @@ class OrderController extends Controller
         $waybillnumber = trim($request->post('waybillnumber', ''), '');
         $shipping_type = trim($request->post('shipping_type', '0'), '');
         $code=1000;
-        if ($shipping_type!=1){
+        if ($shipping_type!=Express::STATUS_TYPE_SEND_TO_HOME){
             if (!$sku|| !$waybillnumber || !$order_no) {
-                return Json::encode([
+                return Json::encode
+                ([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
@@ -3407,11 +3408,11 @@ class OrderController extends Controller
 
         switch ($GoodsOrder->order_refer)
         {
-            case 1:
-                $refund_type='线下已退款';
+            case OrderRefund::REFUND_TYPE_LINE:
+                $refund_type=OrderRefund::REFUND_TYPE_DESC[OrderRefund::REFUND_TYPE_LINE];
                 break;
-            case 2:
-                $refund_type='已退至顾客钱包';
+            case OrderRefund::REFUND_TYPE_TO_WALLET:
+                $refund_type=OrderRefund::REFUND_TYPE_DESC[OrderRefund::REFUND_TYPE_TO_WALLET];
                 break;
         }
 
@@ -3626,8 +3627,10 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
+
     /**
-     * 支付宝APP支付付款数据库操作--异步返回
+     * 支付宝APP支付,付款数据库操作--异步返回
+     * @throws Exception
      */
     public  function  actionAppOrderPayDatabase()
     {
@@ -3868,9 +3871,12 @@ class OrderController extends Controller
             ]
         ]);
     }
+
     /**
      * 删除评论操作
      * @return string
+     * @throws Exception
+     * @throws \Exception
      */
     public  function  actionSupplierDeleteComment()
     {

@@ -14,7 +14,9 @@ class Express extends ActiveRecord
 {
 
     const SEND_TO_HOME='送货上门';
-    const  LOGISTICS='快递物流';
+    const LOGISTICS='快递物流';
+    const STATUS_TYPE_SEND_TO_HOME=1;
+    const STATUS_TYPE_LOGISTICS=0;
     /**
      * @return string 返回该AR类关联的数据表名
      */

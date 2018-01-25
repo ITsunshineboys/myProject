@@ -1990,11 +1990,11 @@ class GoodsOrder extends ActiveRecord
             ->select('user_id')
             ->where(['order_no'=>$order_no])
             ->one();
-        $order_goodslist=OrderGoods::find()
-            ->select('id,order_status')
-            ->where(['order_no'=>$order_no])
-            ->andWhere(['sku'=>$sku])
-            ->one();
+        $order_goodslist=OrderGoods::FindByOrderNoAndSku($order_no,$sku,'id,order_status');
+        if ($order_goodslist)
+        {
+            $order_goodslist=$order_goodslist->toArray();
+        }
         if ($order_goodslist['order_status']!=0)
         {
             $code=1034;
