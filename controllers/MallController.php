@@ -2485,7 +2485,8 @@ class MallController extends Controller
             'data' => [
                 'brand_application_review_list' => [
                     'total' => (int)BrandApplication::find()->where($where)->asArray()->count(),
-                    'details' => BrandApplication::pagination($where, BrandApplication::FIELDS_REVIEW_ADMIN, $page, $size, $orderBy)
+                    'details' => BrandApplication::pagination($where, BrandApplication::FIELDS_REVIEW_ADMIN, $page, $size, $orderBy),
+                    'appliedCnt' => (int)BrandApplication::find()->where(['review_status' => Yii::$app->params['reviewStatuses'][0]])->asArray()->count(),
                 ]
             ],
         ]);
