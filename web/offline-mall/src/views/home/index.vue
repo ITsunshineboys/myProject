@@ -3,7 +3,7 @@
     <flexbox class="search_header">
       <flexbox-item class="location" :span="4/25">
         <router-link :to="{path:'/choose-city',query:{cur_city:cur_city}}">
-          <p><i class="iconfont icon-white"></i>{{city}}</p>
+          <p><i class="iconfont icon-location"></i>{{city}}</p>
         </router-link>
       </flexbox-item>
       <flexbox-item style="margin: 0" :span="18/25">
@@ -12,7 +12,7 @@
         </router-link>
       </flexbox-item>
       <flexbox-item :span="3/25" style="margin: 0;">
-        <i style="font-size:24px;" class="iconfont icon-messages-blue"></i>
+        <i style="font-size:24px;" class="iconfont icon-news-square"></i>
       </flexbox-item>
     </flexbox>
     <swiper dots-position="center" :list="banner_list" loop auto height="171px" :aspect-ratio="375/171" :show-desc-mask="false"></swiper>

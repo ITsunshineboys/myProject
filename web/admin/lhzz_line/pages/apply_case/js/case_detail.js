@@ -17,7 +17,7 @@ app.controller('case_detail_ctrl', function ($rootScope,_ajax, $stateParams, $st
         $scope.particulars_view = res.data.particulars_view
         let material = res.data.material
         $scope.material = []
-        for(let [key,value] of Object.entries(material)){
+        for(let [key,value] of material.entries()){
             $scope.material.push({
                 first_level:key,
                 goods:value,

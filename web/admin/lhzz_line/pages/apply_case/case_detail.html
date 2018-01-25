@@ -48,10 +48,9 @@
         <h3 class="col-md-12">材料信息</h3>
         <div class="col-md-12" ng-repeat="item in material">
             <p class="col-md-6">{{item.first_level}}</p>
-            <p class="col-md-6" style="text-align: right;" ng-if="!item.flag" ng-click="item.flag = !item.flag" data-toggle="collapse" data-parent="#accordion2" href="#cur_index{{$index}}"><i class="glyphicon glyphicon-chevron-down" ></i></p>
-            <p class="col-md-6" style="text-align: right;" ng-if="item.flag" ng-click="item.flag = !item.flag" data-toggle="collapse" data-parent="#accordion2" href="#cur_index{{$index}}"><i class="glyphicon glyphicon-chevron-up" ></i></p>
-            <div class="collapse" id="cur_index{{$index}}">
-            <div class="col-md-12 materials" ng-repeat="item1 in item.goods">
+            <p class="col-md-6" style="text-align: right;" ng-if="!item.flag" ng-click="item.flag = !item.flag"><i class="glyphicon glyphicon-chevron-down" ></i></p>
+            <p class="col-md-6" style="text-align: right;" ng-if="item.flag" ng-click="item.flag = !item.flag"><i class="glyphicon glyphicon-chevron-up" ></i></p>
+            <div class="col-md-12 materials" ng-if="item.flag" ng-repeat="item1 in item.goods">
                 <p class="col-md-2">{{item1.cate_level3}}</p>
                 <p class="col-md-2">{{item1.brand}}</p>
                 <p class="col-md-2">总价：{{item1.price}}</p>
