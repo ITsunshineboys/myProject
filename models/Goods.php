@@ -1657,9 +1657,10 @@ class Goods extends ActiveRecord
                     $this->setProfitRate();
                 }
             } else {
-                if (ModelService::hasChangedAttr(self::PROFIT_RATE_ATTRS, $this)) {
-                    $this->setProfitRate();
-                }
+                $this->setProfitRate();
+//                if (ModelService::hasChangedAttr(self::PROFIT_RATE_ATTRS, $this)) {
+//                    $this->setProfitRate();
+//                }
             }
 
             return true;
