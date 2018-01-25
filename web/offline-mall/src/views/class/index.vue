@@ -185,13 +185,30 @@
     text-align: center;
   }
 
+  /* iphone 5 */
   @media screen and (max-width: 320px)  {
-    /*.cate-item {
-      margin-right: 10%
-    }*/
+    .content-right {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
 
-    .cate-item:nth-child(3n) {
-      margin-right: 10%;
+    .cate-item {
+      margin-right: 5px;
+      margin-bottom: 20px;
+    }
+  }
+
+  /* galaxy S5 */
+  @media screen and (min-width: 321px) and (max-width: 360px) {
+    .cate-item {
+      margin-right: 16px;
+    }
+  }
+
+  /* iphone 7 plus */
+  @media screen and (min-width: 376px) and (max-width: 414px) {
+    .cate-item {
+      margin-right: 44px;
     }
   }
 </style>
