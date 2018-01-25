@@ -285,8 +285,18 @@ class Effect extends ActiveRecord
         }
 
 
-        $material_grop=array_values(self::array_group_by($material,'first_cate_id'));
-        $data['material']=$material_grop;
+        $material_grop=self::array_group_by($material,'first_cate_id');
+        $data2 = array_keys($material_grop);
+       foreach ($material_grop as &$value){
+           foreach ($data2 as $a){
+                if ($value[0]['first_cate_id'] == $a){
+                    $as['title'] = $a;
+                    $asdd[]=[$as,$value];
+
+                }
+            }
+        }
+        $data['material']=$asdd;
         return $data;
 
     }
