@@ -396,6 +396,7 @@ class UserAddress extends  ActiveRecord
     {
         $address=self::find()
             ->where(['uid'=>$user_id])
+            ->andWhere(['default'=>1])
             ->asArray()
             ->one();
         if (!$address)
@@ -404,7 +405,7 @@ class UserAddress extends  ActiveRecord
         }
         return  [
             'district_code'=>$address['district'],
-            'district'=>LogisticsDistrict::GetVagueDistrictCode($address['district']).'-'.$address['region'],
+            'district'=>LogisticsDistrict::GetLineDistrictByDistrictCode($address['district']).'-'.$address['region'],
             'mobile'=>$address['mobile'],
             'consignee'=>$address['consignee']
         ];
