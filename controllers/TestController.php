@@ -774,6 +774,23 @@ class TestController extends Controller
     }
 
 
+    /**
+     * @throws \Exception
+     * @throws \yii\db\StaleObjectException
+     */
+    public  function  actionDelInvalidAddress()
+    {
+        $user=User::find()->where(['mobile'=>\Yii::$app->request->post('mobile')])->one();
+        $userAddress=UserAddress::find()
+            ->where(['uid'=>$user->id])
+            ->all();
+        foreach ($userAddress as &$list)
+        {
+            $list->delete();
+        }
+    }
+
+
 
 
 
