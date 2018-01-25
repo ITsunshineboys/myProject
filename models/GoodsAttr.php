@@ -94,7 +94,7 @@ class GoodsAttr extends ActiveRecord
             return [];
         }
 
-        $sql = "select name, value, unit, addition_type"
+        $sql = "select id, name, value, unit, addition_type"
             . " from {{%" . self::tableName() . "}}"
             . " where category_id = {$categoryId} and goods_id = 0";
 
@@ -106,6 +106,7 @@ class GoodsAttr extends ActiveRecord
             $attr['unit'] = self::UNITS[$attr['unit']];
             $attr['addition_type'] != self::ADDITION_TYPE_NORMAL
             && $attr['value'] = explode(',', $attr['value']);
+            $attr['required'] = (int)in_array($attr['id'], self::IDS_QUOTING_PRICE);
         }
 
         return $attrs;
