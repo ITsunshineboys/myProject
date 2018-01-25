@@ -2912,6 +2912,19 @@ class MallController extends Controller
             ]);
         }
 
+        $oldNames = GoodsAttr::findNecessaryAttrs($categoryId);
+        $deletedNames = array_diff($oldNames, $names);
+        if ($deletedNames
+            && GoodsAttr::IDS_QUOTING_PRICE
+            && array_intersect(GoodsAttr::IDS_QUOTING_PRICE, GoodsAttr::findIdsByName($deletedNames))
+        ) {
+            $code = 1095;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         $category->attr_op_uid = $lhzz->id;
         $category->attr_op_username = $lhzz->nickname;
         $category->attr_op_time = time();

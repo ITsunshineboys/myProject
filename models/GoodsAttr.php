@@ -431,6 +431,18 @@ class GoodsAttr extends ActiveRecord
     }
 
     /**
+     * Find ids by attribute names
+     *
+     * @param array $names attribute
+     * @return array
+     */
+    public static function findIdsByName(array $names)
+    {
+        $ids = self::find()->select(['id'])->where(['in', 'name', $names])->asArray()->all();
+        return StringService::valuesByKey($ids, 'id');
+    }
+
+    /**
      * Validates category_id
      *
      * @param string $attribute category_id to validate
