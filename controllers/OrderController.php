@@ -1206,16 +1206,18 @@ class OrderController extends Controller
             'data'=>$order_type_list
         ]);
     }
-     /**
+
+    /**
      * 大后台订单列表
-     * find order list by admin user
      * @return string
+     * @throws Exception
      */
     public function actionFindOrderList(){
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=403;
-            return Json::encode([
+            return Json::encode
+            ([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
@@ -1225,7 +1227,7 @@ class OrderController extends Controller
         $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
         $keyword = trim($request->get('keyword', ''));
         $timeType = trim($request->get('time_type', ''));
-        $type=trim($request->get('type','all'));
+        $type=trim($request->get('type',GoodsOrder::ORDER_TYPE_ALL));
         $supplier_id=trim($request->get('supplier_id'));
         $where=GoodsOrder::GetTypeWhere($type);
         if ($timeType == 'custom') {
@@ -1329,8 +1331,10 @@ class OrderController extends Controller
             'data'=>$paginationData
         ]);
     }
-    /**
-     *大后台之查看订单详情
+
+    /**大后台之查看订单详情
+     * @return string
+     * @throws Exception
      */
     public function actionGetorderdetailsall(){
         $request=Yii::$app->request;
@@ -3643,11 +3647,11 @@ class OrderController extends Controller
                 $orders=explode(',',urldecode($post['passback_params']));
                 $total_amount=$post['total_amount'];
                 $orderAmount=GoodsOrder::CalculationCost($orders);
-                if (!$total_amount*100==$orderAmount)
-                {
-                    echo 'fail';
-                    exit;
-                }
+//                if (!$total_amount*100==$orderAmount)
+//                {
+//                    echo 'fail';
+//                    exit;
+//                }
                 $tran = Yii::$app->db->beginTransaction();
                 try{
                     $Ord= GoodsOrder::find()

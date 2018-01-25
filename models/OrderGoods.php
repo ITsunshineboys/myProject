@@ -275,7 +275,6 @@ class OrderGoods extends ActiveRecord
             $code = 1000;
             return $code;
         }
-
         //获取收货详情
         $receive_details['consignee']=$order_information['consignee'];
         $receive_details['consignee_mobile']=$order_information['consignee_mobile'];
