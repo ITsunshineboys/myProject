@@ -8,7 +8,7 @@
     </div>
 
     <!--更多弹窗-->
-    <div v-show="show_more" class="pop-down">
+    <div v-if="show_more" class="pop-down">
       <ul>
         <router-link :to="'/'" tag="li">
           <span class="iconfont icon-home"></span>
