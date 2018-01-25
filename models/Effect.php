@@ -263,6 +263,8 @@ class Effect extends ActiveRecord
         }
 
 
+
+
         foreach ($material as &$value){
 
             $goods_cate_id=Goods::find()->select('brand_id,category_id')->where(['id'=>$value['goods_id']])->asArray()->one();
@@ -280,23 +282,21 @@ class Effect extends ActiveRecord
                 ->select('title')
                 ->where(['id'=>$value['first_cate_id']])
                 ->asArray()->one()['title'];
-
-
         }
 
 
         $material_grop=self::array_group_by($material,'first_cate_id');
-        $data2 = array_keys($material_grop);
-       foreach ($material_grop as &$value){
-           foreach ($data2 as $a){
-                if ($value[0]['first_cate_id'] == $a){
-                    $as['title'] = $a;
-                    $asdd[]=[$as,$value];
-
-                }
-            }
-        }
-        $data['material']=$asdd;
+//        $data2 = array_keys($material_grop);
+//       foreach ($material_grop as &$value){
+//           foreach ($data2 as $a){
+//                if ($value[0]['first_cate_id'] == $a){
+//                    $as['title'] = $a;
+//                    $asdd[]=[$as,$value];
+//
+//                }
+//            }
+//        }
+        $data['material']=$material_grop;
         return $data;
 
     }
