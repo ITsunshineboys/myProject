@@ -253,17 +253,14 @@ class Effect extends ActiveRecord
             $stairway_cl=(new Query())->from('effect')->select('attribute')->leftJoin('stairs_details','effect.stair_id=stairs_details.id')->where(['effect.id'=>$effect_id])->one();
             $array['stairway']=$stairway_cl['attribute'];
         }else{
-            $array['stairway']=null;
+            $array['stairway']='';
         }
         $data['particulars_view']=$array;
 
         $material=EffectMaterial::find()->where(['effect_id'=>$effect_id])->asArray()->all();
         if(!$material){
-            $data['material']=null;
+            $data['material']=[];
         }
-
-
-
 
         foreach ($material as &$value){
 
@@ -286,16 +283,6 @@ class Effect extends ActiveRecord
 
 
         $material_grop=array_values(self::array_group_by($material,'first_cate_id'));
-//        $data2 = array_keys($material_grop);
-//       foreach ($material_grop as &$value){
-//           foreach ($data2 as $a){
-//                if ($value[0]['first_cate_id'] == $a){
-//                    $as['title'] = $a;
-//                    $asdd[]=[$as,$value];
-//
-//                }
-//            }
-//        }
         $data['material']=$material_grop;
         return $data;
 
