@@ -38,6 +38,7 @@
       <group>
         <cell-box is-link class="choose-count" @click.native="showCount('count')">
           选择数量
+
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -80,14 +81,17 @@
         <flexbox slot="content" justify="space-between" class="shop-intro">
           <div>
             <span>{{good_detail.supplier.goods_number}}</span><br/>商品数
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.follower_number}}</span><br/>粉丝数
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
+
           </div>
         </flexbox>
         <flexbox slot="footer" justify="center" class="view-shop-btn">
@@ -150,12 +154,15 @@
       <flexbox class="bottom-tabbar">
         <flexbox-item @click.native="contactShop" :span="155/375">
           <i class="iconfont icon-service"></i><br/>联系商家
+
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('cart')" :span="110/375">
           加入购物车
+
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('now')" :span="110/375">
           立即购买
+
         </flexbox-item>
       </flexbox>
     </div>
@@ -182,9 +189,11 @@
         <flexbox class="count-bottom-btn">
           <flexbox-item alt="cart" v-if="count_cart||default_count" @click.native="addCart">
             加入购物车
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
+
           </flexbox-item>
         </flexbox>
       </div>
@@ -220,7 +229,8 @@
     </popup>
 
     <!--线下商品介绍弹窗-->
-    <offlinealert :offlineInfo="offlineInfo" :show="show_offlinegood" :isOffline="false" @isShow="showOfflineAlert"></offlinealert>
+    <offlinealert :offlineInfo="offlineInfo" :show="show_offlinegood" :isOffline="false"
+                  @isShow="showOfflineAlert"></offlinealert>
 
     <!--加入购物车成功提示-->
     <toast v-model="cart_success" width="200px" position="middle" :time="2000" :is-show-mask="true">
@@ -471,6 +481,7 @@
       },
       // 跳转消息中心
       skipMessageCenter () {
+        this.show_more = false
         window.AndroidWebView.skipMessageCenter()
       },
       // 联系商家
