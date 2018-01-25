@@ -441,7 +441,11 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 		if($scope.goods_check_attrs.length === 0){
 			$scope.attrs_check_flag=true
 		}
-		// 判断 input框不能为空、封面图 物流模板、无重复属性名、价格、有品牌、属性输入规则符合标准、属性复选框
+		// 没有下拉框属性
+		if($scope.goods_select_attrs[0] == undefined ){
+			$scope.goods_select_flag=true
+		}
+		// 判断 input框不能为空、封面图 物流模板、无重复属性名、价格、有品牌、属性输入规则符合标准、属性复选框、属性下拉框
 		if(valid && $scope.upload_cover_src &&$scope.logistics_status && $scope.own_submitted && !$scope.price_flag && !$scope.left_number_flag && $scope.brands_arr.length > 0 && $scope.attr_blur_flag && $scope.attrs_check_flag && $scope.goods_select_flag){
 			$scope.description = UE.getEditor('editor').getContent();//富文本编辑器
 			$scope.after_sale_services=[];

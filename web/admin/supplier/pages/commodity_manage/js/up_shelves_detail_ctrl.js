@@ -458,8 +458,12 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
 	    if($scope.goods_check_attrs.length === 0){
 		    $scope.attrs_check_flag=true
 	    }
-		// 判断 input框不能为空、封面图、物流模板、价格、库存、无重复属性名、有品牌、属性输入规则符合标准、属性复选框
-        if (valid && $scope.upload_cover_src && $scope.logistics_status && !$scope.price_flag && !$scope.left_number_flag && $scope.own_submitted && $scope.brands_arr.length > 0 && $scope.attr_blur_flag && $scope.attrs_check_flag) {
+	    // 没有下拉框属性
+	    if($scope.goods_select_attrs[0] == undefined ){
+		    $scope.goods_select_flag=true
+	    }
+			// 判断 input框不能为空、封面图、物流模板、价格、库存、无重复属性名、有品牌、属性输入规则符合标准、属性复选框、属性下拉框
+        if (valid && $scope.upload_cover_src && $scope.logistics_status && !$scope.price_flag && !$scope.left_number_flag && $scope.own_submitted && $scope.brands_arr.length > 0 && $scope.attr_blur_flag && $scope.attrs_check_flag && $scope.goods_select_flag) {
             $scope.description = UE.getEditor('editor').getContent();//富文本编辑器
             $scope.after_sale_services = [];
             //提供发票
