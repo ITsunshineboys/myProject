@@ -8,6 +8,7 @@ use app\models\Express;
 use app\models\Goods;
 use app\models\GoodsAttr;
 use app\models\GoodsBrand;
+use app\models\GoodsComment;
 use app\models\GoodsOrder;
 use app\models\GoodsStat;
 use app\models\Invoice;
@@ -768,8 +769,7 @@ class TestController extends Controller
 
     public  static  function  actionTest1()
     {
-      $data= OrderRefund::find()->where(['order_no'=>'0122191529'])->one();
-      var_dump($data);die;
+     return Json::encode(GoodsComment::find()->all());
 
     }
 
