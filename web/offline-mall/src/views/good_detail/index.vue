@@ -40,6 +40,7 @@
           选择数量
 
 
+
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -82,20 +83,14 @@
         <flexbox slot="content" justify="space-between" class="shop-intro">
           <div>
             <span>{{good_detail.supplier.goods_number}}</span><br/>商品数
-
-
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.follower_number}}</span><br/>粉丝数
-
-
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
-
-
           </div>
         </flexbox>
         <flexbox slot="footer" justify="center" class="view-shop-btn">
@@ -106,69 +101,72 @@
       </card>
       <divider></divider>
 
-      <!--底部选项卡-->
-      <tab defaultColor="#999" active-color="#222" bar-active-color="#222" custom-bar-width="50px" class="tab">
-        <tab-item selected @on-item-click="tabHandler('des')">图文详情</tab-item>
-        <tab-item @on-item-click="tabHandler('params')">产品参数</tab-item>
-      </tab>
-      <!-- 图文详情 -->
-      <div v-show="show_description" class="description-container">
-        <flexbox>
-          <flexbox-item class="description" v-html="good_detail.description"></flexbox-item>
-        </flexbox>
-      </div>
-      <!-- 产品参数 -->
-      <div v-show="!show_description">
-        <flexbox orient="vertical" class="pro-params" align="flex-start">
-          <flexbox-item>
-            <flexbox justify="space-between">
-              <span>产品编码</span>
-              <span>{{good_detail.sku}}</span>
-            </flexbox>
-          </flexbox-item>
-          <flexbox-item>
-            <flexbox justify="space-between">
-              <span>产品品牌</span>
-              <span>{{good_detail.brand_name}}</span>
-            </flexbox>
-          </flexbox-item>
-          <flexbox-item>
-            <flexbox justify="space-between" v-if="good_detail.series_name">
-              <span>系列</span>
-              <span>{{good_detail.series_name}}</span>
-            </flexbox>
-          </flexbox-item>
-          <flexbox-item v-if="good_detail.style_name">
-            <flexbox justify="space-between">
-              <span>风格</span>
-              <span>{{good_detail.style_name}}</span>
-            </flexbox>
-          </flexbox-item>
-          <flexbox-item v-if="good_detail.attr!==''">
-            <flexbox justify="space-between" v-for="item in good_detail.attrs" :key="item.id">
-              <span>{{item.name}}</span>
-              <span>{{item.value}}</span>
-            </flexbox>
-          </flexbox-item>
-        </flexbox>
-        <divider></divider>
+      <!--图文详情选项卡-->
+      <div class="graphic_detail">
+        <tab defaultColor="#999" active-color="#222" bar-active-color="#222" custom-bar-width="50px" class="tab">
+          <tab-item selected @on-item-click="tabHandler('des')">图文详情</tab-item>
+          <tab-item @on-item-click="tabHandler('params')">产品参数</tab-item>
+        </tab>
+        <!-- 图文详情 -->
+        <div v-show="show_description" class="description-container">
+          <flexbox>
+            <flexbox-item class="description" v-html="good_detail.description"></flexbox-item>
+          </flexbox>
+        </div>
+        <!-- 产品参数 -->
+        <div v-show="!show_description">
+          <flexbox orient="vertical" class="pro-params" align="flex-start">
+            <flexbox-item>
+              <flexbox justify="space-between">
+                <span>产品编码</span>
+                <span>{{good_detail.sku}}</span>
+              </flexbox>
+            </flexbox-item>
+            <flexbox-item>
+              <flexbox justify="space-between">
+                <span>产品品牌</span>
+                <span>{{good_detail.brand_name}}</span>
+              </flexbox>
+            </flexbox-item>
+            <flexbox-item>
+              <flexbox justify="space-between" v-if="good_detail.series_name">
+                <span>系列</span>
+                <span>{{good_detail.series_name}}</span>
+              </flexbox>
+            </flexbox-item>
+            <flexbox-item v-if="good_detail.style_name">
+              <flexbox justify="space-between">
+                <span>风格</span>
+                <span>{{good_detail.style_name}}</span>
+              </flexbox>
+            </flexbox-item>
+            <flexbox-item v-if="good_detail.attr!==''">
+              <flexbox justify="space-between" v-for="item in good_detail.attrs" :key="item.id">
+                <span>{{item.name}}</span>
+                <span>{{item.value}}</span>
+              </flexbox>
+            </flexbox-item>
+          </flexbox>
+          <divider></divider>
+        </div>
       </div>
 
       <!--底部按钮-->
       <flexbox class="bottom-tabbar">
-        <flexbox-item @click.native="contactShop" :span="155/375">
-          <i class="iconfont icon-service"></i><br/>联系商家
-
+        <flexbox-item @click.native="contactShop" :span="76/375">
+          <i class="iconfont icon-service1"></i><br/>联系商家
+        </flexbox-item>
+        <span></span>
+        <flexbox-item @click.native="skipCart" :span="77/375">
+          <i class="iconfont icon-cart"></i><br/>购物车
 
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('cart')" :span="110/375">
           加入购物车
 
-
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('now')" :span="110/375">
           立即购买
-
 
         </flexbox-item>
       </flexbox>
@@ -198,9 +196,11 @@
             加入购物车
 
 
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
+
 
 
           </flexbox-item>
@@ -493,6 +493,10 @@
       skipMessageCenter () {
         this.show_more = false
         window.AndroidWebView.skipMessageCenter()
+      },
+      // 跳转购物车
+      skipCart () {
+        window.AndroidWebView.skipShopCart()
       },
       // 联系商家
       contactShop () {
@@ -813,8 +817,11 @@
 
   /*底部选项卡*/
   .good-container .bottom-tabbar {
+    position: fixed;
+    bottom: 0;
     text-align: center;
     height: 48px;
+    background: #fff;
   }
 
   .good-container .bottom-tabbar > div {
@@ -827,13 +834,21 @@
     margin-top: 2px;
   }
 
-  .good-container .bottom-tabbar > div:first-child {
+  .good-container .bottom-tabbar > div:first-child,
+  .good-container .bottom-tabbar > div:nth-child(3) {
     width: 79px;
     font-size: 12px;
     color: rgba(153, 153, 153, 1);
   }
 
-  .good-container .bottom-tabbar > div:nth-child(2) {
+  .good-container .bottom-tabbar > span {
+    display: inline-block;
+    width: 2px;
+    height: 20px;
+    background: #CDD3D7;
+  }
+
+  .good-container .bottom-tabbar > div:nth-child(4) {
     width: 148px;
     font-size: 16px;
     background: rgba(34, 34, 34, 1);
@@ -849,7 +864,7 @@
     color: rgba(255, 255, 255, 1);
   }
 
-  /*选择数量弹窗*/
+  /*选择数量弹窗 start*/
   .good-container .count-top {
     overflow: hidden;
     padding: 15px 0 10px 14px;
@@ -882,6 +897,7 @@
     color: rgba(153, 153, 153, 1);
     line-height: 14px;
   }
+  /*选择数量弹窗 end*/
 
   /*购买数量*/
   .good-container .buy-count > div:first-child p {
@@ -981,7 +997,7 @@
     margin-left: 25px;
   }
 
-  /* 售后弹窗-保障 */
+  /* 售后弹窗-保障 start*/
   .good-container .safe-guard > p {
     height: 46px;
     line-height: 46px;
@@ -1006,7 +1022,13 @@
     color: rgba(255, 255, 255, 1);
   }
 
-  /*图文详情*/
+  /* 售后弹窗-保障 end*/
+
+  /*图文详情 start*/
+  .good-container .graphic_detail {
+    margin-bottom: 48px;
+  }
+
   .good-container .description-container {
     min-height: 10px;
   }
@@ -1041,39 +1063,9 @@
     background: rgba(34, 34, 34, 1);
   }
 
-  /*分享弹窗*/
-  .good-container .share-icon {
-    width: 314px;
-    margin: 20px auto;
-  }
+  /*图文详情 end*/
 
-  .good-container .share-icon img {
-    width: 40px;
-    height: 40px;
-  }
-
-  .good-container .share-icon > div {
-    float: left;
-    width: 48px !important;
-    height: 75px;
-    text-align: center;
-    margin-right: 40px;
-  }
-
-  .good-container .share-icon > div:nth-child(4) {
-    margin-right: 0;
-  }
-
-  .good-container .share-icon > div:last-child {
-    margin-top: 18px;
-  }
-
-  .good-container .share-icon > div > span {
-    font-size: 12px;
-    color: rgba(153, 153, 153, 1);
-  }
-
-  /*添加购物车成功弹窗*/
+  /*添加购物车成功弹窗 start*/
   .good-container .weui-toast {
     text-align: center;
     padding-top: 31px;
@@ -1095,7 +1087,9 @@
     color: rgba(255, 255, 255, 1);
   }
 
-  /*商品不足弹窗*/
+  /*添加购物车成功弹窗 end*/
+
+  /*商品不足弹窗 start*/
   .good-container .goodshort-alert .weui-dialog__ft,
   .good-container .goodshort-alert .weui-dialog__hd {
     display: none;
@@ -1125,7 +1119,9 @@
     color: rgba(34, 34, 34, 1);
   }
 
-  /*商品下架弹窗*/
+  /*商品不足弹窗 start*/
+
+  /*商品下架弹窗 start*/
   .good-container .offline-warning {
     background: rgb(34, 34, 34);
     text-align: center;
@@ -1133,5 +1129,7 @@
     font-size: 18px;
     color: rgba(255, 255, 255, 1);
   }
+
+  /*商品下架弹窗 end*/
 </style>
 
