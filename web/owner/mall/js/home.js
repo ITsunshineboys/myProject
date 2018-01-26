@@ -12,5 +12,4 @@ app.controller('home_ctrl',function ($scope,_ajax) {
         console.log(res);
         $scope.recommend_list = res.data
     });
-    window.AndroidWebView.showTable()
 })
