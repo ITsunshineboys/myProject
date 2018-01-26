@@ -85,7 +85,7 @@
       Grid,
       GridItem
     },
-    method: {
+    methods: {
       goMessage () {
         window.AndroidWebView.skipMessageCenter()
       }
