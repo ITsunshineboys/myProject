@@ -92,7 +92,8 @@ class UserFollow extends \yii\db\ActiveRecord
     {
         $table = self::TABLE_BY_ROLE_ID[$role_id];
         $nickname = 'nickname';
-        if ($table == 'supplier') {
+        if ($table == 'supplier')
+        {
             $nickname = 'shop_name';
         }
 
@@ -100,7 +101,7 @@ class UserFollow extends \yii\db\ActiveRecord
             ->from(self::tableName() . ' as  u')
             ->leftJoin($table . ' as  f', 'u.follow_id = f.id')
             ->select(['u.id', 'u.follow_id', 'u.role_id', 'u.status', 'f.' . $nickname . ' as nickname', 'f.icon', 'f.follower_number'])
-            ->where(['u.role_id' => $user->last_role_id_app, 'u.status' => 1, 'u.user_id' => $user->id]);
+            ->where(['u.role_id' => $user->last_role_id_app,'u.user_follow_role_id'=>$role_id, 'u.status' => 1, 'u.user_id' => $user->id]);
         $count = $query->count();
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
         $arr = $query

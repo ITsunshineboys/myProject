@@ -267,4 +267,9 @@ alter table goods modify `favourable_comment_rate` tinyint unsigned not null def
 --all 2018.1.22 hj
 alter table supplier modify `shop_name` varchar(33) not null DEFAULT '' COMMENT '店铺名称';
 
+--all 2018.1.26 hyz
+alter table user_follow ADD `user_follow_role_id` tinyint(5) NOT NULL DEFAULT '6' COMMENT ' 被关注者角色ID  3 ： 设计师,5： 装修公司, 6 ： 店铺';
+
+ALTER TABLE user_follow MODIFY `role_id` int(11) NOT NULL DEFAULT '0' COMMENT '角色ID';
+
 
