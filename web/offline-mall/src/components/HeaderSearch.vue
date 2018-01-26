@@ -59,6 +59,7 @@
     methods: {
       goHome () {
         console.log(this.goLink, this.goParams)
+        this.$emit('callbackFun')     // 为从安卓跳店铺首页返回触发事件
         this.$router.replace({
           path: this.goLink,
           params: this.goParams

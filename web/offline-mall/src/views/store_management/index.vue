@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-header headTitle="店铺首页" pop="true"></v-header>
+    <v-header headTitle="店铺首页" pop="true"  :backWay="isFromAndroid" @callbackFun="androidFun"></v-header>
     <div class="store" flex="main:justify cross:center">
       <div flex>
         <div class="store-img">
@@ -95,7 +95,7 @@
     },
     data () {
       return {
-        // isAttention: 0,       // 关注图标默认未关注
+        isFromAndroid: false, // 是否从安卓跳入本页面
         tabActive: 0,         // 默认选中店铺首页
         tabHeight: 44,        // tab 默认最小高度为 44 像素
         isShowAlert: false,  // 是否显示线下体验店弹窗
@@ -121,24 +121,35 @@
       }
     },
     created () {
+      // 判断是否从安卓关注列表也进入本页面
+      if (this.$route.query.system === 'android') {
+        this.isFromAndroid = true
+      }
       this.getStoreData()
-      // 请求店铺首页推荐商品
-      this.axios.get('/supplier/recommend-second', {supplier_id: this.$route.params.id}, res => {
-        console.log(res, '店铺推荐商品')
-        this.recommendGoods = res.data.recommend_second
-      })
+      this.getStoreShopGoods()
     },
     methods: {
+      androidFun () { // 返回安卓店铺关注列表
+        window.AndroidWebView.webfinish()
+      },
       onClickTab (index) {
         this.tabActive = index
         if (index === 0) {
           // 当 tab 为店铺首页，tab 高度最小为 44 像素
           this.tabHeight = 44
+          this.getStoreData()
+          this.getStoreShopGoods()
         } else {
           // 当 tab 为全部商品，tab 高度最小为 88 像素
           this.tabHeight = 88
           this.getAllGoodsData()
         }
+      },
+      getStoreShopGoods () {     // 请求店铺首页推荐商品
+        this.axios.get('/supplier/recommend-second', {supplier_id: this.$route.params.id}, res => {
+          console.log(res, '店铺推荐商品')
+          this.recommendGoods = res.data.recommend_second
+        })
       },
       getStoreData () {     // 请求店铺数据
         this.axios.get('/supplier/index', {supplier_id: this.$route.params.id}, res => {
