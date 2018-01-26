@@ -7,9 +7,9 @@
            label-width="375" label-align="left">
       <p>{{item.title}}</p>
     </group>
-    <p v-if="search != ''&&good_list.length==0"
+    <p class="search_height" v-if="search != ''&&good_list.length==0"
        style="padding: 40px 0;text-align: center;font-size: 16px;color: #999;">暂无数据显示</p>
-    <card v-if="search === ''&& history_list.length != 0" class="history" :header="{title:'搜索历史'}">
+    <card v-if="search === ''&& history_list.length != 0" class="history search_height" :header="{title:'搜索历史'}">
       <flexbox slot="content" orient="vertical">
         <flexbox-item @click.native="inquiry(item)" v-for="(item,index) of history_list" :key="index">
           <p>{{item}}</p>
@@ -178,7 +178,7 @@
   .hide_margin .weui-cells {
     margin-top: 0 !important;
   }
-  .weui-panel{
+  .search_height{
     height: calc(100vh - 65px)!important;
   }
 
