@@ -4733,6 +4733,7 @@ class OrderController extends Controller
             $orders==500
             || $orders==1000
             || $orders==1083
+            || $orders==1096
         )
         {
             $code=$orders;
