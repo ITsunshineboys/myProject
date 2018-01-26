@@ -1866,12 +1866,16 @@ class SiteController extends Controller
     }
 
 
+    /**
+     * 获取是否有消息
+     * @return string
+     */
     public function  actionUserCheckNews()
     {
         $user = Yii::$app->user->identity;
         if (!$user)
         {
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -1882,10 +1886,10 @@ class SiteController extends Controller
             ->andWhere(['role_id'=>$user->last_role_id_app])
             ->andWhere(['status'=>0])
             ->count();
-         return Json::encode([
-             'code' => 200,
-             'msg' => 'ok',
-             'data' =>$userNews>0?1:2
-         ]);
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' =>$userNews>0?1:2
+        ]);
     }
 }
