@@ -1,4 +1,6 @@
-app.controller('search_ctrl',function ($stateParams,$scope,_ajax,$state) {
+app.controller('search_ctrl',function ($window,$stateParams,$scope,_ajax,$state) {
+    //获取焦点
+    $window.document.getElementById('search').focus()
     //初始化数据
     $scope.toponymy = {
         name:'',
