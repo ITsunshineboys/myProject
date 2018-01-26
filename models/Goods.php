@@ -1718,6 +1718,7 @@ class Goods extends ActiveRecord
     /**
      * @param $score
      * @return int
+     * @throws \yii\db\Exception
      */
     public   function  UpPraiseRate($score)
     {

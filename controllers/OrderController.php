@@ -2389,7 +2389,7 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        if (Yii::$app->getSecurity()->validatePassword($postData['pay_password'],$user->pay_password)==false)
+        if (\Yii::$app->getSecurity()->validatePassword($postData['pay_password'],$user->pay_password)==false)
         {
             $code=1055;
             return Json::encode
@@ -2487,7 +2487,8 @@ class OrderController extends Controller
              $data=[];
          }
         $code=200;
-        return Json::encode([
+        return Json::encode
+        ([
             'code'=>$code,
             'msg'=>'ok',
             'data'=>$data
@@ -2522,7 +2523,8 @@ class OrderController extends Controller
         $code=GoodsComment::addComment($postData,$user,$uploadsData);
         if($code==200)
         {
-            return Json::encode([
+            return Json::encode
+            ([
                 'code' => $code,
                 'msg' => 'ok'
             ]);

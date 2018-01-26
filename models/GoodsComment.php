@@ -190,7 +190,7 @@ class GoodsComment extends ActiveRecord
             $comment->create_time=$time;
             $comment->content=$postData['content'];
             $comment->is_anonymous=$postData['anonymous'];
-            $comment->name =$postData['anonymous']==self::ANONYMOUS?Yii::$app->params['anonymous']:$user->nickname;
+            $comment->name =$postData['anonymous']==self::ANONYMOUS?\Yii::$app->params['anonymous']:$user->nickname;
             $comment->store_service_score=$postData['store_service_score'];
             $comment->logistics_speed_score=$postData['logistics_speed_score'];
             $comment->shipping_score=$postData['shipping_score'];
