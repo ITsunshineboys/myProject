@@ -29,6 +29,8 @@ class GoodsComment extends ActiveRecord
     const MAX_LEN_CONTENT = 70;
     const PAGE_SIZE_DEFAULT = 12;
     const FIELDS_EXTRA = ['images', 'replies'];
+    const ANONYMOUS=1;
+    const REAL=2;
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -181,7 +183,6 @@ class GoodsComment extends ActiveRecord
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
         try{
-
             $comment=new GoodsComment();
             $comment->goods_id=$goods->id;
             $comment->uid=$user->id;
@@ -189,7 +190,7 @@ class GoodsComment extends ActiveRecord
             $comment->create_time=$time;
             $comment->content=$postData['content'];
             $comment->is_anonymous=$postData['anonymous'];
-            $comment->name =$user->nickname;
+            $comment->name =$postData['anonymous']==self::ANONYMOUS?Yii::$app->params['anonymous']:$user->nickname;
             $comment->store_service_score=$postData['store_service_score'];
             $comment->logistics_speed_score=$postData['logistics_speed_score'];
             $comment->shipping_score=$postData['shipping_score'];

@@ -286,4 +286,5 @@ return [
     ],
     'bankList'=>$bank,
 //    'online' => $paramsOnline,
+    'anonymous'=>'匿名',
 ];
