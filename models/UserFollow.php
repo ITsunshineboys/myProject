@@ -121,56 +121,46 @@ class UserFollow extends \yii\db\ActiveRecord
     public static function toggleStatus($id)
     {
 
-        $follow = self::find()->where(['id' => $id])->one();
-        if ($follow == null) {
+        $follow = self::findOne($id);
+        if (!$follow)
+        {
             return 1000;
         }
 
-        $role_id = (int)$follow->role_id;
-        $follow_id = (int)$follow->follow_id;
-        $status = (int)$follow->status;
-
-        if (!array_key_exists($role_id, self::TABLE_BY_ROLE_ID)) {
+        $user_follow_role_id = (int)$follow->user_follow_role_id;
+        if (!array_key_exists($user_follow_role_id, self::TABLE_BY_ROLE_ID))       {
             return 1000;
         }
-
-        $table = self::TABLE_BY_ROLE_ID[$role_id];
-        if (!$table) {
-            return 1000;
-        }
-
-        $arr = (new Query())->from($table)->where(['id' => $follow_id])->one();
-        if (!$arr) {
-            return 1000;
-        }
-
-        $follower_number = $arr['follower_number'];
+        $table = Role::CheckUserRole($user_follow_role_id)
+            ->where(['id'=>$follow->follow_id])
+            ->one();
+        $status=$follow->status;
         if ($status) {
             $follow->status = 0;
             $follow->unfollow_time = time();
-            $arr['follower_number'] && $follower_number -= 1;
+            $table->follower_number -= 1;
         } else {
             $follow->status = 1;
             $follow->unfollow_time = 0;
             $follow->follow_time = time();
-            $follower_number += 1;
+            $table->follower_number += 1;
         }
-
-        $trans = Yii::$app->db->beginTransaction();
+        $tran = Yii::$app->db->beginTransaction();
         try {
-            $follow->update();
-            \Yii::$app->db->createCommand()
-                ->update($table, ['follower_number' => $follower_number,], ['id' => $follow_id])
-                ->execute();
-
-            $trans->commit();
-
-        } catch (Exception $e) {
-            $trans->rollBack();
+            if (!$follow->save(false))
+            {
+                $tran->rollBack();
+            }
+            if (!$table->save(false))
+            {
+                $tran->rollBack();
+            }
+            $tran->commit();
+            return 200;
+        } catch (\Exception $e) {
+            $tran->rollBack();
             return 1000;
         }
-
-        return 200;
     }
 
 
@@ -195,6 +185,7 @@ class UserFollow extends \yii\db\ActiveRecord
                 $follow=self::find()
                     ->where(['user_id'=>$user->id,'role_id'=>$user->last_role_id_app])
                     ->andWhere(['follow_id'=>$supplier_id])
+                    ->andWhere(['user_follow_role_id'=>\Yii::$app->params['supplierRoleId']])
                     ->one();
                 if (!$follow)
                 {
@@ -209,6 +200,7 @@ class UserFollow extends \yii\db\ActiveRecord
                     $follow->user_id=$user->id;
                     $follow->role_id=$user->last_role_id_app;
                     $follow->follow_id=$supplier_id;
+                    $follow->user_follow_role_id=\Yii::$app->params['supplierRoleId'];
                     if ($status==self::HAVE_FOLLOW)
                     {
                         $supplier->follower_number+=1;
@@ -238,6 +230,7 @@ class UserFollow extends \yii\db\ActiveRecord
                     }
                     $follow->status=$status;
                 }
+
 
                 if (!$follow->save(false))
                 {

@@ -78,20 +78,6 @@ class UserFollowController extends Controller
         ];
     }
 
-    //判断用户是否登陆
-    private function userIdentity()
-    {
-        $user = \Yii::$app->user->identity;
-        if (!$user) {
-            $code = 1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-
-        return $user->getId();
-    }
 
     /**
      * get follow list
