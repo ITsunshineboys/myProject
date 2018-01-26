@@ -8,10 +8,10 @@
     <p class="comment-date">{{commentDate}}</p>
     <p class="comment-content">{{content}}</p>
     <div class="comment-pics">
-      <img class="previewer-demo-img" v-for="(item, index) in previewerList" :src="item.src" width="100"
+      <img class="previewer-demo-img" v-for="(item, index) in images" :src="item.src" width="100"
            @click="show(index)">
       <div>
-        <previewer :list="previewerList" ref="previewer"></previewer>
+        <previewer :list="images" ref="previewer"></previewer>
       </div>
     </div>
     <p class="reply" v-if="reply[0]">
@@ -36,9 +36,7 @@
     created () {
       // 用户评价图片处理
 //      if (typeof this.images === 'undefined') return
-      this.previewerList = this.images.map((item) => ({
-        src: item
-      }))
+
     },
 //    updated () {
 //      this.previewerList = this.images.map((item) => ({

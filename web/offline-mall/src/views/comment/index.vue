@@ -60,7 +60,11 @@
         this.count.medium = Number(res.data.goods_comments.stat.medium)
         this.count.poor = Number(res.data.goods_comments.stat.poor)
         this.comment_details = res.data.goods_comments.details
-//        this.totalpage = Math.ceil((this.count.good + this.count.medium + this.count.poor) / 12)  // 当前状态总页数
+        for (let key in this.comment_details) {
+          this.comment_details[key].images = this.comment_details[key].images.map((item) => ({
+            src: item
+          }))
+        }
       })
     },
     methods: {
@@ -74,10 +78,13 @@
         }
       },
       tabContent: function (obj) {
+        this.params.level_score = obj
         this.axios.get('/mall/goods-comments', this.params, (res) => {
           this.comment_details = res.data.goods_comments.details
           for (let key in this.comment_details) {
-            console.log(this.comment_details[key].images)
+            this.comment_details[key].images = this.comment_details[key].images.map((item) => ({
+              src: item
+            }))
           }
 //          this.params.level_score = obj
 //          if (this.params.level_score === 'all') {
