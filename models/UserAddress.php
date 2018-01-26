@@ -407,7 +407,8 @@ class UserAddress extends  ActiveRecord
             'district_code'=>$address['district'],
             'district'=>LogisticsDistrict::GetLineDistrictByDistrictCode($address['district']).'-'.$address['region'],
             'mobile'=>$address['mobile'],
-            'consignee'=>$address['consignee']
+            'consignee'=>$address['consignee'],
+            'address_id'=>$address['id']
         ];
     }
 
