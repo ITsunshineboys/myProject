@@ -3308,7 +3308,7 @@ class GoodsOrder extends ActiveRecord
         $address=UserAddress::findOne($address_id);
         if (!$address)
         {
-            $code=1000;
+            $code=1096;
             return $code;
         }
         $tran = Yii::$app->db->beginTransaction();
