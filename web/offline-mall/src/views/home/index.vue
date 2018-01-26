@@ -118,6 +118,7 @@
         console.log(res)
         this.recommended_list = res.data.recommend_second
       })
+      window.AndroidWebView.showTable()
     },
     mounted () {
       this.axios.get('/order/iswxlogin', {}, (res) => {
