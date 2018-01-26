@@ -985,7 +985,7 @@ class MallController extends Controller
             $supplier = Supplier::findOne($goods->supplier_id);
             $recommend->supplier_id = $supplier->id;
             $recommend->supplier_name = $supplier->shop_name;
-            $recommend->url = Goods::GOODS_DETAIL_URL_PREFIX . $goods->id;
+            $recommend->url = $goods->id;
         }
 
         if (!$recommend->validate()) {
@@ -5099,7 +5099,7 @@ class MallController extends Controller
             $goods = Goods::find()->where(['sku' => $recommend->sku])->one();
             $recommend->supplier_id = $supplier->id;
             $recommend->supplier_name = $supplier->shop_name;
-            $recommend->url = Goods::GOODS_DETAIL_URL_PREFIX . $goods->id;
+            $recommend->url = $goods->id;
             $recommend->platform_price = $goods->platform_price;
             $recommend->description = $goods->subtitle;
             $recommend->title = $goods->title;
