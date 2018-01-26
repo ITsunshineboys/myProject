@@ -105,9 +105,6 @@
 
 <style>
   /*修改默认样式*/
-  body {
-    background-color: #fff;
-  }
 
   .search form ~ a {
     display: block !important;
@@ -180,6 +177,9 @@
 
   .hide_margin .weui-cells {
     margin-top: 0 !important;
+  }
+  .weui-panel{
+    height: calc(100vh - 65px)!important;
   }
 
   /*搜索历史*/
