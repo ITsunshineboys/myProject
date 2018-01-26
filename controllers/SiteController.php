@@ -7,6 +7,7 @@ use app\models\LoginForm;
 use app\models\User;
 use app\models\Role;
 use app\models\UserAddress;
+use app\models\UserNewsRecord;
 use app\models\UserRole;
 use app\models\LogisticsDistrict;
 use app\models\Invoice;
@@ -1862,5 +1863,29 @@ class SiteController extends Controller
         } else {
             return false;
         }
+    }
+
+
+    public function  actionUserCheckNews()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user)
+        {
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $userNews=UserNewsRecord::find()
+            ->where(['uid'=>$user->id])
+            ->andWhere(['role_id'=>$user->last_role_id_app])
+            ->andWhere(['status'=>0])
+            ->count();
+         return Json::encode([
+             'code' => 200,
+             'msg' => 'ok',
+             'data' =>$userNews>0?1:2
+         ]);
     }
 }

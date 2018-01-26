@@ -5165,6 +5165,7 @@ class OrderController extends Controller
             'data'=> StringService::formatPrice($freight*0.01)
         ]);
     }
+
     /**
      * 订单详情页-获取商品信息
      * @return string
@@ -5677,4 +5678,7 @@ class OrderController extends Controller
             'data'=>OrderGoods::FindOrderNumBer($user)
         ]);
     }
+
+
+
 }
