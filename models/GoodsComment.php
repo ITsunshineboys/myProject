@@ -195,6 +195,7 @@ class GoodsComment extends ActiveRecord
             $comment->logistics_speed_score=$postData['logistics_speed_score'];
             $comment->shipping_score=$postData['shipping_score'];
             $comment->score=$postData['score'];
+            $comment->icon=$user->icon;
             $res=$comment->save(false);
             if (!$res)
             {
