@@ -74,9 +74,11 @@
         }
       },
       tabContent: function (obj) {
-        this.params.level_score = obj
         this.axios.get('/mall/goods-comments', this.params, (res) => {
           this.comment_details = res.data.goods_comments.details
+          for (let key in this.comment_details) {
+            console.log(this.comment_details[key].images)
+          }
 //          this.params.level_score = obj
 //          if (this.params.level_score === 'all') {
 //            this.totalpage = Math.ceil((this.count.good + this.count.medium + this.count.poor) / 12)

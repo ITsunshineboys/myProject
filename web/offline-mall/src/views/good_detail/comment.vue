@@ -61,5 +61,6 @@
     line-height: 20px;
     height: 40px;
     overflow: hidden;
+    word-break: break-all;
   }
 </style>

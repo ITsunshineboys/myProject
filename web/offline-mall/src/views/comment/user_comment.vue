@@ -33,13 +33,18 @@
         previewerList: []
       }
     },
-    mounted () {
+    created () {
       // 用户评价图片处理
 //      if (typeof this.images === 'undefined') return
       this.previewerList = this.images.map((item) => ({
         src: item
       }))
     },
+//    updated () {
+//      this.previewerList = this.images.map((item) => ({
+//        src: item
+//      }))
+//    },
     methods: {
       // 用户评价图片放大 原组件方法
       show (index) {

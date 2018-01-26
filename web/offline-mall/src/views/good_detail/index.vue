@@ -41,6 +41,9 @@
 
 
 
+
+
+
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -83,14 +86,23 @@
         <flexbox slot="content" justify="space-between" class="shop-intro">
           <div>
             <span>{{good_detail.supplier.goods_number}}</span><br/>商品数
+
+
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.follower_number}}</span><br/>粉丝数
+
+
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
+
+
+
           </div>
         </flexbox>
         <flexbox slot="footer" justify="center" class="view-shop-btn">
@@ -155,18 +167,30 @@
       <flexbox class="bottom-tabbar">
         <flexbox-item @click.native="contactShop" :span="76/375">
           <i class="iconfont icon-service1"></i><br/>联系商家
+
+
+
         </flexbox-item>
         <span></span>
         <flexbox-item @click.native="skipCart" :span="77/375">
           <i class="iconfont icon-cart"></i><br/>购物车
 
+
+
+
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('cart')" :span="110/375">
           加入购物车
 
+
+
+
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('now')" :span="110/375">
           立即购买
+
+
+
 
         </flexbox-item>
       </flexbox>
@@ -197,9 +221,15 @@
 
 
 
+
+
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
+
+
+
 
 
 
@@ -365,8 +395,15 @@
         this.good_detail = res.data.goods_view
         // 用户名处理
         if (this.good_detail.comments.total !== '0') {
-          this.user_name = this.good_detail.comments.latest.name.substr(0, 6) + '...'
+          // 用户名长度处理
+          if (this.good_detail.comments.latest.name.length > 6) {
+            this.user_name = this.good_detail.comments.latest.name.substr(0, 6) + '...'
+          } else {
+            this.user_name = this.good_detail.comments.latest.name
+          }
         }
+
+//        if(this.good_detail.comments.latest.content)
         // 售后弹窗显示处理
         this.all_after_sale_services = this.good_detail.after_sale_services
         this.after_sale_services = this.good_detail.after_sale_services.slice(0, 3) // 页面售后显示内容
@@ -897,6 +934,7 @@
     color: rgba(153, 153, 153, 1);
     line-height: 14px;
   }
+
   /*选择数量弹窗 end*/
 
   /*购买数量*/
