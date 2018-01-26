@@ -339,6 +339,7 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
   };
   //编辑确认按钮
   $scope.recommend_shop_edit=function (valid) {
+    console.log($scope.edit_item)
     if(valid){
       $scope.variable_modal="modal";
       if($scope.edit_item.from_type=='商家'){
@@ -347,7 +348,7 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
         }
         _ajax.post('/mall/recommend-edit',{
             id:+$scope.edit_item.id,
-            url:$scope.edit_item.url,
+            url:$scope.recommend_shop_edit_url,
             title:$scope.recommend_shop_edit_title,
             image:$scope.upload_img_src,
             from_type:"1",

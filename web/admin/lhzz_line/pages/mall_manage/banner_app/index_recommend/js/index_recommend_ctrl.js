@@ -346,7 +346,7 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
         }
         _ajax.post('/mall/recommend-edit',{
             id:$scope.edit_item.id,
-            url:$scope.edit_item.url,
+            url:$scope.recommend_shop_edit_url,
             title:$scope.recommend_shop_edit_title,
             image:$scope.upload_img_src,
             from_type:"1",
@@ -354,7 +354,7 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
             type:2,
             sku:$scope.shop_edit_sku,
             description:$scope.recommend_shop_edit_subtitle,
-            platform_price:$scope.edit_item.platform_price
+            platform_price:$scope.recommend_shop_edit_platform_price
         },function (res) {
             list_fn();
         })
