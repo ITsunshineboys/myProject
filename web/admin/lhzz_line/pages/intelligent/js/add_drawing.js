@@ -49,7 +49,7 @@ app.controller('add_drawing_ctrl',function ($window,$uibModal,$anchorScroll,$loc
             all_drawing:[],
             series:'',
             style:'',
-            index:$scope.house_type[0].index
+            index:$scope.house_type[0]==undefined?-1:$scope.house_type[0].index
         })
     }else{
 
@@ -111,7 +111,7 @@ app.controller('add_drawing_ctrl',function ($window,$uibModal,$anchorScroll,$loc
         }
         all_modal1.$inject = ['$scope', '$uibModalInstance']
         if(arr.length <= 1){
-            if($scope.cur_drawing.all_drawing.length > 0&&valid){
+            if($scope.cur_drawing.index!=-1&&$scope.cur_drawing.all_drawing.length > 0&&valid){
                 $scope.drawing_informations[$stateParams.cur_index] = $scope.cur_drawing
                 sessionStorage.setItem('drawingInformation',JSON.stringify($scope.drawing_informations))
                 $uibModal.open({
