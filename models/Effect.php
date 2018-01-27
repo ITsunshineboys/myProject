@@ -660,7 +660,7 @@ class Effect extends ActiveRecord
             ->asArray()
             ->select('toponymy,street,id')
             ->where(['district_code'=>$district])
-            ->groupBy('toponymy')
+//            ->groupBy('toponymy')
             ->all();
         return $data;
     }
