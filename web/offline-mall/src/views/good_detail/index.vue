@@ -403,7 +403,6 @@
           }
         }
 
-//        if(this.good_detail.comments.latest.content)
         // 售后弹窗显示处理
         this.all_after_sale_services = this.good_detail.after_sale_services
         this.after_sale_services = this.good_detail.after_sale_services.slice(0, 3) // 页面售后显示内容
