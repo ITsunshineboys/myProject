@@ -43,7 +43,7 @@ app.directive('water', function ($timeout) {
     .directive('tmPagination', function () {
         return {
             restrict: 'EA',
-            template: `<div class="no-items" style="padding-top: 2rem;background: #fff;color: #b1b1b1;font-size: 40px;text-align: center;" ng-show="conf.totalItems <= 0">暂无符合条件的商品</div>`,
+            template: `<div class="no-items" style="padding-top: 1rem;padding-bottom:1rem;background: #fff;color: #b1b1b1;font-size: 40px;text-align: center;" ng-show="conf.totalItems <= 0">暂无符合条件的商品</div>`,
             replace: true,
             scope: {
                 conf: '='

@@ -193,8 +193,13 @@
 }
 .shop_header_child span{
     font-size: 1.2rem;
-    margin-left: 1rem;
+    margin-left: 5rem;
     margin-top: 1.8rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-right: 1rem;
+    display: block;
 }
 .shop_number {
     margin-top: .6rem;

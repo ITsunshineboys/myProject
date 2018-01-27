@@ -60,8 +60,10 @@ app.controller('product_details_ctrl', function ($timeout, _ajax, $scope, $state
                 }),function (res) {
                     console.log('更换默认数量');
                     console.log(res);
-                    $scope.goods_detail.quantity = res.quantity
-                    $scope.recommend_quantity = res.quantity//推荐数量
+                    if(res.quantity!=null){
+                        $scope.goods_detail.quantity = res.quantity
+                        $scope.recommend_quantity = res.quantity//推荐数量
+                    }
                 })
             }
         }

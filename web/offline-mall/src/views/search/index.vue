@@ -1,9 +1,9 @@
 <template>
   <div>
-    <search v-model="search" @on-cancel="cancelSearch" @on-change="getGoods" class="search" cancel-text="取消"
+    <search maxlength="5" v-model="search" @on-cancel="cancelSearch" @on-change="getGoods" class="search" cancel-text="取消"
             placeholder="请输入想要购买的商品，如：冰箱" ref="search"></search>
-    <group @click.native="goDetail(item)" v-if="good_list.length!=0" v-for="(item,index) of good_list" :key="index"
-           :class="{hide_margin:index!=0,hide_top:index==0,hide_bottom:index==good_list.length-1}" class="search_list"
+    <group  @click.native="goDetail(item)" v-if="good_list.length!=0" v-for="(item,index) of good_list" :key="index"
+           :class="{hide_margin:index!=0,hide_top:index==0,hide_bottom:index==good_list.length-1}" class="search_list search_height"
            label-width="375" label-align="left">
       <p>{{item.title}}</p>
     </group>
@@ -180,6 +180,7 @@
   }
   .search_height{
     height: calc(100vh - 65px)!important;
+    background-color: #fff;
   }
 
   /*搜索历史*/

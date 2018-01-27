@@ -13,8 +13,12 @@ app.controller('product_list_ctrl', function (_ajax, $scope, $state, $stateParam
             tablePages();
         }
     };
+    $scope.price_max = ''
+    $scope.price_min = ''
     let tablePages = function () {
         console.log($scope.params);
+        $scope.params.platform_price_max = +angular.copy($scope.price_max)*100
+        $scope.params.platform_price_min = +angular.copy($scope.price_min)*100
         _ajax.get('/mall/category-goods', $scope.params, function (res) {
             console.log(res);
             $scope.filter_material = [];
@@ -112,7 +116,7 @@ app.controller('product_list_ctrl', function (_ajax, $scope, $state, $stateParam
     // }
     //重置筛选
     $scope.resetFilter = function () {
-        $scope.params.platform_price_max = ''
+        $scope.price_max = ''
         $scope.params.platform_price_min = ''
         $scope.style_arr = []
         $scope.series_arr = []
@@ -120,19 +124,19 @@ app.controller('product_list_ctrl', function (_ajax, $scope, $state, $stateParam
     }
     //价格区间
     $scope.choosePrice = function (str) {
-        if ($scope.params[str] != '') {
-            console.log($scope.params[str]);
-            if (str === 'platform_price_min') {
-                if ($scope.params.platform_price_max != '' && +$scope.params[str] > +$scope.params.platform_price_max) {
-                    let num = $scope.params.platform_price_max
-                    $scope.params.platform_price_max = $scope.params[str]
-                    $scope.params[str] = num
+        if ($scope[str] != '') {
+            console.log($scope[str]);
+            if (str === 'price_min') {
+                if ($scope.price_max != '' && +$scope[str] > +$scope.price_max) {
+                    let num = $scope.price_max
+                    $scope.price_max = $scope[str]
+                    $scope[str] = num
                 }
-            } else if (str === 'platform_price_max') {
-                if ($scope.params.platform_price_min != '' && +$scope.params[str] < +$scope.params.platform_price_min) {
-                    let num = $scope.params.platform_price_min
-                    $scope.params.platform_price_min = $scope.params[str]
-                    $scope.params[str] = num
+            } else if (str === 'price_max') {
+                if ($scope.price_min != '' && +$scope[str] < +$scope.price_min) {
+                    let num = $scope.price_min
+                    $scope.price_min = $scope[str]
+                    $scope[str] = num
                 }
             }
         }

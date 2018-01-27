@@ -13,6 +13,7 @@ app.controller('add_material_ctrl',function ($rootScope,$scope,$stateParams,$sta
         }
     ]
     $scope.status_words = '刷新材料抓取'
+    $scope.keyword = ''
    let obj = JSON.parse(sessionStorage.getItem('area'))
     //请求省市数据
     $http.get('city.json').then(function (res) {
@@ -42,15 +43,17 @@ app.controller('add_material_ctrl',function ($rootScope,$scope,$stateParams,$sta
         keyword:''
     };
     //关键词搜索
-    $scope.$watch('params.keyword',function (newVal,oldVal) {
+    $scope.$watch('keyword',function (newVal,oldVal) {
         if(oldVal!==''&&newVal === ''){
             $scope.Config.currentPage = 1
+            $scope.params.keyword = newVal
             tablePages()
         }
     })
     $scope.getKeywordMaterialsList = function () {
         if($scope.params.keyword!==''){
             $scope.Config.currentPage = 1
+            $scope.params.keyword = $scope.keyword
             tablePages()
         }
     }

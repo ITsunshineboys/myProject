@@ -1,6 +1,6 @@
 app.controller('level_three_ctrl',function (_ajax,$scope,$state,$stateParams) {
     //初始化
-    $scope.basic_materials = JSON.parse(sessionStorage.getItem('materials'))[$stateParams.index]
+    $scope.basic_materials = JSON.parse(sessionStorage.getItem('copies'))[$stateParams.index]
     //请求三级项数据
     _ajax.get('/mall/categories-level3',{
         pid:$scope.basic_materials.id
