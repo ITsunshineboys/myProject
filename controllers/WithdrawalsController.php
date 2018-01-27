@@ -1634,7 +1634,7 @@ class WithdrawalsController extends Controller
 
                 $list[]=[
                     'name'=>'时间',
-                    'value'=>$access['create_time']
+                    'value'=>date('Y-m-d H:i',$access['create_time'])
                 ];
                 $list[]=[
                     'name'=>'交易单号',
@@ -1650,7 +1650,7 @@ class WithdrawalsController extends Controller
                 ];
                 $list[]=[
                     'name'=>'时间',
-                    'value'=>$access['create_time']
+                    'value'=>date('Y-m-d H:i',$access['create_time'])
                 ];
                 $list[]=[
                     'name'=>'交易单号',
@@ -1730,7 +1730,7 @@ class WithdrawalsController extends Controller
             case 6:
                 $list[]=[
                     'name'=>'时间',
-                    'value'=>$access['create_time']
+                    'value'=>date('Y-m-d H:i',$access['create_time'])
                 ];
 
                 $list[]=[
