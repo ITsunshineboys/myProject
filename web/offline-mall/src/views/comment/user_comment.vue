@@ -21,11 +21,13 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {Previewer} from 'vux'
+  import {Previewer, Flexbox, FlexboxItem} from 'vux'
   export default {
     name: 'userComment',
     components: {
-      Previewer
+      Previewer,
+      Flexbox,
+      FlexboxItem
     },
     props: ['userIcon', 'userName', 'commentLevel', 'commentDate', 'content', 'images', 'reply'],
     data () {
@@ -33,16 +35,6 @@
         previewerList: []
       }
     },
-    created () {
-      // 用户评价图片处理
-//      if (typeof this.images === 'undefined') return
-
-    },
-//    updated () {
-//      this.previewerList = this.images.map((item) => ({
-//        src: item
-//      }))
-//    },
     methods: {
       // 用户评价图片放大 原组件方法
       show (index) {
@@ -129,6 +121,25 @@
     width: 109px;
     height: 109px;
     margin-right: 10px;
+    margin-bottom: 10px;
+  }
+
+  @media (max-width: 360px){
+    .comment-pics img {
+      width: 104px;
+      height: 104px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+  }
+
+  @media (min-width: 412px){
+    .comment-pics img {
+      width: 116px;
+      height: 116px;
+      margin-right: 18px;
+      margin-bottom: 12px;
+    }
   }
 
   .comment-pics img:nth-child(3) {
