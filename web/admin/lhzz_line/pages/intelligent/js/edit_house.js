@@ -96,7 +96,7 @@ app.controller('edit_house_ctrl', function ($window,$uibModal,$anchorScroll,$loc
                     $scope.upload_txt = '上传'
                     $scope.img_error = ''
                 } else {
-                    index == 0 ? $scope.img_error = '上传图片格式不正确或尺寸不匹配，请重新上传' : $scope.drawing_error = '上传图片格式不正确或尺寸不匹配，请重新上传'
+                    $scope.img_error = '上传图片格式不正确或尺寸不匹配，请重新上传'
 
                     // $timeout(function () {
                     //     $scope.upload_txt = '上传'
