@@ -115,16 +115,6 @@
         }
       }
     },
-    created () {
-      // this.goodsListData = []
-      this.getGoodsList()
-    },
-    mounted () {
-      window.addEventListener('scroll', this.handleScroll)
-    },
-    beforeDestroy () {
-      window.removeEventListener('scroll', this.handleScroll)
-    },
     methods: {
       tabHandle (str) {
         this.goodsListData = []     // 初始化数据
@@ -223,6 +213,16 @@
           }
         }
       }
+    },
+    created () {
+      // this.goodsListData = []
+      this.getGoodsList()
+    },
+    mounted () {
+      window.addEventListener('scroll', this.handleScroll)
+    },
+    beforeDestroy () {
+      window.removeEventListener('scroll', this.handleScroll)
     }
   }
 </script>
