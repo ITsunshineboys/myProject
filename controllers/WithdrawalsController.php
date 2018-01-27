@@ -1834,7 +1834,7 @@ class WithdrawalsController extends Controller
                     ];
                     $list[]=[
                         'name'=>'下单时间',
-                        'value'=>$GoodsOrder->create_time
+                        'value'=>date('Y-m-d H:i',$GoodsOrder->create_time)
                     ];
                     $list[]=[
                         'name'=>'付款方式',
