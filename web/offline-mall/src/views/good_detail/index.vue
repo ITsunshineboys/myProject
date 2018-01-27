@@ -2,7 +2,7 @@
   <div class="good-container">
     <!-- 顶部icon -->
     <div class="guide-icon">
-      <i class="iconfont icon-return" @click="$router.go(-1)"></i>
+      <i class="iconfont icon-return" @click="goHome"></i>
       <i class="iconfont icon-share" @click="androidShare"></i>
       <i class="iconfont icon-more" @click.passive="showMore"></i>
     </div>
@@ -38,6 +38,8 @@
       <group>
         <cell-box is-link class="choose-count" @click.native="showCount('count')">
           选择数量
+
+
 
 
 
@@ -89,6 +91,8 @@
 
 
 
+
+
           </div>
           <span></span>
           <div>
@@ -96,10 +100,14 @@
 
 
 
+
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
+
+
 
 
 
@@ -170,10 +178,14 @@
 
 
 
+
+
         </flexbox-item>
         <span></span>
         <flexbox-item @click.native="skipCart" :span="77/375">
           <i class="iconfont icon-cart"></i><br/>购物车
+
+
 
 
 
@@ -185,9 +197,13 @@
 
 
 
+
+
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('now')" :span="110/375">
           立即购买
+
+
 
 
 
@@ -224,9 +240,13 @@
 
 
 
+
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
+
+
 
 
 
@@ -336,6 +356,7 @@
     },
     data () {
       return {
+        isFromAndroid: false,       // 由安卓页面跳转至此页面
         good_id: '',                // 商品id
         role_id: 6,                 // 角色id
         show_more: false,           // 更多弹窗
@@ -389,7 +410,7 @@
       }
     },
     created () {
-      console.log(this.$route)
+      if (this.$route.query.system === 'android') this.isFromAndroid = true
       this.good_id = this.$route.params.id // 商品id
       this.axios.get('/mall/goods-view', {id: this.good_id}, (res) => {
         this.good_detail = res.data.goods_view
@@ -416,6 +437,14 @@
       })
     },
     methods: {
+      // 返回上一页面
+      goHome () {
+        if (this.isFromAndroid) {
+          window.AndroidWebView.webfinish()
+          return
+        }
+        this.$route.go(-1)
+      },
       // 判断是否显示售后
       afterServiceShow () {
         for (let [key, value] of this.all_after_sale_services.entries()) {    // eslint-disable-line
