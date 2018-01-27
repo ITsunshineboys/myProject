@@ -1949,6 +1949,6 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         $this->last_role_id_app = $roleId;
-        return $this->save() ? 200 : 500;
+        return $this->save(false) ? 200 : 500;
     }
 }
