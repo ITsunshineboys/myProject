@@ -1791,7 +1791,7 @@ class WithdrawalsController extends Controller
                     ];
                     $list_payment[]=[
                         'name'=>'时间',
-                        'value'=>$access['create_time']
+                        'value'=>date('Y-m-d H:i',$access['create_time'])
                     ];
                     $list_payment[]=[
                         'name'=>'交易单号',
