@@ -1029,13 +1029,18 @@ class User extends ActiveRecord implements IdentityInterface
      * Check if identity has been authorized
      *
      * @param string $identityNo identity card no
+     * @param int $roleId role id default 0
      * @return bool
      */
-    public static function checkIdentityAuthorized($identityNo)
+    public static function checkIdentityAuthorized($identityNo, $roleId = 0)
     {
         $user = self::find()->where(['identity_no' => $identityNo])->one();
         return $user && UserRole::find()
-                ->where(['user_id' => $user->id, 'review_status' => Role::AUTHENTICATION_STATUS_APPROVED])
+                ->where([
+                    'user_id' => $user->id,
+                    'review_status' => Role::AUTHENTICATION_STATUS_APPROVED,
+                    'role_id' => $roleId > 0 ? $roleId : Yii::$app->params['ownerRoleId']
+                ])
                 ->exists();
     }
 
