@@ -99,7 +99,9 @@
   }
 
   .content-right {
+    flex: 1 1 auto;
     padding: 30px 18px;
+    overflow-x: hidden;
   }
 
   .content-left div {
@@ -125,13 +127,13 @@
 
   .hd {
     margin-bottom: 20px;
-    height: 30px;
-    line-height: 30px;
     text-align: center;
     color: #666;
   }
 
   .hd .text {
+    display: inline-block;
+    max-width: 160px;
     position: relative;
   }
 
