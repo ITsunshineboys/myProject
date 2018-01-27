@@ -39,10 +39,12 @@ class User extends ActiveRecord implements IdentityInterface
     const LEN_MAX_FIELDS = [
         'legal_person' => 15,
     ];
-    const SEX_MALE = 0;
-    const SEX_FEMALE = 1;
-    const SEX_UNKOWN = 2;
+    const SEX_MALE = 1;
+    const SEX_FEMALE = 2;
+    const SEX_UNKOWN = 3;
+    const SEX_NOT_SELECTED = 0;
     const SEXES = [
+        self::SEX_NOT_SELECTED => '请选择',
         self::SEX_MALE => '男',
         self::SEX_FEMALE => '女',
         self::SEX_UNKOWN => '保密',

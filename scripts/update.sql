@@ -272,4 +272,8 @@ alter table user_follow ADD `user_follow_role_id` tinyint(5) NOT NULL DEFAULT '6
 
 ALTER TABLE user_follow MODIFY `role_id` int(11) NOT NULL DEFAULT '0' COMMENT '角色ID';
 
+--test,ac 2018.1.27
+alter table user modify `gender` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0: 请选择, 1: 男, 2: 女, 3: 保密';
+
+
 
