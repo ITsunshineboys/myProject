@@ -3027,10 +3027,15 @@ class QuoteController extends Controller
                 ]);
             }
             $tr->commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             var_dump($e);die;
             //回滚
             $tr->rollBack();
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
         }
 
         return Json::encode([
