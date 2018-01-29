@@ -641,8 +641,8 @@
       },
       // 跳转购物车
       skipCart () {
-        window.AndroidWebView.skipShopCart()
         this.show_test = true
+        window.AndroidWebView.skipShopCart()
       },
       // 联系商家
       contactShop () {
