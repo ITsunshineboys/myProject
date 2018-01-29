@@ -49,6 +49,7 @@
 
 
 
+
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -90,12 +91,7 @@
         </flexbox>
         <flexbox slot="content" justify="space-between" class="shop-intro">
           <div>
-            <span @click="obj.test">{{good_detail.supplier.goods_number}}</span><br/>商品数
-
-
-
-
-
+            <span>{{good_detail.supplier.goods_number}}</span><br/>商品数
 
 
 
@@ -111,10 +107,12 @@
 
 
 
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
+
 
 
 
@@ -195,10 +193,12 @@
 
 
 
+
         </flexbox-item>
         <span></span>
         <flexbox-item @click.native="skipCart" :span="77/375">
           <i class="iconfont icon-cart"></i><br/>购物车
+
 
 
 
@@ -220,9 +220,11 @@
 
 
 
+
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('now')" :span="110/375">
           立即购买
+
 
 
 
@@ -269,9 +271,11 @@
 
 
 
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
+
 
 
 
