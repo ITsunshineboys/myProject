@@ -1832,8 +1832,9 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-        $goods = WorkerType::craft(OwnerController::CRAFT_NAME['tiler'],510100);
-        var_dump($goods);
+//        var_dump(GoodsCategory::find()->asArray()->select([])->all());
+        var_dump(GoodsAttr::find()->asArray()->select([])->all());
+        die;
     }
 
 }
