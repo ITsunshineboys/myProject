@@ -46,6 +46,9 @@
 
 
 
+
+
+
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -87,7 +90,10 @@
         </flexbox>
         <flexbox slot="content" justify="space-between" class="shop-intro">
           <div>
-            <span>{{good_detail.supplier.goods_number}}</span><br/>商品数
+            <span @click="obj.test">{{good_detail.supplier.goods_number}}</span><br/>商品数
+
+
+
 
 
 
@@ -102,10 +108,16 @@
 
 
 
+
+
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
+
+
+
 
 
 
@@ -180,10 +192,16 @@
 
 
 
+
+
+
         </flexbox-item>
         <span></span>
         <flexbox-item @click.native="skipCart" :span="77/375">
           <i class="iconfont icon-cart"></i><br/>购物车
+
+
+
 
 
 
@@ -199,9 +217,15 @@
 
 
 
+
+
+
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('now')" :span="110/375">
           立即购买
+
+
+
 
 
 
@@ -242,9 +266,15 @@
 
 
 
+
+
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
+
+
+
 
 
 
@@ -356,6 +386,11 @@
     },
     data () {
       return {
+        andriodFunc: {
+          androidShare: this.androidShare,         // 跳转分享
+          androidMsgCenter: this.skipMessageCenter, // 跳转消息中心
+          androidCart: this.skipCart // 跳转购物车
+        },
         isFromAndroid: false,       // 由安卓页面跳转至此页面
         good_id: '',                // 商品id
         role_id: 6,                 // 角色id
