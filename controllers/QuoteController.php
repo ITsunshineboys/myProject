@@ -3091,7 +3091,7 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-        var_dump(GoodsAttr::find()->asArray()->all());
+        var_dump(AssortGoods::find()->asArray()->all());
 
     }
 }
