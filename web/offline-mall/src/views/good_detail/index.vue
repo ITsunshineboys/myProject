@@ -47,12 +47,6 @@
 
 
 
-
-
-
-
-
-
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -101,6 +95,16 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
           </div>
           <span></span>
           <div>
@@ -117,10 +121,30 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -209,10 +233,30 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
         </flexbox-item>
         <span></span>
         <flexbox-item @click.native="skipCart" :span="77/375">
           <i class="iconfont icon-cart"></i><br/>购物车
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -242,9 +286,29 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('now')" :span="110/375">
           立即购买
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -299,9 +363,29 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -379,6 +463,16 @@
     <alert class="goodshort-alert" v-model="show_test" :hide-on-blur="true">
       <slot name="default" class="alert-content">
         测试弹窗
+
+
+
+
+
+
+
+
+
+
 
       </slot>
     </alert>
@@ -545,9 +639,18 @@
           this.count_now = false
           this.default_count = false
           this.count = 1
+          this.watchCount()
         } else {
           this.show_count = true
           obj === 'cart' ? this.count_cart = true : obj === 'now' ? this.count_now = true : this.default_count = true
+          this.watchCount = this.$watch('count', function (newVal, oldVal) {
+            if (newVal === oldVal) return
+            let reg = /^[1-9]*[1-9][0-9]*$/
+            if (!reg.test(newVal) || newVal > this.good_detail.left_number) {
+              this.count = ''
+            }
+          }
+          )
         }
       },
       // 线下商品弹窗处理
