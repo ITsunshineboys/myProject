@@ -101,11 +101,12 @@ class Alipay extends  ActiveRecord
     }
 
 
-   /**
+    /**
      * 去付款-支付宝支付
      * @param $orderAmount
      * @param array $orders
      * @return string
+     * @throws \yii\base\Exception
      */
     public static  function OrderAppPay($orderAmount,$orders=[])
     {

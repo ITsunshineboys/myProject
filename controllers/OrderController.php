@@ -3581,9 +3581,11 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
+
     /**
      * 去付款支付宝app支付
      * @return string
+     * @throws \yii\base\Exception
      */
     public  function actionAppOrderAliPay()
     {
@@ -4859,27 +4861,7 @@ class OrderController extends Controller
                 $role_id=$Ord->role_id;
                 $user=User::findOne($Ord->user_id);
                 $role=Role::GetRoleByRoleId($role_id,$user);
-                switch ($role_id)
-                {
-                    case 2:
-                        $role_number=$role->worker_type_id;
-                        break;
-                    case 3:
-                        $role_number=$role->decoration_company_id;
-                        break;
-                    case 4:
-                        $role_number=$role->decoration_company_id;
-                        break;
-                    case 5:
-                        $role_number=$role->id;
-                        break;
-                    case 6:
-                        $role_number=$role->shop_no;
-                        break;
-                    case 7:
-                        $role_number=$role->aite_cube_no;
-                        break;
-                }
+                $role_number=Role::GetUserRoleNumber($role,$role_id);
                 $transaction_no=GoodsOrder::SetTransactionNo($role_number);
                 foreach ($orders as $k =>$v){
                     $GoodsOrder=GoodsOrder::find()
@@ -4896,11 +4878,11 @@ class OrderController extends Controller
                            return false;
                         }
                     }
-                    if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
+                    if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=GoodsOrder::PAY_STATUS_UNPAID)
                     {
                         return false;
                     }
-                    $GoodsOrder->pay_status=1;
+                    $GoodsOrder->pay_status=GoodsOrder::PAY_STATUS_PAID;
                     $GoodsOrder->pay_name=PayService::WE_CHAT_APP_PAY;
                     $res=$GoodsOrder->save(false);
                     if (!$res)

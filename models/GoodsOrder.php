@@ -16,6 +16,7 @@ use app\services\SmValidationService;
 class GoodsOrder extends ActiveRecord
 {
     const PAY_STATUS_PAID = 1;
+    const PAY_STATUS_UNPAID=0;
     const PAY_STATUS_DESC_UNPAID = '待付款';
     const SHIPPING_STATUS_DESC_UNSHIPPED='待发货';
     const SHIPPING_STATUS_DESC_SHIPPED='已发货';
