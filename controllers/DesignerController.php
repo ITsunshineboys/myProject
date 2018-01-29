@@ -7,7 +7,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 
-class DesignController extends Controller
+class DesignerController extends Controller
 {
     /**
      * @inheritdoc
