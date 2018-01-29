@@ -310,6 +310,7 @@ class SupplierController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
+                'total' => GoodsRecommendSupplier::find()->where($where)->asArray()->count(),
                 'recommend_second' => GoodsRecommendSupplier::pagination($where, GoodsRecommendSupplier::$appFields, $page, $size, ['sorting_number' => SORT_ASC]),
             ],
         ]);
