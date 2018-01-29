@@ -18,11 +18,13 @@ app.controller('case_detail_ctrl', function ($rootScope,_ajax, $stateParams, $st
         let material = res.data.material
         $scope.material = []
         for(let [key,value] of material.entries()){
-            $scope.material.push({
-                first_level:key,
-                goods:value,
-                flag:false
-            })
+            for (let [key1,value1] of value.entries()){
+                $scope.material.push({
+                    first_level:value1.first_cate_id,
+                    goods:value
+                })
+                break;
+            }
         }
         console.log($scope.material)
     })
