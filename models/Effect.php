@@ -236,6 +236,14 @@ class Effect extends ActiveRecord
         }else{
             $array['earnest']=sprintf('%.2f',(float)$array['earnest']*0.01);
         }
+
+        $array['address']=$array['street'];
+        $array['item']=EffectEarnest::EFFECT_LOGIN[$array['item']];
+        $array['create_time']=date('Y-m-d',$array['create_time']);
+
+        $array['sale_price']=sprintf('%.2f',(float)$array['sale_price']*0.01);
+        $array['original_price']=sprintf('%.2f',(float)$array['original_price']*0.01);
+
         if($array['requirement']==''){
             unset($array['requirement']);
         }
@@ -243,12 +251,6 @@ class Effect extends ActiveRecord
             unset($array['original_price']);
             unset($array['sale_price']);
         }
-        $array['address']=$array['street'];
-        $array['item']=EffectEarnest::EFFECT_LOGIN[$array['item']];
-        $array['create_time']=date('Y-m-d',$array['create_time']);
-
-        $array['sale_price']=sprintf('%.2f',(float)$array['sale_price']*0.01);
-        $array['original_price']=sprintf('%.2f',(float)$array['original_price']*0.01);
         unset($array['city']);
         unset($array['district']);
         unset($array['street']);
