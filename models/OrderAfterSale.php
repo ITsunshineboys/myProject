@@ -116,7 +116,7 @@ class OrderAfterSale extends ActiveRecord
         }
             if (
                 $OrderGoods->order_status !=1
-                || $GoodsOrder->pay_status !=1
+                || $GoodsOrder->pay_status !=GoodsOrder::PAY_STATUS_PAID
             )
             {
                 $code=1036;
@@ -133,7 +133,8 @@ class OrderAfterSale extends ActiveRecord
             }
             if (!empty($status))
             {
-                if (!in_array($postData['type'],$status)){
+                if (!in_array($postData['type'],$status))
+                {
                     $code=1035;
                     return $code;
                 }
