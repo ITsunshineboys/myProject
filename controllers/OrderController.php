@@ -1376,18 +1376,15 @@ class OrderController extends Controller
      * @throws Exception
      */
     public function actionPlatformhandlesubmit(){
-        $user = \Yii::$app->user->identity;
-        if (!$user) {
-            $code = 1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $lhzz=self::LhzzIdentity($user);
-        if (!is_numeric($lhzz))
+        $data=UserRole::VerifyRolePermissions(\Yii::$app->params['lhzzRoleId']);
+        if($data['code']!=200)
         {
-            return $lhzz;
+            $code = $data['code'];
+            return Json::encode
+            ([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
         }
         $request    = Yii::$app->request;
         $order_no   = trim($request->post('order_no',''));
