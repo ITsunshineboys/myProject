@@ -23,8 +23,8 @@
         </div>
       </div>
     </div>
-    <div :style="{minHeight: tabHeight + 'px'}" style="min-height: 44px;">
-      <sticky :offset="40" :check-sticky-support="false">
+    <div class="tab-group" :style="{minHeight: tabHeight + 'px'}">
+      <div :class="{'tab-position': isPosition}">
         <tab class="tab" active-color="#222" bar-active-color="#222" defaultColor="#999" custom-bar-width="50px">
           <tab-item @on-item-click="onClickTab" selected>店铺首页</tab-item>
           <tab-item @on-item-click="onClickTab">全部商品</tab-item>
@@ -34,37 +34,40 @@
           <div :class="{active: sortName === 'platform_price'}" @click="tabHandle('platform_price')">
             <span>价格</span>
             <span class="sort">
-              <span :class="{active: platformPriceSortNum === 4 & sortName === 'platform_price'}"
-                    class="iconfont icon-sort-up"></span>
-              <span :class="{active: platformPriceSortNum === 3 & sortName === 'platform_price'}"
-                    class="iconfont icon-sort-down"></span>
-            </span>
+            <span :class="{active: platformPriceSortNum === 4 & sortName === 'platform_price'}"
+                  class="iconfont icon-sort-up"></span>
+            <span :class="{active: platformPriceSortNum === 3 & sortName === 'platform_price'}"
+                  class="iconfont icon-sort-down"></span>
+          </span>
           </div>
           <div :class="{active: sortName === 'favourable_comment_rate'}" @click="tabHandle('favourable_comment_rate')">
             <span>好评率</span>
             <span class="sort">
-              <span :class="{active: favourableCommentRateSortNum === 4 & sortName === 'favourable_comment_rate'}"
-                    class="iconfont icon-sort-up"></span>
-              <span :class="{active: favourableCommentRateSortNum === 3 & sortName === 'favourable_comment_rate'}"
-                    class="iconfont icon-sort-down"></span>
-            </span>
+            <span :class="{active: favourableCommentRateSortNum === 4 & sortName === 'favourable_comment_rate'}"
+                  class="iconfont icon-sort-up"></span>
+            <span :class="{active: favourableCommentRateSortNum === 3 & sortName === 'favourable_comment_rate'}"
+                  class="iconfont icon-sort-down"></span>
+          </span>
           </div>
         </div>
-      </sticky>
-    </div>
-    <div class="store-home" v-if="tabActive == 0">
-      <swiper :list="carousel" :show-desc-mask="false" dots-position="center" dots-class="dots" :loop="true" :auto="true" height="145px"></swiper>
-      <div class="store-goods-list" flex>
-        <router-link class="store-goods-item" v-for="obj in recommendGoods" :to="'/good-detail/' + obj.url" tag="div" :key="obj.id">
-          <img :src="obj.image">
-          <p class="store-goods-title">{{obj.title}}</p>
-          <p class="store-goods-desc">{{obj.description}}</p>
-          <p class="store-goods-price">￥{{obj.show_price}}</p>
-        </router-link>
       </div>
     </div>
-    <div class="all-goods" v-else>
-      <goods-list :goods-list="allGoodsData"></goods-list>
+    <div class="store-goods">
+      <div class="store-home" v-if="tabActive == 0">
+        <swiper :list="carousel" :show-desc-mask="false" dots-position="center" dots-class="dots" :loop="true" :auto="true" height="145px"></swiper>
+        <div class="store-goods-list" flex>
+          <router-link class="store-goods-item" v-for="obj in recommendGoods" :to="'/good-detail/' + obj.url" tag="div" :key="obj.id">
+            <img :src="obj.image">
+            <p class="store-goods-title">{{obj.title}}</p>
+            <p class="store-goods-desc">{{obj.description}}</p>
+            <p class="store-goods-price">￥{{obj.show_price}}</p>
+          </router-link>
+        </div>
+      </div>
+      <div class="all-goods" v-else>
+        <goods-list :goods-list="allGoodsData"></goods-list>
+      </div>
+      <p v-show="isLoading" class="tip-loading">{{loadingText}}</p>
     </div>
     <div class="btn-group" flex>
       <router-link :to="{path: '/shop-intro/' + $route.params.id}" tag="button" type="button">
@@ -78,7 +81,7 @@
 </template>
 
 <script>
-  import {Tab, TabItem, Swiper, Sticky} from 'vux'
+  import {Tab, TabItem, Swiper} from 'vux'
   import vHeader from '@/components/HeaderSearch'
   import GoodsList from '@/components/GoodsList'
   import OfflineAlert from '@/components/OfflineAlert'
@@ -88,22 +91,29 @@
       Tab,
       TabItem,
       Swiper,
-      Sticky,
       vHeader,
       GoodsList,
       OfflineAlert
     },
     data () {
       return {
-        isFromAndroid: false, // 是否从安卓跳入本页面
-        tabActive: 0,         // 默认选中店铺首页
-        tabHeight: 44,        // tab 默认最小高度为 44 像素
-        isShowAlert: false,  // 是否显示线下体验店弹窗
-        carousel: [],         // 店铺首页轮播
-        storeData: {},        // 店铺信息
-        recommendGoods: [],   // 推荐商品列表
-        uid: null,           // 商家对应用户ID
-        offlineInfo: {        // 线下体验店弹窗信息
+        isPosition: false,             // tab是否定位到 header 下面
+        isFromAndroid: false,          // 是否从安卓跳入本页面
+        isLoading: false,              // 是否在加载状态
+        isShowAlert: false,            // 是否显示线下体验店弹窗
+        loadingText: '加载中...',      // 加载提示信息，默认为加载中...
+        totalPage: 0,                  // 总页数
+        tabActive: 0,                  // 默认选中店铺首页
+        tabHeight: 44,                 // tab 默认最小高度为 44 像素
+        carousel: [],                  // 店铺首页轮播
+        storeData: {},                 // 店铺信息
+        recommendParams: {             // 店铺推荐商品请求参数
+          supplier_id: this.$route.params.id,
+          page: 1
+        },
+        recommendGoods: [],            // 推荐商品列表数据
+        uid: null,                    // 商家对应用户ID
+        offlineInfo: {                 // 线下体验店弹窗信息
           address: '',
           phone: '',
           desc: ''
@@ -117,16 +127,8 @@
           'sort[]': 'sold_number:3',
           size: 12
         },
-        allGoodsData: []
+        allGoodsData: []      // 全部商品列表数据
       }
-    },
-    created () {
-      // 判断是否从安卓关注列表也进入本页面
-      if (this.$route.query.system === 'android') {
-        this.isFromAndroid = true
-      }
-      this.getStoreData()
-      this.getStoreShopGoods()
     },
     methods: {
       androidFun () { // 返回安卓店铺关注列表
@@ -137,22 +139,28 @@
         if (index === 0) {
           // 当 tab 为店铺首页，tab 高度最小为 44 像素
           this.tabHeight = 44
-          this.getStoreData()
+          this.recommendParams.page = 1     // 初始化当前页
+          this.recommendGoods = []      // 初始化数据
           this.getStoreShopGoods()
         } else {
           // 当 tab 为全部商品，tab 高度最小为 88 像素
           this.tabHeight = 88
+          this.allGoodsParams.page = 1      // 初始化当前页
+          this.allGoodsData = []      // 初始化数据
           this.getAllGoodsData()
         }
       },
       getStoreShopGoods () {     // 请求店铺首页推荐商品
         this.axios.get('/supplier/recommend-second', {supplier_id: this.$route.params.id}, res => {
           console.log(res, '店铺推荐商品')
-          this.recommendGoods = res.data.recommend_second
+          let data = res.data
+          this.recommendGoods = this.recommendGoods.concat(data.recommend_second)
+          this.totalPage = Math.ceil(data.total / 12)     // 计算总页数
+          this.isLoading = false      // 加载成功取消加载状态
         })
       },
       getStoreData () {     // 请求店铺数据
-        this.axios.get('/supplier/index', {supplier_id: this.$route.params.id}, res => {
+        this.axios.get('/supplier/index', this.recommendParams, res => {
           console.log(res, '店铺首页数据')
           let data = res.data.index
           this.storeData = data
@@ -178,7 +186,10 @@
       getAllGoodsData () {
         this.axios.get('/supplier/goods', this.allGoodsParams, res => {
           console.log(res, '全部商品列表')
-          this.allGoodsData = res.data.supplier_goods
+          let data = res.data
+          this.allGoodsData = this.allGoodsData.concat(data.supplier_goods)
+          this.totalPage = Math.ceil(data.total / 12)     // 计算总页数
+          this.isLoading = false      // 加载成功取消加载状态
         })
       },
       tabHandle (str) {
@@ -199,6 +210,8 @@
           case 'sold_number':
             this.allGoodsParams['sort[]'] = this.sortName + ':' + 3
         }
+        this.allGoodsParams.page = 1      // 初始化当前页
+        this.allGoodsData = []      // 初始化全部商品列表数据
         this.getAllGoodsData()
       },
       attentionStore () {
@@ -211,12 +224,70 @@
           window.AndroidWebView.clearCache()
           this.getStoreData()
         })
+      },
+      handleScroll () {
+        let scrollTop = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset     // 滚动条位置
+        sessionStorage.setItem('pos', scrollTop)      // 记录滚动条位置
+        let tabTop = document.querySelector('.tab-group').getBoundingClientRect().top     // 获取 tab 元素距离顶部距离
+        console.log(tabTop)
+        this.isPosition = tabTop <= 46      // 判断 tab 距离顶部的距离是否小于46，true：固定tab false：取消固定
+        if (this.isLoading) return    // 如果还在加载中，就跳出函数
+        let node, top, nodeTop
+        if (this.tabActive === 0) {     // 判断 tab 卡 选中的是否为店铺首页
+          node = document.querySelector('.store-goods-item:last-child')     // 获取店铺首页最后一个商品的DOM节
+        } else {
+          node = document.querySelector('.goods-item:last-child')     // 获取全部商品最后一个商品的DOM节
+        }
+        top = document.documentElement.clientHeight     // 获取网页可视高度
+        nodeTop = node.getBoundingClientRect().top + 100      // 获取商品距离可视区域的距离
+        console.log(nodeTop, top)
+        if (nodeTop <= top) {
+          this.isLoading = true           // 显示加载提示
+          if (this.tabActive === 0) {
+            if (this.recommendParams.page < this.totalPage) {      // 判断当前页是否小于最后一页
+              this.loadingText = '加载中...'
+              this.recommendParams.page++     // 当前页 + 1
+              this.getStoreShopGoods()      // 请求店铺推荐商品数据
+            } else {
+              this.loadingText = '没用更多数据了'
+            }
+          } else {
+            if (this.allGoodsParams.page < this.totalPage) {      // 判断当前页是否小于最后一页
+              this.loadingText = '加载中...'
+              this.allGoodsParams.page++     // 当前页 + 1
+              this.getAllGoodsData()        // 请求全部商品数据
+            } else {
+              this.loadingText = '没用更多数据了'
+            }
+          }
+        }
       }
+    },
+    created () {
+      // 判断是否从安卓关注列表也进入本页面
+      if (this.$route.query.system === 'android') {
+        this.isFromAndroid = true
+      }
+      this.getStoreData()
+      this.getStoreShopGoods()
+    },
+    mounted () {
+      window.addEventListener('scroll', this.handleScroll)
+    },
+    beforeDestroy () {
+      window.removeEventListener('scroll', this.handleScroll)
     }
   }
 </script>
 
 <style scoped>
+  .tab-position {
+    position: fixed;
+    top: 46px;
+    left: 0;
+    z-index: 10;
+    width: 100%;
+  }
   .store {
     margin-top: 46px;
     margin-bottom: 10px;
@@ -271,8 +342,7 @@
     background: none;
   }
 
-  .store-goods-list,
-  .all-goods {
+  .store-goods {
     margin-bottom: 70px;
   }
 
@@ -286,6 +356,9 @@
     margin-bottom: 10px;
     margin-right: 3%;
     width: 168px;
+    -webkit-box-shadow: 0 2px 4px 0 #F6F6F6;
+    -moz-box-shadow: 0 2px 4px 0 #F6F6F6;
+    box-shadow: 0 2px 4px 0 #F6F6F6;
   }
 
   .store-goods-item:nth-child(2n) {

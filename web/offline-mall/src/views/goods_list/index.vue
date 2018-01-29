@@ -195,9 +195,9 @@
         this.getGoodsList()           // 请求商品列表数据
       },
       handleScroll () {
-        if (this.isLoading) return    // 如果还在加载中，就跳出函数
         let scrollTop = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset     // 滚动条位置
         sessionStorage.setItem('pos', scrollTop)      // 记录滚动条位置
+        if (this.isLoading) return    // 如果还在加载中，就跳出函数
         let node = document.querySelector('.goods-item:last-child')     // 获取最后一个商品的DOM节点
         let top = document.documentElement.clientHeight     // 获取网页可视高度
         let nodeTop = node.getBoundingClientRect().top + 100      // 获取商品距离可视区域的距离

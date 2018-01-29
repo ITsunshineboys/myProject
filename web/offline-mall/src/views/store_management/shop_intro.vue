@@ -4,7 +4,7 @@
     <div class="store" flex="main:justify cross:center">
       <div flex>
         <div class="store-img">
-          <img src="http://service.cdlhzz.cn/static/image/2017/12/18/1513588491053.jpg">
+          <img :src="storeData.icon">
         </div>
         <div class="store-name">
           <p>{{storeData.shop_name}}</p>
@@ -40,6 +40,14 @@
         <span class="store-score">{{storeData.comprehensive_score}}</span>
       </li>
       <li flex="main:justify cross:center">
+        <span class="store-title">店家服务</span>
+        <span class="store-score">{{storeData.store_service_score}}</span>
+      </li>
+      <li flex="main:justify cross:center">
+        <span class="store-title">物流速度</span>
+        <span class="store-score">{{storeData.logistics_speed_score}}</span>
+      </li>
+      <li flex="main:justify cross:center">
         <span class="store-title">配送员服务</span>
         <span class="store-score">{{storeData.delivery_service_score}}</span>
       </li>
@@ -51,6 +59,7 @@
           <!--<span>冬瓜先生</span>-->
           <!--<span class="iconfont icon-service"></span>-->
         <!--</span>-->
+      <!--</li>-->
       <!--</li>-->
       <li flex="main:justify cross:center">
         <span class="store-title">质保金</span>
