@@ -51,6 +51,8 @@
 
 
 
+
+
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -97,6 +99,8 @@
 
 
 
+
+
           </div>
           <span></span>
           <div>
@@ -111,10 +115,14 @@
 
 
 
+
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
+
+
 
 
 
@@ -199,10 +207,14 @@
 
 
 
+
+
         </flexbox-item>
         <span></span>
         <flexbox-item @click.native="skipCart" :span="77/375">
           <i class="iconfont icon-cart"></i><br/>购物车
+
+
 
 
 
@@ -228,9 +240,13 @@
 
 
 
+
+
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('now')" :span="110/375">
           立即购买
+
+
 
 
 
@@ -281,9 +297,13 @@
 
 
 
+
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
+
+
 
 
 
@@ -354,6 +374,15 @@
            :show-mask="false">
       <div>该商品已下架</div>
     </popup>
+
+
+    <alert class="goodshort-alert" v-model="show_test" :hide-on-blur="true">
+      <slot name="default" class="alert-content">
+        测试弹窗
+
+      </slot>
+    </alert>
+
   </div>
 </template>
 
@@ -405,6 +434,7 @@
           androidMsgCenter: this.skipMessageCenter, // 跳转消息中心
           androidCart: this.skipCart // 跳转购物车
         },
+        show_test: false,
         isFromAndroid: false,       // 由安卓页面跳转至此页面
         good_id: '',                // 商品id
         role_id: 6,                 // 角色id
@@ -612,6 +642,7 @@
       // 跳转购物车
       skipCart () {
         window.AndroidWebView.skipShopCart()
+        this.show_test = true
       },
       // 联系商家
       contactShop () {
