@@ -237,7 +237,7 @@ class Effect extends ActiveRecord
             $array['earnest']=sprintf('%.2f',(float)$array['earnest']*0.01);
         }
 
-        $array['address']=$array['street'];
+        $array['address']=$array['city'].$array['street'];
         $array['item']=EffectEarnest::EFFECT_LOGIN[$array['item']];
         $array['create_time']=date('Y-m-d',$array['create_time']);
 
@@ -345,7 +345,7 @@ class Effect extends ActiveRecord
 
 
         $data['id']=$array['id'];
-        $array['address']=$array['street'];
+        $array['address']=$array['city'].$array['street'];
 
         if($array['stairway']){
             $stairway_cl=(new Query())->from('effect')->select('attribute')->leftJoin('stairs_details','effect.stair_id=stairs_details.id')->where(['effect.id'=>$effect_id])->one();
