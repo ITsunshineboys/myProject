@@ -594,8 +594,9 @@
             /* params
              * 商品id 购买数量
              * */
+            let temp_count = this.count
             this.showCount('all')
-            window.AndroidWebView.skipIntent(this.good_id, this.count)
+            window.AndroidWebView.skipIntent(this.good_id, temp_count)
           }
         })
       },
