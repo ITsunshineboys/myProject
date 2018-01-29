@@ -248,7 +248,7 @@ class Effect extends ActiveRecord
         $array['original_price']=sprintf('%.2f',(float)$array['original_price']*0.01);
         unset($array['city']);
         unset($array['district']);
-        unset($array['street']);
+
         if(isset($array['stairway'])){
             $stairway_cl=(new Query())->from('effect')->select('attribute')->leftJoin('stairs_details','effect.stair_id=stairs_details.id')->where(['effect.id'=>$effect_id])->one();
             $array['stairway']=$stairway_cl['attribute'];
