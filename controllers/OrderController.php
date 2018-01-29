@@ -583,8 +583,10 @@ class OrderController extends Controller
             'msg' => 'ok'
         ]);
     }
+
     /**
      * 样板间支付订单异步返回
+     * @throws Exception
      */
     public function actionAliPayEffectEarnestNotify()
     {
@@ -1117,12 +1119,10 @@ class OrderController extends Controller
     }
 
 
-
     /**
      * 微信公众号样板间申请定金异步返回
-     * wxpay notify action
-     * wxpay nityfy apply Deposit database
      * @return bool
+     * @throws Exception
      */
     public function actionWxPayEffectEarnestNotify(){
         //获取通知的数据
@@ -3608,7 +3608,7 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-         $orders=explode(',',$postData['list']);
+        $orders=explode(',',$postData['list']);
         if (!is_array($orders))
         {
             $code=1000;
@@ -3616,6 +3616,28 @@ class OrderController extends Controller
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
+        }
+        foreach ($orders as &$orderNo)
+        {
+            $goodsOrder=GoodsOrder::FindByOrderNo($orderNo,'user_id,role_id');
+            if (!$goodsOrder)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            if (
+                $goodsOrder->role_id!=$user->last_role_id_app
+                || $goodsOrder->user_id!=$user->id)
+            {
+                $code=1034;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
         }
         $orderAmount=GoodsOrder::CalculationCost($orders);
         if ( $postData['total_amount']*100 != $orderAmount){
@@ -4789,6 +4811,28 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        foreach ($orders as &$orderNo)
+        {
+            $goodsOrder=GoodsOrder::FindByOrderNo($orderNo,'user_id,role_id');
+            if (!$goodsOrder)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            if (
+                $goodsOrder->role_id!=$user->last_role_id_app
+                || $goodsOrder->user_id!=$user->id)
+            {
+                $code=1034;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+        }
         $orderAmount=123;
 //        $orderAmount=GoodsOrder::CalculationCost($orders);
 //        if ($postData['total_amount']*100  != $orderAmount){
@@ -5345,9 +5389,11 @@ class OrderController extends Controller
             ]
         ]);
     }
+
     /**
      * 清空失效商品
      * @return string
+     * @throws Exception
      */
     public function actionDelInvalidGoods()
     {
