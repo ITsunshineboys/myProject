@@ -3034,8 +3034,6 @@ class QuoteController extends Controller
             }
             $tr->commit();
         } catch (Exception $e) {
-            var_dump($e);die;
-            //回滚
             $tr->rollBack();
             $code=500;
             return Json::encode([
