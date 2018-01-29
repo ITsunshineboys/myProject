@@ -1,7 +1,7 @@
 // /**
 //  * Created by xl on 2017/6/29 0029.
 //  */
-app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$location", "$anchorScroll", "$state", "$stateParams", "_ajax", function ($uibModal,$q,$scope, $timeout, $location, $anchorScroll, $state, $stateParams, _ajax) {
+app.controller("modelRoomCtrl", ["$uibModal", "$q", "$scope", "$timeout", "$location", "$anchorScroll", "$state", "$stateParams", "_ajax", function ($uibModal, $q, $scope, $timeout, $location, $anchorScroll, $state, $stateParams, _ajax) {
     /*   sessionStorage.removeItem('check_goods');
        sessionStorage.removeItem('toponymy')
        sessionStorage.removeItem('params')
@@ -489,25 +489,25 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
        }*/
     let mySwiper
     $scope.showAll = function () {
-        if(mySwiper!==undefined){
-            mySwiper.destroy(true,true)
+        if (mySwiper !== undefined) {
+            mySwiper.destroy(true, true)
         }
         $timeout(function () {
             mySwiper = new Swiper(".swiper-container", {
                 autoplay: 3000,
                 loop: true,
                 pagination: ".swiper-pagination",
-                 observer:true,//修改swiper自己或子元素时，自动初始化swiper
-                 observeParents:true,//修改swiper的父元素时，自动初始化swiper
-                 onSlideChangeEnd: function(swiper){
-                     swiper.update(true);
-                     // mySwiper.startAutoplay();
-                     // mySwiper.reLoop();
-                 }
+                observer: true,//修改swiper自己或子元素时，自动初始化swiper
+                observeParents: true,//修改swiper的父元素时，自动初始化swiper
+                onSlideChangeEnd: function (swiper) {
+                    swiper.update(true);
+                    // mySwiper.startAutoplay();
+                    // mySwiper.reLoop();
+                }
             })
             mySwiper.startAutoplay()
             mySwiper.reLoop()
-        },300)
+        }, 300)
     }
     //初始化
     $scope.special_request = ''
@@ -539,17 +539,17 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                 address: $scope.case_list[0].detailed_address//小区地址
             }
             //默认选中案例
-            if($stateParams.effect_id){
+            if ($stateParams.effect_id) {
                 $scope.active_case = $scope.case_list.find(function (item) {
                     return item.id == $stateParams.effect_id
                 })
-            }else{
+            } else {
                 let index = $scope.case_list.findIndex(function (item) {
                     return item.type == 1
                 })
-                if(index == -1){
+                if (index == -1) {
                     $scope.active_case = $scope.case_list[0]
-                }else{
+                } else {
                     $scope.active_case = $scope.case_list[index]
                 }
             }
@@ -558,15 +558,15 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
         })
     })
     //获取案例材料和价格数据
-    $scope.getMaterials = function (obj,item,result) {
+    $scope.getMaterials = function (obj, item, result) {
         $scope.active_case = obj
-        if(item!=undefined){
+        if (item != undefined) {
             $scope.params[item] = result
-        }else{
+        } else {
             let index = $scope.stairs.findIndex(function (item) {
                 return item.id == obj.stair_id
             })
-            if(obj.type == 1){
+            if (obj.type == 1) {
                 let effect_image = obj.case_picture
                 let index1 = $scope.series.findIndex(function (item) {
                     return item.id == effect_image[0].series_id
@@ -575,43 +575,43 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                     return item.id == effect_image[0].style_id
                 })
                 $scope.params = {
-                    stair:index==-1?0:$scope.stairs[index],
-                    series:index1==-1?0:$scope.series[index1],
-                    style:index2==-1?0:$scope.style[index2]
+                    stair: index == -1 ? 0 : $scope.stairs[index],
+                    series: index1 == -1 ? 0 : $scope.series[index1],
+                    style: index2 == -1 ? 0 : $scope.style[index2]
                 }
-            }else{
+            } else {
                 $scope.params = {
-                    stair:index==-1?0:$scope.stairs[index],
-                    series:$scope.series[0],
-                    style:$scope.style[0]
+                    stair: index == -1 ? 0 : $scope.stairs[index],
+                    series: $scope.series[0],
+                    style: $scope.style[0]
                 }
             }
         }
         //样板间则获取商品、工人等数据,有资料则获取样板间实图
-        if(sessionStorage.getItem('quotation_materials') == null||(sessionStorage.getItem('quotation_materials') != null&&$scope.active_case.id!=$stateParams.effect_id)){
-            _ajax.get('/owner/particulars',{
-                id:obj.id
-            },function (res) {
+        if (sessionStorage.getItem('quotation_materials') == null || (sessionStorage.getItem('quotation_materials') != null && $scope.active_case.id != $stateParams.effect_id)) {
+            _ajax.get('/owner/particulars', {
+                id: obj.id
+            }, function (res) {
                 console.log('案例详情');
                 console.log(res);
-                if(res.effect.type == 0){
+                if (res.effect.type == 0) {
                     let index = res.effect.case_picture.findIndex(function (item) {
                         return item.series_id == $scope.params.series.id && item.style_id == $scope.params.style.id
                     })
-                    if(index!=-1){
+                    if (index != -1) {
                         $scope.roomPic = res.effect.case_picture[index]
-                    }else{
+                    } else {
                         $scope.roomPic = ''
                     }
                     $scope.total_prices = 0//原价
                     $scope.special_offer = 0//折后价
                     $scope.materials = []
                     console.log($scope.roomPic);
-                }else{
+                } else {
                     let index = res.effect.case_picture.findIndex(function (item) {
                         return item.series_id == $scope.params.series.id && item.style_id == $scope.params.style.id
                     })
-                    if(index!=-1){
+                    if (index != -1) {
                         //整合分类
                         $scope.materials = angular.copy($scope.first_level)
                         for (let [key, value] of $scope.materials.entries()) {
@@ -671,18 +671,19 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                         $scope.worker_list = res.worker_cost
                         getPrice()
                         console.log($scope.roomPic);
-                    }else {
+                    } else {
                         $scope.roomPic = ''
                         $scope.materials = []
                     }
                 }
             })
-        }else{
+        } else {
             $scope.materials = JSON.parse(sessionStorage.getItem('quotation_materials'))
             $scope.worker_list = JSON.parse(sessionStorage.getItem('worker_list'))
             getPrice()
         }
     }
+
     //计算总价和折后价
     function getPrice() {
         let arr = [], arr1 = []
@@ -706,7 +707,7 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
         $q.all([
             //运费
             (function () {
-                if(arr1.length!=0){
+                if (arr1.length != 0) {
                     return _ajax.post('/order/calculation-freight', {
                         goods: arr1
                     }, function (res) {
@@ -719,7 +720,7 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
             })(),
             //总价
             (function () {
-                if(arr.length!=0){
+                if (arr.length != 0) {
                     return _ajax.post('/owner/coefficient', {
                         list: arr
                     }, function (res) {
@@ -731,12 +732,12 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                 }
             })()
         ]).then(function () {
-            for(let [key,value] of $scope.materials.entries()){
-                for(let [key1,value1] of value.second_level.entries()){
-                    let index = value1.goods.findIndex(function(item){
+            for (let [key, value] of $scope.materials.entries()) {
+                for (let [key1, value1] of value.second_level.entries()) {
+                    let index = value1.goods.findIndex(function (item) {
                         return item.status == 0
                     })
-                    value1.status = index == -1?2:0
+                    value1.status = index == -1 ? 2 : 0
                 }
             }
             let worker_price = $scope.worker_list.reduce(function (prev, cur) {
@@ -746,15 +747,16 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
             $scope.special_offer += worker_price
         })
     }
+
     //跳转内页页面
     $scope.goInner = function (item, index) {
         sessionStorage.setItem('quotation_materials', JSON.stringify($scope.materials))
-        sessionStorage.setItem('params',JSON.stringify({
-            area:$scope.active_case.area,
-            series:$scope.active_case.case_picture[0].series_id,
-            style:$scope.active_case.case_picture[0].style_id,
-            effect_id:$scope.active_case.id,
-            id:$stateParams.id
+        sessionStorage.setItem('params', JSON.stringify({
+            area: $scope.active_case.area,
+            series: $scope.active_case.case_picture[0].series_id,
+            style: $scope.active_case.case_picture[0].style_id,
+            effect_id: $scope.active_case.id,
+            id: $stateParams.id
         }))
         sessionStorage.setItem('copies', JSON.stringify($scope.materials))
         sessionStorage.setItem('worker_list', JSON.stringify($scope.worker_list))
@@ -844,34 +846,34 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
         let materials = []
         //整合保存方案所需传值
         let obj = {
-            province_code:$scope.active_case.province_code,
-            city_code:$scope.active_case.city_code,
-            street:$scope.toponymy.address,
-            toponymy:$scope.toponymy.name,
-            sittingRoom_diningRoom:$scope.active_case.sittingRoom_diningRoom,
-            window:$scope.active_case.window,
-            bedroom:$scope.active_case.bedroom,
-            area:$scope.active_case.area,
-            high:$scope.active_case.high,
-            toilet:$scope.active_case.toilet,
-            kitchen:$scope.active_case.kitchen,
-            stair_id:$scope.active_case.stairway == 0?0:$scope.params.stair.id,
-            stairway:$scope.active_case.stairway,
-            series:$scope.params.series.id,
-            style:$scope.params.style.id,
-            type:1,
-            requirement:$scope.special_request,
-            original_price:$scope.total_prices.toFixed(2),
-            sale_price:$scope.special_offer.toFixed(2)
+            province_code: $scope.active_case.province_code,
+            city_code: $scope.active_case.city_code,
+            street: $scope.toponymy.address,
+            toponymy: $scope.toponymy.name,
+            sittingRoom_diningRoom: $scope.active_case.sittingRoom_diningRoom,
+            window: $scope.active_case.window,
+            bedroom: $scope.active_case.bedroom,
+            area: $scope.active_case.area,
+            high: $scope.active_case.high,
+            toilet: $scope.active_case.toilet,
+            kitchen: $scope.active_case.kitchen,
+            stair_id: $scope.active_case.stairway == 0 ? 0 : $scope.params.stair.id,
+            stairway: $scope.active_case.stairway,
+            series: $scope.params.series.id,
+            style: $scope.params.style.id,
+            type: 1,
+            requirement: $scope.special_request,
+            original_price: $scope.total_prices.toFixed(2),
+            sale_price: $scope.special_offer.toFixed(2)
         }
-        for(let [key,value] of $scope.materials.entries()){
-            for(let [key1,value1] of value.second_level.entries()){
-                for(let [key2,value2] of value1.goods.entries()){
+        for (let [key, value] of $scope.materials.entries()) {
+            for (let [key1, value1] of value.second_level.entries()) {
+                for (let [key2, value2] of value1.goods.entries()) {
                     materials.push({
-                        goods_id:value2.id,
-                        price:value2.cost,
-                        count:value2.quantity,
-                        first_cate_id:value.id
+                        goods_id: value2.id,
+                        price: value2.cost,
+                        count: value2.quantity,
+                        first_cate_id: value.id
                     })
                 }
             }
@@ -890,16 +892,16 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
             }
         }
         all_modal.$inject = ['$scope', '$uibModalInstance']
-        _ajax.post('/effect/app-apply-effect',obj,function (res) {
+        _ajax.post('/effect/app-apply-effect', obj, function (res) {
             console.log(res);
-            if(res.code == 403||res.code == 1052){
+            if (res.code == 403 || res.code == 1052) {
                 window.AndroidWebView.skipNotLogin()
-            }else{
+            } else {
                 $uibModal.open({
                     templateUrl: 'cur_model.html',
                     controller: all_modal,
-                    windowClass:'cur_modal',
-                    backdrop:'static'
+                    windowClass: 'cur_modal',
+                    backdrop: 'static'
                 })
             }
         })
@@ -910,46 +912,43 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
         let status = false//材料是否存在下架
         //整合申请样板间所需传值
         let obj = {
-            province_code:$scope.active_case.province_code,
-            city_code:$scope.active_case.city_code,
-            street:$scope.toponymy.address,
-            toponymy:$scope.toponymy.name,
-            sittingRoom_diningRoom:$scope.active_case.sittingRoom_diningRoom,
-            window:$scope.active_case.window,
-            bedroom:$scope.active_case.bedroom,
-            area:$scope.active_case.area,
-            high:$scope.active_case.high,
-            toilet:$scope.active_case.toilet,
-            kitchen:$scope.active_case.kitchen,
-            stair_id:$scope.active_case.stairway == 0?0:$scope.params.stair.id,
-            stairway:$scope.active_case.stairway,
-            series:$scope.params.series.id,
-            style:$scope.params.style.id,
-            type:0,
-            requirement:$scope.special_request,
-            original_price:$scope.total_prices.toFixed(2),
-            sale_price:$scope.special_offer.toFixed(2)
+            province_code: $scope.active_case.province_code,
+            city_code: $scope.active_case.city_code,
+            street: $scope.toponymy.address,
+            toponymy: $scope.toponymy.name,
+            sittingRoom_diningRoom: $scope.active_case.sittingRoom_diningRoom,
+            window: $scope.active_case.window,
+            bedroom: $scope.active_case.bedroom,
+            area: $scope.active_case.area,
+            high: $scope.active_case.high,
+            toilet: $scope.active_case.toilet,
+            kitchen: $scope.active_case.kitchen,
+            stair_id: $scope.active_case.stairway == 0 ? 0 : $scope.params.stair.id,
+            stairway: $scope.active_case.stairway,
+            series: $scope.params.series.id,
+            style: $scope.params.style.id,
+            type: 0
         }
-        for(let [key,value] of $scope.materials.entries()){
-            for(let [key1,value1] of value.second_level.entries()){
-                for(let [key2,value2] of value1.goods.entries()){
+        for (let [key, value] of $scope.materials.entries()) {
+            for (let [key1, value1] of value.second_level.entries()) {
+                for (let [key2, value2] of value1.goods.entries()) {
                     materials.push({
-                        goods_id:value2.id,
-                        price:value2.cost,
-                        count:value2.quantity,
-                        first_cate_id:value.id
+                        goods_id: value2.id,
+                        price: value2.cost,
+                        count: value2.quantity,
+                        first_cate_id: value.id
                     })
                 }
             }
         }
         //遍历是否存在下架商品
-        for(let [key,value] of $scope.materials.entries()){
+        for (let [key, value] of $scope.materials.entries()) {
             let index = value.second_level.findIndex(function (item) {
                 return item.status == 0
             })
-            if(index == -1){
+            if (index == -1) {
                 status = false
-            }else{
+            } else {
                 status = true
                 break
             }
@@ -976,28 +975,38 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
         }
         all_modal1.$inject = ['$scope', '$uibModalInstance']
         //判断是否登录
-        if(status){
+        if (status) {
             $uibModal.open({
                 templateUrl: 'cur_model.html',
                 controller: all_modal,
-                windowClass:'cur_modal',
-                backdrop:'static'
+                windowClass: 'cur_modal',
+                backdrop: 'static'
             })
-        }else{
-            _ajax.get('/site/check-is-login',{},function (res) {
-                if(res.code == 403||res.code == 1052){
-                    obj.materials = materials
-                    sessionStorage.setItem('payParams',JSON.stringify(obj))
+        } else {
+            _ajax.get('/site/check-is-login', {}, function (res) {
+                if (res.code == 403 || res.code == 1052) {
+                    if ($scope.materials.length != 0) {
+                        obj.materials = materials
+                        obj.requirement = $scope.special_request
+                        obj.original_price = $scope.total_prices.toFixed(2)
+                        obj.sale_price = $scope.special_offer.toFixed(2)
+                    }
+                    sessionStorage.setItem('payParams', JSON.stringify(obj))
                     $state.go('deposit')
-                }else if(res.code == 200){
-                    obj.materials = materials
-                    _ajax.post('/effect/app-apply-effect',obj,function (res) {
-                        if(res.code == 200){
+                } else if (res.code == 200) {
+                    if ($scope.materials.length != 0) {
+                        obj.materials = materials
+                        obj.requirement = $scope.special_request
+                        obj.original_price = $scope.total_prices.toFixed(2)
+                        obj.sale_price = $scope.special_offer.toFixed(2)
+                    }
+                    _ajax.post('/effect/app-apply-effect', obj, function (res) {
+                        if (res.code == 200) {
                             $uibModal.open({
                                 templateUrl: 'cur_model.html',
                                 controller: all_modal1,
-                                windowClass:'cur_modal',
-                                backdrop:'static'
+                                windowClass: 'cur_modal',
+                                backdrop: 'static'
                             })
                         }
                     })
