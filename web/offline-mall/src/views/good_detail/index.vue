@@ -50,6 +50,7 @@
 
 
 
+
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -95,6 +96,7 @@
 
 
 
+
           </div>
           <span></span>
           <div>
@@ -108,10 +110,12 @@
 
 
 
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
+
 
 
 
@@ -194,10 +198,12 @@
 
 
 
+
         </flexbox-item>
         <span></span>
         <flexbox-item @click.native="skipCart" :span="77/375">
           <i class="iconfont icon-cart"></i><br/>购物车
+
 
 
 
@@ -221,9 +227,11 @@
 
 
 
+
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('now')" :span="110/375">
           立即购买
+
 
 
 
@@ -272,9 +280,11 @@
 
 
 
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
+
 
 
 
@@ -482,7 +492,7 @@
           window.AndroidWebView.webfinish()
           return
         }
-        this.$route.go(-1)
+        this.$router.go(-1)
       },
       // 判断是否显示售后
       afterServiceShow () {
