@@ -3003,17 +3003,22 @@ class QuoteController extends Controller
         $post = \Yii::$app->request->post();
         $tr = \Yii::$app->db->beginTransaction();
         try {
-            $del = (new AssortGoods())->deleteAll(['and',['state'=>1],['city_code'=>$post['city']]]);
-            //(new AssortGoods())->deleteAll(['and',['state'=>0],['city_code'=>$post['city']]]);
-            var_dump($del);die;
-            if (!$del){
-                $tr->rollBack();
-                $code=500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code]
-                ]);
+            $data=AssortGoods::find()->where(['state'=>1])->all();
+            if($data){
+                $del = (new AssortGoods())->deleteAll(['and',['state'=>1],['city_code'=>$post['city']]]);
+                if (!$del){
+                    $tr->rollBack();
+                    $code=500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
             }
+
+            //(new AssortGoods())->deleteAll(['and',['state'=>0],['city_code'=>$post['city']]]);
+
+
 
             foreach($post['add_item'] as $management) {
                 $add = AssortGoods::findByInsert($management,$post['city']);
