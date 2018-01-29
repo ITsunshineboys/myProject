@@ -302,7 +302,7 @@ class Effect extends ActiveRecord
         $data=[];
         $query=new Query();
         $array= $query->from('effect_earnest As ea')
-            ->select('e.add_time,e.area,e.toponymy,e.city,e.particulars,e.district,e.street,e.high,e.window,e.stairway,t.style,s.series,ea.*')
+            ->select('e.add_time,e.area,e.toponymy,e.city,e.particulars,e.district,e.street,e.high,e.window,e.stair_id,t.style,s.series,ea.*')
             ->leftJoin('effect as e','ea.effect_id=e.id')
             ->leftJoin('effect_picture as ep','ea.effect_id=ep.effect_id')
             ->leftJoin('series As s','s.id = ep.series_id')
