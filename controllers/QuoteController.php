@@ -3005,6 +3005,7 @@ class QuoteController extends Controller
         try {
             $del = (new AssortGoods())->deleteAll(['and',['state'=>1],['city_code'=>$post['city']]]);
             //(new AssortGoods())->deleteAll(['and',['state'=>0],['city_code'=>$post['city']]]);
+            var_dump($del);die;
             if (!$del){
                 $tr->rollBack();
                 $code=500;
