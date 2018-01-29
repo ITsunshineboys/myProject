@@ -286,8 +286,8 @@ class Effect extends ActiveRecord
                 ->asArray()->one()['title'];
         }
 
-
         $material_grop=array_values(self::array_group_by($material,'first_cate_id'));
+
         $data['material']=$material_grop;
         return $data;
 
@@ -429,6 +429,7 @@ class Effect extends ActiveRecord
         }
         return $grouped;
     }
+
 
 
     public function beforeSave($insert)
