@@ -131,7 +131,7 @@ class Role extends ActiveRecord
     }
 
 
-       public  static  function    GetRoleByRoleId($role_id,$user)
+    public  static  function    GetRoleByRoleId($role_id,$user)
     {
         switch ($role_id){
             case 2:
