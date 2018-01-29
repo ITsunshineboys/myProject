@@ -93,13 +93,13 @@ class ShippingCart extends \yii\db\ActiveRecord
         }
         switch ($user->last_role_id_app)
         {
-            case 1:
+            case \Yii::$app->params['lhzzRoleId']:
                 $money='supplier_price';
                 break;
-            case 6:
+            case \Yii::$app->params['supplierRoleId']:
                 $money='supplier_price';
                 break;
-            case 7:
+            case \Yii::$app->params['ownerRoleId']:
                 $money='platform_price';
                 break;
         }

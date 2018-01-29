@@ -5208,6 +5208,15 @@ class OrderController extends Controller
                         ]);
                     }
                     $Good=$Good->toArray();
+                    if ($Good['left_number']<$good['goods_num'])
+                    {
+
+                        $code= 1085;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg'  =>$Good['title'] .Yii::$app->params['errorCodes'][$code]
+                        ]);
+                    }
                     $Good['goods_num']=$good['goods_num'];
                     $Goods[]=$Good;
                 }else
