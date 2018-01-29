@@ -347,9 +347,11 @@ class Effect extends ActiveRecord
         $data['id']=$array['id'];
         $array['address']=$array['city'].$array['street'];
 
-        if($array['stairway']){
+        if($array['stair_id']!=0){
             $stairway_cl=(new Query())->from('effect')->select('attribute')->leftJoin('stairs_details','effect.stair_id=stairs_details.id')->where(['effect.id'=>$effect_id])->one();
-            $array['stairway']=$stairway_cl['attribute'];
+            $array['stair_id']=$stairway_cl['attribute'];
+        }else{
+            $array['stair_id']='';
         }
         $data['particulars_view'] =[
             ['name'=>'小区名称','value'=>$array['toponymy']],
@@ -358,7 +360,7 @@ class Effect extends ActiveRecord
             ['name'=>'户型','value'=>$array['particulars']],
             ['name'=>'层高','value'=>$array['high'].'m'],
             ['name'=>'飘窗','value'=>$array['window'].'m'],
-            ['name'=>'楼梯选择','value'=>$array['stairway']],
+            ['name'=>'楼梯选择','value'=>$array['stair_id']],
             ['name'=>'系列','value'=>$array['series']],
             ['name'=>'风格','value'=>$array['style']]
         ];
