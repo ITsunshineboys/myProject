@@ -3619,20 +3619,9 @@ class OrderController extends Controller
         }
         foreach ($orders as &$orderNo)
         {
-            $goodsOrder=GoodsOrder::FindByOrderNo($orderNo,'user_id,role_id');
-            if (!$goodsOrder)
+            $code=GoodsOrder::VerificationBuyerIdentity($orderNo,$user);
+            if ($code!=200)
             {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-            if (
-                $goodsOrder->role_id!=$user->last_role_id_app
-                || $goodsOrder->user_id!=$user->id)
-            {
-                $code=1034;
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code]
@@ -4813,20 +4802,9 @@ class OrderController extends Controller
         }
         foreach ($orders as &$orderNo)
         {
-            $goodsOrder=GoodsOrder::FindByOrderNo($orderNo,'user_id,role_id');
-            if (!$goodsOrder)
+            $code=GoodsOrder::VerificationBuyerIdentity($orderNo,$user);
+            if ($code!=200)
             {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-            if (
-                $goodsOrder->role_id!=$user->last_role_id_app
-                || $goodsOrder->user_id!=$user->id)
-            {
-                $code=1034;
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code]

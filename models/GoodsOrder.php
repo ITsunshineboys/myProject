@@ -3739,6 +3739,25 @@ class GoodsOrder extends ActiveRecord
     }
 
 
+    public  static  function VerificationBuyerIdentity($order_no,$user)
+    {
+        $goodsOrder=self::FindByOrderNo($order_no,'user_id,role_id');
+        if (!$goodsOrder)
+        {
+            $code=1000;
+            return $code;
+        }
+        if (
+            $goodsOrder->role_id!=$user->last_role_id_app
+            || $goodsOrder->user_id!=$user->id)
+        {
+            $code=1034;
+            return $code;
+        }
+        return 200;
+    }
+
+
 
 
 
