@@ -4646,9 +4646,12 @@ class OrderController extends Controller
             ]);
         }
     }
+
     /**
-     * 删除购物车商品
+     *  删除购物车商品
      * @return string
+     * @throws Exception
+     * @throws \Exception
      */
     public  function  actionDelShippingCartGoods()
     {

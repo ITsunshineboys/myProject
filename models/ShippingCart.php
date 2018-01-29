@@ -164,7 +164,10 @@ class ShippingCart extends \yii\db\ActiveRecord
     /**
      * 删除购物车商品
      * @param array $carts
+     * @param array $andWhere
      * @return int
+     * @throws Exception
+     * @throws \Exception
      */
     public static function DelShippingCartData($carts = [],$andWhere = [])
     {
@@ -206,6 +209,7 @@ class ShippingCart extends \yii\db\ActiveRecord
      * @param $Goods_ids
      * @param $user
      * @return int
+     * @throws Exception
      */
     public  static  function  DelInvalidGoods($Goods_ids,$user)
     {
