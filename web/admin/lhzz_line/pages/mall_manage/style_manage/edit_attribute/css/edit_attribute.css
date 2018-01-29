@@ -24,7 +24,7 @@ input {
 }
 
 table {
-    margin:20px auto 0;
+    margin: 20px auto 0;
 }
 
 .inline_block {
@@ -37,12 +37,19 @@ table {
     padding-top: 20px;
 }
 
-.gay_input {
-    width: 280px;
-    background-color: #E8E6E8;
-    border: 1px solid #E8E6E8;
-    border-radius: 3px;
+.attr-name {
+    padding-left: 40px
 }
+
+.intel-tr {
+    padding-top:20px
+}
+
+.attr-td {
+   padding-left: 40px;
+   padding-top: 20px;
+}
+
 
 .normal_input {
     width: 280px;
@@ -74,14 +81,14 @@ table {
 }
 
 /*.bottom span {*/
-    /*display: inline-block;*/
-    /*border: 1px solid #ddd;*/
-    /*width: 80px;*/
-    /*height: 35px;*/
-    /*border-radius: 3px;*/
-    /*text-align: center;*/
-    /*line-height: 35px;*/
-    /*cursor: pointer;*/
+/*display: inline-block;*/
+/*border: 1px solid #ddd;*/
+/*width: 80px;*/
+/*height: 35px;*/
+/*border-radius: 3px;*/
+/*text-align: center;*/
+/*line-height: 35px;*/
+/*cursor: pointer;*/
 /*}*/
 
 .bg_blue {

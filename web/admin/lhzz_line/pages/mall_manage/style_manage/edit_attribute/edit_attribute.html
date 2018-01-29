@@ -1,71 +1,91 @@
 <link rel="stylesheet" href="pages/mall_manage/style_manage/edit_attribute/css/edit_attribute.css">
 <div ng-controller="edit_attribute_ctrl">
-        <div class="top_title">
-            <span>分类名称</span>
-            <span ng-bind="titles"></span>
-        </div>
-        <hr>
-        <div class="add_box">
-            <button class="btn btn-primary" ng-click=selectAdd()><i class="iconfont icon-add"></i>下拉添加</button>
-            <button class="btn btn-primary" ng-click="generalAdd()"><i class="iconfont icon-add"></i>普通添加</button>
-            <button class="btn btn-primary" ng-click="checkboxAdd()"><i class="iconfont icon-add"></i>复选框添加</button>
-        </div>
-        <!--属性设置-->
+    <div class="top_title">
+        <span>分类名称</span>
+        <span ng-bind="titles"></span>
+    </div>
+    <hr>
+    <div class="add_box">
+        <button class="btn btn-primary" ng-click=selectAdd()><i class="iconfont icon-add"></i>下拉添加</button>
+        <button class="btn btn-primary" ng-click="generalAdd()"><i class="iconfont icon-add"></i>普通添加</button>
+        <button class="btn btn-primary" ng-click="checkboxAdd()"><i class="iconfont icon-add"></i>复选框添加</button>
+    </div>
+    <!--属性设置-->
 
-            <table>
-                <tr ng-if="propattrs.length">
-                    <td>属性名称</td>
-                    <td>属性内容</td>
-                    <td>单位</td>
-                </tr>
+    <table>
+        <tr ng-if="propattrs.length">
+            <td class="attr-name">属性名称</td>
+            <td>属性内容</td>
+            <td>单位</td>
+        </tr>
 
-                <form name="attr_form" novalidate>
-                <tr ng-repeat="item in propattrs">
-                    <td class="padding_right">
-                        <span >
+        <form name="attr_form" novalidate>
+            <tr ng-repeat="item in propattrs" ng-if="item.required"  class="intel-tr">
+                <td class="attr-td">
+                    <span>{{item.name}}</span>
+                </td>
+                <td>
+                    <span ng-if="item.addition_type==0"></span>
+                    <span ng-if="item.addition_type==1||item.addition_type==2" ng-bind="item.value.join(',')"></span>
+                </td>
+                <td>
+                    <span class="attr_font">{{item.cur_unit.unit}}</span>
+                </td>
+            </tr>
+            <tr ng-repeat="item in propattrs" ng-if="!item.required">
+                <td class="padding_right">
+                        <span>
                           <img src="pages/mall_manage/style_manage/edit_attribute/images/red.png" alt="">
-                           <i class="glyphicon glyphicon-minus" ng-click=deleteTr($index)></i>
+                           <i class="glyphicon glyphicon-minus" ng-click="deleteTr($index)"></i>
                         </span>
-                        <input type="text" class="input_one" ng-model="item.name" maxlength=6 required ng-blur=checkname(item.name,$index) ng-class={warningred:$index==temp&&iswarning==true}>
-                    </td>
-                    <td class="padding_right">
-                        <input type="text" class="normal_input" ng-model="item.value" disabled=disabled ng-if="item.addition_type==0">
-                        <input type="text" class="normal_input" ng-model="item.value" ng-if="item.addition_type==1||item.addition_type==2" ng-class={warningred:$index==tempcontent&&iswarningcontent==true} ng-blur=checkContent(item.value,$index)>
-                    </td>
-                    <td class="padding_right">
-                        <select name="" class="select_css" ng-options="op.unit for op in unitarrs" ng-model="item.cur_unit"></select>
-                        <span class="attr_font">*属性名称限1~6个字，属性内容以逗号隔开</span>
-                        <!--ng-change=aiya(item.cur_unit.unit)-->
-                    </td>
-                </tr>
-                </form>
-            </table>
+                    <input type="text" class="input_one" ng-model="item.name" maxlength=6 required
+                           ng-blur="checkname(item.name,$index)" ng-class="{warningred:$index==temp&&iswarning==true}">
+                </td>
+                <td class="padding_right">
+                    <input type="text" class="normal_input" ng-model="item.value" disabled=disabled
+                           ng-if="item.addition_type==0">
+                    <input type="text" class="normal_input" ng-model="item.value"
+                           ng-if="item.addition_type==1||item.addition_type==2"
+                           ng-class={warningred:$index==tempcontent&&iswarningcontent==true}
+                           ng-blur=checkContent(item.value,$index)>
+                </td>
+                <td class="padding_right">
+                    <select name="" class="select_css" ng-options="op.unit for op in unitarrs"
+                            ng-model="item.cur_unit"></select>
+                    <span class="attr_font">*属性名称限1~6个字，属性内容以逗号隔开</span>
+                </td>
+            </tr>
+        </form>
+    </table>
 
-        <!--保存 返回-->
-        <div class="bottom">
-            <button class="btn btn-primary" ng-click=saveProp()><i class="iconfont icon-save"></i>保存</button>
-            <button class="btn btn-default" ui-sref='style_index({showattr:true})'>返回</button>
-        </div>
+    <!--保存 返回-->
+    <div class="bottom">
+        <button class="btn btn-primary" ng-click=saveProp()><i class="iconfont icon-save"></i>保存</button>
+        <button class="btn btn-default" ui-sref='style_index({showattr:true})'>返回</button>
+    </div>
 
 
-        <!-- 弹窗-保存成功 -->
-        <div class="modal customer_modal detail_modal fade" tabindex="-1" role="dialog" id="success_modal">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">提示</h4>
+    <!-- 弹窗-保存成功 -->
+    <div class="modal customer_modal detail_modal fade" tabindex="-1" role="dialog" id="success_modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <span class="col-md-12">{{backInfo}}</span>
                     </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <span class="col-md-12">{{backInfo}}</span>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" ng-click="btnclick?modalBack():''" data-dismiss="modal">确认</button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="btnclick?modalBack():''"
+                            data-dismiss="modal">确认
+                    </button>
                 </div>
             </div>
         </div>
+    </div>
     </section>
 </div>
