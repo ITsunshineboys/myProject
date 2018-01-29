@@ -34,17 +34,17 @@
         <p class="col-md-10">{{particulars_view.series}}</p>
         <p class="col-md-2">风格</p>
         <p class="col-md-10">{{particulars_view.style}}</p>
-        <p class="col-md-2">特殊要求</p>
-        <p class="col-md-10">{{particulars_view.requirement}}</p>
+        <p class="col-md-2" ng-if="particulars_view.requirement!=undefined">特殊要求</p>
+        <p class="col-md-10" ng-if="particulars_view.requirement!=undefined">{{particulars_view.requirement}}</p>
     </div>
-    <div class="row">
+    <div class="row" ng-if="particulars_view.original_price!=undefined">
         <h3 class="col-md-12">智能报价</h3>
         <p class="col-md-2">原价格</p>
         <p class="col-md-10">{{particulars_view.original_price | currency:'￥'}}</p>
         <p class="col-md-2">优惠后价格</p>
         <p class="col-md-10">{{particulars_view.sale_price | currency:'￥'}}</p>
     </div>
-    <div class="row" id="accordion2">
+    <div class="row" id="accordion2" ng-if="material.length != 0">
         <h3 class="col-md-12">材料信息</h3>
         <div class="col-md-12" ng-repeat="item in material">
             <p class="col-md-6">{{item.first_level}}</p>
