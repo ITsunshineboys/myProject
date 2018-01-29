@@ -89,74 +89,14 @@
         <flexbox slot="content" justify="space-between" class="shop-intro">
           <div>
             <span>{{good_detail.supplier.goods_number}}</span><br/>商品数
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.follower_number}}</span><br/>粉丝数
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
           </div>
         </flexbox>
         <flexbox slot="footer" justify="center" class="view-shop-btn">
@@ -221,107 +161,16 @@
       <flexbox class="bottom-tabbar">
         <flexbox-item @click.native="contactShop" :span="76/375">
           <i class="iconfont icon-service1"></i><br/>联系商家
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         </flexbox-item>
         <span></span>
         <flexbox-item @click.native="skipCart" :span="77/375">
           <i class="iconfont icon-cart"></i><br/>购物车
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('cart')" :span="110/375">
           加入购物车
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('now')" :span="110/375">
           立即购买
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         </flexbox-item>
       </flexbox>
     </div>
@@ -348,59 +197,9 @@
         <flexbox class="count-bottom-btn">
           <flexbox-item alt="cart" v-if="count_cart||default_count" @click.native="addCart">
             加入购物车
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
           </flexbox-item>
         </flexbox>
       </div>
@@ -458,25 +257,6 @@
            :show-mask="false">
       <div>该商品已下架</div>
     </popup>
-
-
-    <alert class="goodshort-alert" v-model="show_test" :hide-on-blur="true">
-      <slot name="default" class="alert-content">
-        测试弹窗
-
-
-
-
-
-
-
-
-
-
-
-      </slot>
-    </alert>
-
   </div>
 </template>
 
@@ -528,7 +308,6 @@
           androidMsgCenter: this.skipMessageCenter, // 跳转消息中心
           androidCart: this.skipCart // 跳转购物车
         },
-        show_test: false,
         isFromAndroid: false,       // 由安卓页面跳转至此页面
         good_id: '',                // 商品id
         role_id: 6,                 // 角色id
@@ -744,7 +523,6 @@
       },
       // 跳转购物车
       skipCart () {
-        this.show_test = true
         window.AndroidWebView.skipShopCart()
       },
       // 联系商家
