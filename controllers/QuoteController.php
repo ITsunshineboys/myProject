@@ -3007,7 +3007,11 @@ class QuoteController extends Controller
             //(new AssortGoods())->deleteAll(['and',['state'=>0],['city_code'=>$post['city']]]);
             if (!$del){
                 $tr->rollBack();
-                return 500;
+                $code=500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code]
+                ]);
             }
 
             foreach($post['add_item'] as $management) {
@@ -3016,7 +3020,11 @@ class QuoteController extends Controller
 
             if (!$add){
                 $tr->rollBack();
-                return 500;
+                $code=500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code]
+                ]);
             }
             $tr->commit();
         } catch (\Exception $e) {
