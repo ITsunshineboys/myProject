@@ -636,7 +636,7 @@
       },
       // 跳转消息中心
       skipMessageCenter () {
-        this.show_more = falsenp
+        this.show_more = false
         window.AndroidWebView.skipMessageCenter()
       },
       // 跳转购物车
