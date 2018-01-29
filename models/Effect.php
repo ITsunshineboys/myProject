@@ -341,11 +341,8 @@ class Effect extends ActiveRecord
 
 
         $data['id']=$array['id'];
-        if(isset($array['district'])){
-            $array['address']=$array['city'].$array['district'].$array['street'];
-        }else{
-            $array['address']=$array['city'].$array['street'];
-        }
+        $array['address']=$array['street'];
+
         if($array['stairway']){
             $stairway_cl=(new Query())->from('effect')->select('attribute')->leftJoin('stairs_details','effect.stair_id=stairs_details.id')->where(['effect.id'=>$effect_id])->one();
             $array['stairway']=$stairway_cl['attribute'];
