@@ -3076,10 +3076,7 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-       var_dump(EffectToponymy::find()->asArray()->all());
-       $array=[401,402];
-       $array=implode(',',$array);
-       var_dump($array);
+
 
     }
 }

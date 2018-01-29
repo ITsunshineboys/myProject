@@ -151,41 +151,41 @@ class EffectController extends Controller
     }
 
 
-    /**
-     * 删除完成的样板间
-     * @return string
-     */
-    public function actionEffectApplyDel(){
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $code = 1000;
-        $id=(int)Yii::$app->request->post('id');
-        if(!$id){
-            Json::encode([
-                'code'=>$code,
-                'msg'=>Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $res=EffectEarnest::deleteAll(['id'=>$id]);
-        if(!$res){
-            $code=500;
-            Json::encode([
-                'code'=>$code,
-                'msg'=>Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        return Json::encode([
-            'code'=>200,
-            'msg'=>'ok',
-        ]);
-
-    }
+//    /**
+//     * 删除完成的样板间
+//     * @return string
+//     */
+//    public function actionEffectApplyDel(){
+//        $user = Yii::$app->user->identity;
+//        if (!$user){
+//            $code=403;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+//        $code = 1000;
+//        $id=(int)Yii::$app->request->post('id');
+//        if(!$id){
+//            Json::encode([
+//                'code'=>$code,
+//                'msg'=>Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+//        $res=EffectEarnest::deleteAll(['id'=>$id]);
+//        if(!$res){
+//            $code=500;
+//            Json::encode([
+//                'code'=>$code,
+//                'msg'=>Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+//        return Json::encode([
+//            'code'=>200,
+//            'msg'=>'ok',
+//        ]);
+//
+//    }
     /**
      * 样板间完成
      * @return string

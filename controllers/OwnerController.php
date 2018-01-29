@@ -1591,7 +1591,7 @@ class OwnerController extends Controller
     }
 
     /**
-     * 小区案例列表 ---yr
+     * 小区案例列表
      * @return string
      */
     public function actionEffectCaseList(){
@@ -1605,7 +1605,7 @@ class OwnerController extends Controller
             ]);
         }
         foreach ($effect as &$one_effect){
-            $one_effect['detailed_address'] = $one_effect['province'] . $one_effect['city'] . $one_effect['district'] .  $one_effect['street'];
+            $one_effect['detailed_address'] = $one_effect['district'] .  $one_effect['street'];
             if ($one_effect['type'] == 1){
                 $one_effect['case_picture'] = EffectPicture::findById( $one_effect['id']);
             }
@@ -1622,14 +1622,14 @@ class OwnerController extends Controller
     }
 
     /**
-     * 案例列表
+     * 案例数据
      * @return string
      */
     public function actionParticulars()
     {
         $id = (int)Yii::$app->request->get('id','');
         $effect = Effect::find()->asArray()->select('id,bedroom,sittingRoom_diningRoom as hall,toilet,kitchen,window,area,high,province,city,district,toponymy,street,particulars,stairway,stair_id,house_image,type,city_code')->where(['id'=>$id])->one();
-        $effect['street'] = $effect['province'].$effect['city'].$effect['district'].$effect['street'];
+        $effect['street'] = $effect['district'].$effect['street'];
         $effect['case_picture'] = EffectPicture::find()->asArray()->where(['effect_id'=>$id])->all();
         if ($effect['type'] == 0){
             return Json::encode([

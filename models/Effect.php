@@ -236,11 +236,7 @@ class Effect extends ActiveRecord
         }else{
             $array['earnest']=sprintf('%.2f',(float)$array['earnest']*0.01);
         }
-//        if(isset($array['district'])){
-//            $array['address']=$array['city'].$array['district'].$array['street'];
-//        }else{
-//            $array['address']=$array['city'].$array['street'];
-//        }
+
         $array['address']=$array['street'];
         $array['item']=EffectEarnest::EFFECT_LOGIN[$array['item']];
         $array['create_time']=date('Y-m-d',$array['create_time']);

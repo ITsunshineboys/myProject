@@ -283,6 +283,18 @@ class EffectEarnest extends \yii\db\ActiveRecord
                 $earnest=0;
                 $transaction_no='';
             }
+            if(!isset($post['requirement']) ){
+                $requirement='';
+            }else{
+                $requirement=$post['requirement'];
+            }
+            if(!isset($post['original_price']) && !isset($post['sale_price'])){
+                $original_price=0;
+                $sale_price=0;
+            }else{
+                $original_price=$post['original_price'];
+                $sale_price=$post['sale_price'];
+            }
             $effect_earnest=new EffectEarnest();
             $effect_earnest->uid=$uid;
             $effect_earnest->effect_id=$id;
@@ -290,9 +302,9 @@ class EffectEarnest extends \yii\db\ActiveRecord
             $effect_earnest->name=$name;
             $effect_earnest->earnest =$earnest;
             $effect_earnest->transaction_no=$transaction_no;
-            $effect_earnest->requirement=$post['requirement'];
-            $effect_earnest->original_price=$post['original_price']*100;
-            $effect_earnest->sale_price=$post['sale_price']*100;
+            $effect_earnest->requirement=$requirement;
+            $effect_earnest->original_price=$original_price*100;
+            $effect_earnest->sale_price=$sale_price*100;
             $effect_earnest->type=$post['type'];
             $effect_earnest->item=$item;
             if(!$effect_earnest->save(false)){
