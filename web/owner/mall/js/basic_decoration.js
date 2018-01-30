@@ -106,11 +106,11 @@ app.controller('basic_ctrl',function ($timeout,$scope,$state,$stateParams,_ajax)
                                             let index1 = $scope.materials[key].second_level[index].goods.findIndex(function (item) {
                                                 return item.id == value2.id
                                             })
-                                        }
-                                        if(value2.cost == 0){
-                                            if(index1!=-1){
-                                                $scope.materials[key].count --
-                                                $scope.materials[key].second_level[index].splice(index1,1)
+                                            if(value2.cost == 0){
+                                                if(index1!=-1){
+                                                    $scope.materials[key].count --
+                                                    $scope.materials[key].second_level[index].goods.splice(index1,1)
+                                                }
                                             }
                                         }
                                     }
@@ -229,11 +229,11 @@ app.controller('basic_ctrl',function ($timeout,$scope,$state,$stateParams,_ajax)
                                     let index1 = $scope.materials[key].second_level[index].goods.findIndex(function (item) {
                                         return item.id == value2.id
                                     })
-                                }
-                                if(value2.cost == 0){
-                                    if(index1!=-1){
-                                        $scope.materials[key].count --
-                                        $scope.materials[key].second_level[index].splice(index1,1)
+                                    if(value2.cost == 0){
+                                        if(index1!=-1){
+                                            $scope.materials[key].count --
+                                            $scope.materials[key].second_level[index].goods.splice(index1,1)
+                                        }
                                     }
                                 }
                             }
