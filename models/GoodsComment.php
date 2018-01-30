@@ -523,10 +523,10 @@ class GoodsComment extends ActiveRecord
                 }
             }
             $data['well_probability']=round($score_list['good_score']/$count,2)*100;
-            $data['shipping_score']=round(($score_list['shipping_score']+$postData['shipping_score'])/$count+1,1);
-            $data['store_service_score']=round(($score_list['store_service_score']+$postData['store_service_score'])/$count+1,1);
-            $data['logistics_speed_score']=round(($score_list['logistics_speed_score']+$postData['logistics_speed_score'])/$count+1,1);
-            $data['score']=round(($score_list['score']+$postData['score'])/$count+1,1);
+            $data['shipping_score']=round(($score_list['shipping_score']+$postData['shipping_score'])/($count+1),1);
+            $data['store_service_score']=round(($score_list['store_service_score']+$postData['store_service_score'])/($count+1),1);
+            $data['logistics_speed_score']=round(($score_list['logistics_speed_score']+$postData['logistics_speed_score'])/($count+1),1);
+            $data['score']=round(($score_list['score']+$postData['score'])/($count+1),1);
             $data['count']=$count;
         }else{
             $data['logistics_speed_score']=0;
