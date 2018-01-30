@@ -719,11 +719,9 @@ class TestController extends Controller
         $order=[];
         foreach ($orders as $k =>$v){
             if ($orders[$k]['comment_id']){
-                $order[$k]=GoodsComment::find()
+                $order[]=GoodsComment::find()
                     ->where(['id'=>$orders[$k]['comment_id']])
                     ->one();
-            }else{
-                unset($order[$k]['comment_id']);
             }
         }
         $count=count($order);
@@ -754,6 +752,10 @@ class TestController extends Controller
             $data['logistics_speed_score']=0;
             $data['score']=0;
         }
+        $supplier=Supplier::findOne($supplier_id);
+        $supplier->comprehensive_score=$data['score'];
+        $supplier->logistics_speed_score=$data['logistics_speed_score'];
+        $supplier->save(false);
         return Json::encode($data);
     }
 

@@ -495,11 +495,9 @@ class GoodsComment extends ActiveRecord
         $order=[];
         foreach ($orders as $k =>$v){
             if ($orders[$k]['comment_id']){
-                $order[$k]=self::find()
+                $order[]=self::find()
                     ->where(['id'=>$orders[$k]['comment_id']])
                     ->one();
-            }else{
-                unset($order[$k]['comment_id']);
             }
         }
         $count=count($order);
