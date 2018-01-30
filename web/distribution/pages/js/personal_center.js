@@ -9,6 +9,7 @@ app.controller('personal_center_ctrl',function ($uibModal,$scope,$state,$statePa
     })
     //获取个人中心数据
     _ajax.get('/distribution/distribution-user-center',{},function (res) {
+        alert(res)
         console.log(res)
         $scope.all_data = res.data
         sessionStorage.setItem('all_data',JSON.stringify($scope.all_data))
