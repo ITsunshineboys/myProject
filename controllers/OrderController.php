@@ -5084,7 +5084,7 @@ class OrderController extends Controller
             }
             if (!empty($one['num']))
             {
-                if ($one['num'] != 0 || $one['num'] !=null){
+                if ($one['num'] != 0 && $one['num'] !=null){
                     $goods_ [] = $one;
                 }else{
                     unset($one);
