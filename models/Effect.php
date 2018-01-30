@@ -362,7 +362,8 @@ class Effect extends ActiveRecord
             ['name'=>'飘窗','value'=>$array['window'].'m'],
             ['name'=>'楼梯选择','value'=>$array['stair_id']],
             ['name'=>'系列','value'=>$array['series']],
-            ['name'=>'风格','value'=>$array['style']]
+            ['name'=>'风格','value'=>$array['style']],
+            ['name'=>'特殊要求','value'=>$array['requirement']]
         ];
 
         $material=EffectMaterial::find()->where(['effect_id'=>$effect_id])->asArray()->all();
