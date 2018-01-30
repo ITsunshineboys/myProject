@@ -2503,7 +2503,9 @@ class QuoteController extends Controller
             ]);
         }
         $goods  = Goods::priceDetail(self::CATEGORY_LEVEL,$category_id);
-
+        var_dump($get);
+        var_dump($category_id);
+        die;
         if ( isset($goods['0'])) {
             $max        = BasisDecorationService::profitMargin($goods);
             $goods_attr = GoodsAttr::frontDetailsByGoodsId($max['id']);
