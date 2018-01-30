@@ -9,7 +9,7 @@ app.controller('personal_center_ctrl',function ($uibModal,$scope,$state,$statePa
                 alert(res)
                 $scope.all_data = res.data
                 // sessionStorage.setItem('all_data',JSON.stringify($scope.all_data))
-                // console.log($scope.all_data)
+                console.log($scope.all_data)
                 // sessionStorage.removeItem('basic_data')
                 // $state.go('personal_center')
             })
