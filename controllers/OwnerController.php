@@ -1835,9 +1835,9 @@ class OwnerController extends Controller
         $a = Goods::find()->where(["sku"=>108287])->one();
         $b = GoodsAttr::find()->where(['goods_id'=>$a['id']]);
         $c = GoodsStyle::find()->where(['goods_id'=>$a['id']]);
-        var_dump($a);
-        var_dump($b);
-        var_dump($c);die;
+        return Json::encode([
+           "a"=>[$a,$b,$c]
+        ]);
 
     }
 
