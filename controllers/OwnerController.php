@@ -1832,7 +1832,7 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-        echo pinyin("wangwu");
+        echo pinyin("汗");
     }
 
 }
