@@ -3019,7 +3019,7 @@ class QuoteController extends Controller
             //(new AssortGoods())->deleteAll(['and',['state'=>0],['city_code'=>$post['city']]]);
 
 
-            if($post['add_item']){
+            if(isset($post['add_item'])){
                 foreach($post['add_item'] as $management) {
                     $add = AssortGoods::findByInsert($management,$post['city']);
                 }
