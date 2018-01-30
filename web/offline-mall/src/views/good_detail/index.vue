@@ -742,7 +742,7 @@
   /*右上弹窗样式结束*/
 
   .good-container .choose-count {
-    border-bottom: 1px solid #E9EDEE;
+    border-bottom: 0px solid #E9EDEE;
   }
 
   .good-container .weui-cells {
@@ -885,9 +885,9 @@
 
   .good-container .shop-intro > span {
     display: inline-block;
-    width: 2px;
+    width: 1px;
     height: 20px;
-    background: #CDD3D7;
+    background: #E9EDEE;
   }
 
   .good-container .view-shop-btn {
@@ -923,7 +923,7 @@
     font-size: 14px;
     color: rgba(153, 153, 153, 1);
     line-height: 14px;
-    border-bottom: 1px solid #CDD3D7;
+    border-bottom: 1px solid #E9EDEE;
   }
 
   .good-container .pro-params > div:last-child {
