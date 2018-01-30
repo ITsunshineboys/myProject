@@ -420,4 +420,12 @@ class ChatController extends Controller
             'msg'=>'ok'
         ]);
     }
+
+
+    public function actionTest(){
+
+        $chat=new ChatService();
+        $a=$chat->getChatRecord("select * where timestamp>1403164734");
+        echo  $a;
+    }
 }
