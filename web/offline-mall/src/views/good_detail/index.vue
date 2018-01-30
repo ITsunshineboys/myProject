@@ -152,8 +152,8 @@
             </flexbox-item>
             <flexbox-item v-if="good_detail.attr!==''">
               <flexbox justify="space-between" v-for="item in good_detail.attrs" :key="item.id">
-                <span>{{item.name}}</span>
-                <span>{{item.value}}</span>
+                <flexbox-item>{{item.name}}</flexbox-item>
+                <flexbox-item :span="257/375" class="attr-content">{{item.value}}</flexbox-item>
               </flexbox>
             </flexbox-item>
           </flexbox>
@@ -249,7 +249,7 @@
                   @isShow="showOfflineAlert"></offlinealert>
 
     <!--加入购物车成功提示-->
-    <toast v-model="cart_success" width="200px" position="middle" :time="2000" :is-show-mask="true">
+    <toast v-model="show_cart_success" width="200px" position="middle" :time="2000" :is-show-mask="true">
       <i class="iconfont icon-checkbox-circle-chec"></i>
       <p>成功添加到购物车</p>
     </toast>
@@ -330,7 +330,8 @@
         show_offlinegood: false,    // 线下商品简介
         show_goodshort_alert: false, // 商品不足弹窗
         show_offline: false,        // 商品下架提示
-        cart_success: false,        // 添加购物车成功toast
+
+        show_cart_success: false,        // 添加购物车成功toast
         count_cart: false,          // 加入购物车按钮显示
         count_now: false,           // 立即购买按钮显示
         default_count: false,       // 两个按钮显示
@@ -492,7 +493,7 @@
             }, (res) => {
               if (res.code === 200) {
                 this.showCount('all')
-                this.cart_success = true // 购物车添加成功弹窗显示
+                this.show_cart_success = true // 购物车添加成功弹窗显示
                 window.AndroidWebView.showInfoFromJs(res.data)
               }
             })
@@ -1027,6 +1028,8 @@
   /*图文详情 start*/
   .good-container .description-container {
     min-height: 10px;
+    padding-top: 15px;
+    padding-bottom: 10px;
   }
 
   .good-container .description {
@@ -1058,6 +1061,11 @@
 
   .good-container .pro-params > div:last-child {
     margin-bottom: 50px;
+  }
+
+  .good-container .pro-params .attr-content {
+    text-align: right;
+    line-height: 18px;
   }
     /*产品参数 end*/
   /*图文详情&产品参数 end*/
