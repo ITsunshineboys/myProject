@@ -4,18 +4,17 @@ app.controller('personal_center_ctrl',function ($uibModal,$scope,$state,$statePa
         if(res.code == 403){
             window.AndroidWebView.skipNotLogin()
         }else if(res.code == 200){
-
+            //获取个人中心数据
+            _ajax.get('/distribution/distribution-user-center',{},function (res) {
+                alert(res)
+                console.log(res)
+                $scope.all_data = res.data
+                sessionStorage.setItem('all_data',JSON.stringify($scope.all_data))
+                console.log($scope.all_data)
+                sessionStorage.removeItem('basic_data')
+                $state.go('personal_center')
+            })
         }
-    })
-    //获取个人中心数据
-    _ajax.get('/distribution/distribution-user-center',{},function (res) {
-        alert(res)
-        console.log(res)
-        $scope.all_data = res.data
-        sessionStorage.setItem('all_data',JSON.stringify($scope.all_data))
-        console.log($scope.all_data)
-        sessionStorage.removeItem('basic_data')
-        $state.go('personal_center')
     })
     //跳转绑定手机号
     $scope.go_bind_tel = function () {
