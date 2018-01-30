@@ -292,7 +292,7 @@ class UserChat extends \yii\db\ActiveRecord
         $data=[];
         if($recipient_role_id==6){
             $data['recipient']= Supplier::find()
-                    ->select(['uid as id','icon','shop_name as name'])
+                    ->select(['uid as id','icon','shop_name as name','id as supplier_id'])
                     ->asArray()
                     ->where(['uid'=>$recipient_id])
                     ->one();
@@ -310,7 +310,7 @@ class UserChat extends \yii\db\ActiveRecord
         }
         if($role_id==6){
             $data['user']=Supplier::find()
-                ->select(['uid as id','icon','shop_name as name'])
+                ->select(['uid as id','icon','shop_name as name','id as supplier_id'])
                 ->asArray()
                 ->where(['uid'=>$uid])
                 ->one();
