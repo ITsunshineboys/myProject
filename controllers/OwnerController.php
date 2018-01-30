@@ -1832,9 +1832,7 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-//        var_dump(GoodsCategory::find()->asArray()->select([])->all());
-        var_dump(GoodsAttr::find()->asArray()->select([])->all());
-        die;
+        echo pinyin("wangwu");
     }
 
 }
