@@ -2575,7 +2575,7 @@ class OrderController extends Controller
             ->where(['id'=>$order['comment_id']])
             ->asArray()
             ->one();
-         if(!$comment)
+        if(!$comment)
         {
             $code=200;
             return Json::encode([
@@ -2584,21 +2584,18 @@ class OrderController extends Controller
                 'data'=>[]
             ]);
         }
-
-
-
-        if (6 <$comment['score'] && $comment['score']<= 10 )
+        if (in_array($comment['score'],GoodsComment::SCORE_GOOD))
         {
             $comment['score']=GoodsComment::DESC_SCORE_GOOD;
-        }else if (2< $comment['score'] && $comment['score']<= 6 )
+        }
+        else if(in_array($comment['score'],GoodsComment::SCORE_MEDIUM))
         {
             $comment['score']=GoodsComment::DESC_SCORE_MEDIUM;
         }else{
             $comment['score']=GoodsComment::DESC_SCORE_POOR;
         }
         $comment['create_time']=date('Y-m-d H:i',0);
-
-         if ($comment){
+        if ($comment){
             $comment['image']=CommentImage::find()
                 ->select('image')
                 ->where(['comment_id'=>$order['comment_id']])
@@ -2614,7 +2611,6 @@ class OrderController extends Controller
             }else{
                 $comment['reply']='';
             }
-
         }
         $code=200;
         return Json::encode([
