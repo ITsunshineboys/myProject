@@ -3019,19 +3019,21 @@ class QuoteController extends Controller
             //(new AssortGoods())->deleteAll(['and',['state'=>0],['city_code'=>$post['city']]]);
 
 
+            if($post['add_item']){
+                foreach($post['add_item'] as $management) {
+                    $add = AssortGoods::findByInsert($management,$post['city']);
+                }
 
-            foreach($post['add_item'] as $management) {
-                $add = AssortGoods::findByInsert($management,$post['city']);
+                if (!$add){
+                    $tr->rollBack();
+                    $code=500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
             }
 
-            if (!$add){
-                $tr->rollBack();
-                $code=500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
             $tr->commit();
         } catch (Exception $e) {
             $tr->rollBack();
