@@ -57,7 +57,6 @@ class User extends ActiveRecord implements IdentityInterface
         'nickname',
         'gender',
         'birthday',
-        'district_name',
         'signature',
         'aite_cube_no',
         'balance',
@@ -1846,8 +1845,10 @@ class User extends ActiveRecord implements IdentityInterface
             ? array_merge($modelData, $this->_extraData(self::FIELDS_USER_CENTER_EXTRA))
             : $modelData;
         self::_formatData($viewData);
+        UserAddress::_getReceiveDistrict($viewData,$this->id);
         return $viewData;
     }
+
 
     /**
      * Get view data(lhzz)

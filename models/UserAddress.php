@@ -11,6 +11,7 @@ class UserAddress extends  ActiveRecord
     const USER_ADDRESS = 'user_address';
     const ADDRESS_MSG_NORMAL='收货地址正常';
     const ADDRESS_MSG_ABNORMAL='收货地址异常';
+    const ADDRESS_SELECT=1;
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -415,8 +416,15 @@ class UserAddress extends  ActiveRecord
 
 
 
-
-
+    public  static  function  _getReceiveDistrict( array &$data,$user_id)
+    {
+        $userAddress=UserAddress::find()
+            ->select('district')
+            ->where(['uid'=>$user_id])
+            ->andWhere(['default'=>UserAddress::ADDRESS_SELECT])
+            ->one();
+        $data['district_name']=$userAddress?LogisticsDistrict::GetLineDistrictByDistrictCode($userAddress->district):'';
+    }
 
 
 }
