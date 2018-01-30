@@ -2494,15 +2494,15 @@ class QuoteController extends Controller
         $get=\Yii::$app->request->get();
         $category_id = (int)trim(\Yii::$app->request->get('category_id',''));
         if(!isset($get['id'])){
-            $d_add = DecorationAdd::find()->where(['c_id'=>$category_id])->one();
-            if ($d_add){
-                $code=1087;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
+        $d_add = DecorationAdd::find()->where(['c_id'=>$category_id])->one();
+        if ($d_add){
+            $code=1087;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
         }
+    }
 
         $goods  = Goods::priceDetail(self::CATEGORY_LEVEL,$category_id);
 
