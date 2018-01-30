@@ -1,10 +1,10 @@
 app.controller('personal_center_ctrl',function ($uibModal,$scope,$state,$stateParams,_ajax) {
     sessionStorage.clear()
     _ajax.get('/site/check-is-login',{},function (res) {
-        alert(res.code+':'+res.data)
         if(res.code == 403){
             window.AndroidWebView.skipNotLogin()
         }else if(res.code == 200){
+            alert(res.code+':'+res.data)
             //获取个人中心数据
             _ajax.get('/distribution/distribution-user-center',{},function (res) {
                 alert(res.code+':'+res.data)
