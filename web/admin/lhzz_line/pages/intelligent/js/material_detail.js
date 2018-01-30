@@ -203,11 +203,16 @@ app.controller('material_detail_ctrl', function ($rootScope, _ajax, $scope, $sta
         }
         first_all_modal.$inject = ['$scope', '$uibModalInstance']
         if($scope.basic_attr.id == undefined){
-            obj
+            obj = {
+                category_id: $scope.cur_level_three.id
+            }
+        }else{
+            obj = {
+                id:$scope.basic_attr.id,
+                category_id: $scope.cur_level_three.id
+            }
         }
-        _ajax.get('/quote/decoration-add-classify', {
-            category_id: $scope.cur_level_three.id
-        }, function (res) {
+        _ajax.get('/quote/decoration-add-classify',obj, function (res) {
             console.log(res);
             if(res.code == 200){
                 //基本属性
