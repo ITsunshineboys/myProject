@@ -532,7 +532,7 @@ class GoodsComment extends ActiveRecord
             $data['logistics_speed_score']=0;
             $data['score']=0;
         }
-
+        var_dump($data);die;
       return $data;
     }
 
