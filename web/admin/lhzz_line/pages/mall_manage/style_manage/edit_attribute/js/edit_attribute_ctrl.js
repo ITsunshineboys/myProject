@@ -1,5 +1,4 @@
-let edit_attribute = angular.module("edit_attribute_module", []);
-edit_attribute.controller("edit_attribute_ctrl", function ($rootScope,$scope, $http, $stateParams, $state, _ajax) {
+angular.module("edit_attribute_module", []).controller("edit_attribute_ctrl", function ($rootScope,$scope, $http, $stateParams, $state, _ajax) {
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
@@ -12,16 +11,11 @@ edit_attribute.controller("edit_attribute_ctrl", function ($rootScope,$scope, $h
         name: '属性管理详情'
     }];
 
-    let tempArr = [{name: "智能报价1", value: "", unit: "m", addition_type: "0", required: 1},
-        {name: "适应处", value: ["厨房", "卫生间"], unit: "无", addition_type: "2", required: 1},
-        {name: "适应处123", value: ["1", "2"], unit: "无", addition_type: "2", required: 1},
-        {name: "智能报价2", value: ["下拉2", "下拉3"], unit: "无", addition_type: "1", required:1}]
     $scope.iswarning = false;
     $scope.iswarningcontent = false;
     $scope.propid = $stateParams.propid;
     $scope.titles = $stateParams.titles;
-    // $scope.propattrs = $stateParams.propattrs;
-    $scope.propattrs = tempArr;
+    $scope.propattrs = $stateParams.propattrs;
     $scope.btnclick = true;
 
 

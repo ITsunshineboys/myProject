@@ -11,55 +11,98 @@
         <button class="btn btn-primary" ng-click="checkboxAdd()"><i class="iconfont icon-add"></i>复选框添加</button>
     </div>
     <!--属性设置-->
+    <form class="form-horizontal" role="form">
+        <div class="form-group" ng-if="propattrs.length">
+            <div class="col-md-4 form-control-static">属性名称</div>
+            <div class="col-md-4 form-control-static">属性内容</div>
+            <div class="col-md-4 form-control-static">单位</div>
+        </div>
 
-    <table>
-        <tr ng-if="propattrs.length">
-            <td class="attr-name">属性名称</td>
-            <td>属性内容</td>
-            <td>单位</td>
-        </tr>
+        <div class="form-group" ng-repeat="item in propattrs"  ng-if="item.required">
+            <div class="col-md-4 form-control-static">{{item.name}}</div>
+            <div class="col-md-4 form-control-static">
+                <span ng-if="item.addition_type==0"></span>
+                <span ng-if="item.addition_type==1||item.addition_type==2" ng-bind="item.value.join(',')"></span>
+            </div>
+            <div class="col-md-4 form-control-static">{{item.cur_unit.unit}}</div>
+        </div>
 
-        <form name="attr_form" novalidate>
-            <tr ng-repeat="item in propattrs" ng-if="item.required"  class="intel-tr">
-                <td class="attr-td">
-                    <span>{{item.name}}</span>
-                </td>
-                <td>
-                    <span ng-if="item.addition_type==0"></span>
-                    <span ng-if="item.addition_type==1||item.addition_type==2" ng-bind="item.value.join(',')"></span>
-                </td>
-                <td>
-                    <span class="attr_font">{{item.cur_unit.unit}}</span>
-                </td>
-            </tr>
-            <tr ng-repeat="item in propattrs" ng-if="!item.required">
-                <td class="padding_right">
-                        <span>
-                          <img src="pages/mall_manage/style_manage/edit_attribute/images/red.png" alt="">
-                           <i class="glyphicon glyphicon-minus" ng-click="deleteTr($index)"></i>
-                        </span>
-                    <input type="text" class="input_one" ng-model="item.name" maxlength=6 required
-                           ng-blur="checkname(item.name,$index)" ng-class="{warningred:$index==temp&&iswarning==true}">
-                </td>
-                <td class="padding_right">
-                    <input type="text" class="normal_input" ng-model="item.value" disabled=disabled
-                           ng-if="item.addition_type==0">
-                    <input type="text" class="normal_input" ng-model="item.value"
-                           ng-if="item.addition_type==1||item.addition_type==2"
-                           ng-class={warningred:$index==tempcontent&&iswarningcontent==true}
-                           ng-blur=checkContent(item.value,$index)>
-                </td>
-                <td class="padding_right">
-                    <select name="" class="select_css" ng-options="op.unit for op in unitarrs"
-                            ng-model="item.cur_unit"></select>
-                    <span class="attr_font">*属性名称限1~6个字，属性内容以逗号隔开</span>
-                </td>
-            </tr>
-        </form>
-    </table>
+        <div class="form-group"  ng-repeat="item in propattrs"  ng-if="!item.required">
+            <div class="col-md-4">
+                <div class="col-md-1 icon-style">
+                    <img src="pages/mall_manage/style_manage/edit_attribute/images/red.png" alt="">
+                </div>
+                <div class="col-md-1 icon-style">
+                    <i class="glyphicon glyphicon-minus" ng-click="deleteTr($index)"></i>
+                </div>
+                <div class="col-md-5 attr-name">
+                    <input type="text" class="form-control" ng-model="item.name" maxlength="6" required ng-blur="checkname(item.name,$index)" ng-class="{warningred:$index==temp&&iswarning==true}">
+                </div>
+            </div>
+            <div class="col-md-4 content-style">
+                <input type="text" class="form-control" ng-model="item.value" disabled=disabled ng-if="item.addition_type==0">
+                <input type="text" class="form-control" ng-model="item.value"
+                       ng-if="item.addition_type==1||item.addition_type==2"
+                       ng-class={warningred:$index==tempcontent&&iswarningcontent==true}
+                       ng-blur="checkContent(item.value,$index)">
+            </div>
+            <div class="col-md-1 unit-style">
+                <select name="" class="form-control" ng-options="op.unit for op in unitarrs" ng-model="item.cur_unit"></select>
+            </div>
+            <div class="col-md-3">
+                <span class="form-control-static attr_font">*属性名称限1~6个字，属性内容以逗号隔开</span>
+            </div>
+        </div>
+
+    </form>
+
+
+        <!--<tr ng-if="propattrs.length">-->
+            <!--<td class="attr-name">属性名称</td>-->
+            <!--<td>属性内容</td>-->
+            <!--<td>单位</td>-->
+        <!--</tr>-->
+
+        <!--<form name="attr_form" novalidate>-->
+            <!--<tr ng-repeat="item in propattrs" ng-if="item.required"  class="intel-tr">-->
+                <!--<td class="attr-td">-->
+                    <!--<span>{{item.name}}</span>-->
+                <!--</td>-->
+                <!--<td>-->
+                    <!--<span ng-if="item.addition_type==0"></span>-->
+                    <!--<span ng-if="item.addition_type==1||item.addition_type==2" ng-bind="item.value.join(',')"></span>-->
+                <!--</td>-->
+                <!--<td>-->
+                    <!--<span class="attr_font">{{item.cur_unit.unit}}</span>-->
+                <!--</td>-->
+            <!--</tr>-->
+            <!--<tr ng-repeat="item in propattrs" ng-if="!item.required">-->
+                <!--<td class="padding_right">-->
+                        <!--<span>-->
+                          <!--<img src="pages/mall_manage/style_manage/edit_attribute/images/red.png" alt="">-->
+                           <!--<i class="glyphicon glyphicon-minus" ng-click="deleteTr($index)"></i>-->
+                        <!--</span>-->
+                    <!--<input type="text" class="input_one" ng-model="item.name" maxlength=6 required-->
+                           <!--ng-blur="checkname(item.name,$index)" ng-class="{warningred:$index==temp&&iswarning==true}">-->
+                <!--</td>-->
+                <!--<td class="padding_right">-->
+                    <!--<input type="text" class="normal_input" ng-model="item.value" disabled=disabled-->
+                           <!--ng-if="item.addition_type==0">-->
+                    <!--<input type="text" class="normal_input" ng-model="item.value"-->
+                           <!--ng-if="item.addition_type==1||item.addition_type==2"-->
+                           <!--ng-class={warningred:$index==tempcontent&&iswarningcontent==true}-->
+                           <!--ng-blur=checkContent(item.value,$index)>-->
+                <!--</td>-->
+                <!--<td class="padding_right">-->
+                    <!--<select name="" class="select_css" ng-options="op.unit for op in unitarrs"-->
+                            <!--ng-model="item.cur_unit"></select>-->
+                    <!--<span class="attr_font">*属性名称限1~6个字，属性内容以逗号隔开</span>-->
+                <!--</td>-->
+            <!--</tr>-->
+        <!--</form>-->
 
     <!--保存 返回-->
-    <div class="bottom">
+    <div class="btns">
         <button class="btn btn-primary" ng-click=saveProp()><i class="iconfont icon-save"></i>保存</button>
         <button class="btn btn-default" ui-sref='style_index({showattr:true})'>返回</button>
     </div>
