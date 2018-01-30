@@ -186,6 +186,7 @@ app.controller('material_detail_ctrl', function ($rootScope, _ajax, $scope, $sta
     //抓取材料
     $scope.getMaterialDetail = function () {
         let str = ''
+        let obj = ''
         console.log($scope.cur_level_three);
         let next_all_modal = function ($scope, $uibModalInstance) {
             $scope.cur_title = '抓取材料信息错误，请重新抓取'
