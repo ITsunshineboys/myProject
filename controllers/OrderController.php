@@ -854,7 +854,6 @@ class OrderController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $id=1;
         $openId=$request->post('wxpayCode', '');
         if (!$openId)
         {
