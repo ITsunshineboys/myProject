@@ -5,8 +5,10 @@ app.controller('personal_center_ctrl',function ($uibModal,$scope,$state,$statePa
             window.AndroidWebView.skipNotLogin()
         }else if(res.code == 200){
             alert(res.code+':'+res.data)
+            alert(111)
             //获取个人中心数据
             _ajax.get('/distribution/distribution-user-center',{},function (res) {
+                alert(222)
                 alert(res.code+':'+res.data)
                 console.log(res)
                 $scope.all_data = res.data
