@@ -709,62 +709,9 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
-        $goods1=Goods::find()
-            ->where(['sku'=>157465])
-            ->one();
-        $goods2=Goods::find()
-            ->where(['sku'=>135467])
-            ->one();
-        $goods3=Goods::find()
-            ->where(['sku'=>36468])
-            ->one();
-        $goods4=Goods::find()
-            ->where(['sku'=>120470])
-            ->one();
-        $goods5=Goods::find()
-            ->where(['sku'=>500000474])
-            ->one();
-        $goods6=Goods::find()
-            ->where(['sku'=>860000478])
-            ->one();
-        $goods[]=
-        [
-            'goods_id'=>$goods1->id,
-            'goods_num'=>5,
-            'temp_id'=>$goods1->logistics_template_id
-        ];
-        $goods[]=
-        [
-            'goods_id'=>$goods2->id,
-            'goods_num'=>2,
-            'temp_id'=>$goods2->logistics_template_id
-        ];
-        $goods[]=
-        [
-            'goods_id'=>$goods3->id,
-            'goods_num'=>1,
-            'temp_id'=>$goods3->logistics_template_id
-        ];
-        $goods[]=
-        [
-            'goods_id'=>$goods4->id,
-            'goods_num'=>5,
-            'temp_id'=>$goods4->logistics_template_id
-        ];
-        $goods[]=
-        [
-            'goods_id'=>$goods5->id,
-            'goods_num'=>1,
-            'temp_id'=>$goods5->logistics_template_id
-        ];
-        $goods[]=
-        [
-            'goods_id'=>$goods6->id,
-            'goods_num'=>2,
-            'temp_id'=>$goods6->logistics_template_id
-        ];
-        $data=GoodsOrder::decomposeFreight($goods);
-        var_dump($data);die;
+        $user=\Yii::$app->user->identity;
+        $supplier = UserRole::roleUser($user, Yii::$app->params['supplierRoleId']);
+        var_dump($supplier);
     }
 
     public  static  function  actionTest1()
