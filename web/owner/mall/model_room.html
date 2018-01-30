@@ -158,7 +158,7 @@
         <span class="comment_edit">点击以下版块查看详情</span>
         <div id="basis_decoration" class="basis_decoration">
             <div class="grid" ng-repeat="obj in materials" id="{{obj.id}}" ng-click="goInner(obj, $index)" water>
-                <div ng-if="obj.count != 0">
+                <div>
                     <h1 class="title_p" ng-if="obj.id == 1">
                         基础装修
                         <span>{{obj.second_level.length + '项'}}</span>
@@ -169,9 +169,9 @@
                     </h1>
                     <h1 class="title_p" ng-if="obj.id != 1 && obj.id != 14">
                         {{obj.title}}
-                        <span>{{obj.count + '项'}}</span>
+                        <span ng-if="obj.count != 0">{{obj.count + '项'}}</span>
                     </h1>
-                    <span class="pic">{{'¥' + obj.cost.toFixed(2)}}</span>
+                    <span class="pic" ng-if="obj.count != 0">{{'¥' + obj.cost.toFixed(2)}}</span>
                     <div class="decoration">
                         <div ng-repeat="second in obj.second_level">
                             <div ng-if="obj.id == 1 || obj.id == 14">
