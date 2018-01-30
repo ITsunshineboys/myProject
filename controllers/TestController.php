@@ -709,8 +709,51 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
-        $data=OrderRefund::find()->where(['order_no'=>Yii::$app->request->post('order_no')])->all();
-        return Json::encode($data);
+        $supplier_id=Yii::$app->request->get('supplier_id');
+        $orders=(new Query())
+            ->from(GoodsOrder::tableName().' as a')
+            ->select('c.comment_id')
+            ->leftJoin(OrderGoods::tableName().' as c','a.order_no = c.order_no')
+            ->where(['a.supplier_id'=>$supplier_id])
+            ->all();
+        $order=[];
+        foreach ($orders as $k =>$v){
+            if ($orders[$k]['comment_id']){
+                $order[$k]=GoodsComment::find()
+                    ->where(['id'=>$orders[$k]['comment_id']])
+                    ->one();
+            }else{
+                unset($order[$k]['comment_id']);
+            }
+        }
+        $count=count($order);
+        if ($count !=0)
+        {
+            $score_list=[];
+            $score_list['shipping_score']=0;
+            $score_list['store_service_score']=0;
+            $score_list['logistics_speed_score']=0;
+            $score_list['score']=0;
+            $score_list['good_score']=0;
+            foreach ($order as $k =>$v){
+                $score_list['shipping_score']+=$order[$k]['shipping_score'];
+                $score_list['store_service_score']+=$order[$k]['store_service_score'];
+                $score_list['logistics_speed_score']+=$order[$k]['logistics_speed_score'];
+                $score_list['score']+=$order[$k]['score'];
+                if ($order[$k]['score']>=8){
+                    $score_list['good_score']= $score_list['good_score']+1;
+                }
+            }
+            $data['well_probability']=round($score_list['good_score']/$count,2)*100;
+            $data['shipping_score']=round(($score_list['shipping_score'])/$count,1);
+            $data['store_service_score']=round(($score_list['store_service_score'])/$count,1);
+            $data['logistics_speed_score']=round(($score_list['logistics_speed_score'])/$count,1);
+            $data['score']=round(($score_list['score'])/$count,1);
+            $data['count']=$count;
+        }else{
+            $data['logistics_speed_score']=0;
+            $data['score']=0;
+        }
     }
 
     public  static  function  actionTest1()
