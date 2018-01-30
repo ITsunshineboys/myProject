@@ -5082,19 +5082,15 @@ class OrderController extends Controller
                     'msg'  => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-            if (empty($one['num']))
+            if (!empty($one['num']))
             {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code]
-                ]);
+                if ($one['num'] != 0 || $one['num'] !=null){
+                    $goods_ [] = $one;
+                }else{
+                    unset($one);
+                }
             }
-            if ($one['num'] != 0 || $one['num'] !=null){
-                $goods_ [] = $one;
-            }else{
-                unset($one);
-            }
+
         }
         //步骤2：获取每个商品物流数据
         foreach ($goods_ as  $k =>$v)
