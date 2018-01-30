@@ -87,6 +87,7 @@ class Alipay extends  ActiveRecord
         $payRequestBuilder->setPassback_params($passback_params);
         $payResponse = new AlipayTradeService($config);
         $result=$payResponse->wapPay($payRequestBuilder,$config['return_url'],$config['notify_url']);
+        return $result;
     }
 
     /**
