@@ -709,9 +709,8 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
-        $user=\Yii::$app->user->identity;
-        $supplier = UserRole::roleUser($user, Yii::$app->params['supplierRoleId']);
-        var_dump($supplier);
+        $data=OrderRefund::find()->where(['order_no'=>Yii::$app->request->post('order_no')])->all();
+        return Json::encode($data);
     }
 
     public  static  function  actionTest1()
