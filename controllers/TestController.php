@@ -754,6 +754,7 @@ class TestController extends Controller
             $data['logistics_speed_score']=0;
             $data['score']=0;
         }
+        return Json::encode($data);
     }
 
     public  static  function  actionTest1()
