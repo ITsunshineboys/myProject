@@ -2493,7 +2493,9 @@ class QuoteController extends Controller
     {
         $get=\Yii::$app->request->get();
         $category_id = (int)trim(\Yii::$app->request->get('category_id',''));
-
+        var_dump($get);
+        var_dump($category_id);
+        die;
         $d_add = DecorationAdd::find()->where(['c_id'=>$category_id])->one();
         if ($d_add){
             $code=1087;
@@ -2503,9 +2505,7 @@ class QuoteController extends Controller
             ]);
         }
         $goods  = Goods::priceDetail(self::CATEGORY_LEVEL,$category_id);
-        var_dump($get);
-        var_dump($category_id);
-        die;
+
         if ( isset($goods['0'])) {
             $max        = BasisDecorationService::profitMargin($goods);
             $goods_attr = GoodsAttr::frontDetailsByGoodsId($max['id']);
