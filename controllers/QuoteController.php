@@ -3099,7 +3099,8 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-        var_dump(AssortGoods::find()->asArray()->all());
+        $row=EngineeringStandardCarpentryCraft::find()->asArray()->all();
+        var_dump($row);die;
 
     }
 }

@@ -14,6 +14,7 @@ class EngineeringStandardCarpentryCraft extends ActiveRecord
 
     const UNIT = [
         1 => 'm',
+        2 => '㎡'
     ];
 
     /**
@@ -41,6 +42,9 @@ class EngineeringStandardCarpentryCraft extends ActiveRecord
 
               $a['title']=$a['worker_name'];
               $a['unit'] = self::UNIT[1];
+              if($row['id']==69){
+                  $a['unit']=self::UNIT[2];
+              }
               $a['value']='';
                unset($a['worker_name']);
            }
