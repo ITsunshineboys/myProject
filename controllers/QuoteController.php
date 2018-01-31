@@ -3099,10 +3099,13 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-        $type=WorkerType::find()->where(['status'=>4])->all();
-        var_dump($type);
-        $row=EngineeringStandardCarpentryCraft::find()->where(['type_id'=>69])->one();
-        var_dump($row);die;
+
+        $row=EngineeringStandardCarpentryCraft::find()->where(['type_id'=>69])->all();
+        foreach ($row as $a){
+           $a->unit=2;
+           $b=$a->save(false);
+        }
+        var_dump($b);
 
     }
 }
