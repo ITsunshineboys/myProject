@@ -287,5 +287,7 @@ CREATE TABLE `app_version` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+ALTER TABLE `app_version`  ADD  `version_code` varchar(30) DEFAULT NULL;
+
 
 
