@@ -3358,21 +3358,21 @@ class GoodsOrder extends ActiveRecord
                         $code=1000;
                         return $code;
                     }
-//                    $shoppingCart= ShippingCart::find()
-//                        ->where(['uid'=>$user->id])
-//                        ->andWhere(['role_id'=>$user->last_role_id_app])
-//                        ->andWhere(['goods_id'=>$goods['goods_id']])
-//                        ->one();
-//                    if ($shoppingCart)
-//                    {
-//                        $resS=$shoppingCart->delete();
-//                        if (!$resS)
-//                        {
-//                            $tran->rollBack();
-//                            $code=500;
-//                            return $code;
-//                        }
-//                    }
+                    $shoppingCart= ShippingCart::find()
+                        ->where(['uid'=>$user->id])
+                        ->andWhere(['role_id'=>$user->last_role_id_app])
+                        ->andWhere(['goods_id'=>$goods['goods_id']])
+                        ->one();
+                    if ($shoppingCart)
+                    {
+                        $resS=$shoppingCart->delete();
+                        if (!$resS)
+                        {
+                            $tran->rollBack();
+                            $code=500;
+                            return $code;
+                        }
+                    }
                     $time=time();
                     $Goods=Goods::findOne($goods['goods_id']);
                     if ($Goods->left_number<$goods['goods_num'])
