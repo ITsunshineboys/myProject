@@ -66,9 +66,8 @@ app.controller('class_offline', ['$scope', '$stateParams', '_ajax', function ($s
 
     /*分类筛选方法*/
     $scope.$watch('dropdown.firstselect', function (value, oldValue) {
-        if (value == oldValue) {
-            return
-        }
+        if (value == oldValue) return
+        if (value === 0 && $scope.params.keyword !== '') return
         $scope.params['sort[]'] = 'offline_time:3'
         subClass(value);
         $scope.params.pid = value;
@@ -95,6 +94,7 @@ app.controller('class_offline', ['$scope', '$stateParams', '_ajax', function ($s
             tableList()
         } else {
             //二级分类id为0
+            if ($scope.dropdown.firstselect === 0 && $scope.params.keyword !== '') return
             $scope.params.pid = $scope.dropdown.firstselect;
             $scope.table.keyword = '';
             $scope.params.keyword = '';
