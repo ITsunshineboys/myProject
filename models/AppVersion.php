@@ -62,7 +62,7 @@ class AppVersion extends \yii\db\ActiveRecord
      */
     public  static  function  AddNewAppVersion($postData)
     {
-        if (!isset($postData['level'],$postData['url'],$postData['version_no']))
+        if (!isset($postData['level'],$postData['url'],$postData['version_no'],$postData['version_code']))
         {
             return 1000;
         }
@@ -84,6 +84,7 @@ class AppVersion extends \yii\db\ActiveRecord
             $version->level=$postData['level'];
             $version->url=$postData['url'];
             $version->create_time=time();
+            $version->version_code=$postData['version_code'];
             if (isset($postData['version_description']))
             {
                 $version->version_description=$postData['version_description'];

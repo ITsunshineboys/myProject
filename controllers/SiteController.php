@@ -1915,7 +1915,7 @@ class SiteController extends Controller
             'code'=>200,
             'msg'=>'ok',
             'data'=>AppVersion::find()
-                ->select(new Expression("id,version_no,url,level,version_description,FROM_UNIXTIME(`create_time` ,'%Y-%m-%d %H:%i') as create_time"))
+                ->select(new Expression("id,version_no,version_code,url,level,version_description,FROM_UNIXTIME(`create_time` ,'%Y-%m-%d %H:%i') as create_time"))
                 ->asArray()
                 ->orderBy('create_time DESC ')
                 ->one()
