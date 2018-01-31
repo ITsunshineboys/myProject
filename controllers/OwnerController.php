@@ -1833,8 +1833,8 @@ class OwnerController extends Controller
     public function actionTest()
     {
         $a = Goods::find()->where(["sku"=>108287])->one();
-        $b = GoodsAttr::find()->where(['goods_id'=>$a['id']]);
-        $c = GoodsStyle::find()->where(['goods_id'=>$a['id']]);
+        $b = GoodsAttr::find()->where(['goods_id'=>$a['id']])->one();
+        $c = GoodsStyle::find()->where(['goods_id'=>$a['id']])->one();
         return Json::encode([
            "a"=>[$a,$b,$c]
         ]);
