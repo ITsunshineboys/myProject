@@ -283,7 +283,7 @@ CREATE TABLE `app_version` (
   `url` varchar(100) NOT NULL,
   `create_time` int(11) NOT NULL,
   `level` tinyint(2) NOT NULL COMMENT '1.普通  2.高级',
-  `version_description` varchar(255) DEFAULT NULL,
+  `version_description` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
