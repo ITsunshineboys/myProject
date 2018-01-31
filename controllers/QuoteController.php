@@ -352,6 +352,8 @@ class QuoteController extends Controller
         $material = [22,9,12,13]; // 龙骨 丝杆 细木工板 石膏板分类 id   13
         $goods_ = Goods::priceDetail(3,$material);
 
+        var_dump($goods_);die;
+
         $category = array_values(Effect::array_group_by($goods_,'title'));
 
         foreach ($category as $v){
