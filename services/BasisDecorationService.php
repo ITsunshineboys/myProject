@@ -1008,7 +1008,6 @@ class BasisDecorationService
             }
         }
         $style = self::style($goods_material);
-        var_dump($style);die;
 
         return $style;
 
@@ -1443,15 +1442,12 @@ class BasisDecorationService
 
             if ($one_goods['series_id'] > 0){
                 $goods_series[] =  $one_goods['series_id'];
-                var_dump($goods_series);
                 $series = Series::find()->asArray()->select('series')->where(['in','id',$goods_series])->all();
                 $series_ = [];
                 foreach ($series as $one_series){
                     $series_[] = $one_series['series'];
                 }
                 $one_goods['series_name'] = implode('、',$series_);
-                var_dump($one_goods['series_name']);
-                var_dump($series_);
                 unset($one_goods['series_id']);
             }else{
                 $one_goods['series_name'] = '';
