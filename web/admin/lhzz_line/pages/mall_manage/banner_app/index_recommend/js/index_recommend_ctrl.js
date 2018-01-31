@@ -78,7 +78,9 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
     }).then(function (response) {
       console.log(response);
       if(!response.data.data){
-        $scope.img_flag="上传图片格式不正确，请重新上传"
+        $scope.img_flag="上传图片格式不正确，请重新上传";
+        $scope.upload_txt="上传";
+        $scope.upload_dis=false;
       }else{
         $scope.img_flag='';
         $scope.upload_img_src=response.data.data.file_path;
@@ -107,7 +109,9 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
     }).then(function (response) {
       console.log(response);
       if(!response.data.data){
-        $scope.img_link_flag="上传图片格式不正确，请重新上传"
+        $scope.img_link_flag="上传图片格式不正确，请重新上传";
+        $scope.upload_txt="上传";
+        $scope.upload_dis=false;
       }else{
         $scope.img_link_flag='';
         $scope.upload_link_img_src=response.data.data.file_path;
