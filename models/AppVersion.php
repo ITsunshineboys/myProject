@@ -69,7 +69,7 @@ class AppVersion extends \yii\db\ActiveRecord
         if (isset($postData['version_no']))
         {
             $data=self::find()
-                ->where(['version_no'=>$postData['version_no']])
+                ->where(['version_code'=>$postData['version_code']])
                 ->one();
             if ($data)
             {
