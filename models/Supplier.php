@@ -216,7 +216,6 @@ class Supplier extends ActiveRecord
         $supplier->create_time = time();
         $supplier->status = self::STATUS_WAIT_REVIEW;
         $supplier->shop_name = isset($attrs['shop_name']) ? trim($attrs['shop_name']) : '';
-        $supplier->shop_name .= self::TYPE_SHOP[$supplier->type_shop];
 //        $supplier->support_offline_shop = isset($attrs['support_offline_shop'])
 //            ? (int)$attrs['support_offline_shop']
 //            : self::OFFLINE_SHOP_NOT_SUPPORT;
@@ -252,7 +251,8 @@ class Supplier extends ActiveRecord
 
         $transaction = Yii::$app->db->beginTransaction();
         try {
-            if (!$supplier->save()) {
+            $supplier->shop_name .= self::TYPE_SHOP[$supplier->type_shop];
+            if (!$supplier->save(false)) {
                 $transaction->rollBack();
 
                 $code = 500;
@@ -261,7 +261,7 @@ class Supplier extends ActiveRecord
 
             $supplier->shop_no = Yii::$app->params['supplierRoleId']
                 . (Yii::$app->params['offsetGeneral'] + $supplier->id);
-            if (!$supplier->save()) {
+            if (!$supplier->save(false)) {
                 $transaction->rollBack();
 
                 $code = 500;
@@ -280,7 +280,7 @@ class Supplier extends ActiveRecord
                 $userRole->reviewer_uid = $operator->id;
 
                 $supplier->status = self::STATUS_OFFLINE;
-                if (!$supplier->save()) {
+                if (!$supplier->save(false)) {
                     $transaction->rollBack();
 
                     $code = 500;
@@ -320,7 +320,7 @@ class Supplier extends ActiveRecord
                     return $code;
                 }
 
-                if (!$user->save()) {
+                if (!$user->save(false)) {
                     $transaction->rollBack();
 
                     $code = 500;
