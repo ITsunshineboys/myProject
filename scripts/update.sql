@@ -276,4 +276,16 @@ ALTER TABLE user_follow MODIFY `role_id` int(11) NOT NULL DEFAULT '0' COMMENT '�
 alter table user modify `gender` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0: 请选择, 1: 男, 2: 女, 3: 保密';
 
 
+--all  2018.1.31 hyz
+CREATE TABLE `app_version` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `version_no` varchar(50) NOT NULL,
+  `url` varchar(100) NOT NULL,
+  `create_time` int(11) NOT NULL,
+  `level` tinyint(2) NOT NULL COMMENT '1.普通  2.高级',
+  `version_description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+
 
