@@ -1008,7 +1008,6 @@ class BasisDecorationService
             }
         }
         $style = self::style($goods_material);
-        var_dump($style);die;
 
         return $style;
 
