@@ -242,7 +242,15 @@ class DistributionController extends Controller
         $data=explode('&', base64_decode(base64_decode($session['distribution_token'])));
         if (!$data)
         {
-            $code=1052;
+            $code=403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        if (count($data)<2)
+        {
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -254,7 +262,7 @@ class DistributionController extends Controller
             ->where(['mobile'=>$mobile,'create_time'=>$create_time])
             ->one();
         if (!$Distribution){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
