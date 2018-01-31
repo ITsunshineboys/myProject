@@ -711,6 +711,36 @@ class DistributionController extends Controller
         ]);
     }
 
+
+    public function  actionCorrelateOrderList()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user
+            || $user->last_role_id_app!=\Yii::$app->params['lhzzRoleId']
+        )
+        {
+            $code=403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $page=trim($request->get('page',1));
+        $size=trim($request->get('size', Distribution::PAGE_SIZE_DEFAULT));
+        $request = Yii::$app->request;
+        $mobile= trim($request->get('mobile'));
+        if (!$mobile)
+        {
+            $code=1000;
+            return Json::encode
+            ([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Distribution::GetDistributionCorrelateList($mobile,$page,$size);
+    }
     /**
      * 获取关联订单
      * @return string
@@ -719,7 +749,7 @@ class DistributionController extends Controller
     {
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
