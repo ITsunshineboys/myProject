@@ -128,26 +128,26 @@
           <flexbox orient="vertical" class="pro-params" align="flex-start">
             <flexbox-item>
               <flexbox justify="space-between">
-                <span>产品编码</span>
-                <span>{{good_detail.sku}}</span>
+                <flexbox-item>产品编码</flexbox-item>
+                <flexbox-item :span="257/375" class="attr-content">{{good_detail.sku}}</flexbox-item>
               </flexbox>
             </flexbox-item>
             <flexbox-item>
               <flexbox justify="space-between">
-                <span>产品品牌</span>
-                <span>{{good_detail.brand_name}}</span>
+                <flexbox-item>产品品牌</flexbox-item>
+                <flexbox-item :span="257/375" class="attr-content">{{good_detail.brand_name}}</flexbox-item>
               </flexbox>
             </flexbox-item>
             <flexbox-item>
               <flexbox justify="space-between" v-if="good_detail.series_name">
-                <span>系列</span>
-                <span>{{good_detail.series_name}}</span>
+                <flexbox-item>系列</flexbox-item>
+                <flexbox-item :span="257/375" class="attr-content">{{good_detail.series_name}}</flexbox-item>
               </flexbox>
             </flexbox-item>
             <flexbox-item v-if="good_detail.style_name">
               <flexbox justify="space-between">
-                <span>风格</span>
-                <span>{{good_detail.style_name}}</span>
+                <flexbox-item>风格</flexbox-item>
+                <flexbox-item :span="257/375" class="attr-content">{{good_detail.style_name}}</flexbox-item>
               </flexbox>
             </flexbox-item>
             <flexbox-item v-if="good_detail.attr!==''">
@@ -331,7 +331,7 @@
         show_goodshort_alert: false, // 商品不足弹窗
         show_offline: false,        // 商品下架提示
 
-        show_cart_success: false,        // 添加购物车成功toast
+        show_cart_success: false,   // 添加购物车成功toast
         count_cart: false,          // 加入购物车按钮显示
         count_now: false,           // 立即购买按钮显示
         default_count: false,       // 两个按钮显示
@@ -362,14 +362,7 @@
         checkin: 1,                    // 是否登录默认登录
         afterservice_arr: ['上门维修', '上门退货', '上门换货', '退货', '换货'],
         safeguard_arr: ['提供发票', '上门安装'],
-        user_icon: require('../../assets/images/user_icon_default.png'), // 默认用户头像
-        share_content: [
-          {image: require('../../assets/images/weixin.png'), title: '微信'},
-          {image: require('../../assets/images/pengyouquan.png'), title: '朋友圈'},
-          {image: require('../../assets/images/sina.png'), title: '新浪微博'},
-          {image: require('../../assets/images/qq.png'), title: 'QQ'},
-          {image: require('../../assets/images/qzone.png'), title: 'QQ空间'}
-        ]
+        user_icon: require('../../assets/images/user_icon_default.png') // 默认用户头像
       }
     },
     created () {

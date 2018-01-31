@@ -42,7 +42,6 @@
           medium: 0,  // 中评数
           poor: 0     // 差评数
         },
-//        status: 'all', // 当前状态
         totalpage: 1, // 总页数
         loadingText: '加载中...',      // 加载提示信息，默认为加载中...
         user_icon: require('../../assets/images/user_icon_default.png'), // 默认用户头像
@@ -115,7 +114,6 @@
         node = document.querySelector('.comment-container:last-child')
         top = document.documentElement.clientHeight     // 获取网页可视高度
         nodeTop = node.getBoundingClientRect().top + 100      // 获取商品离可视区域的距离
-//        console.log(nodeTop, top)
         if (nodeTop <= top) {
           this.isLoading = true           // 显示加载提示
           if (this.params.page < this.totalPage) {      // 判断当前页是否小于最后一页
