@@ -7,18 +7,13 @@
     padding-top: 0!important;
 }
 
-.btns{
-    margin-top: 20px;
-    margin-left: 52px;
-}
-
-.btns button{
-    margin-right: 10px;
-}
-
 .dl_active8{
     background-color: #E6E9F0!important;
 }
 .a_active8{
     color: #5677FC!important;
+}
+
+.control-label + .control-label {
+    text-align: left;
 }
