@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\AppVersion;
 use app\models\ContactForm;
 use app\models\LoginForm;
 use app\models\User;
@@ -20,6 +21,7 @@ use app\services\AuthService;
 use app\services\ModelService;
 use app\services\EventHandleService;
 use Yii;
+use yii\db\Expression;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
@@ -1890,6 +1892,33 @@ class SiteController extends Controller
             'code' => 200,
             'msg' => 'ok',
             'data' =>$userNews>0?1:2
+        ]);
+    }
+
+
+    /**
+     * @return string
+     * @throws \yii\db\Exception
+     */
+    public function actionAddNewAppVersion()
+    {
+        $code=AppVersion::AddNewAppVersion(\Yii::$app->request->post());
+        return Json::encode([
+            'code'=>$code,
+            'msg' =>$code==200?'ok':\Yii::$app->params['errorCodes'][$code]
+        ]);
+    }
+
+    public  function  actionGetCurrentAppVersion()
+    {
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>AppVersion::find()
+                ->select(new Expression("id,version_no,url,level,version_description,FROM_UNIXTIME(`create_time` ,'%Y-%m-%d %H:%i') as create_time"))
+                ->asArray()
+                ->orderBy('create_time DESC ')
+                ->one()
         ]);
     }
 }
