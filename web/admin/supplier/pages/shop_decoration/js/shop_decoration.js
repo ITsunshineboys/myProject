@@ -214,7 +214,7 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
     }else{
         $scope.banner_num_error=false;
     }
-    if(valid && $scope.banner_add_img_src &&!$scope.banner_num_error){
+    if(valid && $scope.banner_add_img_src &&!$scope.banner_num_error &&!$scope.banner_add_img_flag){
       if($scope.b_show_table_flag){
           $scope.pass_type=0;
       }else{
@@ -316,7 +316,7 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
         $scope.submitted=true;
         $scope.shop_edit_sku_error='商品编号不能为空';
     }
-    if(valid && $scope.banner_edit_img_src){
+    if(valid && $scope.banner_edit_img_src &&!$scope.banner_edit_img_flag){
       if($scope.b_show_table_flag){
         $scope.edit_pass_type=0
       }else{

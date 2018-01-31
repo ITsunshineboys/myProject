@@ -73,7 +73,7 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
     $scope.upload_dis=true;
     console.log($scope.data);
     Upload.upload({
-      url:baseUrl+'/site/upload',
+      url:'/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
       console.log(response);
@@ -104,7 +104,7 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
     $scope.upload_dis=true;
     console.log($scope.data);
     Upload.upload({
-      url:baseUrl+'/site/upload',
+      url:'/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
       console.log(response);
@@ -224,7 +224,7 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
   $scope.shop_subtitle_flag=false;//副标题
   $scope.recommend_shop_add_btn=function (valid) {
     console.log(valid);
-    if(valid&&$scope.upload_img_src){
+    if(valid&&$scope.upload_img_src&&!$scope.img_flag){
       $scope.variable_flag='modal';
       _ajax.post('/mall/recommend-add',{
           district_code:510100,
@@ -261,7 +261,7 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
     if($scope.recommend_link_url.indexOf('http://')){
       $scope.recommend_link_url='http://'+$scope.recommend_link_url
     }
-    if(vaild && $scope.upload_link_img_src){
+    if(vaild && $scope.upload_link_img_src && !$scope.img_link_flag){
       $scope.link_add_modal='modal';
       _ajax.post('/mall/recommend-add',{
           district_code:510100,
@@ -342,7 +342,7 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
 
  //编辑确认按钮
   $scope.recommend_shop_edit=function (valid) {
-    if(valid){
+    if(valid && !$scope.img_flag && !$scope.img_link_flag){
       $scope.edit_variable_modal="modal";
       if($scope.edit_item.from_type=='商家'){
         if($scope.upload_img_src==''){
@@ -387,7 +387,6 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
     }else{
       $scope.submitted = true;
       $scope.edit_variable_modal="";
-      $scope.img_flag='请上传图片'
     }
   };
 /**
