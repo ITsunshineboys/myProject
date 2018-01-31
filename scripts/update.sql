@@ -289,5 +289,8 @@ CREATE TABLE `app_version` (
 
 ALTER TABLE `app_version`  ADD  `version_code` varchar(30) DEFAULT NULL;
 
+--all 2018.1.31 yr
+ ALTER TABLE `chat_record` ADD  `del_status` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '删除状态' ;
+
 
 
