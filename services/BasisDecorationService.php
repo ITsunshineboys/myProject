@@ -1442,13 +1442,16 @@ class BasisDecorationService
             }
 
             if ($one_goods['series_id'] > 0){
-                $goods_style[] =  $one_goods['series_id'];
-                $style = Series::find()->asArray()->select('series')->where(['in','id',$goods_style])->all();
-                $style_ = [];
-                foreach ($style as $one_style){
-                    $style_[] = $one_style['series'];
+                $goods_series[] =  $one_goods['series_id'];
+                var_dump($goods_series);
+                $series = Series::find()->asArray()->select('series')->where(['in','id',$goods_series])->all();
+                $series_ = [];
+                foreach ($series as $one_series){
+                    $series_[] = $one_series['series'];
                 }
-                $one_goods['series_name'] = implode('、',$style_);
+                $one_goods['series_name'] = implode('、',$series_);
+                var_dump($one_goods['series_name']);
+                var_dump($series_);
                 unset($one_goods['series_id']);
             }else{
                 $one_goods['series_name'] = '';
