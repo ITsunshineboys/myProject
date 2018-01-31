@@ -114,7 +114,6 @@ class DistributionController extends Controller
             ]);
         }
         $user=Distribution::findByMobile($mobile);
-        $time=time();
         if($user)
         {
             $sms['mobile']=$mobile;
@@ -242,7 +241,7 @@ class DistributionController extends Controller
         $data=explode('&', base64_decode(base64_decode($session['distribution_token'])));
         if (!$data)
         {
-            $code=403;
+            $code=1097;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -250,23 +249,42 @@ class DistributionController extends Controller
         }
         if (count($data)<2)
         {
-            $code=403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $mobile=$data[0];
-        $create_time=$data[1];
-        $Distribution=Distribution::find()
-            ->where(['mobile'=>$mobile,'create_time'=>$create_time])
-            ->one();
-        if (!$Distribution){
-            $code=403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
+            $user=\Yii::$app->user->identity;
+            if (!$user)
+            {
+                $code=1097;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $mobile=$user->mobile;
+//            $create_time=$user->create_time;
+            $Distribution=Distribution::find()
+                ->where(['mobile'=>$mobile])
+                ->one();
+            if (!$Distribution){
+                $code=1097;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $session['distribution_token']=base64_encode(base64_encode($mobile.'&'.$Distribution->create_time));
+        }else
+        {
+            $mobile=$data[0];
+            $create_time=$data[1];
+            $Distribution=Distribution::find()
+                ->where(['mobile'=>$mobile,'create_time'=>$create_time])
+                ->one();
+            if (!$Distribution){
+                $code=1097;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
         }
         $data=Distribution::DistributionUserCenter($mobile);
         $code=200;
