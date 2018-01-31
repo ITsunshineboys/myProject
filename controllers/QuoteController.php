@@ -364,7 +364,7 @@ class QuoteController extends Controller
         foreach ($goods_c as $one){
             $id [] = $one['id'];
         }
-        var_dump($id);die;
+
         $goods['specification'] = GoodsCategory::attrValue($id);
 
         $series = Series::findBySeries();
