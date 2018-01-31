@@ -3684,7 +3684,7 @@ class GoodsOrder extends ActiveRecord
         $OrderGoods=OrderGoods::find()
             ->where(['order_no'=>$order_no])
             ->all();
-        $GoodsOrder=self::FindByOrderNo($order_no);
+//        $GoodsOrder=self::FindByOrderNo($order_no);
         $trans = \Yii::$app->db->beginTransaction();
         try {
 
@@ -3723,13 +3723,13 @@ class GoodsOrder extends ActiveRecord
                     $trans->rollBack();
                     return $code;
                 }
-                $supplier=Supplier::findOne($GoodsOrder->supplier_id);
-                $code=UserNewsRecord::AddOrderNewRecord(User::findOne($GoodsOrder->user_id),'取消订单反馈',$GoodsOrder->role_id,"您的订单{$order_no},已被{$supplier->shop_name}商家驳回.",$order_no,$goods->sku,self::STATUS_DESC_DETAILS);
-                if ($code!=200)
-                {
-                    $trans->rollBack();
-                    return $code;
-                }
+//                $supplier=Supplier::findOne($GoodsOrder->supplier_id);
+//                $code=UserNewsRecord::AddOrderNewRecord(User::findOne($supplier->uid),'申请退款',$GoodsOrder->role_id,"订单号{$order_no},申请退款.",$order_no,$goods->sku,self::STATUS_DESC_DETAILS);
+//                if ($code!=200)
+//                {
+//                    $trans->rollBack();
+//                    return $code;
+//                }
             }
             $trans->commit();
             $code=200;
