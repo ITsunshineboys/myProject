@@ -254,7 +254,7 @@
               this.recommendParams.page++     // 当前页 + 1
               this.getStoreShopGoods()      // 请求店铺推荐商品数据
             } else {
-              this.loadingText = '没用更多数据了'
+              this.loadingText = '没有更多数据了'
             }
           } else {
             if (this.allGoodsParams.page < this.totalPage) {      // 判断当前页是否小于最后一页
@@ -262,7 +262,7 @@
               this.allGoodsParams.page++     // 当前页 + 1
               this.getAllGoodsData()        // 请求全部商品数据
             } else {
-              this.loadingText = '没用更多数据了'
+              this.loadingText = '没有更多数据了'
             }
           }
         }

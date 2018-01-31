@@ -119,7 +119,6 @@
     },
     methods: {
       tabHandle (str) {
-        this.goodsListData = []     // 初始化数据
         this.sortName = str
         switch (str) {      // 只有在价格和好评率会做排序
           case 'platform_price':
@@ -140,12 +139,22 @@
             this.goodsListParams['sort[]'] = this.sortName + ':' + 3
             this.goodsListParams.page = 1
         }
+        this.goodsListData = []     // 初始化数据
         this.getGoodsList()
       },
       getGoodsList () {     // 商品列表数据请求
         this.goodsListParams.category_id = this.$route.params.id      // 获取三级分类ID
         this.axios.get('/mall/category-goods', this.goodsListParams, res => {
-          console.log(res)
+          console.log(res, '商品列表数据')
+          let data = res.data
+          this.goodsListData = data.category_goods
+          this.totalPage = Math.ceil(data.total / 12)     // 计算总页数
+          this.isLoading = false      // 加载成功，取消加载样式
+        })
+      },
+      getMoreGoodsList () {     // 获取更多商品数据
+        this.goodsListParams.category_id = this.$route.params.id      // 获取三级分类ID
+        this.axios.get('/mall/category-goods', this.goodsListParams, res => {
           let data = res.data
           this.goodsListData = this.goodsListData.concat(data.category_goods)
           this.totalPage = Math.ceil(data.total / 12)     // 计算总页数
@@ -232,7 +241,7 @@
           if (this.goodsListParams.page < this.totalPage) {      // 判断当前页是否小于最后一页
             this.loadingText = '加载中...'
             this.goodsListParams.page++     // 当前页 + 1
-            this.getGoodsList()
+            this.getMoreGoodsList()
           } else {
             this.loadingText = '没有更多数据了'
           }
@@ -240,7 +249,6 @@
       }
     },
     created () {
-      // this.goodsListData = []
       this.getGoodsList()
     },
     mounted () {
