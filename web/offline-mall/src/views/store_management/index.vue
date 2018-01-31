@@ -7,7 +7,7 @@
           <img :src="storeData.icon">
         </div>
         <div class="store-name">
-          <p>{{storeData.shop_name}}</p>
+          <p class="title">{{storeData.shop_name}}</p>
           <p class="experience-shop" v-if="storeData.is_line_supplier === 1" @click="isShowAlert = true">线下体验店</p>
         </div>
       </div>
@@ -301,6 +301,14 @@
     background-color:  #fff;
   }
 
+  .store-name .title {
+    max-width: 205px;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
   .store-img {
     margin-right: 10px;
     width: 50px;
@@ -451,6 +459,10 @@
       width: 140px;
       height: 140px;
     }
+
+    .store-name .title {
+      max-width: 150px;
+    }
   }
 
   /* galaxy S5 */
@@ -462,6 +474,10 @@
     .store-goods-item img {
       width: 160px;
       height: 160px;
+    }
+
+    .store-name .title {
+      max-width: 190px;
     }
   }
 
@@ -475,6 +491,10 @@
     .store-goods-item img {
       width: 180px;
       height: 180px;
+    }
+
+    .store-name .title {
+      max-width: 240px;
     }
   }
 </style>

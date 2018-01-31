@@ -7,12 +7,12 @@
           <img :src="storeData.icon">
         </div>
         <div class="store-name">
-          <p>{{storeData.shop_name}}</p>
+          <p class="title">{{storeData.shop_name}}</p>
           <p class="experience-shop" v-if="storeData.is_line_supplier === 1" @click="isShowAlert = true">线下体验店</p>
         </div>
       </div>
       <div flex>
-        <div class="attention" flex="dir:top main:justify">
+        <div class="attention" flex="dir:top main:justify" @click="attentionStore">
           <span class="iconfont" :class="{'icon-heart': isAttention === 0, 'icon-heart-solid': isAttention === 1}"></span>
           <span>关注</span>
         </div>
@@ -98,9 +98,6 @@
       isShow (bool) {
         this.isShowAlert = bool
       },
-      contactShop () {      // 联系商家
-        // do something
-      },
       attentionStore () {
         // 关注店铺
         let params = {
@@ -108,7 +105,7 @@
           status: this.isAttention === 1 ? 0 : 1
         }
         this.axios.post('/user-follow/user-follow-shop', params, res => {
-          console.log(res, '关注')
+          window.AndroidWebView.clearCache()
           this.getStoreData()
         })
       },
@@ -139,6 +136,14 @@
     margin-right: 10px;
     width: 50px;
     height: 50px;
+  }
+
+  .store-name .title {
+    max-width: 205px;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   .store-img img {
@@ -212,5 +217,26 @@
   .store-score {
     font-size: 14px;
     color: #222222;
+  }
+
+  /* iphone 5 */
+  @media screen and (max-width: 320px) {
+    .store-name .title {
+      max-width: 150px;
+    }
+  }
+
+  /* galaxy S5 */
+  @media screen and (min-width: 321px) and (max-width: 360px) {
+    .store-name .title {
+      max-width: 190px;
+    }
+  }
+
+  /* iphone 7 plus */
+  @media screen and (min-width: 376px) and (max-width: 414px) {
+    .store-name .title {
+      max-width: 240px;
+    }
   }
 </style>
