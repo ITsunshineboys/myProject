@@ -1441,8 +1441,8 @@ class BasisDecorationService
             }
 
             if ($one_goods['series_id'] > 0){
-                $goods_series[] =  $one_goods['series_id'];
-                $series = Series::find()->asArray()->select('series')->where(['in','id',$goods_series])->all();
+                $where ="id in (".$one_goods['series_id'].")";
+                $series = Series::find()->asArray()->select('series')->where($where)->all();
                 $series_ = [];
                 foreach ($series as $one_series){
                     $series_[] = $one_series['series'];
