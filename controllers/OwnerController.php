@@ -1471,11 +1471,6 @@ class OwnerController extends Controller
         if ($get['stairway_id'] == 1) {
             $stairs = Goods::findByCategory(BasisDecorationService::goodsNames()['stairs']);
             $stairs_details = StairsDetails::find()->select(['attribute'])->where(['id'=>$get['stairs']])->one();
-//            foreach ($stairs_details as $detail){
-//               if ($detail['id'] == $get['stairs']){
-//                   $sm = $detail['attribute'];
-//               }
-//            }
 
             foreach ($stairs as &$one_stairs_price) {
                 if (
@@ -1723,18 +1718,12 @@ class OwnerController extends Controller
         //   楼梯  数据
         if ($effect['stairway'] != 0){
             $stairs = Goods::findByCategory(BasisDecorationService::goodsNames()['stairs']);
-            $stairs_details = StairsDetails::find()->asArray()->all();
-            $ma = [];
-            foreach ($stairs_details as $detail){
-                if ($effect['stair_id'] == $detail['id'] ){
-                    $ma = $detail['attribute'];
-                }
-            }
+            $stairs_details = StairsDetails::find()->select(['attribute'])->where(['id'=>$get['stairs']])->one();
 
             $condition_stairs=[];
             foreach ($stairs as &$one_stairs_price) {
                 if (
-                    $one_stairs_price['value'] == $ma
+                    $one_stairs_price['value'] == $stairs_details->attribute
                     && $one_stairs_price['style_id'] == $effect['case_picture'][0]['style_id']
                 ) {
                     $substr = substr($one_stairs_price['path'],0,strlen($one_stairs_price['path'])-1);
