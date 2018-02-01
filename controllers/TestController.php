@@ -761,7 +761,12 @@ class TestController extends Controller
 
     public  static  function  actionTest1()
     {
-     echo 4-5;
+
+             $data=Express::find()
+                 ->where(['order_no'=>\Yii::$app->request->get('order_no')])
+                 ->asArray()
+                 ->one();
+             var_dump($data);
 
     }
 

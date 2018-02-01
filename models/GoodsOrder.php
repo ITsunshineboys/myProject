@@ -1423,14 +1423,6 @@ class GoodsOrder extends ActiveRecord
             $express=Express::find()
                 ->where(['order_no'=>$list['order_no'],'sku'=>$list['sku']])
                 ->one();
-            if ($express)
-            {
-                echo 1;
-            }else
-            {
-                echo 2;
-            }
-            die;
             if ($list['status']==self::ORDER_TYPE_DESC_UNRECEIVED){
 
                 if ($express)
