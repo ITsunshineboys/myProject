@@ -1480,7 +1480,7 @@ class OwnerController extends Controller
             foreach ($stairs as &$one_stairs_price) {
                 if (
                     $one_stairs_price['value'] == $stairs_details->attribute
-                    && $one_stairs_price['style_id'] == $get['style']
+                    && $one_stairs_price['style_id'] == 7
                 ) {
                     $one_stairs_price['quantity'] = (int)1;
                     $one_stairs_price['cost'] = round(BasisDecorationService::algorithm(1,$one_stairs_price['platform_price'],$one_stairs_price['quantity']),2);
@@ -1488,6 +1488,9 @@ class OwnerController extends Controller
                     $condition_stairs [] = $one_stairs_price;
                 }
 
+            }
+            if ($condition_stairs == null){
+                $material[] = [];
             }
             $style = BasisDecorationService::style($condition_stairs);
             $material[][]= BasisDecorationService::profitMargin($style);
