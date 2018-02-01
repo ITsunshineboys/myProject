@@ -206,11 +206,7 @@ app.controller('product_details_ctrl', function ($timeout, _ajax, $scope, $state
     }
     //返回前一页
     $scope.goPrev = function () {
-        if($stateParams.status!==undefined){
-            history.go(-1)
-        }else{
-            window.AndroidWebView.webfinish()
-        }
+        history.go(-1)
     }
 })
     .filter("toHtml", ["$sce", function ($sce) {
