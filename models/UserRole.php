@@ -151,6 +151,31 @@ class UserRole extends ActiveRecord
     }
 
     /**
+     * Add user role
+     *
+     * @param int $userId user id
+     * @param int $roleId role id
+     * @param ActiveRecord|null $operator operator
+     * @return bool
+     */
+    public static function addUserRole($userId, $roleId, ActiveRecord $operator = null)
+    {
+        UserRole::deleteAll(['user_id' => $userId, 'role_id' => $roleId]);
+        $userRole = new self;
+        $userRole->user_id = $userId;
+        $userRole->role_id = $roleId;
+        $now = time();
+        $userRole->review_apply_time = $now;
+        $userRole->review_status = Role::AUTHENTICATION_STATUS_IN_PROCESS;
+        if ($operator) {
+            $userRole->review_time = $now;
+            $userRole->review_status = Role::AUTHENTICATION_STATUS_APPROVED;
+            $userRole->reviewer_uid = $operator->id;
+        }
+        return $userRole->save();
+    }
+
+    /**
      * @param int $userId user id
      * @param int $reviewStatus review status default 2 anthorized
      * @return array
