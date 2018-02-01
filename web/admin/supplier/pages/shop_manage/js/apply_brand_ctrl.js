@@ -101,6 +101,7 @@ applybrand.controller("applybrand_ctrl", function ($scope, $rootScope, $state, U
     $scope.upload = function (file, valid, name, type, idx) {
         const baseUrl = $rootScope.baseUrl;
         // 判断是否初始化数据
+        console.log(file);
         if (file === null && valid.length === 0) {
             return false
         }
