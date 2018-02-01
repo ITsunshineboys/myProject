@@ -63,9 +63,9 @@
         city: '成都',
         cur_city: ['510000', '510100'],
         nav_list: [
-          {image: require('../../assets/images/Quote.png'), title: '报价', url: '/mall/index.html#!/'},
+          {image: require('../../assets/images/Quote.png'), title: '报价', url: '/mall/index.html'},
           {image: require('../../assets/images/shop.png'), title: '商城'},
-          {image: require('../../assets/images/Mine.png'), title: '我的', url: '/distribution'}
+          {image: require('../../assets/images/Mine.png'), title: '我的', url: '/distribution/index.html'}
         ]
       }
     },
