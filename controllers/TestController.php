@@ -31,6 +31,7 @@ use app\models\ShippingCart;
 use app\models\Supplier;
 use app\models\User;
 use app\models\UserAddress;
+use app\models\UserBankInfo;
 use app\models\UserRole;
 use app\services\BasisDecorationService;
 use app\services\ExceptionHandleService;
@@ -525,6 +526,12 @@ class TestController extends Controller
         }
         $tran->commit();
         return 'ok';
+    }
+
+    public  function  actionTest()
+    {
+        $user=\Yii::$app->user->identity;
+        return Json::encode(UserBankInfo::find()->where(['uid'=>$user->id])->all());
     }
 
 }
