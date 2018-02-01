@@ -439,8 +439,10 @@ class QuoteController extends Controller
                 $specification->city_code=$post['city_code'];
                 if($one_specification['id']==71){
                     $specification->unit=2;
+                }else{
+                    $specification->unit=1;
                 }
-                $specification->unit=1;
+
             }
 
 
