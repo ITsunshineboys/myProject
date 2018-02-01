@@ -1599,7 +1599,7 @@ class SupplieraccountController extends  Controller{
         $user_audit->review_status=$status;
         $user_audit->review_time=time();
         $user_audit->review_remark=$review_remark;
-        $operator = UserRole::roleUser($user, $user->login_role_id);
+        $operator = UserRole::roleUser($user, Yii::$app->session[User::LOGIN_ROLE_ID]);
         if (!$operator) {
             $code=500;
             return Json::encode([

@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\GoodsCategory;
+use app\models\Lhzz;
 use app\models\LineSupplier;
 use app\models\LineSupplierGoods;
 use app\models\LogisticsDistrict;
@@ -1159,6 +1160,29 @@ class SupplierController extends Controller
                 ]);
             }
 
+            $operator = UserRole::roleUser($user, Yii::$app->session[User::LOGIN_ROLE_ID]);
+            if (!$operator) {
+                $tran->rollBack();
+
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+
+            if (!in_array(Yii::$app->params['ownerRoleId'], UserRole::findRoleIdsByUserIdAndReviewStatus($supplier->uid))
+                && !UserRole::addUserRole($supplier->uid, Yii::$app->params['ownerRoleId'], $operator, $status)
+            ) {
+                $tran->rollBack();
+
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+
             if ($status==UserRole::REVIEW_DISAGREE) {
                 $supplier->status=Supplier::STATUS_NOT_APPROVED;
                 $supplier->reject_reason=$review_remark;
@@ -1166,44 +1190,6 @@ class SupplierController extends Controller
 
             if ($status==UserRole::REVIEW_AGREE)
             {
-                $certificatedUser = User::findOne($supplier->uid);
-                if (!$certificatedUser || !$certificatedUser->validateIdentity()) {
-                    $tran->rollBack();
-
-                    $code = 500;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-
-                $operator = UserRole::roleUser($user,$user->login_role_id);
-                if (!$operator) {
-                    $tran->rollBack();
-
-                    $code = 500;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-                if (!User::checkIdentityAuthorized($certificatedUser->identity_no)
-                    && 200 != $certificatedUser->certificate(
-                    $certificatedUser->identity_no,
-                    $certificatedUser->legal_person,
-                    $certificatedUser->identity_card_back_image,
-                    $certificatedUser->identity_card_front_image,
-                    $operator)
-                ) {
-                    $tran->rollBack();
-
-                    $code = 500;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-
                 $supplier->status=Supplier::STATUS_OFFLINE;
                 $supplier->approve_reason=$review_remark;
             }
