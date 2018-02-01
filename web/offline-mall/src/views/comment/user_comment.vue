@@ -59,7 +59,7 @@
 <style scoped>
   .comment-container {
     padding: 23px 14px 0;
-    border-bottom: 1px solid #CDD3D7;
+    border-bottom: 1px solid #E9EDEE;
     background: #FFF;
   }
 
@@ -114,7 +114,7 @@
   .comment-pics {
     padding-top: 12px;
     padding-bottom: 16px;
-    border-bottom: 1px solid #E9EDEE;
+    border-bottom: 0px solid #E9EDEE;
   }
 
   .comment-pics img {

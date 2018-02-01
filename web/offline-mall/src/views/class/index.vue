@@ -95,7 +95,7 @@
 
   .content-left {
     flex: 0 0 110px;
-    border-right: 1px solid #cdd3d7;
+    border-right: 1px solid #ecedee;
   }
 
   .content-right {
@@ -123,6 +123,7 @@
   .content-left div.active a {
     color: #222222;
     border-color: #222222;
+    font-size: 18px;
   }
 
   .hd {
@@ -145,7 +146,7 @@
     margin: auto;
     height: 1px;
     width: 20px;
-    background-color: #cdd3d7;
+    background-color: #ecedee;
     -webkit-transform-origin: 50% 100% 0;
     transform-origin: 50% 100% 0;
   }
@@ -175,6 +176,8 @@
   .cate-img-wrapper {
     width: 60px;
     height: 60px;
+    border-radius: 3px;
+    overflow: hidden;
   }
 
   .cate-img-wrapper img {
@@ -185,6 +188,7 @@
     font-size: 14px;
     color: #999;
     text-align: center;
+    margin-top: 6px;
   }
 
   /* iphone 5 */

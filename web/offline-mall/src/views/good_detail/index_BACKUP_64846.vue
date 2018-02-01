@@ -618,7 +618,7 @@
   }
 
   .good-container .pop-down ul {
-    position: fixed;
+    position: absolute;
     top: 69px;
     right: 6px;
     padding-left: 0;
@@ -676,6 +676,43 @@
     border-radius: 50%;
   }
 
+  /*右上弹窗样式结束*/
+
+  .good-container .choose-count {
+    border-bottom: 0px solid #E9EDEE;
+  }
+
+  .good-container .weui-cells {
+    margin-top: 0;
+  }
+
+  .good-container .weui-cell {
+    padding: 16px 14px;
+    font-size: 16px;
+    color: rgba(102, 102, 102, 1);
+    line-height: 16px;
+    font-size: 16px;
+  }
+
+  .good-container .service {
+    line-height: 16px;
+    margin-right: 25px;
+  }
+
+  .good-container .icon-blue {
+    font-size: 20px;
+    color: #222222;
+  }
+
+  .good-container .icon-checkbox-circle-line {
+    font-size: 20px;
+  }
+
+  .good-container .service span {
+    font-size: 16px;
+    color: rgba(153, 153, 153, 1);
+    vertical-align: text-top;
+  }
   /*右上弹窗样式 end*/
 
   /*商品信息 start*/
@@ -729,7 +766,129 @@
     font-size: 16px;
     color: rgba(102, 102, 102, 1);
     line-height: 16px;
+    margin-left: 10px;
+  }
+
+  .good-container .shop-card > div:nth-child(2) > div {
+    text-align: center;
+  }
+
+  .good-container .shop-intro {
+    padding-top: 15px;
+    padding-bottom: 20px;
+  }
+
+  .good-container .shop-intro > div {
+    width: 128px;
+    text-align: center;
+    font-size: 14px;
+    color: rgba(149, 146, 146, 1);
+    line-height: 14px;
+  }
+
+  .good-container .shop-intro > div > span {
+    display: inline-block;
+    margin-bottom: 9px;
+    font-size: 18px;
+    color: rgba(217, 173, 101, 1);
+    line-height: 18px;
+  }
+
+  .good-container .shop-intro > span {
+    display: inline-block;
+    width: 1px;
+    height: 20px;
+    background: #E9EDEE;
+  }
+
+  .good-container .view-shop-btn {
+    padding-bottom: 20px;
+  }
+
+  .good-container .view-shop-btn button {
+    width: 100px;
+    height: 34px;
+    line-height: 17px;
+    text-align: center;
+    border: 1px solid rgba(34, 34, 34, 1);
+    border-radius: 41px;
+    color: rgba(34, 34, 34, 1);
+    background: rgba(255, 255, 255, 1);;
+  }
+
+  .good-container .tab > div {
     font-size: 16px;
+  }
+
+  .good-container .pro-params {
+    margin-top: 39px;
+  }
+
+  .good-container .pro-params .vux-flexbox-item {
+    margin-top: 0 !important;
+  }
+
+  .good-container .pro-params .vux-flexbox-item .vux-flexbox {
+    box-sizing: border-box;
+    padding: 14px 17px;
+    font-size: 14px;
+    color: rgba(153, 153, 153, 1);
+    line-height: 14px;
+    border-bottom: 1px solid #E9EDEE;
+  }
+
+  .good-container .pro-params > div:last-child {
+    margin-bottom: 50px;
+  }
+
+  /*底部选项卡*/
+  .good-container .bottom-tabbar {
+    position: fixed;
+    bottom: 0;
+    text-align: center;
+    height: 48px;
+    background: #fff;
+    box-shadow: 0 -1px 0 rgba(0,0,0,.05);
+  }
+
+  .good-container .bottom-tabbar > div {
+    height: 48px;
+    margin-left: 0 !important;
+  }
+
+  .good-container .bottom-tabbar i {
+    display: inline-block;
+    margin-top: 2px;
+  }
+
+  .good-container .bottom-tabbar > div:first-child,
+  .good-container .bottom-tabbar > div:nth-child(3) {
+    width: 79px;
+    font-size: 12px;
+    color: rgba(153, 153, 153, 1);
+  }
+
+  .good-container .bottom-tabbar > span {
+    display: inline-block;
+    width: 1px;
+    height: 20px;
+    background: #e9edee;
+  }
+
+  .good-container .bottom-tabbar > div:nth-child(4) {
+    width: 148px;
+    font-size: 16px;
+    background: rgba(34, 34, 34, 1);
+    color: rgba(255, 255, 255, 1);
+    line-height: 48px;
+  }
+
+  .good-container .bottom-tabbar > div:last-child {
+    width: 148px;
+    line-height: 48px;
+    background: rgba(217, 173, 101, 1);
+    font-size: 16px;
+    color: rgba(255, 255, 255, 1);
   }
 
   /*选择数量cell end*/
@@ -738,7 +897,6 @@
   .good-container .count-top {
     overflow: hidden;
     padding: 15px 0 10px 14px;
-    border-bottom: 1px solid #E9EDEE;
   }
 
   .good-container .count-cover-img {
@@ -845,7 +1003,7 @@
   /*售后服务cell start*/
   .good-container .service {
     line-height: 16px;
-    margin-right: 25px;
+    margin-right: 14px;
   }
 
   .good-container .icon-blue {
@@ -1097,8 +1255,6 @@
     text-align: center;
     height: 48px;
     background: #fff;
-    box-shadow: 0 -1px 0 rgba(0,0,0,0.05);
-    -webkit-box-shadow: 0 -1px 0 rgba(0,0,0,0.05);
   }
 
   .good-container .bottom-tabbar > div {

@@ -119,7 +119,7 @@
   }
 
   .search .weui-search-bar {
-    padding-bottom: 16px !important;
+    padding-bottom: 8px !important;
   }
 
   .search .weui-search-bar__input {

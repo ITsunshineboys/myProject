@@ -555,8 +555,8 @@
   }
 
   .good-container .guide-icon .iconfont {
-    position: fixed;
-    top: 14px;
+    position: absolute;
+    top: 32px;
     z-index: 200;
     font-size: 15px;
     color: #FFFFFF;
@@ -576,31 +576,15 @@
 
   .good-container .guide-icon .icon-return {
     left: 14px;
-    font-size: 10px;
-  }
-
-  .good-container .guide-icon .icon-return:before {
-    display: block;
-    margin: 3px 1px;
   }
 
   .good-container .guide-icon .icon-share {
     right: 54px;
   }
 
-  .good-container .guide-icon .icon-share:before {
-    display: block;
-    margin: 2px 1px;
-  }
-
   .good-container .guide-icon .icon-more {
     right: 14px;
     z-index: 210;
-  }
-
-  .good-container .guide-icon .icon-more:before {
-    display: block;
-    margin: 2px 1px;
   }
 
   /*图标样式 end*/
@@ -618,7 +602,7 @@
   }
 
   .good-container .pop-down ul {
-    position: fixed;
+    position: absolute;
     top: 69px;
     right: 6px;
     padding-left: 0;
@@ -717,7 +701,7 @@
 
   /*选择数量cell start*/
   .good-container .choose-count {
-    border-bottom: 0px solid #E9EDEE;
+    border-bottom: 1px solid #E9EDEE;
   }
 
   .good-container .weui-cells {
@@ -797,14 +781,6 @@
   .good-container .vux-number-selector svg {
     fill: #222;
   }
-
-  .good-container .vux-number-selector-sub {
-    border-right: 0;
-  }
-
-  .good-container .vux-number-selector-plus {
-    border-left: 0;
-  }
   /*购买数量-Xnumber end*/
 
   /*购买数量-button start*/
@@ -831,12 +807,9 @@
 
   .good-container .icon-close {
     position: absolute;
-    right: 0px;
-    top: 9px;
+    right: 10px;
     font-size: 18px;
     color: #999;
-    width: 30px;
-    height: 30px;
   }
   /*购买数量-button end*/
   /*购买数量 end*/
@@ -885,7 +858,7 @@
     color: rgba(102, 102, 102, 1);
     text-align: center;
     line-height: 63px;
-    border-bottom: 1px solid #e9edee;
+    border-bottom: 2px solid #CDD3D7;
   }
 
   .good-container .after-service > div {
@@ -900,7 +873,6 @@
     font-size: 16px;
     color: rgba(102, 102, 102, 1);
     line-height: 16px;
-    vertical-align: text-top;
   }
 
   .good-container .after-service > div p {
@@ -1019,9 +991,9 @@
 
   .good-container .shop-intro > span {
     display: inline-block;
-    width: 1px;
+    width: 2px;
     height: 20px;
-    background: #e9edee;
+    background: #CDD3D7;
   }
 
     /*进店逛逛 start*/
@@ -1081,7 +1053,7 @@
     font-size: 14px;
     color: rgba(153, 153, 153, 1);
     line-height: 14px;
-    border-bottom: 1px solid #e9edee;
+    border-bottom: 1px solid #CDD3D7;
   }
 
   .good-container .pro-params > div:last-child {
@@ -1097,8 +1069,6 @@
     text-align: center;
     height: 48px;
     background: #fff;
-    box-shadow: 0 -1px 0 rgba(0,0,0,0.05);
-    -webkit-box-shadow: 0 -1px 0 rgba(0,0,0,0.05);
   }
 
   .good-container .bottom-tabbar > div {
@@ -1120,9 +1090,9 @@
 
   .good-container .bottom-tabbar > span {
     display: inline-block;
-    width: 1px;
+    width: 2px;
     height: 20px;
-    background: #e9edee;
+    background: #CDD3D7;
   }
 
   .good-container .bottom-tabbar > div:nth-child(4) {
@@ -1188,7 +1158,7 @@
     line-height: 86px;
     font-size: 16px;
     color: rgba(102, 102, 102, 1);
-    border-bottom: 1px solid #e9edee;
+    border-bottom: 2px solid #CDD3D7;
   }
 
   .good-container .goodshort-alert .weui-dialog .weui-dialog__bd > div:nth-child(2) {

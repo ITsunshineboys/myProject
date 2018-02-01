@@ -19,8 +19,8 @@
 <style scoped>
   .comment-container {
     padding: 14px 20px 16px;
-    border-top: 2px solid #E9EDEE;
-    border-bottom: 2px solid #E9EDEE;
+    border-top: 1px solid #E9EDEE;
+    border-bottom: 1px solid #E9EDEE;
   }
 
   .top-container,

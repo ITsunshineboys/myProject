@@ -334,7 +334,7 @@
     margin: 10px 6px 0;
     width: 1px;
     height: 20px;
-    background-color: #cdd3d7;
+    background-color: #ecede9;
   }
 
   .vux-tab .vux-tab-item {
@@ -356,9 +356,9 @@
     margin-bottom: 10px;
     margin-right: 3%;
     width: 168px;
-    -webkit-box-shadow: 0 2px 4px 0 #F6F6F6;
-    -moz-box-shadow: 0 2px 4px 0 #F6F6F6;
-    box-shadow: 0 2px 4px 0 #F6F6F6;
+    /*-webkit-box-shadow: 0 2px 4px 0 #F6F6F6;*/
+    /*-moz-box-shadow: 0 2px 4px 0 #F6F6F6;*/
+    /*box-shadow: 0 2px 4px 0 #F6F6F6;*/
   }
 
   .store-goods-item:nth-child(2n) {
@@ -420,6 +420,8 @@
     left: 0;
     padding: 16px 0;
     background-color: #fff;
+    box-shadow: 0 -1px 0 rgba(0,0,0,0.05);
+    -webkit-box-shadow: 0 -1px 0 rgba(0,0,0,0.05);
   }
 
   .btn-group button {
@@ -432,7 +434,7 @@
   }
 
   .btn-group button:first-child {
-    border-right: 1px solid #cdd3d7;
+    border-right: 1px solid #ecede9;
   }
 
   /* iphone 5 */
