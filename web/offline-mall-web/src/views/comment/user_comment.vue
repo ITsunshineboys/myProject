@@ -1,17 +1,16 @@
 <template>
   <div class="comment-container">
     <div class="top-container">
-      <img :src="userIcon" alt="用户头像">
+      <img :src="userIcon" alt="userPic">
       <span>{{userName | stringSubstr}}</span>
       <span>{{commentLevel}}</span>
     </div>
     <p class="comment-date">{{commentDate}}</p>
     <p class="comment-content">{{content}}</p>
     <div class="comment-pics">
-      <img class="previewer-demo-img" v-for="(item, index) in previewerList" :src="item.src" width="100"
-           @click="show(index)">
+      <x-img v-for="(item, index) in images" :src="item.src" :default-src="default_pic" :key="item.index" @click.native="show(index)"></x-img>
       <div>
-        <previewer :list="previewerList" ref="previewer"></previewer>
+        <previewer :list="images" ref="previewer"></previewer>
       </div>
     </div>
     <p class="reply" v-if="reply[0]">
@@ -21,24 +20,21 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {Previewer} from 'vux'
+  import {Previewer, Flexbox, FlexboxItem, XImg} from 'vux'
   export default {
     name: 'userComment',
     components: {
-      Previewer
+      Previewer,
+      Flexbox,
+      FlexboxItem,
+      XImg
     },
     props: ['userIcon', 'userName', 'commentLevel', 'commentDate', 'content', 'images', 'reply'],
     data () {
       return {
-        previewerList: []
+        previewerList: [],
+        default_pic: require('../../assets/images/default_pic.png') // 默认用户头像
       }
-    },
-    mounted () {
-      // 用户评价图片处理
-//      if (typeof this.images === 'undefined') return
-      this.previewerList = this.images.map((item) => ({
-        src: item
-      }))
     },
     methods: {
       // 用户评价图片放大 原组件方法
@@ -112,6 +108,7 @@
     font-size: 14px;
     color: rgba(153, 153, 153, 1);
     line-height: 18px;
+    word-break: break-all
   }
 
   /* 评价图片 */
@@ -125,6 +122,25 @@
     width: 109px;
     height: 109px;
     margin-right: 10px;
+    margin-bottom: 10px;
+  }
+
+  @media (max-width: 360px) {
+    .comment-pics img {
+      width: 104px;
+      height: 104px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+  }
+
+  @media (min-width: 412px) {
+    .comment-pics img {
+      width: 116px;
+      height: 116px;
+      margin-right: 18px;
+      margin-bottom: 12px;
+    }
   }
 
   .comment-pics img:nth-child(3) {
@@ -139,5 +155,9 @@
     color: rgba(153, 153, 153, 1);
     line-height: 18px;
   }
-
+</style>
+<style>
+  .pswp--supports-fs .pswp__button--fs {
+    display: none !important;
+  }
 </style>
