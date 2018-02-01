@@ -1470,16 +1470,16 @@ class OwnerController extends Controller
         //  楼梯信息
         if ($get['stairway_id'] == 1) {
             $stairs = Goods::findByCategory(BasisDecorationService::goodsNames()['stairs']);
-            $stairs_details = StairsDetails::find()->asArray()->all();
-            foreach ($stairs_details as $detail){
-               if ($detail['id'] == $get['stairs']){
-                   $sm = $detail['attribute'];
-               }
-            }
+            $stairs_details = StairsDetails::find()->select(['attribute'])->where(['id'=>$get['stairs']])->one();
+//            foreach ($stairs_details as $detail){
+//               if ($detail['id'] == $get['stairs']){
+//                   $sm = $detail['attribute'];
+//               }
+//            }
 
             foreach ($stairs as &$one_stairs_price) {
                 if (
-                    $one_stairs_price['value'] == $sm
+                    $one_stairs_price['value'] == $stairs_details->attribute
                     && $one_stairs_price['style_id'] == $get['style']
                 ) {
                     $one_stairs_price['quantity'] = (int)1;
@@ -1837,9 +1837,10 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-        $a = GoodsCategory::find()->where(["id"=>1515])->one();
-//        $b = GoodsAttr::find()->where(['goods_id'=>$a['id']])->one();
-//        $c = GoodsStyle::find()->where(['goods_id'=>$a['id']])->one();
+       $a = 0.162;
+       $b = 0.011;
+       $c = $a * $b;
+       echo $c;
 
     }
 
