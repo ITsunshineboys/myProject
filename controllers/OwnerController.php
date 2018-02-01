@@ -1109,6 +1109,11 @@ class OwnerController extends Controller
         }
         $series = Series::find()->select('id,series')->where(['id'=>$get['series']])->one();
         $style = Style::find()->select('id,style')->where(['id'=>$get['style']])->one();
+        var_dump($brick);
+        var_dump($series->series);
+        var_dump($style->style);
+
+        die;
         foreach ($brick as $one_brick){
             foreach ($one_brick['attr'] as $attr_){
 
