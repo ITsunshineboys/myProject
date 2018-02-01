@@ -507,7 +507,7 @@ class TestController extends Controller
     }
 
     /**
-     * Handle goods style
+     * Handle goods style 
      *
      * @return string
      * @throws Exception
@@ -538,8 +538,7 @@ class TestController extends Controller
 
     public  function  actionTest()
     {
-        $user=\Yii::$app->user->identity;
-        return Json::encode(UserBankInfo::find()->asArray()->where(['uid'=>$user->id])->all());
+        echo substr(123456,6-5,4);
     }
 
 }
