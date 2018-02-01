@@ -937,8 +937,8 @@ class OwnerController extends Controller
 
         // 商品属性
         $putty_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['putty'],'');
-        $undercoat_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['emulsion_varnish_primer'],'');
-        $finishing_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['emulsion_varnish_surface'],'');
+        $undercoat_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['emulsion_varnish_primer'],'体积');
+        $finishing_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['emulsion_varnish_surface'],'体积');
         $wire_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['concave_line'],'长');
         $land_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['land_plaster'],'');
 
@@ -1470,16 +1470,11 @@ class OwnerController extends Controller
         //  楼梯信息
         if ($get['stairway_id'] == 1) {
             $stairs = Goods::findByCategory(BasisDecorationService::goodsNames()['stairs']);
-            $stairs_details = StairsDetails::find()->asArray()->all();
-            foreach ($stairs_details as $detail){
-               if ($detail['id'] == $get['stairs']){
-                   $sm = $detail['attribute'];
-               }
-            }
+            $stairs_details = StairsDetails::find()->select(['attribute'])->where(['id'=>$get['stairs']])->one();
 
             foreach ($stairs as &$one_stairs_price) {
                 if (
-                    $one_stairs_price['value'] == $sm
+                    $one_stairs_price['value'] == $stairs_details->attribute
                     && $one_stairs_price['style_id'] == $get['style']
                 ) {
                     $one_stairs_price['quantity'] = (int)1;
@@ -1489,8 +1484,10 @@ class OwnerController extends Controller
                 }
 
             }
-            $style = BasisDecorationService::style($condition_stairs);
-            $material[][]= BasisDecorationService::profitMargin($style);
+            if ($condition_stairs != null) {
+                $style = BasisDecorationService::style($condition_stairs);
+                $material[][] = BasisDecorationService::profitMargin($style);
+            }
         }
 
 
@@ -1721,18 +1718,12 @@ class OwnerController extends Controller
         //   楼梯  数据
         if ($effect['stairway'] != 0){
             $stairs = Goods::findByCategory(BasisDecorationService::goodsNames()['stairs']);
-            $stairs_details = StairsDetails::find()->asArray()->all();
-            $ma = [];
-            foreach ($stairs_details as $detail){
-                if ($effect['stair_id'] == $detail['id'] ){
-                    $ma = $detail['attribute'];
-                }
-            }
+            $stairs_details = StairsDetails::find()->select(['attribute'])->where(['id'=>$get['stairs']])->one();
 
             $condition_stairs=[];
             foreach ($stairs as &$one_stairs_price) {
                 if (
-                    $one_stairs_price['value'] == $ma
+                    $one_stairs_price['value'] == $stairs_details->attribute
                     && $one_stairs_price['style_id'] == $effect['case_picture'][0]['style_id']
                 ) {
                     $substr = substr($one_stairs_price['path'],0,strlen($one_stairs_price['path'])-1);
@@ -1837,9 +1828,10 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-        $a = GoodsCategory::find()->where(["id"=>1515])->one();
-//        $b = GoodsAttr::find()->where(['goods_id'=>$a['id']])->one();
-//        $c = GoodsStyle::find()->where(['goods_id'=>$a['id']])->one();
+       $a = 0.162;
+       $b = 0.011;
+       $c = $a * $b;
+       echo $c;
 
     }
 

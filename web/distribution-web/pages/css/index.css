@@ -1,0 +1,17 @@
+.index{
+    background: rgba(246,246,246,1);
+    font-family: '黑体';
+}
+.header{
+    text-align: center;
+    height: 1.17rem;
+    line-height: 1.17rem;
+    font-size: 36px;
+    margin-bottom:.26rem ;
+    background: #fff;
+}
+.header img{
+    position: absolute;
+    left: .32rem;
+    top: .37rem;
+}

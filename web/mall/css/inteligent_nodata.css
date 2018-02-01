@@ -1,0 +1,995 @@
+body{
+    background-color: #f6f6f6 !important;
+}
+input[disabled]{
+    background: none;
+}
+h1{
+    font-family: PingFangSC-Regular;
+    font-weight: 400!important;
+    font-size: 1.5rem!important;
+}
+label{
+    font-weight: 400!important;
+}
+
+/*单选按按钮样式*/
+input[type="radio"] {
+    display: none;
+}
+
+input[type="radio"] + span {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    vertical-align: middle;
+    border-radius: 50%;
+    border: 1px solid #B8B6B6;
+    background-color: white;
+    margin-top: -0.1rem;
+    margin-left: 0.1rem !important;
+}
+
+/*结束*/
+
+/*多选按按钮样式*/
+input[type="checkbox"] {
+    display: none;
+}
+
+input[type="checkbox"] + span {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    vertical-align: middle;
+    border-radius: 50%;
+    border: 1px solid #B8B6B6;
+    background-color: white;
+}
+
+input[type="checkbox"]:checked + span {
+    border: 1px solid #C2C2C2;
+    background-color: #53A8F4;
+}
+
+/*结束*/
+.back{
+    background-color: #F6F6F6;
+}
+.area_news{
+    background-color: white;
+}
+.background_w{
+    background-color: white;
+    padding: 1.2rem;
+    position: relative;
+    margin-bottom: 1rem;
+}
+/*头部开始*/
+
+/*头部结束*/
+
+.quarters_small {
+    padding-bottom: 2rem;
+    position: relative;
+    /*margin-top: 1rem;*/
+    background: white;
+    position: relative;
+    overflow: hidden;
+    padding: 1.2rem;
+}
+.quarters_small p{
+    
+}
+/*小区选择-start*/
+.line{
+    width: 100%;
+    height: 2px;
+    background-color: #E9EDEE;
+    margin: 1.6rem 0;
+}
+.line1{
+    margin: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #E9EDEE;
+}
+
+.shu {
+    width: .3rem;
+    height: 1.5rem;
+    background-color: #333;
+    position: absolute;
+    left: 1.2rem;
+    top: 1.7rem;
+}
+.shu_house_2{
+    width: .3rem;
+    height: 1.5rem;
+    background-color: #333;
+    position: absolute;
+    left: 1.2rem;
+    top: 1.7rem; 
+}
+
+.title{
+    padding-left: 1.1rem;
+    font-size: 1.6rem;
+    color: #666;
+    margin: 0;
+}
+.sub_title{
+    font-size: 1.4rem;
+    color: #666;
+}
+.list_box{
+    margin-top: 1.6rem;
+    position: relative;
+}
+.input_box{
+    margin-left: 1.6rem;
+    position: relative;
+}
+.input_box input{
+    display: block;
+    padding: .3rem 3rem;
+    color: #666;
+    font-size: 1.4rem;
+    border: 2px solid #E5E5E5;
+    border-radius: 2rem;
+    width: 22.3rem;
+    margin-top: -0.3rem;
+}
+
+.input_box img{
+    position: absolute;
+    left: 1.2rem;
+    top: 0.6rem;
+}
+/*小区选择-end*/
+
+/*小区地址-start*/
+.list_box .info{
+    font-size: 1.4rem;
+    color: #999;
+    margin-left: 1.6rem;
+}
+.text_all {
+    width:22.3rem;
+    border: 2px solid #E5E5E5;
+    color: #4A4A4A;
+    font-size: 1.4rem;
+    border-radius: .3rem;
+    padding-left: 1.2rem;
+    padding-top: .5rem;
+    padding-right:.5rem;
+    margin-top: -0.5rem;
+}
+.text_all_length {
+    position: absolute;
+    right: 1.2rem;
+    top: 4.7rem;
+    font-size: 1rem;
+    color: #b1b1b1;
+}
+.address_tips{
+    margin-top:1rem;
+}
+.right_box{
+    padding-left: 1.6rem;
+}
+/*小区地址-end*/
+.shu_house{
+    width: .3rem;
+    height: 1.5rem;
+    background-color:#53A8F4;
+    position: absolute;
+    left: .9rem;
+    margin-top: 1.4rem;
+}
+.seachr{
+    position: absolute;
+    left:9rem;
+    top:5.7rem;
+}
+.quarters_adress {
+    /*padding-left: 1rem;*/
+    font-size: 1.3rem!important;
+    display: inline-block;
+    /*margin:1rem 0 0 -.5rem;*/
+    margin-top: 2rem;
+    margin-left: -.5rem;
+}
+
+.quarters {
+    margin-left: 2rem;
+    font-size: 1rem;
+    display: inline-block;
+}
+
+.quarters_small p {
+    
+
+}
+
+.choose_quarter {
+    display: inline-block;
+    margin: 1rem 0 0 1rem;
+    font-size: 1.3rem!important;
+    color: #4A4A4A!important;
+}
+.quarters_small{
+    margin-top: 5rem;
+    margin-bottom: 1rem;
+}
+
+.house_area {
+    /*padding-top: 1rem;*/
+    background: white;
+    overflow: hidden;
+}
+.house_area h1{
+    font-size: 1.6rem;
+    color: #666;
+}
+.p{
+    position: absolute;
+    right: 1rem;
+    top: .3rem;
+    font-size: 1.2rem;
+    color: #999;
+}
+.house_span {
+    font-size: 1.3rem;
+    margin-left: 1rem;
+    color: #4A4A4A;
+}
+
+.house_area input {
+    display: block;
+    padding: .3rem 1.2rem;
+    color: #666;
+    font-size: 1.4rem;
+    border: 2px solid #E5E5E5;
+    border-radius: .3rem;
+    width: 22.3rem;
+    margin-top: -0.3rem;
+}
+
+.house_area p{
+
+}
+
+.apartment_layout {
+    margin-top: 1rem;
+    border-top: 1px solid #e5e5e5;
+    padding-top: 1.2rem;
+    padding-bottom: 1rem;
+}
+
+.apartment_span {
+    font-size: 1.3rem;
+    margin-left: 1rem;
+    color: #4A4A4A;
+    position: relative;
+    top: 1rem;
+}
+
+.apartment_ul span {
+    margin-left: -3rem;
+    font-size: 1.2rem;
+}
+
+.apartment_ul {
+    padding-left: 3.7rem;
+    margin-top: -2.5rem;
+    /*position: relative;*/
+    /*top:2rem;*/
+}
+
+.apartment_ul li {
+    display: inline-block;
+    width: 10rem;
+    height: 3rem;
+    margin-left: 3.3rem;
+    margin-right:-2.3rem;
+    position: relative;
+    border:1px solid #e5e5e5;
+    border-radius: 12px;
+    margin-bottom:1.2rem;
+}
+
+.apartment_ul li input {
+    width: 8rem;
+    height: 2.8rem;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    padding-left: 4rem;
+    border: none;
+    padding-top: 0.4rem;
+    color: #333;
+}
+
+.apartment_ul button {
+    width: 2rem;
+    height: 2rem;
+    background-color: white;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-left: .2rem;
+}
+
+.btn_left {
+    position: absolute;
+    left: 0.5rem;
+    top: .5rem;
+    color: #333;
+}
+
+.btn_right {
+    position: absolute;
+    right: 0.5rem;
+    top: .5rem;
+    color: #333;
+}
+
+
+
+.address_content {
+    position: relative;
+}
+
+
+
+.storey {
+    border-top: 1px solid #C2C2C2;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+
+}
+.storey_span{
+    font-size: 1.3rem;
+    margin-left: 1rem;
+    /*margin-top: 1rem;*/
+    position: relative;
+    top:1rem;
+    color: #4A4A4A;
+}
+
+.storey h1 {
+    margin-left: 1rem;
+}
+
+.storey_ul {
+    margin-top:1rem;
+}
+
+.storey_ul li {
+    display: inline-block;
+    list-style: none;
+    font-size: 1.2rem;
+    /*margin-right:1.2rem;*/
+    font-weight: 400!important;
+    color: #333;
+    position: relative;
+    margin-right:1rem;
+}
+.series li,.structure li{
+     display: inline-block;
+     list-style: none;
+     font-size: 1.2rem;
+     font-weight: 400!important;
+     color: #333;
+     position: relative;
+ }
+input[type='radio'] ~ img{
+    position: absolute;
+    top: .4rem !important;
+     left: -2px!important;
+    /*display: none;*/
+}
+.storey_ul input[type='radio'] ~ img{
+    position: absolute;
+    top: 1rem;
+    left: -.05rem;
+    display: none;
+}
+input[type='radio']:checked ~ img{
+    display: inline-block;
+}
+#img_size{
+    position: absolute;
+    top: 0.3rem!important;
+    left: 0!important;
+
+}
+#img_size_1{
+    position: absolute;
+    top: 0.3rem!important;
+    left: 0.1rem !important;
+
+}
+.rey{
+    margin-top: 1rem;
+    border-top: 1px solid #e5e5e5;
+    position: relative;
+    padding-bottom: 1rem;
+}
+.storey_txt{
+    font-size: 1.1rem;
+    color: #999;
+    margin-left: .4rem;
+}
+/*.ml{*/
+/*margin-left: 1rem;*/
+/*}*/
+.bay_window {
+    
+}
+.input_windin{
+    margin-top: .7rem;
+}
+.bay_span {
+    font-size: 1.3rem;
+    color: #666;
+}
+
+.bay_window input {
+    padding: .3rem 1.2rem;
+    color: #666;
+    font-size: 1.4rem;
+    border: 2px solid #E5E5E5;
+    border-radius: .3rem;
+    width: 22.3rem;
+    margin-top: -0.3rem;
+    margin-left: 3.7rem;
+}
+
+.bay_square {
+    margin-left: -2.2rem;
+    font-size: 1.2rem;
+    color: #999;
+
+}
+
+.choose_stairs {
+    position: relative;
+}
+
+.choose_span {
+    position: relative;
+    font-size: 1.3rem;
+    color: #666;
+}
+
+.choose_stairs label {
+    margin-left: 2rem;
+    position: relative;
+}
+.choose_stairs label span{
+    margin-top: -0.4rem;
+    margin-left: 0.1rem !important;
+}
+.img_size{
+    position: absolute;
+    top:0;
+    left:.5rem;
+}
+
+.have, .no {
+    margin-left: .1rem;
+    font-size: 1.2rem;
+    position: relative;
+    top: 0;
+    left: .2rem;
+}
+
+.structure{
+    border: 2px solid #dcdcdc;
+    width: 100%;
+    padding: 1.2rem 1.2rem 0 1.2rem;
+    border-radius: .3rem;
+    margin-top: 1.2rem;
+}
+.structure ul {
+}
+
+.structure ul li {
+    display: inline-block;
+    margin-right: 2rem;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: #6C6C6C;
+}
+
+.structure ul li label {
+    font-weight: 400;
+}
+
+.structure ul li label img{
+    
+}
+
+.structure ul li label .check_img{
+    margin-top: -0.1rem;
+}
+
+.series {
+   
+}
+ol, ul {
+     padding-left: 0;
+}
+.series ul{
+    padding-left: 1rem;
+}
+.series h1{
+    font-size: 1.5rem;
+    color: #666;
+}
+.series p {
+    padding-left: 1.6rem;
+    font-size: 1.5rem;
+    color: #4A4A4A;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+.series ul li {
+    display: inline-block;
+    font-size: 1.2rem;
+    margin-right: 1.5rem;
+    padding-top:1.2rem;
+    position: relative;
+    right:1rem;
+    /*padding-top: 1rem;*/
+}
+
+.series label {
+    font-weight: normal;
+    vertical-align: middle;
+}
+
+.check_img{
+    margin-top: 1.2rem;
+}
+
+
+.fit {
+    padding-top: 1rem;
+}
+
+.fit h1 {
+    font-size: 1.4rem;
+    color: #999;
+}
+
+.fit p {
+    font-size: 1.2rem;
+    color: #999;
+}
+
+.choose_style {
+    
+}
+.choose_style h1{
+    color: #666;
+    font-size: 1.5rem;
+}
+[ng-cloak] {
+    display: none;
+}
+
+.choose_style p {
+    padding-left: 1.6rem;
+    font-size: 1.5rem;
+    color: #4A4A4A;
+    margin-bottom: 1rem;
+    position: relative;
+    top: 1rem;
+}
+
+.choose_style ul {
+    padding-left: 0;
+}
+
+.choose_style ul li {
+    display: inline-block;
+}
+
+.choose_style ul li button {
+    background-color: white;
+    min-width: 6.3rem;
+    height: 2.3rem;
+    font-size: 1.1rem;
+    color: #999;
+    border: 2px solid #dcdcdc;
+    margin-right: 0.3rem;
+    margin-top: 1rem;
+    border-radius: .3rem !important;
+}
+.style_box{
+    background-color: #fff;
+    padding-top: 1.2rem;
+    margin-top: -1rem;
+}
+
+.carousel {
+    /*margin-top: 1rem;*/
+    /*border: 1px solid #C2C2C2;*/
+    /*width: 30rem;*/
+    /*height: 16rem;*/
+    /*margin-left: 1rem;*/
+    width: 100%;
+    height: 16rem;
+    border: 1px solid #C2C2C2;
+    margin-top: 1.2rem;
+}
+
+.note {
+    margin-top: 1.5rem;
+    padding: 0 1.2rem;
+}
+
+.note ul li {
+    display: inline-block;
+    margin-bottom: 1rem;
+
+}
+
+.note ul li button {
+
+}
+.btn_vr {
+    padding: 2rem 1.2rem 1.2rem 1.2rem;
+    border: none;
+}
+.btn_vr button {
+    width: 100%;
+    border-radius: .3rem;
+    background-color: #333;
+    color: white;
+    font-size: 1.2rem;
+    padding: 1rem 0;
+}
+
+/*轮播*/
+.swiper-slide img{
+   width:100%;
+}
+
+.swiper-pagination span {
+    width: 1rem;
+    height: 1rem;
+}
+/*系列*/
+.tag {
+    padding-top: 1rem;
+    color: #333;
+}
+ol, ul {
+     padding-left: 0;
+}
+.tag span {
+    display: inline-block;
+    margin-right: 0.5rem;
+    border-radius: 1.5rem;
+    border: 2px solid #999999;
+    text-align: center;
+    font-size: .9rem;
+    padding: .3rem 1.3rem;
+    height: 2rem;
+}
+
+/*风格*/
+.btn_checked {
+    border: 2px solid #333 !important;
+    color: #333 !important;
+}
+
+.note button {
+    display: inline-block;
+    margin-right: 0.5rem;
+    border-radius: 1.5rem;
+    border: 2px solid #999999;
+    text-align: center;
+    font-size: .9rem;
+    padding: .3rem 1.3rem;
+    background: #fff;
+}
+
+button {
+    outline: none !important;
+}
+/*提交按钮样式*/
+button[disabled]{
+
+
+}
+
+/*数据获取 样式*/
+.left_main{
+    display: inline-block;
+    width: 100%;
+    background-color: white;
+    margin-top: 1rem;
+    position: relative;
+    padding: 1.2rem;
+}
+.title_span{
+    margin-left: 1rem;
+}
+.right_main {
+    /*border: 1px solid #C2C2C2;*/
+    display: inline-block;
+    width: 14rem;
+    margin-left: 1.2rem;
+}
+.right_main ul li{
+    margin-bottom: .5rem;
+    font-size: 1rem;
+    border-bottom: 1px solid #C2C2C2;
+}
+.left_main ul {
+    /* border: 1px solid #C2C2C2; */
+    margin-bottom: 0;
+}
+.right_main ul {
+    margin-bottom: 1rem;
+}
+.left_main ul li{
+    margin-bottom: .5rem;
+    font-size: 1rem;
+}
+.basis_border{
+    border-bottom: 1px solid rgba(222, 222, 224, 0.9);
+}
+.basis_border:last-child div{
+    border-bottom: none!important;
+}
+/*.left_main div{*/
+    /*border-bottom: 1px solid rgba(222, 222, 224, 0.9);*/
+/*}*/
+.last_chird div:last-child{
+    border-bottom: none!important;
+}
+.right_main ul li {
+    border-bottom: 1px solid rgba(222, 222, 224, 0.9);
+    margin-left: 1rem;
+}
+.decoration p{
+    padding-left: 1rem;
+    /*padding-top: .5rem;*/
+    font-size: 1rem;
+}
+.font_size p{
+     margin-top: 0.5rem;
+}
+.pic{
+    color: #D9AD65;
+    font-size: 1.2rem;
+    /* margin-left: 1rem; */
+    margin-bottom: 1.2rem;
+}
+
+.pic_q{
+    /*position: absolute;*/
+    right: 1rem;
+    bottom:0;
+    margin-left: 4rem;
+    font-size: 1.1rem!important;
+}
+.dw{
+    position: relative;
+}
+.right_main p{
+    padding-left: 1rem;
+    /*padding-top: .5rem;*/
+    font-size: 1rem;
+}
+.right_main span{
+    color:#FFB13D ;
+    font-size: 1rem;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+}
+/*.decoration li{*/
+    /*margin-bottom: .5rem;*/
+    /*font-size: 1rem;*/
+    /*border-bottom: 1px solid #C2C2C2;*/
+/*}*/
+.right_main ul {
+    border:1px solid #C2C2C2;
+}
+
+.material_choose h1{
+    display: inline-block;
+    /*font-size: 1rem;*/
+    /*margin-left: 1rem;*/
+    /*margin-top: 1rem;*/
+    margin: 1.4rem 0 0 1.5rem;
+    font-size: 1.5rem;
+}
+.comment_span{
+    display: inline-block;
+    margin-top: -5rem;
+    margin-left: .5rem;
+    font-size: 1.1rem;
+    color: #C2C2C2;
+}
+.two_category{
+    padding-top:.77rem;
+    padding-bottom:.77rem;
+}
+.two_category li:last-child{
+    border-bottom: none;
+}
+.basis_decoration{
+    /*column-count: 2;*/
+    /*column-gap: 0;*/
+    /*background-color: white;*/
+    /*overflow: hidden;*/
+    margin-top: 1.2rem;
+    position: relative;
+}
+.grid{
+    position: absolute;
+    width:49%;
+    top: 0;
+    left:0;
+}
+.basis_decoration ul{
+    padding:0;
+}
+.basis_decoration ul li{
+    position: relative;
+}
+.basis_decoration ul li .pic_q{
+    position: absolute;
+    right:0;
+}
+.basis_decoration ul p{
+    padding: 0;
+}
+.cur_title{
+    font-size:1rem;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 6rem;
+}
+.dark{
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 6rem;
+}
+.basis_item{
+        break-inside: avoid;
+    box-sizing: border-box;
+    border: 2px solid #E5E5E5;
+    padding: 1rem 1rem 0.3rem 1rem;
+    border-radius: .3rem;
+}
+.basis_title{
+    font-size: 1.2rem!important;
+    color: #666;
+    font-weight: bold;
+}
+.basis_title_span{
+    font-size: 1rem!important;
+    font-weight: normal !important;
+    color: #999;
+}
+.basis_txt{
+    color: #6C6C6C;
+    font-size:1.1rem!important;
+}
+/*样式结束*/
+/*风格样式*/
+.special_requirements{
+    margin-top: 1rem;
+    overflow: hidden;
+    background-color: white;
+    margin-bottom: 1rem;
+    position: relative;
+    padding: 1.2rem 1.2rem 0 1.2rem;
+    margin-bottom: 5rem;
+}
+.special_requirements p{
+ 
+}
+.main_text{
+    width: 30rem;
+    height: 10rem;
+    padding-left: 1rem;
+    font-size: 1.3rem;
+    border-radius: .3rem;
+    outline: none;
+    border: 2px solid #E5E5E5;
+    margin-top: 1.2rem;
+}
+.special_requirements span{
+    position: relative;
+    left: 26rem;
+    top: -2.2rem;
+    font-size: 1rem;
+    color: #999;
+}
+/*尾部样式*/
+.footer_settlement{
+    width:100%;
+    height:4rem;
+    overflow: hidden;
+    margin:0!important;
+    background-color: white;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 999;
+    box-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+}
+.footer_set{
+    width:calc(100% - 12rem);/*修改过*/
+    float: left;
+    padding-left:1.19rem;
+    height:4rem;
+}
+.first_span{
+    font-size:1.6rem;
+    color: #D9AD65 ;
+}
+.second_span{
+    font-size:1.2rem;
+    color: #D9AD65;
+    text-decoration: line-through;
+}
+.no_data{
+    width:12.68rem;
+    height: 3.23rem;
+    border-radius:4rem;
+    color: #D9AD65;
+    font-size: 1.2rem;
+    border:1px dotted #E5E5E5 ;
+    background: none;
+}
+.three_span{
+    font-size: 1rem;
+    color: #999;
+    position: absolute;
+    bottom: .3rem;
+    left: 1.4rem;
+}
+.footer_settlement button{/*修改过*/
+    border:none;
+    float: left;
+    width:6rem;
+    height: 4rem;
+    color: #fff;
+    font-size:1.2rem;
+    border-left:1px solid #333;
+    background-color: #333 ;
+}
+.house_tips{
+    position: absolute;
+    right:4.6rem;
+    font-size:1rem!important;
+    margin-top:.5rem!important;
+    margin-bottom: 1rem;
+}
+.error_tips{
+    font-size:1.2rem!important;
+    color: #F55122!important;
+}
+.window_tips{
+    left:9rem;
+    top:1rem;
+}
+.price{
+    text-align: right;
+}
+.swiper-container-horizontal{
+    height: 16rem!important;
+}

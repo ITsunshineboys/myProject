@@ -4,19 +4,14 @@
     <div class="store" flex="main:justify cross:center">
       <div flex>
         <div class="store-img">
-          <img src="http://service.cdlhzz.cn/static/image/2017/12/18/1513588491053.jpg">
+          <img :src="storeData.icon">
         </div>
         <div class="store-name">
-          <p>{{storeData.shop_name}}</p>
+          <p class="title">{{storeData.shop_name}}</p>
           <p class="experience-shop" v-if="storeData.is_line_supplier === 1" @click="isShowAlert = true">线下体验店</p>
         </div>
       </div>
       <div flex>
-        <div class="attention" flex="dir:top main:justify">
-          <span class="iconfont" :class="{'icon-heart': !isAttention, 'icon-heart-solid': isAttention}"></span>
-          <span>关注</span>
-        </div>
-        <div class="split-line"></div>
         <div class="fans" flex="dir:top main:justify">
           <span>{{storeData.follower_number}}</span>
           <span>粉丝数</span>
@@ -40,21 +35,30 @@
         <span class="store-score">{{storeData.comprehensive_score}}</span>
       </li>
       <li flex="main:justify cross:center">
+        <span class="store-title">店家服务</span>
+        <span class="store-score">{{storeData.store_service_score}}</span>
+      </li>
+      <li flex="main:justify cross:center">
+        <span class="store-title">物流速度</span>
+        <span class="store-score">{{storeData.logistics_speed_score}}</span>
+      </li>
+      <li flex="main:justify cross:center">
         <span class="store-title">配送员服务</span>
         <span class="store-score">{{storeData.delivery_service_score}}</span>
       </li>
     </ul>
     <ul class="store-info">
-      <li flex="main:justify cross:center">
-        <span class="store-title">掌柜名</span>
-        <span class="store-msg" flex="cross:center">
-          <span>冬瓜先生</span>
-          <span class="iconfont icon-service"></span>
-        </span>
-      </li>
+      <!--<li flex="main:justify cross:center">-->
+      <!--<span class="store-title">掌柜名</span>-->
+      <!--<span class="store-msg" flex="cross:center">-->
+      <!--<span>冬瓜先生</span>-->
+      <!--<span class="iconfont icon-service"></span>-->
+      <!--</span>-->
+      <!--</li>-->
+      <!--</li>-->
       <li flex="main:justify cross:center">
         <span class="store-title">质保金</span>
-        <span class="store-score" style="color: #d9ad65;">5000质保金</span>
+        <span class="store-score" style="color: #d9ad65;">{{storeData.quality_guarantee_deposit}}质保金</span>
       </li>
     </ul>
     <!-- 线下体验店详情弹窗 -->
@@ -74,7 +78,6 @@
     data () {
       return {
         isShowAlert: false,
-        isAttention: false,
         offlineInfo: {
           address: '',
           iphone: ''
@@ -82,21 +85,21 @@
         storeData: {}
       }
     },
-    activated () {
-      this.axios.get('/supplier/view', {id: this.$route.params.id}, res => {
-        console.log(res, '店铺简介')
-        let data = res.data.supplier_view
-        this.storeData = data
-        this.offlineInfo.address = data.district
-        this.offlineInfo.iphone = data.line_supplier_mobile
-      })
+    created () {
+      this.getStoreData()
     },
     methods: {
       isShow (bool) {
         this.isShowAlert = bool
       },
-      contactShop () {      // 联系商家
-        // do something
+      getStoreData () {
+        this.axios.get('/supplier/view', {id: this.$route.params.id}, res => {
+          console.log(res, '店铺简介')
+          let data = res.data.supplier_view
+          this.storeData = data
+          this.offlineInfo.address = data.district
+          this.offlineInfo.iphone = data.line_supplier_mobile
+        })
       }
     }
   }
@@ -117,6 +120,14 @@
     height: 50px;
   }
 
+  .store-name .title {
+    max-width: 205px;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
   .store-img img {
     width: 100%;
     height: 100%;
@@ -130,26 +141,14 @@
     color: #f18074;
   }
 
-  .fans,
-  .attention {
+  .fans {
     font-size: 12px;
     text-align: center;
     line-height: normal;
   }
 
-  .attention .iconfont {
-    font-size: 20px;
-  }
-
   .fans span:first-child {
     margin-top: 3px;
-  }
-
-  .split-line {
-    margin: 10px 6px 0;
-    width: 1px;
-    height: 20px;
-    background-color: #cdd3d7;
   }
 
   .store-info {
@@ -188,5 +187,26 @@
   .store-score {
     font-size: 14px;
     color: #222222;
+  }
+
+  /* iphone 5 */
+  @media screen and (max-width: 320px) {
+    .store-name .title {
+      max-width: 150px;
+    }
+  }
+
+  /* galaxy S5 */
+  @media screen and (min-width: 321px) and (max-width: 360px) {
+    .store-name .title {
+      max-width: 190px;
+    }
+  }
+
+  /* iphone 7 plus */
+  @media screen and (min-width: 376px) and (max-width: 414px) {
+    .store-name .title {
+      max-width: 240px;
+    }
   }
 </style>

@@ -43,7 +43,7 @@
         secondClass: []
       }
     },
-    activated () {
+    created () {
       this.isSelectClass = this.$route.params.id
       this.axios.get('/mall/categories-with-children', '', response => {
         console.log(response)
@@ -99,7 +99,9 @@
   }
 
   .content-right {
+    flex: 1 1 auto;
     padding: 30px 18px;
+    overflow-x: hidden;
   }
 
   .content-left div {
@@ -125,13 +127,13 @@
 
   .hd {
     margin-bottom: 20px;
-    height: 30px;
-    line-height: 30px;
     text-align: center;
     color: #666;
   }
 
   .hd .text {
+    display: inline-block;
+    max-width: 160px;
     position: relative;
   }
 
@@ -158,7 +160,8 @@
 
   .cate-item {
     display: inline-block;
-    margin-right: 24px;
+    /*margin-right: 24px;*/
+    margin-right: 10%;
     margin-bottom: 30px;
     font-size: 0;
     width: 60px;
@@ -182,5 +185,32 @@
     font-size: 14px;
     color: #999;
     text-align: center;
+  }
+
+  /* iphone 5 */
+  @media screen and (max-width: 320px)  {
+    .content-right {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    .cate-item {
+      margin-right: 5px;
+      margin-bottom: 20px;
+    }
+  }
+
+  /* galaxy S5 */
+  @media screen and (min-width: 321px) and (max-width: 360px) {
+    .cate-item {
+      margin-right: 16px;
+    }
+  }
+
+  /* iphone 7 plus */
+  @media screen and (min-width: 376px) and (max-width: 414px) {
+    .cate-item {
+      margin-right: 44px;
+    }
   }
 </style>

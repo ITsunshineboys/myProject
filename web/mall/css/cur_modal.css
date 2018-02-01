@@ -1,0 +1,49 @@
+.cur_modal{
+    top:18rem!important;
+    font-family:'黑体';
+}
+.cur_modal .modal-dialog{
+    width:20.67rem!important;
+    border-radius:.16rem!important;
+    margin:auto!important;
+}
+.cur_modal .modal-body{
+    padding-top: 3.07rem;
+    padding-bottom: 2.8rem;
+    text-align: center;
+    border-bottom:2px solid #CDD3D7 ;
+}
+.cur_modal .modal-body p:first-child{
+    font-size: 32px;
+    color: #666666;
+}
+.cur_modal .modal-body p:last-child{
+    font-size: 28px;
+    color: #999;
+}
+.cur_modal .modal-footer{
+    padding: .43rem 0;
+    text-align: center;
+    font-size: 32px;
+    color: #222222;
+}
+.cur_modal .apply p{
+    font-size: 32px!important;
+}
+.cur_modal .modal-footer button:first-child{
+    width: 49.5%;
+    background: none;
+    border: none;
+    border-right: 1px solid #999;
+    padding: 0;
+    height: 100%;
+    color: #999;
+}
+.cur_modal .modal-footer button:last-child{
+    width: 47.5%;
+    background: none;
+    border: none;
+    padding: 0;
+    height: 100%;
+    color: #222;
+}

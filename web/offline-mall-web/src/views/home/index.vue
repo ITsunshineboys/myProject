@@ -3,7 +3,7 @@
     <flexbox class="search_header">
       <flexbox-item class="location" :span="4/25">
         <router-link :to="{path:'/choose-city',query:{cur_city:cur_city}}">
-          <p><i class="iconfont icon-location"></i>{{city}}</p>
+          <p style="white-space:nowrap;overflow: hidden;text-overflow: ellipsis"><i class="iconfont icon-location"></i>{{city}}</p>
         </router-link>
       </flexbox-item>
       <flexbox-item style="margin: 0" :span="18/25">
@@ -11,9 +11,6 @@
           <search v-model="search" cancel-text="" placeholder="超级无敌地暖片" ref="search"></search>
         </router-link>
       </flexbox-item>
-      <!--<flexbox-item :span="3/25" style="margin: 0;">-->
-        <!--<i style="font-size:24px;" class="iconfont icon-news-square"></i>-->
-      <!--</flexbox-item>-->
     </flexbox>
     <swiper dots-position="center" :list="banner_list" loop auto height="171px" :aspect-ratio="375/171" :show-desc-mask="false"></swiper>
     <flexbox :gutter="0" class="category" wrap="wrap">
@@ -28,10 +25,12 @@
     <card :header="{title:'推荐'}" class="command">
       <flexbox align="flex-start" :gutter="0" slot="content" wrap="wrap">
 
-          <flexbox-item style="margin-left: 20px!important;" :span="56/125" class="command_list" :class="{odd_col:index%2==0,even_col:index%2==1}"
+          <flexbox-item style="margin-left: 3.46%!important;" :span="56/125" class="command_list" :class="{odd_col:index%2==0,even_col:index%2==1}"
                         v-for="(item,index) in recommended_list" :key="index">
             <router-link :to="'/good-detail/' + item.url">
-            <img width="168px" height="160px" :src="item.image" alt="">
+              <div style="width: 100%;height: 160px" :style="{'background-image':'url('+item.image+')',backgroundSize:'contain',backgroundRepeat:'no-repeat',backgroundPosition:'center center' }">
+                <!--<img style="width: 100%;" :src="item.image" alt="">-->
+              </div>
             <p class="command_title nowrap">{{item.title}}</p>
             <p class="command_description nowrap">{{item.description}}</p>
             <p class="command_price">￥{{item.platform_price}}</p>
@@ -39,17 +38,13 @@
           </flexbox-item>
       </flexbox>
     </card>
-    <!--<div class="shopcart">-->
-    <!--<p><i class="iconfont icon-home-shoppingcart"></i></p>-->
-    <!--<p style="font-size: 12px;color: #999;">购物车</p>-->
-    <!--</div>-->
-    <!--<div style="height: 64px;"></div>-->
-    <!--<flexbox class="nav" wrap="wrap">-->
-    <!--<flexbox-item style="text-align: center;margin: 0;" :span="1/4" v-for="(item,index) in nav_list" :key="index">-->
-    <!--<img width="23px" height="23px" :src="item.image">-->
-    <!--<p :style="{color:index==1?'#D9AD65':'#999'}" style="font-size: 12px;">{{item.title}}</p>-->
-    <!--</flexbox-item>-->
-    <!--</flexbox>-->
+    <div style="height: 48px;"></div>
+    <flexbox class="nav" wrap="wrap" style="padding-top:1%;background-color:#fff;position: fixed;bottom: 0;">
+    <flexbox-item style="text-align: center;margin: 0;" @click.native="goNewModule(item)" :span="1/3" v-for="(item,index) in nav_list" :key="index">
+    <img width="23px" height="23px" :src="item.image">
+    <p :style="{color:index==1?'#D9AD65':'#999'}" style="font-size: 12px;">{{item.title}}</p>
+    </flexbox-item>
+    </flexbox>
   </div>
 </template>
 
@@ -68,10 +63,9 @@
         city: '成都',
         cur_city: ['510000', '510100'],
         nav_list: [
-          {image: require('../../assets/images/Quote.png'), title: '报价'},
+          {image: require('../../assets/images/Quote.png'), title: '报价', url: '/mall/index.html'},
           {image: require('../../assets/images/shop.png'), title: '商城'},
-          {image: require('../../assets/images/shopping_cart.png'), title: '购物车'},
-          {image: require('../../assets/images/Mine.png'), title: '我的'}
+          {image: require('../../assets/images/Mine.png'), title: '我的', url: '/distribution-web/index.html'}
         ]
       }
     },
@@ -85,7 +79,13 @@
       Grid,
       GridItem
     },
-    method: {},
+    methods: {
+      goNewModule (item) {
+        if (item.url !== undefined) {
+          window.location.href = item.url
+        }
+      }
+    },
     created () {
       if (this.$route.query.cur_city !== undefined) {
         this.cur_city = this.$route.query.cur_city
@@ -98,7 +98,7 @@
         console.log(res)
         const imgList = res.data.carousel
         this.banner_list = imgList.map((item, index) => ({
-          url: item.url,
+          url: '/good-detail/' + item.url,
           img: item.image,
           title: '',
           id: item.id
@@ -114,6 +114,7 @@
         console.log(res)
         this.recommended_list = res.data.recommend_second
       })
+      window.AndroidWebView.showTable()
     },
     mounted () {
       this.axios.get('/order/iswxlogin', {}, (res) => {

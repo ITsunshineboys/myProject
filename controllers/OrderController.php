@@ -3708,7 +3708,7 @@ class OrderController extends Controller
                             }
 
                             $supplier=Supplier::findOne($GoodsOrder->supplier_id);
-                            $code=UserNewsRecord::AddOrderNewRecord(User::findOne($supplier->uid),'订单已付款，请发货',\Yii::$app->params['supplierRoleId'],"订单号{$orders[$k]},{$Goods->goods_name}",$orders[$k],$Goods->sku,GoodsOrder::STATUS_DESC_DETAILS);
+                            $code=UserNewsRecord::AddOrderNewRecord(User::findOne($supplier->uid),'订单已付款，请发货',\Yii::$app->params['supplierRoleId'],"订单号{$orders[$k]},{$Goods['goods_name']}",$orders[$k],$Goods['sku'],GoodsOrder::STATUS_DESC_DETAILS);
                             if (!$code==200)
                             {
                                 $code=1000;
@@ -4651,7 +4651,7 @@ class OrderController extends Controller
             }
             return Json::encode([
                 'code' =>  200,
-                'msg'  => '提醒发货',
+                'msg'  => '提醒成功',
                 'data' =>$end_time
             ]);
         }else{
@@ -4885,11 +4885,12 @@ class OrderController extends Controller
                         }
 
                         $supplier=Supplier::findOne($GoodsOrder->supplier_id);
-                        $code=UserNewsRecord::AddOrderNewRecord(User::findOne($supplier->uid),'订单已付款，请发货',\Yii::$app->params['supplierRoleId'],"订单号{$orders[$k]},{$Goods->goods_name}",$orders[$k],$Goods->sku,GoodsOrder::STATUS_DESC_DETAILS);
+                        $code=UserNewsRecord::AddOrderNewRecord(User::findOne($supplier->uid),'订单已付款，请发货',\Yii::$app->params['supplierRoleId'],"订单号{$orders[$k]},{$Goods['goods_name']}",$orders[$k],$Goods['sku'],GoodsOrder::STATUS_DESC_DETAILS);
                         if (!$code==200)
                         {
                             $code=1000;
                             $tran->rollBack();
+
                             return $code;
                         }
                     }

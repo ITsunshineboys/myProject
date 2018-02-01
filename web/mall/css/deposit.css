@@ -1,0 +1,136 @@
+.pay-content {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    color: #4a4a4a;
+    font-size: 1.33rem;
+    background-color: #F6F6F6;
+}
+
+.contact-us {
+    margin-top: 5rem;
+    padding:1.2rem;
+    background-color: #fff;
+}
+
+.contact-us label {
+    font-weight: normal;
+}
+
+.contact-us label:first-child {
+    padding-bottom: 1rem;
+    border-bottom: .08rem solid #e9edee;
+}
+
+.contact-us label:last-child {
+    margin-top: 1rem;
+}
+
+.contact-us span {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    width: 3rem !important;
+    padding-right: .83rem;
+    border-right: 2px solid #e5e5e5;
+}
+
+.contact-us input {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border: none;
+}
+
+.contact-us input::-webkit-input-placeholder {
+    color: #b8b6b6;
+}
+
+.contact-us input:-moz-placeholder {
+    color: #b8b6b6;
+}
+
+.contact-us input::-moz-placeholder {
+    color: #b8b6b6;
+}
+
+.contact-us input:-ms-input-placeholder {
+    color: #b8b6b6;
+}
+
+.pay {
+    display: block;
+    margin: 2.5rem auto 1.67rem;
+    width: 28.92rem;
+    height: 4rem;
+    line-height: 4rem;
+    font-size: 1.5rem;
+    color: #fff;
+    outline: none;
+    background-color: #333;
+    border: none;
+    border-radius: 0.5rem;
+}
+
+.pay[disabled] span {
+    opacity: .25;
+}
+
+.help {
+    font-size: 1.17rem;
+    text-align: center;
+}
+
+.help a {
+    color: #333;
+}
+
+.help a:focus {
+    text-decoration: none;
+}
+
+/* model start */
+.model {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(74, 74, 74, 0.25);
+}
+
+.model-body {
+    width: 20.83rem;
+    background-color: rgba(255, 255, 255, 1);
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.model-body > div {
+    height: 9.17rem;
+    font-size: 1.17rem;
+    color: #6c6c6c;
+}
+
+.model-body > div > p {
+    margin-bottom: 0;
+}
+
+.model-body > div > p:first-child {
+    font-size: 1.33rem;
+    color: #4a4a4a;
+}
+
+.model-body button {
+    width: 100%;
+    height: 4rem;
+    font-size: 1.33rem;
+    line-height: 4rem;
+    outline: none;
+    background-color: #fff;
+    border: none;
+    border-top: .08rem solid #cdd3d7;
+}
+/* model end */

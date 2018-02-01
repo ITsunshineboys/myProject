@@ -1,0 +1,76 @@
+<div class="back">
+    <header>
+        <div>
+            <a class="return_btn" ng-if="edit_status==0" ng-click="goPrev()">
+                <img src="images/mall_nav_return.png" class="in_span">
+            </a>
+            <p class="pic_span" style="text-align: center;">{{header_title}}</p>
+            <!--<p class="cur_location">-->
+            <!--<i class="icon icon-map-marker icon-3x map"></i>-->
+            <!--<span class="postion_span">成都</span>-->
+            <!--</p>-->
+            <p class="cur_location">
+            <span class="postion_span" ng-click="changeEditStatus()">{{edit_status==0?'编辑':'完成'}}</span>
+            </p>
+        </div>
+    </header>
+    <section style="overflow: hidden">
+        <!--其它材料-->
+        <div class="sheet_material">
+            <ul class="wall_ul">
+                <li ng-repeat="item in basic_materials.second_level">
+                    <div ng-class="{'cur_animate':edit_status == 1}" class="goods_detail" data-target="#myModal" data-toggle="{{modal_status}}" ng-repeat="item1 in item.goods"
+                         ng-click="getDetails(item1)">
+                        <div class="wall_span_brand">
+                            <span ng-style="{'color':(item1.status == 0?'#D9AD65':'#666')}" class="wall_span">{{item1.title}}x{{item1.quantity}}</span><br>
+                            <span ng-style="{'color':(item1.status == 0?'#D9AD65':'#959292')}" class="wall_brand">{{item1.name}}</span>
+                        </div>
+                        <span class="wall_money">{{item1.cost | currency:'￥'}}
+                            <img ng-if="edit_status==0" src="images/left_more.png" alt=""></span>
+                        <button class="del" ng-click="deleteItem(item1)" ng-if="edit_status == 1">删除</button>
+                    </div>
+                </li>
+            </ul>
+            <p ng-if="basic_materials.count==0&&edit_status == 1" class="no_data">暂无材料显示</p>
+        </div>
+
+        <!--添加材料按钮-->
+        <div class="add_material">
+            <a ng-if="edit_status == 0" ng-click="goLevelThree()">
+                <span>点击添加装修材料</span>
+            </a>
+        </div>
+        <div ng-show="cur_item.count>6"></div>
+        <!--按钮、-->
+        <div class="preservation">
+            <span>合计：</span>
+            <span class="money_col">{{basic_materials.cost | currency:'￥'}}</span>
+            <button ng-if="edit_status == 0" ng-click="saveData()">保存</button>
+        </div>
+
+        <!--模态框  ===== 更换材料 -->
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" id="whit">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <div class="comment_img">
+                        <img ng-src="{{goods_details.cover_image}}" alt=""/>
+                    </div>
+                    <div class="comment">
+                        <p class="goods_name">{{goods_details.goods_name}}</p>
+                        <p class="price">{{goods_details.platform_price | currency:'￥'}}</p>
+                        <p>品牌名称：{{goods_details.name}}</p>
+                        <p ng-if="goods_details.series_name!=''">系列：{{goods_details.series_name}}</p>
+                        <p ng-if="goods_details.style_name!=''">风格：{{goods_details.style_name}}</p>
+                    </div>
+                    <button type="button" data-dismiss="modal" class="go_detail" ng-click="goDetails()">查看详情</button>
+                    <button type="button" data-dismiss="modal" class="go_replace" ng-click="goDetails(1)">更换</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+</div>

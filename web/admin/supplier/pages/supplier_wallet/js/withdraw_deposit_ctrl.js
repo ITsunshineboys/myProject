@@ -71,7 +71,7 @@ withdraw_deposit.controller("withdraw_deposit_ctrl", function (_ajax, $rootScope
                         $scope.moneyflag = true;
                         break;
                     case 1000:
-                        $scope.failwarning = "您尚未绑定银行卡";
+                        $scope.failwarning = res.msg;
                         $("#withdraw_warning").modal('show');
                         $scope.backpage = false;
                         break;

@@ -1,0 +1,84 @@
+body{
+    background: #f6f6f6;
+}
+.header_cell{
+    
+}
+.header_cell img{
+    position: absolute;
+    top: 1.5rem;
+    left: 2.5rem;
+    width: 1.2rem;
+}
+.header_cell input{
+    width: 25.8rem;
+    height: 2.7rem;
+    margin-top: 0.7rem;
+    border: 2px solid #e5e5e5;
+    border-radius: 3rem;
+    padding-left: 3rem;
+    font-size: 1.2rem;
+    margin-left: 1.2rem;
+    line-height:2rem;
+}
+.header_cell a{
+    font-size: 1.2rem;
+    color: #666;
+    width: 5rem;
+    height: 4rem;
+    display: block;
+    line-height: 4rem;
+}
+.header_i{
+    color: #d0d0d0;
+    position: absolute;
+    left:2.2rem;
+    top:1.6rem;
+}
+.cell_ul{
+    padding: 0 1.2rem;
+}
+.cell_ul li{
+    border-bottom: 2px solid #dcdcdc;
+}
+.cell_ul li a{
+    width: 100%;
+    display: block;
+    padding: 1.4rem 0;
+}
+.second_fru {
+    color: #C2C2C2;
+    font-size: 1rem;
+}
+.first_fru {
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.have_data{
+    margin-top: 5rem;
+    background: #fff;
+}
+.no_data{
+    text-align: center;
+    padding-top: 10rem;
+    /*display: none;*/
+}
+.no_data div{
+    font-size: 1.3rem;
+    color: #B8B6B6;
+}
+.no_data a{
+    display: block;
+    position: relative;
+    top: 2rem;
+    font-size: 1.2rem;
+    text-decoration: none;
+    border: 2px solid #333;
+    color: #333;
+    border-radius: 3rem;
+    padding: 0.6rem 1.2rem;
+    width: 50%;
+    text-align: center;
+    margin: 0 auto;
+}

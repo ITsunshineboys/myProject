@@ -54,7 +54,7 @@ export default {
       // baseURL: '/api/',
       url,
       data: qs.stringify(data),
-      timeout: 1000,
+      // timeout: 0,
       headers: {
         'X-Requested-With': 'XMLHttpRequest',
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -73,7 +73,7 @@ export default {
       // baseURL: '/api/',
       url,
       params, // get 请求时带的参数
-      timeout: 1000,
+      // timeout: 0,
       headers: {
         'X-Requested-With': 'XMLHttpRequest'
       }

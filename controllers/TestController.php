@@ -11,6 +11,7 @@ use app\models\GoodsBrand;
 use app\models\GoodsComment;
 use app\models\GoodsOrder;
 use app\models\GoodsStat;
+use app\models\GoodsStyle;
 use app\models\Invoice;
 use app\models\LogisticsDistrict;
 use app\models\LogisticsTemplate;
@@ -30,6 +31,7 @@ use app\models\ShippingCart;
 use app\models\Supplier;
 use app\models\User;
 use app\models\UserAddress;
+use app\models\UserBankInfo;
 use app\models\UserRole;
 use app\services\BasisDecorationService;
 use app\services\ExceptionHandleService;
@@ -502,6 +504,42 @@ class TestController extends Controller
                 'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+    }
+
+    /**
+     * Handle goods style
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function actionHandleGoodsStyle()
+    {
+        $goodsIds = GoodsStyle::find()->select(['goods_id'])->asArray()->column();
+        $where = [
+            'and',
+            ['>', 'style_id', 0],
+            ['not in', 'id', $goodsIds]
+        ];
+        $goodsIdsStyleIds = Goods::find()->select(['id', 'style_id'])->where($where)->asArray()->all();
+        
+        $tran = Yii::$app->db->beginTransaction();
+        foreach ($goodsIdsStyleIds as $row) {
+            $gy = new GoodsStyle;
+            $gy->goods_id = $row['id'];
+            $gy->style_id = $row['style_id'];
+            if (!$gy->save(false)) {
+                $tran->rollBack();
+                return 'failed_' . $row['id'];
+            }
+        }
+        $tran->commit();
+        return 'ok';
+    }
+
+    public  function  actionTest()
+    {
+        $user=\Yii::$app->user->identity;
+        return Json::encode(UserBankInfo::find()->asArray()->where(['uid'=>$user->id])->all());
     }
 
 }

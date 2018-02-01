@@ -405,7 +405,7 @@ class Supplier extends ActiveRecord
                 return $code;
             }
 
-            if (!UserRole::addUserRole($user->id, Yii::$app->params['supplierRoleId'], $operator)) {
+            if (!UserRole::addUserRole($user->id, Yii::$app->params['supplierRoleId'], $operator, Role::AUTHENTICATION_STATUS_APPROVED)) {
                 $transaction->rollBack();
 
                 $code = 500;
@@ -423,7 +423,7 @@ class Supplier extends ActiveRecord
                     ? trim($attrs['identity_card_back_image'])
                     : '';
 
-                if (!$user->validateIdentity($operator)) {StringService::writeLog('test', json_encode($supplier->errors), 'supplier-add-validateIdentity');
+                if (!$user->validateIdentity($operator)) {
                     $transaction->rollBack();
 
                     $code = 1000;
@@ -439,7 +439,7 @@ class Supplier extends ActiveRecord
             }
 
             if (!User::checkIdentityAuthorized($user->identity_no)
-                && !UserRole::addUserRole($user->id, Yii::$app->params['ownerRoleId'], $operator)
+                && !UserRole::addUserRole($user->id, Yii::$app->params['ownerRoleId'], $operator, Role::AUTHENTICATION_STATUS_APPROVED)
             ) {
                 $transaction->rollBack();
 
@@ -914,7 +914,6 @@ class Supplier extends ActiveRecord
         if (isset($data['category_id'])) {
             $cat = GoodsCategory::findOne($data['category_id']);
             $data['category_name'] = $cat->fullTitle();
-            unset($data['category_id']);
         }
 
         if (isset($data['type_shop'])) {
