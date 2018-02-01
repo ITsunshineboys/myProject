@@ -4651,7 +4651,7 @@ class OrderController extends Controller
             }
             return Json::encode([
                 'code' =>  200,
-                'msg'  => '提醒发货',
+                'msg'  => '提醒成功',
                 'data' =>$end_time
             ]);
         }else{
