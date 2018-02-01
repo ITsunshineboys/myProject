@@ -444,8 +444,7 @@ class Wxpay  extends ActiveRecord
         //、获取用户openid
         $tools = new PayService();
         $input = new WxPayUnifiedOrder();
-
-        $attach= base64_encode("{$user->last_role_id_app},{$user->id},{$user->id},{$out_trade_no}");
+        $attach= base64_encode("{$user->last_role_id_app},{$user->id},{$out_trade_no}");
         $input->SetBody('艾特智造-充值');
         $input->SetAttach($attach);
         $input->SetOut_trade_no(WxPayConfig::APP_MCHID.date("YmdHis"));

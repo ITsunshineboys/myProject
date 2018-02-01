@@ -1668,7 +1668,7 @@ class WithdrawalsController extends Controller
                 $count=strlen($cashData['bankcard']);
                 $list[]=[
                     'name'=>'到账银行卡',
-                    'value'=>$cashData['bankname']."(".substr($cashData['bankcard'],$count-5,4).")"];
+                    'value'=>$cashData['bankname']."(".substr($cashData['bankcard'],$count-4,4).")"];
                 $list[]=[
                     'name'=>'申请时间',
                     'value'=>date('Y-m-d H:i',$cashData['apply_time'])
@@ -1691,7 +1691,7 @@ class WithdrawalsController extends Controller
                 $count=strlen($cashData['bankcard']);
                 $list[]=[
                     'name'=>'到账银行卡',
-                    'value'=>$cashData['bankname']."(".substr($cashData['bankcard'],$count-5,4).")"];
+                    'value'=>$cashData['bankname']."(".substr($cashData['bankcard'],$count-4,4).")"];
                 $list[]=[
                     'name'=>'申请时间',
                     'value'=>date('Y-m-d H:i',$cashData['apply_time'])
@@ -1711,7 +1711,7 @@ class WithdrawalsController extends Controller
                 $count=strlen($cashData['bankcard']);
                 $list[]=[
                     'name'=>'到账银行卡',
-                    'value'=>$cashData['bankname']."(".substr($cashData['bankcard'],$count-5,4).")"];
+                    'value'=>$cashData['bankname']."(".substr($cashData['bankcard'],$count-4,4).")"];
                 $list[]=[
                     'name'=>'申请时间',
                     'value'=>date('Y-m-d H:i',$cashData['apply_time'])
