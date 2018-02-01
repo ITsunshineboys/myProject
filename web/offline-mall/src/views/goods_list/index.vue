@@ -41,7 +41,7 @@
           <checker v-model="filterParams.seriesParams" default-item-class="btn" selected-item-class="btn-primary" v-if="seriesData.length !== 0">
             <checker-item v-for="obj in seriesData" :value="obj.id" :key="obj.id">{{obj.name}}</checker-item>
           </checker>
-          <p v-else>暂无风格</p>
+          <p v-else>暂无系列</p>
         </div>
         <cell :title="'价格区间'" :border-intent="false" disabled></cell>
         <div class="modal-filter-style price-range">
@@ -54,7 +54,7 @@
           <checker v-model="filterParams.brandParams" default-item-class="btn" selected-item-class="btn-primary" type="checkbox" v-if="brandData.length !== 0">
             <checker-item v-for="obj in brandData" :value="obj.id" :key="obj.id">{{obj.name}}</checker-item>
           </checker>
-          <p v-else>暂无风格</p>
+          <p v-else>暂无品牌</p>
         </div>
         <div class="btn-group">
           <button class="btn-reset" type="button" @click="filterReset">重置</button>

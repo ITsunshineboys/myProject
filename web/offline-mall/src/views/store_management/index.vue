@@ -226,7 +226,6 @@
           status: this.storeData.is_follow === 1 ? 0 : 1
         }
         this.axios.post('/user-follow/user-follow-shop', params, res => {
-          window.AndroidWebView.clearCache()
           this.getFansData()
         })
       },
@@ -293,6 +292,7 @@
     z-index: 10;
     width: 100%;
   }
+
   .store {
     margin-top: 46px;
     margin-bottom: 10px;
