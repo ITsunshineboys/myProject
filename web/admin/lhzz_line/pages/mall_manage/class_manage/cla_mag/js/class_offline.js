@@ -126,7 +126,7 @@ app.controller('class_offline', ['$scope', '$stateParams', '_ajax', function ($s
 
     /*全选*/
     $scope.checkAll = function () {
-        !$scope.table.roles.length ? $scope.table.roles = $scope.listdata.map(function (item) {
+        $scope.table.roles.length !==  $scope.listdata.length ? $scope.table.roles = $scope.listdata.map(function (item) {
             return item.id;
         }) : $scope.table.roles.length = 0;
     };

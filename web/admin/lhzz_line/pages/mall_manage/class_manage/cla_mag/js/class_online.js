@@ -131,7 +131,7 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
 
     /*全选*/
     $scope.checkAll = function () {
-        !$scope.table.roles.length ? $scope.table.roles = $scope.listdata.map(function (item) {
+       $scope.table.roles.length !==  $scope.listdata.length ? $scope.table.roles = $scope.listdata.map(function (item) {
             return item.id;
         }) : $scope.table.roles = [];
     };
