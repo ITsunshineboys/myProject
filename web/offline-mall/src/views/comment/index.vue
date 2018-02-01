@@ -47,6 +47,7 @@
         user_icon: require('../../assets/images/user_icon_default.png'), // 默认用户头像
         comment_details: [],
         last_tab: '',
+        isLoading: false,
         params: {
           id: '',
           page: 1,
@@ -106,6 +107,7 @@
           this.comment_details = this.comment_details.concat(res.data.goods_comments.details)
         })
       },
+      // 滚动加载
       handleScroll () {
         let scrollTop = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset     // 滚动条位置
         sessionStorage.setItem('commentPos', scrollTop)      // 记录滚动条位置
