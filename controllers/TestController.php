@@ -510,18 +510,20 @@ class TestController extends Controller
     {
         $goodsIds = GoodsStyle::find()->select(['goods_id'])->asArray()->column();
         $where = [
+            'and',
             ['>', 'style_id', 0],
             ['not in', 'id', $goodsIds]
         ];
-        $goodsIdsStyleIds = Goods::find()->select(['goods_id', 'style_id'])->where($where)->asArray()->all();
+        $goodsIdsStyleIds = Goods::find()->select(['id', 'style_id'])->where($where)->asArray()->all();
+        
         $tran = Yii::$app->db->beginTransaction();
         foreach ($goodsIdsStyleIds as $row) {
             $gy = new GoodsStyle;
-            $gy->goods_id = $row['goods_id'];
+            $gy->goods_id = $row['id'];
             $gy->style_id = $row['style_id'];
             if (!$gy->save(false)) {
                 $tran->rollBack();
-                return 'failed_' . $row['goods_id'];
+                return 'failed_' . $row['id'];
             }
         }
         $tran->commit();
