@@ -26,7 +26,15 @@ class UserNewsRecord extends ActiveRecord
     }
 
     /**
+     * @param $user
+     * @param $title
+     * @param $role_id
+     * @param $content
+     * @param $order_no
+     * @param $sku
+     * @param $type
      * @return int
+     * @throws \yii\db\Exception
      */
     public static function  AddOrderNewRecord($user, $title, $role_id, $content, $order_no, $sku, $type)
     {
