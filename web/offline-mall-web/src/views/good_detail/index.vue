@@ -75,6 +75,7 @@
 
 
 
+
           </div>
           <span></span>
           <div>
@@ -87,10 +88,12 @@
 
 
 
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
+
 
 
 
@@ -162,7 +165,7 @@
       <!--底部按钮-->
       <flexbox class="bottom-tabbar">
         <flexbox-item :span="155/375"></flexbox-item>
-        <flexbox-item :span="110/375">
+        <flexbox-item :span="110/375" @click.native="toMatchEstate">
           匹配小区
 
         </flexbox-item>
@@ -195,6 +198,7 @@
         <flexbox class="count-bottom-btn">
           <flexbox-item alt="now" @click.native="buyNow">
             立即购买
+
 
           </flexbox-item>
         </flexbox>
@@ -444,6 +448,9 @@
       // 库存不足确认
       goodshortSure () {
         this.show_goodshort_alert = false
+      },
+      toMatchEstate () {
+        window.location.href = '/mall/index.html#!/search'
       }
     }
   }
