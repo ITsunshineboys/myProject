@@ -223,7 +223,7 @@
 
   .command_list { /*推荐列表项*/
     margin-bottom: 9px;
-    box-shadow: 0px 2px 4px 0px #F6F6F6;
+    /*box-shadow: 0px 2px 4px 0px #F6F6F6;*/
   }
 
   .command_title { /*推荐商品名称*/
