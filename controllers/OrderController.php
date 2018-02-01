@@ -583,8 +583,10 @@ class OrderController extends Controller
             'msg' => 'ok'
         ]);
     }
+
     /**
      * 样板间支付订单异步返回
+     * @throws Exception
      */
     public function actionAliPayEffectEarnestNotify()
     {
@@ -852,7 +854,6 @@ class OrderController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $id=1;
         $openId=$request->post('wxpayCode', '');
         if (!$openId)
         {
@@ -1117,12 +1118,10 @@ class OrderController extends Controller
     }
 
 
-
     /**
      * 微信公众号样板间申请定金异步返回
-     * wxpay notify action
-     * wxpay nityfy apply Deposit database
      * @return bool
+     * @throws Exception
      */
     public function actionWxPayEffectEarnestNotify(){
         //获取通知的数据
@@ -1376,18 +1375,15 @@ class OrderController extends Controller
      * @throws Exception
      */
     public function actionPlatformhandlesubmit(){
-        $user = \Yii::$app->user->identity;
-        if (!$user) {
-            $code = 1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $lhzz=self::LhzzIdentity($user);
-        if (!is_numeric($lhzz))
+        $data=UserRole::VerifyRolePermissions(\Yii::$app->params['lhzzRoleId']);
+        if($data['code']!=200)
         {
-            return $lhzz;
+            $code = $data['code'];
+            return Json::encode
+            ([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
         }
         $request    = Yii::$app->request;
         $order_no   = trim($request->post('order_no',''));
@@ -3584,9 +3580,11 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
+
     /**
      * 去付款支付宝app支付
      * @return string
+     * @throws \yii\base\Exception
      */
     public  function actionAppOrderAliPay()
     {
@@ -3608,7 +3606,7 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-         $orders=explode(',',$postData['list']);
+        $orders=explode(',',$postData['list']);
         if (!is_array($orders))
         {
             $code=1000;
@@ -3616,6 +3614,17 @@ class OrderController extends Controller
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
+        }
+        foreach ($orders as &$orderNo)
+        {
+            $code=GoodsOrder::VerificationBuyerIdentity($orderNo,$user);
+            if ($code!=200)
+            {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
         }
         $orderAmount=GoodsOrder::CalculationCost($orders);
         if ( $postData['total_amount']*100 != $orderAmount){
@@ -4789,6 +4798,17 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        foreach ($orders as &$orderNo)
+        {
+            $code=GoodsOrder::VerificationBuyerIdentity($orderNo,$user);
+            if ($code!=200)
+            {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+        }
         $orderAmount=123;
 //        $orderAmount=GoodsOrder::CalculationCost($orders);
 //        if ($postData['total_amount']*100  != $orderAmount){
@@ -4840,27 +4860,7 @@ class OrderController extends Controller
                 $role_id=$Ord->role_id;
                 $user=User::findOne($Ord->user_id);
                 $role=Role::GetRoleByRoleId($role_id,$user);
-                switch ($role_id)
-                {
-                    case 2:
-                        $role_number=$role->worker_type_id;
-                        break;
-                    case 3:
-                        $role_number=$role->decoration_company_id;
-                        break;
-                    case 4:
-                        $role_number=$role->decoration_company_id;
-                        break;
-                    case 5:
-                        $role_number=$role->id;
-                        break;
-                    case 6:
-                        $role_number=$role->shop_no;
-                        break;
-                    case 7:
-                        $role_number=$role->aite_cube_no;
-                        break;
-                }
+                $role_number=Role::GetUserRoleNumber($role,$role_id);
                 $transaction_no=GoodsOrder::SetTransactionNo($role_number);
                 foreach ($orders as $k =>$v){
                     $GoodsOrder=GoodsOrder::find()
@@ -4877,11 +4877,11 @@ class OrderController extends Controller
                            return false;
                         }
                     }
-                    if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
+                    if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=GoodsOrder::PAY_STATUS_UNPAID)
                     {
                         return false;
                     }
-                    $GoodsOrder->pay_status=1;
+                    $GoodsOrder->pay_status=GoodsOrder::PAY_STATUS_PAID;
                     $GoodsOrder->pay_name=PayService::WE_CHAT_APP_PAY;
                     $res=$GoodsOrder->save(false);
                     if (!$res)
@@ -5082,19 +5082,15 @@ class OrderController extends Controller
                     'msg'  => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-            if (empty($one['num']))
+            if (!empty($one['num']))
             {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code]
-                ]);
+                if ($one['num'] != 0 && $one['num'] !=null){
+                    $goods_ [] = $one;
+                }else{
+                    unset($one);
+                }
             }
-            if ($one['num'] != 0 || $one['num'] !=null){
-                $goods_ [] = $one;
-            }else{
-                unset($one);
-            }
+
         }
         //步骤2：获取每个商品物流数据
         foreach ($goods_ as  $k =>$v)
@@ -5345,9 +5341,11 @@ class OrderController extends Controller
             ]
         ]);
     }
+
     /**
      * 清空失效商品
      * @return string
+     * @throws Exception
      */
     public function actionDelInvalidGoods()
     {

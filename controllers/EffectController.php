@@ -151,41 +151,41 @@ class EffectController extends Controller
     }
 
 
-//    /**
-//     * 删除完成的样板间
-//     * @return string
-//     */
-//    public function actionEffectApplyDel(){
-//        $user = Yii::$app->user->identity;
-//        if (!$user){
-//            $code=403;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg' => Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        }
-//        $code = 1000;
-//        $id=(int)Yii::$app->request->post('id');
-//        if(!$id){
-//            Json::encode([
-//                'code'=>$code,
-//                'msg'=>Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        }
-//        $res=EffectEarnest::deleteAll(['id'=>$id]);
-//        if(!$res){
-//            $code=500;
-//            Json::encode([
-//                'code'=>$code,
-//                'msg'=>Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        }
-//        return Json::encode([
-//            'code'=>200,
-//            'msg'=>'ok',
-//        ]);
-//
-//    }
+    /**
+     * 删除完成的样板间
+     * @return string
+     */
+    public function actionEffectApplyDel(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code = 1000;
+        $id=(int)Yii::$app->request->post('id');
+        if(!$id){
+            Json::encode([
+                'code'=>$code,
+                'msg'=>Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $res=EffectEarnest::deleteAll(['id'=>$id]);
+        if(!$res){
+            $code=500;
+            Json::encode([
+                'code'=>$code,
+                'msg'=>Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+        ]);
+
+    }
     /**
      * 样板间完成
      * @return string
@@ -238,6 +238,8 @@ class EffectController extends Controller
             ]);
         }
         $code = 1000;
+        $vaue_all=Yii::$app->params['value_all'];
+        $item=(int)trim(Yii::$app->request->get('item',$vaue_all));
         $timeType = trim(Yii::$app->request->get('time_type', ''));
         $keyword = trim(Yii::$app->request->get('keyword', ''));
 
@@ -277,11 +279,15 @@ class EffectController extends Controller
                 $endTime = (int)strtotime($endTime);
                  $endTime && $where .= " and create_time <= {$endTime}";
             }
+            if($item!=$vaue_all){
+                $where.=" and item = $item";
+            }
 
         }else{
             $where.= " and CONCAT(name,phone,transaction_no) like '%{$keyword}%'";
 
         }
+
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', ModelService::PAGE_SIZE_DEFAULT);
         $paginationData = EffectEarnest::pagination($where, EffectEarnest::FIELDS_ADMIN, $page, $size);

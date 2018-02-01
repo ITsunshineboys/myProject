@@ -1,88 +1,33 @@
-
-hr {
-    margin: 10px 0;
+form {
+    padding-top: 50px;
+    padding-left: 140px;
 }
 
-input {
-    height: 30px;
+.form-group .icon-style {
+    padding-left: 0;
+    padding-right: 0;
+    width: 5%
 }
 
-.add_box {
-    margin-top: 20px;
+.form-group .unit-style {
+    width: 105px;
 }
 
-.add {
-    color: #5E6166;
-    padding: 5px 10px;
-    border: 1px solid #5E6166;
-    margin-right: 15px;
-    font-size: 12px;
+.form-group .unit-style .form-control {
+    width: 100% !important;
 }
 
-.margin_left {
-    margin-left: 85px;
-}
-
-table {
-    margin:20px auto 0;
-}
-
-.inline_block {
-    display: inline-block;
-    vertical-align: top;
-}
-
-.padding_right {
-    padding-right: 30px;
-    padding-top: 20px;
-}
-
-.gay_input {
-    width: 280px;
-    background-color: #E8E6E8;
-    border: 1px solid #E8E6E8;
-    border-radius: 3px;
-}
-
-.normal_input {
-    width: 280px;
-    border: 1px solid #E8E6E8;
-    border-radius: 3px;
-}
-
-.input_one {
-    width: 140px;
-    border-radius: 3px;
-    border: 1px solid #666F80
-}
-
-.select_css {
-    width: 70px;
-    height: 30px;
-    font-size: 12px;
-    color: #666F80;
-    border-radius: 3px;
-    border: 1px solid #666F80;
+.form-group .content-style .form-control {
+    width: 30% !important;
 }
 
 .attr_font {
     color: #ABABAB;
 }
 
-.bottom {
+.btns {
     margin-top: 200px;
 }
-
-/*.bottom span {*/
-    /*display: inline-block;*/
-    /*border: 1px solid #ddd;*/
-    /*width: 80px;*/
-    /*height: 35px;*/
-    /*border-radius: 3px;*/
-    /*text-align: center;*/
-    /*line-height: 35px;*/
-    /*cursor: pointer;*/
-/*}*/
 
 .bg_blue {
     color: #487AF8;

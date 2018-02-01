@@ -1,5 +1,4 @@
-let edit_attribute = angular.module("edit_attribute_module", []);
-edit_attribute.controller("edit_attribute_ctrl", function ($rootScope,$scope, $http, $stateParams, $state, _ajax) {
+angular.module("edit_attribute_module", []).controller("edit_attribute_ctrl", function ($rootScope,$scope, $http, $stateParams, $state, _ajax) {
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
@@ -18,6 +17,7 @@ edit_attribute.controller("edit_attribute_ctrl", function ($rootScope,$scope, $h
     $scope.titles = $stateParams.titles;
     $scope.propattrs = $stateParams.propattrs;
     $scope.btnclick = true;
+
 
     let namesarr = []; // 属性名称数组
     let valuesarr = [];// 属性内容数组

@@ -286,8 +286,8 @@ class Effect extends ActiveRecord
                 ->asArray()->one()['title'];
         }
 
-
         $material_grop=array_values(self::array_group_by($material,'first_cate_id'));
+
         $data['material']=$material_grop;
         return $data;
 
@@ -302,7 +302,7 @@ class Effect extends ActiveRecord
         $data=[];
         $query=new Query();
         $array= $query->from('effect_earnest As ea')
-            ->select('e.add_time,e.area,e.toponymy,e.city,e.particulars,e.district,e.street,e.high,e.window,e.stairway,t.style,s.series,ea.*')
+            ->select('e.add_time,e.area,e.toponymy,e.city,e.particulars,e.district,e.street,e.high,e.window,e.stair_id,t.style,s.series,ea.*')
             ->leftJoin('effect as e','ea.effect_id=e.id')
             ->leftJoin('effect_picture as ep','ea.effect_id=ep.effect_id')
             ->leftJoin('series As s','s.id = ep.series_id')
@@ -347,11 +347,11 @@ class Effect extends ActiveRecord
         $data['id']=$array['id'];
         $array['address']=$array['city'].$array['street'];
 
-        if($array['stairway']){
+        if($array['stair_id']!=0){
             $stairway_cl=(new Query())->from('effect')->select('attribute')->leftJoin('stairs_details','effect.stair_id=stairs_details.id')->where(['effect.id'=>$effect_id])->one();
-            $array['stairway']=$stairway_cl['attribute'];
+            $array['stair_id']=$stairway_cl['attribute'];
         }else{
-            $array['stairway']='';
+            $array['stair_id']='';
         }
         $data['particulars_view'] =[
             ['name'=>'小区名称','value'=>$array['toponymy']],
@@ -360,9 +360,10 @@ class Effect extends ActiveRecord
             ['name'=>'户型','value'=>$array['particulars']],
             ['name'=>'层高','value'=>$array['high'].'m'],
             ['name'=>'飘窗','value'=>$array['window'].'m'],
-            ['name'=>'楼梯选择','value'=>$array['stairway']],
+            ['name'=>'楼梯选择','value'=>$array['stair_id']],
             ['name'=>'系列','value'=>$array['series']],
-            ['name'=>'风格','value'=>$array['style']]
+            ['name'=>'风格','value'=>$array['style']],
+            ['name'=>'特殊要求','value'=>$array['requirement']]
         ];
 
         $material=EffectMaterial::find()->where(['effect_id'=>$effect_id])->asArray()->all();
@@ -429,6 +430,7 @@ class Effect extends ActiveRecord
         }
         return $grouped;
     }
+
 
 
     public function beforeSave($insert)

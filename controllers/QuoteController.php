@@ -3003,25 +3003,45 @@ class QuoteController extends Controller
         $post = \Yii::$app->request->post();
         $tr = \Yii::$app->db->beginTransaction();
         try {
-            $del = (new AssortGoods())->deleteAll(['and',['state'=>1],['city_code'=>$post['city']]]);
+            $data=AssortGoods::find()->where(['state'=>1])->all();
+            if($data){
+                $del = (new AssortGoods())->deleteAll(['and',['state'=>1],['city_code'=>$post['city']]]);
+                if (!$del){
+                    $tr->rollBack();
+                    $code=500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+            }
+
             //(new AssortGoods())->deleteAll(['and',['state'=>0],['city_code'=>$post['city']]]);
-            if (!$del){
-                $tr->rollBack();
-                return 500;
+
+
+            if(isset($post['add_item'])){
+                foreach($post['add_item'] as $management) {
+                    $add = AssortGoods::findByInsert($management,$post['city']);
+                }
+
+                if (!$add){
+                    $tr->rollBack();
+                    $code=500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
             }
 
-            foreach($post['add_item'] as $management) {
-                $add = AssortGoods::findByInsert($management,$post['city']);
-            }
-
-            if (!$add){
-                $tr->rollBack();
-                return 500;
-            }
             $tr->commit();
-        } catch (\Exception $e) {
-            //回滚
+        } catch (Exception $e) {
             $tr->rollBack();
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
         }
 
         return Json::encode([
@@ -3076,7 +3096,7 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-
+        var_dump(AssortGoods::find()->asArray()->all());
 
     }
 }

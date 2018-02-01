@@ -1832,8 +1832,7 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-        $goods = WorkerType::craft(OwnerController::CRAFT_NAME['tiler'],510100);
-        var_dump($goods);
+        echo pinyin("汗");
     }
 
 }

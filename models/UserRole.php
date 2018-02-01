@@ -276,13 +276,13 @@ class UserRole extends ActiveRecord
         }
         switch ( $role_id)
         {
-            case Yii::$app->params['ownerRoleId']:
+            case \Yii::$app->params['ownerRoleId']:
                 $role=$user;
                 break;
-            case Yii::$app->params['supplierRoleId']:
+            case \Yii::$app->params['supplierRoleId']:
                 $role=Supplier::find()->select('id')->where(['uid'=>$user->id])->one();
                 break;
-            case Yii::$app->params['lhzzRoleId']:
+            case \Yii::$app->params['lhzzRoleId']:
                 $role=Lhzz::find()->select('id')->where(['uid'=>$user->id])->one();
                 break;
         }

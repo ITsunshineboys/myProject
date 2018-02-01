@@ -19,7 +19,7 @@ class Alipay extends  ActiveRecord
 
 
     /**
-     *  支付宝线下支付
+     * 支付宝线下支付
      * @param $out_trade_no
      * @param $subject
      * @param $total_amount
@@ -34,6 +34,7 @@ class Alipay extends  ActiveRecord
      * @param $return_insurance
      * @param $buyer_message
      * @return bool|mixed|\SimpleXMLElement|string|\vendor\alipay\提交表单HTML文本
+     * @throws \yii\base\Exception
      */
     public static function  AliPayLineSubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message){
         $notify_url="https://".$_SERVER["SERVER_NAME"].'/'.self::ALIPAY_LINPAY_NOTIFY;
@@ -87,6 +88,7 @@ class Alipay extends  ActiveRecord
         $payRequestBuilder->setPassback_params($passback_params);
         $payResponse = new AlipayTradeService($config);
         $result=$payResponse->wapPay($payRequestBuilder,$config['return_url'],$config['notify_url']);
+        return $result;
     }
 
     /**
@@ -101,11 +103,12 @@ class Alipay extends  ActiveRecord
     }
 
 
-   /**
+    /**
      * 去付款-支付宝支付
      * @param $orderAmount
      * @param array $orders
      * @return string
+     * @throws \yii\base\Exception
      */
     public static  function OrderAppPay($orderAmount,$orders=[])
     {

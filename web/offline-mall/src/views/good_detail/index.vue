@@ -48,9 +48,6 @@
 
 
 
-
-
-
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -94,36 +91,15 @@
           <div>
             <span>{{good_detail.supplier.goods_number}}</span><br/>商品数
 
-
-
-
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.follower_number}}</span><br/>粉丝数
 
-
-
-
-
-
-
-
-
-
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
-
-
-
-
-
-
-
-
-
 
           </div>
         </flexbox>
@@ -136,7 +112,7 @@
       <divider></divider>
 
       <!--图文详情选项卡-->
-      <div class="graphic_detail">
+      <div class="graphic-detail-container">
         <tab defaultColor="#999" active-color="#222" bar-active-color="#222" custom-bar-width="50px" class="tab">
           <tab-item selected @on-item-click="tabHandler('des')">图文详情</tab-item>
           <tab-item @on-item-click="tabHandler('params')">产品参数</tab-item>
@@ -190,57 +166,18 @@
         <flexbox-item @click.native="contactShop" :span="76/375">
           <i class="iconfont icon-service1"></i><br/>联系商家
 
-
-
-
-
-
-
-
-
-
         </flexbox-item>
         <span></span>
         <flexbox-item @click.native="skipCart" :span="77/375">
           <i class="iconfont icon-cart"></i><br/>购物车
 
-
-
-
-
-
-
-
-
-
-
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('cart')" :span="110/375">
           加入购物车
 
-
-
-
-
-
-
-
-
-
-
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('now')" :span="110/375">
           立即购买
-
-
-
-
-
-
-
-
-
-
 
         </flexbox-item>
       </flexbox>
@@ -269,33 +206,9 @@
           <flexbox-item alt="cart" v-if="count_cart||default_count" @click.native="addCart">
             加入购物车
 
-
-
-
-
-
-
-
-
-
-
-
-
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
-
-
-
-
-
-
-
-
-
-
-
-
 
           </flexbox-item>
         </flexbox>
@@ -303,7 +216,7 @@
     </popup>
 
     <!--售后保障弹窗 -->
-    <popup v-model="show_after_service" height="100%" class="show_after_service">
+    <popup v-model="show_after_service" height="100%" class="after-service-container">
       <div>
         <flexbox orient="vertical" justify="space-between" style="-webkit-overflow-scrolling: touch;">
           <flexbox-item>
@@ -515,9 +428,18 @@
           this.count_now = false
           this.default_count = false
           this.count = 1
+          this.watchCount()
         } else {
           this.show_count = true
           obj === 'cart' ? this.count_cart = true : obj === 'now' ? this.count_now = true : this.default_count = true
+          this.watchCount = this.$watch('count', function (newVal, oldVal) {
+            if (newVal === oldVal) return
+            let reg = /^[1-9]*[1-9][0-9]*$/
+            if (!reg.test(newVal) || newVal > this.good_detail.left_number) {
+              this.count = ''
+            }
+          }
+          )
         }
       },
       // 线下商品弹窗处理
@@ -627,11 +549,7 @@
     position: relative;
   }
 
-  .good-container .custom-bottom {
-    bottom: 26px;
-  }
-
-  /*图标样式*/
+  /*图标样式 start*/
   .good-container .guide-icon {
     position: relative;
   }
@@ -660,24 +578,27 @@
     left: 14px;
   }
 
-  .good-container .vux-popup-dialog {
-    background: rgba(255, 255, 255, 1);
-  }
-
   .good-container .guide-icon .icon-share {
     right: 54px;
   }
 
   .good-container .guide-icon .icon-more {
     right: 14px;
+    z-index: 210;
   }
 
-  /*右上弹窗样式*/
+  /*图标样式 end*/
+
+  /*右上弹窗样式 start*/
   .good-container .pop-down {
     position: absolute;
     top: 0;
     right: 0;
-    z-index: 100;
+    bottom: 0;
+    left: 0;
+    z-index: 200;
+    margin-top: 0 !important;
+    background-color: transparent;
   }
 
   .good-container .pop-down ul {
@@ -739,56 +660,9 @@
     border-radius: 50%;
   }
 
-  /*右上弹窗样式结束*/
+  /*右上弹窗样式 end*/
 
-  .good-container .choose-count {
-    border-bottom: 0px solid #E9EDEE;
-  }
-
-  .good-container .weui-cells {
-    margin-top: 0;
-  }
-
-  .good-container .weui-cell {
-    padding: 16px 14px;
-    font-size: 16px;
-    color: rgba(102, 102, 102, 1);
-    line-height: 16px;
-    font-size: 16px;
-  }
-
-  .good-container .service {
-    line-height: 16px;
-    margin-right: 25px;
-  }
-
-  .good-container .icon-blue {
-    font-size: 20px;
-    color: #222222;
-  }
-
-  .good-container .icon-checkbox-circle-line {
-    font-size: 20px;
-  }
-
-  .good-container .service span {
-    font-size: 16px;
-    color: rgba(153, 153, 153, 1);
-    vertical-align: text-top;
-  }
-
-  .good-container .comment-count {
-    padding: 16px 14px;
-    line-height: 16px;
-    font-size: 16px;
-    color: rgba(102, 102, 102, 1);
-  }
-
-  .good-container .comment-count span:first-child {
-    margin-right: 10px;
-  }
-
-  /*商品名称等内容*/
+  /*商品信息 start*/
   .good-container .title-container {
     box-sizing: border-box;
     padding: 15px 14px 20px;
@@ -823,7 +697,237 @@
     color: rgba(153, 153, 153, 1);
     line-height: 17px;
   }
+  /*商品信息 end*/
 
+  /*选择数量cell start*/
+  .good-container .choose-count {
+    border-bottom: 1px solid #E9EDEE;
+  }
+
+  .good-container .weui-cells {
+    margin-top: 0;
+  }
+
+  .good-container .weui-cell {
+    padding: 16px 14px;
+    font-size: 16px;
+    color: rgba(102, 102, 102, 1);
+    line-height: 16px;
+    font-size: 16px;
+  }
+
+  /*选择数量cell end*/
+
+  /*选择数量弹窗 start*/
+  .good-container .count-top {
+    overflow: hidden;
+    padding: 15px 0 10px 14px;
+    border-bottom: 1px solid #E9EDEE;
+  }
+
+  .good-container .count-cover-img {
+    float: left;
+    width: 112px;
+    padding-right: 10px;
+  }
+
+  .good-container .count-cover-img img {
+    width: 88px;
+    height: 88px;
+  }
+
+  .good-container .count-price-sum {
+    float: left;
+  }
+
+  .good-container .count-price-sum p:first-child {
+    font-size: 18px;
+    color: rgba(217, 173, 101, 1);
+    line-height: 18px;
+  }
+
+  .good-container .count-price-sum span:last-child {
+    font-size: 14px;
+    color: rgba(153, 153, 153, 1);
+    line-height: 14px;
+  }
+
+    /*购买数量 start*/
+  .good-container .buy-count > div:first-child p {
+    font-size: 14px;
+    color: rgba(153, 153, 153, 1);
+  }
+
+   /*购买数量-Xnumber start*/
+  .good-container .vux-number-selector svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .good-container .vux-number-input {
+    height: 23px;
+    font-size: 14px;
+  }
+
+  .good-container .vux-number-selector {
+    float: left;
+    height: 23px;
+    font-size: 16px;
+    line-height: 0;
+    color: #222;
+    border: 1px solid #ececec;
+  }
+
+  .good-container .vux-number-selector svg {
+    fill: #222;
+  }
+  /*购买数量-Xnumber end*/
+
+  /*购买数量-button start*/
+  .good-container .count-bottom-btn {
+    height: 49px;
+  }
+
+  .good-container .count-bottom-btn > div {
+    height: 49px;
+    text-align: center;
+    line-height: 49px;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 1);
+  }
+
+  .good-container .count-bottom-btn > div[alt="cart"] {
+    background: rgba(34, 34, 34, 1);
+  }
+
+  .good-container .count-bottom-btn > div[alt="now"] {
+    background: rgba(217, 173, 101, 1);
+    margin-left: 0 !important;
+  }
+
+  .good-container .icon-close {
+    position: absolute;
+    right: 10px;
+    font-size: 18px;
+    color: #999;
+  }
+  /*购买数量-button end*/
+  /*购买数量 end*/
+  /*选择数量弹窗 end*/
+
+  /*售后服务cell start*/
+  .good-container .service {
+    line-height: 16px;
+    margin-right: 25px;
+  }
+
+  .good-container .icon-blue {
+    font-size: 20px;
+    color: #222222;
+  }
+
+  .good-container .icon-checkbox-circle-line {
+    font-size: 20px;
+  }
+
+  .good-container .service span {
+    font-size: 16px;
+    color: rgba(153, 153, 153, 1);
+    vertical-align: text-top;
+  }
+
+  /*售后服务cell end*/
+
+  /* 售后弹窗服务弹窗 start */
+  .good-container .after-service-container {
+    background: #fff;
+  }
+
+  .good-container .after-service-container > div {
+    height: inherit;
+  }
+
+  .good-container .after-service-container > div > div {
+    height: inherit;
+  }
+
+  /*售后part start*/
+  .good-container .after-service > p {
+    height: 63px;
+    font-size: 18px;
+    color: rgba(102, 102, 102, 1);
+    text-align: center;
+    line-height: 63px;
+    border-bottom: 2px solid #CDD3D7;
+  }
+
+  .good-container .after-service > div {
+    padding: 11px 14px 4px;
+  }
+
+  .good-container .after-service > div .iconfont {
+    color: #222;
+  }
+
+  .good-container .after-service > div span {
+    font-size: 16px;
+    color: rgba(102, 102, 102, 1);
+    line-height: 16px;
+  }
+
+  .good-container .after-service > div p {
+    font-size: 12px;
+    color: rgba(149, 146, 146, 1);
+    line-height: 17px;
+    margin-top: 6px;
+    margin-left: 25px;
+  }
+
+  /*售后part end*/
+
+  /*保障part start*/
+  .good-container .safe-guard > p {
+    height: 46px;
+    line-height: 46px;
+  }
+
+  .good-container .safe-guard > div:last-child {
+    margin-bottom: 200px;
+  }
+
+  .good-container .weui-cells:after {
+    border-bottom: none;
+  }
+
+  .good-container .after-service-done-btn {
+    position: fixed;
+    bottom: 0;
+    height: 48px;
+    line-height: 48px;
+    text-align: center;
+    background: rgba(34, 34, 34, 1);
+    font-size: 18px;
+    color: rgba(255, 255, 255, 1);
+  }
+
+  /*保障part end*/
+  /* 售后弹窗服务弹窗 end */
+
+  /*评价flex start*/
+  .good-container .comment-count {
+    padding: 16px 14px;
+    line-height: 16px;
+    font-size: 16px;
+    color: rgba(102, 102, 102, 1);
+  }
+
+  .good-container .comment-count span:first-child {
+    margin-right: 10px;
+  }
+  /*评价flex end*/
+
+
+  /*查看全部评价 start*/
   .good-container .view-all {
     padding-top: 16px;
     padding-bottom: 16px;
@@ -837,7 +941,9 @@
   .good-container .view-all .iconfont {
     margin-top: 2px;
   }
+    /*查看全部评价 end*/
 
+  /*店铺简介 start*/
   .good-container .shop-card {
     margin-top: 0;
   }
@@ -885,11 +991,12 @@
 
   .good-container .shop-intro > span {
     display: inline-block;
-    width: 1px;
+    width: 2px;
     height: 20px;
-    background: #E9EDEE;
+    background: #CDD3D7;
   }
 
+    /*进店逛逛 start*/
   .good-container .view-shop-btn {
     padding-bottom: 20px;
   }
@@ -904,11 +1011,34 @@
     color: rgba(34, 34, 34, 1);
     background: rgba(255, 255, 255, 1);;
   }
+    /*进店逛逛 start*/
 
+  /*店铺简介 end*/
+
+  /*图文详情&产品参数 start*/
   .good-container .tab > div {
     font-size: 16px;
   }
 
+  .good-container .graphic-detail-container {
+    margin-bottom: 48px;
+  }
+
+  /*图文详情 start*/
+  .good-container .description-container {
+    min-height: 10px;
+  }
+
+  .good-container .description {
+    margin: auto;
+  }
+
+  .good-container .description img {
+    max-width: 100%;
+  }
+    /*图文详情 end*/
+
+    /*产品参数 start*/
   .good-container .pro-params {
     margin-top: 39px;
   }
@@ -923,14 +1053,16 @@
     font-size: 14px;
     color: rgba(153, 153, 153, 1);
     line-height: 14px;
-    border-bottom: 1px solid #E9EDEE;
+    border-bottom: 1px solid #CDD3D7;
   }
 
   .good-container .pro-params > div:last-child {
     margin-bottom: 50px;
   }
+    /*产品参数 end*/
+  /*图文详情&产品参数 end*/
 
-  /*底部选项卡*/
+  /*底部选项卡 start*/
   .good-container .bottom-tabbar {
     position: fixed;
     bottom: 0;
@@ -978,208 +1110,8 @@
     font-size: 16px;
     color: rgba(255, 255, 255, 1);
   }
+  /*底部选项卡 end*/
 
-  /*选择数量弹窗 start*/
-  .good-container .count-top {
-    overflow: hidden;
-    padding: 15px 0 10px 14px;
-    border-bottom: 1px solid #E9EDEE;
-  }
-
-  .good-container .count-cover-img {
-    float: left;
-    width: 112px;
-    padding-right: 10px;
-  }
-
-  .good-container .count-cover-img img {
-    width: 88px;
-    height: 88px;
-  }
-
-  .good-container .count-price-sum {
-    float: left;
-  }
-
-  .good-container .count-price-sum p:first-child {
-    font-size: 18px;
-    color: rgba(217, 173, 101, 1);
-    line-height: 18px;
-  }
-
-  .good-container .count-price-sum span:last-child {
-    font-size: 14px;
-    color: rgba(153, 153, 153, 1);
-    line-height: 14px;
-  }
-
-  /*选择数量弹窗 end*/
-
-  /*购买数量*/
-  .good-container .buy-count > div:first-child p {
-    font-size: 14px;
-    color: rgba(153, 153, 153, 1);
-  }
-
-  /*购买数量-Xnumber*/
-  .good-container .vux-number-selector svg {
-    width: 15px;
-    height: 15px;
-  }
-
-  .good-container .vux-number-input {
-    height: 23px;
-    font-size: 14px;
-  }
-
-  .good-container .vux-number-selector {
-    float: left;
-    height: 23px;
-    font-size: 16px;
-    line-height: 0;
-    color: #222;
-    border: 1px solid #ececec;
-  }
-
-  .good-container .vux-number-selector svg {
-    fill: #222;
-  }
-
-  .good-container .count-bottom-btn {
-    height: 49px;
-  }
-
-  .good-container .count-bottom-btn > div {
-    height: 49px;
-    text-align: center;
-    line-height: 49px;
-    font-size: 16px;
-    color: rgba(255, 255, 255, 1);
-  }
-
-  .good-container .count-bottom-btn > div[alt="cart"] {
-    background: rgba(34, 34, 34, 1);
-  }
-
-  .good-container .count-bottom-btn > div[alt="now"] {
-    background: rgba(217, 173, 101, 1);
-    margin-left: 0 !important;
-  }
-
-  .good-container .icon-close {
-    position: absolute;
-    right: 10px;
-    font-size: 18px;
-    color: #999;
-  }
-
-  /* 售后弹窗 */
-  .good-container .show_after_service > div {
-    height: inherit;
-  }
-
-  .good-container .show_after_service > div > div {
-    height: inherit;
-  }
-
-  .good-container .after-service > p {
-    height: 63px;
-    font-size: 18px;
-    color: rgba(102, 102, 102, 1);
-    text-align: center;
-    line-height: 63px;
-    border-bottom: 2px solid #CDD3D7;
-  }
-
-  .good-container .after-service > div {
-    padding: 11px 14px 4px;
-  }
-
-  .good-container .after-service > div .iconfont {
-    color: #222;
-  }
-
-  .good-container .after-service > div span {
-    font-size: 16px;
-    color: rgba(102, 102, 102, 1);
-    line-height: 16px;
-  }
-
-  .good-container .after-service > div p {
-    font-size: 12px;
-    color: rgba(149, 146, 146, 1);
-    line-height: 17px;
-    margin-top: 6px;
-    margin-left: 25px;
-  }
-
-  /* 售后弹窗-保障 start*/
-  .good-container .safe-guard > p {
-    height: 46px;
-    line-height: 46px;
-  }
-
-  .good-container .safe-guard > div:last-child {
-    margin-bottom: 200px;
-  }
-
-  .good-container .weui-cells:after {
-    border-bottom: none;
-  }
-
-  .good-container .after-service-done-btn {
-    position: fixed;
-    bottom: 0;
-    height: 48px;
-    line-height: 48px;
-    text-align: center;
-    background: rgba(34, 34, 34, 1);
-    font-size: 18px;
-    color: rgba(255, 255, 255, 1);
-  }
-
-  /* 售后弹窗-保障 end*/
-
-  /*图文详情 start*/
-  .good-container .graphic_detail {
-    margin-bottom: 48px;
-  }
-
-  .good-container .description-container {
-    min-height: 10px;
-  }
-
-  .good-container .description {
-    margin: auto;
-  }
-
-  .good-container .description img {
-    max-width: 100%;
-  }
-
-  .good-container .show_share > div:first-child {
-    height: 48px;
-    line-height: 48px;
-    text-align: center;
-    font-size: 16px;
-    color: rgba(102, 102, 102, 1);
-    border-bottom: 1px solid rgba(205, 211, 215, 1);
-  }
-
-  .good-container .show_share > div:nth-child(2) {
-    height: 163px;
-  }
-
-  .good-container .show_share > div:last-child {
-    height: 48px;
-    text-align: center;
-    line-height: 48px;
-    font-size: 18px;
-    color: rgba(255, 255, 255, 1);
-    background: rgba(34, 34, 34, 1);
-  }
-
-  /*图文详情 end*/
 
   /*添加购物车成功弹窗 start*/
   .good-container .weui-toast {
@@ -1235,7 +1167,7 @@
     color: rgba(34, 34, 34, 1);
   }
 
-  /*商品不足弹窗 start*/
+  /*商品不足弹窗 end*/
 
   /*商品下架弹窗 start*/
   .good-container .offline-warning {
@@ -1245,7 +1177,6 @@
     font-size: 18px;
     color: rgba(255, 255, 255, 1);
   }
-
   /*商品下架弹窗 end*/
 </style>
 

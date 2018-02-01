@@ -16,6 +16,7 @@ use app\services\SmValidationService;
 class GoodsOrder extends ActiveRecord
 {
     const PAY_STATUS_PAID = 1;
+    const PAY_STATUS_UNPAID=0;
     const PAY_STATUS_DESC_UNPAID = '待付款';
     const SHIPPING_STATUS_DESC_UNSHIPPED='待发货';
     const SHIPPING_STATUS_DESC_SHIPPED='已发货';
@@ -212,7 +213,10 @@ class GoodsOrder extends ActiveRecord
             $goods_order->supplier_id = $supplier_id;
             $goods_order->pay_status = $pay_status;
             $goods_order->create_time =$create_time;
-            $goods_order->paytime =$create_time;
+            if ($pay_status=self::PAY_STATUS_PAID)
+            {
+                $goods_order->paytime =$create_time;
+            }
             $goods_order->order_refer = $order_refer;
             $goods_order->return_insurance = $return_insurance * 100;
             $goods_order->pay_name = $pay_name;
@@ -246,8 +250,8 @@ class GoodsOrder extends ActiveRecord
             $tran->commit();
             return 200;
         }catch (\Exception $e) {
-                $tran->rollBack();
-                return 500;
+            $tran->rollBack();
+            return 500;
         }
     }
 
@@ -3485,7 +3489,7 @@ class GoodsOrder extends ActiveRecord
                     $money+=($Goods->toArray()[$role_money]*$goods['goods_num']);
                 }
                 $total+=($money+$supplier['freight']*100);
-                $code=self::AddNewPayOrderData($order_no,$supplier['freight']*100+$money,$supplier['supplier_id'],0,$time,2,0,PayService::ONLINE_PAY,$supplier['buyer_message'],$address,$supplier,$user->id,$user->last_role_id_app);
+                $code=self::AddNewPayOrderData($order_no,$supplier['freight']*100+$money,$supplier['supplier_id'],self::PAY_STATUS_UNPAID,$time,2,0,PayService::ONLINE_PAY,$supplier['buyer_message'],$address,$supplier,$user->id,$user->last_role_id_app);
                 if ($code!=200)
                 {
                     $tran->rollBack();
@@ -3736,6 +3740,25 @@ class GoodsOrder extends ActiveRecord
             $code=500;
             return $code;
         }
+    }
+
+
+    public  static  function VerificationBuyerIdentity($order_no,$user)
+    {
+        $goodsOrder=self::FindByOrderNo($order_no,'user_id,role_id');
+        if (!$goodsOrder)
+        {
+            $code=1000;
+            return $code;
+        }
+        if (
+            $goodsOrder->role_id!=$user->last_role_id_app
+            || $goodsOrder->user_id!=$user->id)
+        {
+            $code=1034;
+            return $code;
+        }
+        return 200;
     }
 
 
