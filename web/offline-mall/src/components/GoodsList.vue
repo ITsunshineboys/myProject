@@ -1,6 +1,6 @@
 <template>
   <div class="goods-list">
-    <router-link class="goods-item" v-for="obj in goodsList"  :key="obj.id" :to="'/good-detail/' + obj.id" tag="div">
+    <div class="goods-item" v-for="obj in goodsList"  :key="obj.id" @click="toDetail(obj.id)">
       <div class="goods-item-img">
         <img :src="obj.cover_image">
       </div>
@@ -12,7 +12,7 @@
         </p>
         <p class="goods-item-price">￥{{obj.platform_price}}</p>
       </div>
-    </router-link>
+    </div>
   </div>
 </template>
 
@@ -22,6 +22,12 @@
       goodsList: {
         type: Array,
         default: []
+      }
+    },
+    methods: {
+      toDetail (id) {
+        this.$router.push('/good-detail/' + id)
+        this.$emit('recordScroll')
       }
     }
   }

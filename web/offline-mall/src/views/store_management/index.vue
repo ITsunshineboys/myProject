@@ -26,10 +26,10 @@
     <div class="tab-group" :style="{minHeight: tabHeight + 'px'}">
       <div :class="{'tab-position': isPosition}">
         <tab class="tab" active-color="#222" bar-active-color="#222" defaultColor="#999" custom-bar-width="50px">
-          <tab-item @on-item-click="onClickTab" selected>店铺首页</tab-item>
-          <tab-item @on-item-click="onClickTab">全部商品</tab-item>
+          <tab-item @on-item-click="onClickTab" :selected="tabActive === 0">店铺首页</tab-item>
+          <tab-item @on-item-click="onClickTab" :selected="tabActive === 1">全部商品</tab-item>
         </tab>
-        <div class="goods-filter" v-if="tabActive == 1">
+        <div class="goods-filter" v-if="tabActive === 1">
           <div :class="{active: sortName === 'sold_number'}" @click="tabHandle('sold_number')">销量优先</div>
           <div :class="{active: sortName === 'platform_price'}" @click="tabHandle('platform_price')">
             <span>价格</span>
@@ -56,7 +56,7 @@
       <div class="store-home" v-if="tabActive == 0">
         <swiper :list="carousel" :show-desc-mask="false" dots-position="center" dots-class="dots" :loop="true" :auto="true" height="145px"></swiper>
         <div class="store-goods-list" flex>
-          <router-link class="store-goods-item" v-for="obj in recommendGoods" :to="'/good-detail/' + obj.url" tag="div" :key="obj.id">
+          <router-link class="store-goods-item" v-for="obj in recommendGoods" :to="'/good-detail/' + obj.url" tag="div" :key="obj.id" @click.native="recordScroll">
             <img :src="obj.image">
             <p class="store-goods-title">{{obj.title}}</p>
             <p class="store-goods-desc">{{obj.description}}</p>
@@ -65,7 +65,7 @@
         </div>
       </div>
       <div class="all-goods" v-else>
-        <goods-list :goods-list="allGoodsData"></goods-list>
+        <goods-list :goods-list="allGoodsData" @recordScroll="recordScroll"></goods-list>
       </div>
       <p v-show="isLoading" class="tip-loading">{{loadingText}}</p>
     </div>
@@ -130,12 +130,39 @@
         allGoodsData: []      // 全部商品列表数据
       }
     },
+    created () {
+      if (this.$route.query.system === 'android') {     // 判断是否从安卓关注列表也进入本页面
+        this.isFromAndroid = true
+      }
+      let tabIndex = sessionStorage.getItem('storeIndex')     // 获取 tab 选项卡选中的状态
+      if (tabIndex !== null) {
+        this.tabActive = parseInt(tabIndex)
+      }
+      this.getStoreData()
+      console.log(typeof tabIndex, tabIndex)
+      if (this.tabActive === 0) {      // 判断选项卡选中状态，按状态请求数据
+        this.getStoreShopGoods()
+      } else {
+        this.getAllGoodsData()
+      }
+    },
+    mounted () {
+      window.addEventListener('scroll', this.handleScroll)
+      // 清除记录
+      // sessionStorage.removeItem('storePos')
+      // sessionStorage.removeItem('recordScroll')
+      // sessionStorage.removeItem('storeIndex')
+    },
+    beforeDestroy () {
+      window.removeEventListener('scroll', this.handleScroll)
+    },
     methods: {
       androidFun () { // 返回安卓店铺关注列表
         window.AndroidWebView.webfinish()
       },
       onClickTab (index) {
         this.tabActive = index
+        sessionStorage.setItem('storeIndex', index)     // 存储 tab 状态
         if (index === 0) {
           // 当 tab 为店铺首页，tab 高度最小为 44 像素
           this.tabHeight = 44
@@ -180,13 +207,12 @@
           this.storeData = res.data.index
         })
       },
-      /**
-       * 线下体验店弹窗
-       * 传值给父级，告知是否隐藏
-       * @param bool
-       */
-      isShow (bool) {
-        this.isShowAlert = bool
+      recordScroll () {
+        let scrollTop = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset     // 滚动条位置
+        sessionStorage.setItem('storePos', scrollTop)      // 记录滚动条位置
+      },
+      isShow (bool) {     // 线下体验店弹窗
+        this.isShowAlert = bool     // 将bool传值给父级，告知是否隐藏
       },
       getAllGoodsData () {
         this.axios.get('/supplier/goods', this.allGoodsParams, res => {
@@ -230,8 +256,6 @@
         })
       },
       handleScroll () {
-        let scrollTop = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset     // 滚动条位置
-        sessionStorage.setItem('pos', scrollTop)      // 记录滚动条位置
         let tabTop = document.querySelector('.tab-group').getBoundingClientRect().top     // 获取 tab 元素距离顶部距离
         console.log(tabTop)
         this.isPosition = tabTop <= 46      // 判断 tab 距离顶部的距离是否小于46，true：固定tab false：取消固定
@@ -266,20 +290,6 @@
           }
         }
       }
-    },
-    created () {
-      // 判断是否从安卓关注列表也进入本页面
-      if (this.$route.query.system === 'android') {
-        this.isFromAndroid = true
-      }
-      this.getStoreData()
-      this.getStoreShopGoods()
-    },
-    mounted () {
-      window.addEventListener('scroll', this.handleScroll)
-    },
-    beforeDestroy () {
-      window.removeEventListener('scroll', this.handleScroll)
     }
   }
 </script>
