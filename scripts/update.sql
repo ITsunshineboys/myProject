@@ -294,3 +294,9 @@ ALTER TABLE `app_version`  ADD  `version_code` varchar(30) DEFAULT NULL;
 
 
 
+ --all 2018.2.1 hyz
+
+ ALTER TABLE express MODIFY sku varchar(50) NOT NULL ;
+
+
+
