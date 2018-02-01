@@ -531,7 +531,7 @@ class TestController extends Controller
     public  function  actionTest()
     {
         $user=\Yii::$app->user->identity;
-        return Json::encode(UserBankInfo::find()->where(['uid'=>$user->id])->all());
+        return Json::encode(UserBankInfo::find()->asArray()->where(['uid'=>$user->id])->all());
     }
 
 }
