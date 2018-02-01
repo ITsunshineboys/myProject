@@ -437,6 +437,9 @@ class QuoteController extends Controller
                 $specification->type_id=$one_specification['id'];
                 $specification->value=$one_specification['value']*100;
                 $specification->city_code=$post['city_code'];
+                if($one_specification['id']==71){
+                    $specification->unit=2;
+                }
                 $specification->unit=1;
             }
 
@@ -3104,12 +3107,12 @@ class QuoteController extends Controller
     {
 
         $row2=EngineeringStandardCarpentryCraft::find()->where(['type_id'=>71])->all();
-        var_dump($row2);die;
-//        foreach ($row2 as $a){
-//            $a->unit=2;
-//            $b=$a->save(false);
-//        }
-//        var_dump($b);
+
+        foreach ($row2 as $a){
+            $a->unit=2;
+            $b=$a->save(false);
+        }
+        var_dump($b);
 
     }
 }
