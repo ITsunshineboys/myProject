@@ -65,7 +65,7 @@
         nav_list: [
           {image: require('../../assets/images/Quote.png'), title: '报价', url: '/mall/index.html'},
           {image: require('../../assets/images/shop.png'), title: '商城'},
-          {image: require('../../assets/images/Mine.png'), title: '我的', url: '/distribution/index.html'}
+          {image: require('../../assets/images/Mine.png'), title: '我的', url: '/distribution-web/index.html'}
         ]
       }
     },
