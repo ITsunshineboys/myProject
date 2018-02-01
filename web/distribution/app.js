@@ -17,7 +17,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         .state('personal_center', {//个人中心
             url: '/personal_center',
             templateUrl: 'pages/personal_center.html',
-            css: 'pages/css/personal_center.css',
+            css: ['pages/css/personal_center.css','//at.alicdn.com/t/font_499455_m8vh0qf9xb1hh0k9.css'],
             controller: 'personal_center_ctrl'
         })
         .state('bind_tel', {//绑定手机号
