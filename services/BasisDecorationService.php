@@ -836,6 +836,7 @@ class BasisDecorationService
                     }
 
 
+
                     $area = round(self::algorithm(1,$length,$breadth),2);
                     $one_goods['quantity'] = (int)ceil(self::algorithm(6,$post['bedroom_area'],$area));
                     $one_goods['cost'] = round(self::algorithm(1,$one_goods['platform_price'],$one_goods['quantity']),2);
