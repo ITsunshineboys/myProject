@@ -23,8 +23,7 @@
     </div>
 
     <!--轮播-->
-    <swiper loop auto :list="banner_list" height="375px" dots-class="custom-bottom" dots-position="center"
-            :show-desc-mask="false"></swiper>
+    <swiper loop auto :list="banner_list" height="375px" dots-class="custom-bottom" dots-position="center" :show-desc-mask="false"></swiper>
     <div class="good-detail">
       <div class="title-container">
         <p>{{good_detail.title}}</p>
@@ -38,16 +37,6 @@
       <group>
         <cell-box is-link class="choose-count" @click.native="showCount('count')">
           选择数量
-
-
-
-
-
-
-
-
-
-
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -707,9 +696,16 @@
     font-size: 16px;
     color: rgba(102, 102, 102, 1);
     line-height: 16px;
-    font-size: 16px;
   }
 
+  @media (max-width: 360px){
+    .good-container .weui-cell {
+      padding: 16px 14px;
+      font-size: 14px;
+      color: rgba(102, 102, 102, 1);
+      line-height: 16px;
+    }
+  }
   /*选择数量cell end*/
 
   /*选择数量弹窗 start*/
@@ -830,6 +826,36 @@
     vertical-align: text-top;
   }
 
+  @media (max-width: 360px){
+    .good-container .icon-blue {
+      font-size: 18px;
+      color: #222222;
+    }
+
+    .good-container .service span {
+      font-size: 14px;
+      color: rgba(153, 153, 153, 1);
+      vertical-align: text-top;
+    }
+  }
+
+  @media (max-width: 320px){
+    .good-container .service {
+      line-height: 18px;
+      margin-right:16px;
+    }
+
+    .good-container .icon-blue {
+      font-size: 16px;
+      color: #222222;
+    }
+
+    .good-container .service span {
+      font-size: 14px;
+      color: rgba(153, 153, 153, 1);
+      vertical-align: text-top;
+    }
+  }
   /*售后服务cell end*/
 
   /* 售后弹窗服务弹窗 start */
