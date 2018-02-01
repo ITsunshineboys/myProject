@@ -193,7 +193,6 @@ class Worker extends \yii\db\ActiveRecord
                 $code = 1000;
                 return $code;
             }
-
             $user=User::find()->where(['id'=>$uid])->one();
             $user->identity_no=$post['identity_no'];
             $user->identity_card_front_image=$post['identity_card_front_image'];

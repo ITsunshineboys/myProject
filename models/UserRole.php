@@ -170,7 +170,6 @@ class UserRole extends ActiveRecord
         $userRole->review_status = $reviewStatus;
         if ($operator) {
             $userRole->review_time = $now;
-            $userRole->review_status = Role::AUTHENTICATION_STATUS_APPROVED;
             $userRole->reviewer_uid = $operator->id;
         }
         return $userRole->save();
