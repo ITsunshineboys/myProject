@@ -575,6 +575,35 @@ class OrderAfterSale extends ActiveRecord
             }
         }
         $res=[];
+//1:关闭订单退款 2：关闭订单线下退款 3：退货 4.换货 5：上门维修 6：上门退货 7：上门换货    8:关闭订单
+        switch ($PlatForm->handle)
+        {
+            case 3:
+                $type='退货';
+                break;
+            case 4:
+                $type='换货';
+                break;
+            case 5:
+                $type='上门维修';
+                break;
+            case 6:
+                $type='上门退货';
+                break;
+            case 7:
+                $type='上门换货';
+                break;
+        }
+        $res[]=[
+            'type'=>'选择操作',
+            'value'=>$type,
+            'time'=>date('Y-m-d H:i',$PlatForm->create_time),
+            'phone'=>'',
+            'content'=>$PlatForm->reasons,
+            'number'=>'',
+            'code'=>'',
+            'status'=>self::AFTER_STATUS_IN
+        ];
         switch ($PlatForm->handle)
         {
             case 3:
@@ -886,7 +915,7 @@ class OrderAfterSale extends ActiveRecord
             {
                 case 'user':
                     $data[]=[
-                        'type'=>'等待商家处理',
+                        'type'=>'商家派出工作人员',
                         'value' =>'',
                         'time'=>'',
                         'phone'=>'',
@@ -898,7 +927,7 @@ class OrderAfterSale extends ActiveRecord
                     break;
                 case 'supplier':
                     $data[]=[
-                        'type'=>'等待商家处理',
+                        'type'=>'商家派出工作人员',
                         'value' =>'',
                         'time'=>'',
                         'phone'=>'',
