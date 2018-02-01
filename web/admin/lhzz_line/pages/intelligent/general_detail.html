@@ -67,7 +67,7 @@
                                    ng-if="item1.differentiate == 0">{{item1.title}}</p>
                                 <div class="col-md-1 text-right" style="margin: 0!important;"
                                      ng-if="item1.differentiate == 1&&!$first">
-                                    <button type="button" class="text-center" ng-click="removeTwoTitle($parent.$index,$index)"><i
+                                    <button type="button" class="text-center" ng-click="removeTwoTitle(item,$index)"><i
                                             class="glyphicon glyphicon-minus"></i></button>
                                 </div>
                                 <p class="col-md-3" ng-class="{'col-md-offset-1':$first}"
