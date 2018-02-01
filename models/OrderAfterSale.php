@@ -597,7 +597,7 @@ class OrderAfterSale extends ActiveRecord
         $res[]=[
             'type'=>'选择操作',
             'value'=>$type,
-            'time'=>date('Y-m-d H:i',$PlatForm->create_time),
+            'time'=>date('Y-m-d H:i',$PlatForm->creat_time),
             'phone'=>'',
             'content'=>$PlatForm->reasons,
             'number'=>'',
