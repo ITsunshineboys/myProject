@@ -1489,11 +1489,10 @@ class OwnerController extends Controller
                 }
 
             }
-            if ($condition_stairs == null){
-                $a = [];
+            if ($condition_stairs != null) {
+                $style = BasisDecorationService::style($condition_stairs);
+                $material[][] = BasisDecorationService::profitMargin($style);
             }
-            $style = BasisDecorationService::style($condition_stairs);
-            $material[][]= BasisDecorationService::profitMargin($style);
         }
 
 
