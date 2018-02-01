@@ -66,17 +66,17 @@ class AppVersion extends \yii\db\ActiveRecord
         {
             return 1000;
         }
-        if (isset($postData['version_no']))
-        {
-            $data=self::find()
-                ->where(['version_code'=>$postData['version_code']])
-                ->one();
-            if ($data)
-            {
-                $code=1000;
-                return $code;
-            }
-        }
+//        if (isset($postData['version_no']))
+//        {
+//            $data=self::find()
+//                ->where(['version_code'=>$postData['version_code']])
+//                ->one();
+//            if ($data)
+//            {
+//                $code=1000;
+//                return $code;
+//            }
+//        }
         $tran=\Yii::$app->db->beginTransaction();
         try{
             $version=new self();
