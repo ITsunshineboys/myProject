@@ -156,9 +156,10 @@ class UserRole extends ActiveRecord
      * @param int $userId user id
      * @param int $roleId role id
      * @param ActiveRecord|null $operator operator
+     * @param int $reviewStatus review status default 0(meaning "in process")
      * @return bool
      */
-    public static function addUserRole($userId, $roleId, ActiveRecord $operator = null)
+    public static function addUserRole($userId, $roleId, ActiveRecord $operator = null, $reviewStatus = Role::AUTHENTICATION_STATUS_IN_PROCESS)
     {
         UserRole::deleteAll(['user_id' => $userId, 'role_id' => $roleId]);
         $userRole = new self;
@@ -166,7 +167,7 @@ class UserRole extends ActiveRecord
         $userRole->role_id = $roleId;
         $now = time();
         $userRole->review_apply_time = $now;
-        $userRole->review_status = Role::AUTHENTICATION_STATUS_IN_PROCESS;
+        $userRole->review_status = $reviewStatus;
         if ($operator) {
             $userRole->review_time = $now;
             $userRole->review_status = Role::AUTHENTICATION_STATUS_APPROVED;

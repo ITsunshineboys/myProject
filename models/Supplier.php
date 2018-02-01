@@ -276,7 +276,7 @@ class Supplier extends ActiveRecord
                 return $code;
             }
 
-            if (!in_array(Yii::$app->params['ownerRoleId'], UserRole::findRoleIdsByUserIdAndReviewStatus())
+            if (!in_array(Yii::$app->params['ownerRoleId'], UserRole::findRoleIdsByUserIdAndReviewStatus($user->id))
                 && !UserRole::addUserRole($user->id, Yii::$app->params['ownerRoleId'], $operator)
             ) {
                 $transaction->rollBack();
