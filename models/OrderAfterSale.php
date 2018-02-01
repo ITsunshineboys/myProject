@@ -1368,7 +1368,7 @@ class OrderAfterSale extends ActiveRecord
             'value' =>'',
             'time'=>date('Y-m-d H:i',$buyer_express->receive_time),
             'phone'=>'',
-            'content'=>'已退至顾客钱包',
+            'content'=>'',
             'number'=>'',
             'code'=>'',
             'status'=>'over'
