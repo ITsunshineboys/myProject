@@ -236,7 +236,7 @@ class GoodsComment extends ActiveRecord
             $supplier->comprehensive_score=$list['score'];
             $supplier->logistics_speed_score=$list['logistics_speed_score'];
             $supplier->store_service_score=$list['store_service_score'];
-            $supplier->shipping_score=$list['shipping_score'];
+            $supplier->delivery_service_score=$list['shipping_score'];
             $res2=$supplier->save(false);
             if (!$res2){
 
@@ -348,6 +348,8 @@ class GoodsComment extends ActiveRecord
             }
             $supplier->comprehensive_score=$list['score'];
             $supplier->logistics_speed_score=$list['logistics_speed_score'];
+            $supplier->store_service_score=$list['store_service_score'];
+            $supplier->delivery_service_score=$list['shipping_score'];
             $res2=$supplier->save(false);
             if (!$res2){
                 $code=1000;

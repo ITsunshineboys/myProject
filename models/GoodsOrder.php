@@ -2130,6 +2130,16 @@ class GoodsOrder extends ActiveRecord
                     if ($Goods['order_status']!=0)
                     {
                         $code=1000;
+                        $tran->rollBack();
+                        return $code;
+                    }
+
+                    $supplier=Supplier::findOne($GoodsOrder->supplier_id);
+                    $code=UserNewsRecord::AddOrderNewRecord(User::findOne($supplier->uid),'订单已付款，请发货',\Yii::$app->params['supplierRoleId'],"订单号{$orders[$k]},{$Goods->goods_name}",$orders[$k],$Goods->sku,self::STATUS_DESC_DETAILS);
+                    if (!$code==200)
+                    {
+                        $code=1000;
+                        $tran->rollBack();
                         return $code;
                     }
                 }
@@ -2167,6 +2177,8 @@ class GoodsOrder extends ActiveRecord
                     return $code;
                 }
             }
+
+
             $tran->commit();
         }catch (\Exception $e){
             $tran->rollBack();
