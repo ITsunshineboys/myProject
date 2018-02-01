@@ -506,6 +506,12 @@ class TestController extends Controller
         }
     }
 
+    /**
+     * Handle goods style
+     *
+     * @return string
+     * @throws Exception
+     */
     public function actionHandleGoodsStyle()
     {
         $goodsIds = GoodsStyle::find()->select(['goods_id'])->asArray()->column();
