@@ -11,6 +11,7 @@ use app\models\GoodsBrand;
 use app\models\GoodsComment;
 use app\models\GoodsOrder;
 use app\models\GoodsStat;
+use app\models\GoodsStyle;
 use app\models\Invoice;
 use app\models\LogisticsDistrict;
 use app\models\LogisticsTemplate;
@@ -502,6 +503,28 @@ class TestController extends Controller
                 'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+    }
+
+    public function actionHandleGoodsStyle()
+    {
+        $goodsIds = GoodsStyle::find()->select(['goods_id'])->asArray()->column();
+        $where = [
+            ['>', 'style_id', 0],
+            ['not in', 'id', $goodsIds]
+        ];
+        $goodsIdsStyleIds = Goods::find()->select(['goods_id', 'style_id'])->where($where)->asArray()->all();
+        $tran = Yii::$app->db->beginTransaction();
+        foreach ($goodsIdsStyleIds as $row) {
+            $gy = new GoodsStyle;
+            $gy->goods_id = $row['goods_id'];
+            $gy->style_id = $row['style_id'];
+            if (!$gy->save(false)) {
+                $tran->rollBack();
+                return 'failed_' . $row['goods_id'];
+            }
+        }
+        $tran->commit();
+        return 'ok';
     }
 
 }
