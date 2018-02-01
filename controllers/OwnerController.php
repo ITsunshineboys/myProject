@@ -1491,7 +1491,7 @@ class OwnerController extends Controller
 //            }
 //            $style = BasisDecorationService::style($condition_stairs);
 //            $material[][]= BasisDecorationService::profitMargin($style);
-            $material[][] = 0;
+            $material[] = ['a'=>1,'b'=>2];
         }
 
 
