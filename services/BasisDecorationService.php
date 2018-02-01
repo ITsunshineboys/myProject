@@ -844,7 +844,7 @@ class BasisDecorationService
                     break;
                 case $one_goods['title'] == self::goodsNames()['marble']: // 大理石
                     if ($post['window'] > 1) {
-                        $one_goods['quantity'] = $post['window'];
+                        $one_goods['quantity'] = (int)$post['window'];
                         $one_goods['cost'] = round(self::algorithm(1,$one_goods['platform_price'], $one_goods['quantity']),2);
                         $one_goods['procurement'] = round(self::algorithm(1,$one_goods['purchase_price_decoration_company'],$one_goods['quantity']),2);
                         $marble [] = $one_goods;
