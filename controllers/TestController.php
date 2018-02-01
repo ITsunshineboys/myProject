@@ -761,7 +761,7 @@ class TestController extends Controller
 
     public  static  function  actionTest1()
     {
-     return Json::encode(GoodsComment::find()->all());
+     echo 4-5;
 
     }
 
