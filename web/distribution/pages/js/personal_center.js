@@ -1,9 +1,5 @@
 app.controller('personal_center_ctrl',function ($uibModal,$scope,$state,$stateParams,_ajax) {
     sessionStorage.clear()
-    _ajax.get('/site/check-is-login',{},function (res) {
-        if(res.code == 403){
-            window.AndroidWebView.skipNotLogin()
-        }else if(res.code == 200){
             //获取个人中心数据
             _ajax.get('/distribution/distribution-user-center',{},function (res) {
                 $scope.all_data = res.data
@@ -12,8 +8,6 @@ app.controller('personal_center_ctrl',function ($uibModal,$scope,$state,$statePa
                 sessionStorage.removeItem('basic_data')
                 $state.go('personal_center')
             })
-        }
-    })
     //跳转绑定手机号
     $scope.go_bind_tel = function () {
         let all_modal = function ($scope, $uibModalInstance) {
