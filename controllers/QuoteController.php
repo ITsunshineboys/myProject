@@ -3104,11 +3104,12 @@ class QuoteController extends Controller
     {
 
         $row2=EngineeringStandardCarpentryCraft::find()->where(['type_id'=>71])->all();
-        foreach ($row2 as $a){
-            $a->unit=2;
-            $b=$a->save(false);
-        }
-        var_dump($b);
+        var_dump($row2);die;
+//        foreach ($row2 as $a){
+//            $a->unit=2;
+//            $b=$a->save(false);
+//        }
+//        var_dump($b);
 
     }
 }
