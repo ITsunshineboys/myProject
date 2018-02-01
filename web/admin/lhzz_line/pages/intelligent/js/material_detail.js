@@ -216,14 +216,21 @@ app.controller('material_detail_ctrl', function ($rootScope, _ajax, $scope, $sta
             console.log(res);
             if(res.code == 200){
                 //基本属性
-                $scope.basic_attr = {
+                if($scope.basic_attr.id!=undefined){
+                    $scope.basic_attr = {
+                        id:$scope.basic_attr.id
+                    }
+                }else{
+                    $scope.basic_attr = {}
+                }
+                Object.assign($scope.basic_attr,{
                     goods_name: res.goods.goods_name,
                     sku: res.goods.sku,
                     supplier_price: res.goods.supplier_price,
                     platform_price: res.goods.platform_price,
                     market_price: res.goods.market_price,
                     left_number: res.goods.left_number,
-                }
+                })
                 //商品属性
                 $scope.other_attr = res.goods_attr
             }else if(res.code == 1087){
