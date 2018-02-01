@@ -1469,28 +1469,29 @@ class OwnerController extends Controller
         $condition_stairs = [];
         //  楼梯信息
         if ($get['stairway_id'] == 1) {
-            $stairs = Goods::findByCategory(BasisDecorationService::goodsNames()['stairs']);
-            $stairs_details = StairsDetails::find()->select(['attribute'])->where(['id'=>$get['stairs']])->one();
-//            foreach ($stairs_details as $detail){
-//               if ($detail['id'] == $get['stairs']){
-//                   $sm = $detail['attribute'];
-//               }
+//            $stairs = Goods::findByCategory(BasisDecorationService::goodsNames()['stairs']);
+//            $stairs_details = StairsDetails::find()->select(['attribute'])->where(['id'=>$get['stairs']])->one();
+////            foreach ($stairs_details as $detail){
+////               if ($detail['id'] == $get['stairs']){
+////                   $sm = $detail['attribute'];
+////               }
+////            }
+//
+//            foreach ($stairs as &$one_stairs_price) {
+//                if (
+//                    $one_stairs_price['value'] == $stairs_details->attribute
+//                    && $one_stairs_price['style_id'] == $get['style']
+//                ) {
+//                    $one_stairs_price['quantity'] = (int)1;
+//                    $one_stairs_price['cost'] = round(BasisDecorationService::algorithm(1,$one_stairs_price['platform_price'],$one_stairs_price['quantity']),2);
+//                    $one_stairs_price['procurement'] = round(BasisDecorationService::algorithm(1,$one_stairs_price['purchase_price_decoration_company'],$one_stairs_price['quantity']),2);
+//                    $condition_stairs [] = $one_stairs_price;
+//                }
+//
 //            }
-
-            foreach ($stairs as &$one_stairs_price) {
-                if (
-                    $one_stairs_price['value'] == $stairs_details->attribute
-                    && $one_stairs_price['style_id'] == $get['style']
-                ) {
-                    $one_stairs_price['quantity'] = (int)1;
-                    $one_stairs_price['cost'] = round(BasisDecorationService::algorithm(1,$one_stairs_price['platform_price'],$one_stairs_price['quantity']),2);
-                    $one_stairs_price['procurement'] = round(BasisDecorationService::algorithm(1,$one_stairs_price['purchase_price_decoration_company'],$one_stairs_price['quantity']),2);
-                    $condition_stairs [] = $one_stairs_price;
-                }
-
-            }
-            $style = BasisDecorationService::style($condition_stairs);
-            $material[][]= BasisDecorationService::profitMargin($style);
+//            $style = BasisDecorationService::style($condition_stairs);
+//            $material[][]= BasisDecorationService::profitMargin($style);
+            $material[][] = 0;
         }
 
 
