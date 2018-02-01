@@ -1113,12 +1113,12 @@ class OwnerController extends Controller
         foreach ($brick as $one_brick){
             foreach ($one_brick['attr'] as $attr_){
 
-//                if ( $attr_['value'] == "卫生间"
-//                     && strpos($one_brick['series_name'],$series->series) !== false
-//                    &&  strpos($one_brick['style_name'],$style->style) !== false
-//                ){
-//                    $toilet_goods[] = $one_brick;
-//                }
+                if ( $attr_['value'] == '卫生间'
+                     && strpos($one_brick['series_name'],$series->series) !== false
+                    &&  strpos($one_brick['style_name'],$style->style) !== false
+                ){
+                    $toilet_goods[] = $one_brick;
+                }
 
 
                 if ($attr_['value'] == '厨房'
@@ -1138,9 +1138,7 @@ class OwnerController extends Controller
             }
 
         }
-        var_dump($kitchen_goods);
-        var_dump($hall_goods);
-die;
+
 
         $max_toilet_goods[] = BasisDecorationService::profitMargin($toilet_goods);
         $max_kitchen_goods[] = BasisDecorationService::profitMargin($kitchen_goods);
