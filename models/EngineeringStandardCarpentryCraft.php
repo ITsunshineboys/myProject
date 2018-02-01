@@ -42,7 +42,7 @@ class EngineeringStandardCarpentryCraft extends ActiveRecord
 
                 $a['title']=$a['worker_name'];
                 $a['unit'] = self::UNIT[1];
-                if($row['id']==71){
+                if($a['id']==71){
                     $a['unit']=self::UNIT[2];
                 }
                 $a['value']='';
