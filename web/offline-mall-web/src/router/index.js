@@ -9,6 +9,7 @@ import Invoice from '@/views/invoice/index'                 // 发票
 import PaySuccess from '@/views/pay_success/index'          // 支付成功
 import GoodDetail from '@/views/good_detail/index'          // 商品详情
 import AllComment from '@/views/comment/index'              // 全部评价
+import Download from '@/views/download/index'               // 下载app
 import ClassList from '@/views/class/index'                 // 分类列表
 import GoodsList from '@/views/goods_list/index'            // 商品列表
 import StoreHome from '@/views/store_management/index'      // 店铺首页
@@ -40,6 +41,11 @@ export default new Router({
       name: 'AllComment',
       component: AllComment
     }, {
+      path: '/download-app',
+      name: 'Download',
+      component: Download
+    },
+    {
       path: '/order',
       name: 'Order',
       component: Order

@@ -482,7 +482,7 @@
           }
         })
       },
-      // 立即购买
+      // 弹窗中的立即购买
       buyNow () {
         this.axios.get('/mall/goods-view', {id: this.good_id}, (res) => {
           this.good_detail.status = res.data.goods_view.status
