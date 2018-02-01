@@ -796,7 +796,7 @@ class OrderAfterSale extends ActiveRecord
                     break;
                 case 'supplier':
                     $data[]=[
-                        'type'=>'等待商家处理',
+                        'type'=>'商家派出人员',
                         'value'=>'',
                         'time'=>'',
                         'phone'=>'',
@@ -915,7 +915,7 @@ class OrderAfterSale extends ActiveRecord
             {
                 case 'user':
                     $data[]=[
-                        'type'=>'商家派出工作人员',
+                        'type'=>'等待商家处理',
                         'value' =>'',
                         'time'=>'',
                         'phone'=>'',
