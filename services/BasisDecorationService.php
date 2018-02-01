@@ -823,13 +823,19 @@ class BasisDecorationService
                 case $one_goods['title'] == self::goodsNames()['wood_floor'] && $one_goods['series_id'] == $post['series']: // 木地板
                     $goods_area = GoodsAttr::findByGoodsIdUnits($one_goods['id'],'');
                     foreach ($goods_area as $one_goods_area) {
-                        if ($one_goods_area['name'] == self::UNITS['length']) {
+
+                        // 获取长
+                        if (strpos($one_goods_area['name'],self::UNITS['length']) !== false) {
                             $length = $one_goods_area['value'];
                         }
-                        if ($one_goods_area['name'] == self::UNITS['breadth']) {
+
+                        //  获取宽
+                        if ((strpos($one_goods_area['name'],self::UNITS['breadth']) !== false)) {
                             $breadth = $one_goods_area['value'];
                         }
                     }
+
+
                     $area = round(self::algorithm(1,$length,$breadth),2);
                     $one_goods['quantity'] = (int)ceil(self::algorithm(6,$post['bedroom_area'],$area));
                     $one_goods['cost'] = round(self::algorithm(1,$one_goods['platform_price'],$one_goods['quantity']),2);
