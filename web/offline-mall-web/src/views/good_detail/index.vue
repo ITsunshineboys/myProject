@@ -67,23 +67,14 @@
         <flexbox slot="content" justify="space-between" class="shop-intro">
           <div>
             <span>{{good_detail.supplier.goods_number}}</span><br/>商品数
-
-
-
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.follower_number}}</span><br/>粉丝数
-
-
-
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
-
-
-
           </div>
         </flexbox>
         <flexbox slot="footer" justify="center" class="view-shop-btn">
@@ -283,14 +274,7 @@
         checkin: 1,                    // 是否登录默认登录
         afterservice_arr: ['上门维修', '上门退货', '上门换货', '退货', '换货'],
         safeguard_arr: ['提供发票', '上门安装'],
-        user_icon: require('../../assets/images/user_icon_default.png'), // 默认用户头像
-        share_content: [
-          {image: require('../../assets/images/weixin.png'), title: '微信'},
-          {image: require('../../assets/images/pengyouquan.png'), title: '朋友圈'},
-          {image: require('../../assets/images/sina.png'), title: '新浪微博'},
-          {image: require('../../assets/images/qq.png'), title: 'QQ'},
-          {image: require('../../assets/images/qzone.png'), title: 'QQ空间'}
-        ]
+        user_icon: require('../../assets/images/user_icon_default.png') // 默认用户头像
       }
     },
     activated () {

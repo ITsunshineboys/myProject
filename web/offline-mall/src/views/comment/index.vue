@@ -147,8 +147,4 @@
   .comments-container {
     margin-top: 94px;
   }
-
-  /*.scroller {*/
-  /*margin-top: 350px;*/
-  /*}*/
 </style>

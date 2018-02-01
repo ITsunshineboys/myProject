@@ -8,7 +8,7 @@
     <p class="comment-date">{{commentDate}}</p>
     <p class="comment-content">{{content}}</p>
     <div class="comment-pics">
-      <x-img v-for="(item, index) in images" :src="item.src" :key="item.index" @click.native="show(index)"></x-img>
+      <x-img v-for="(item, index) in images" :src="item.src" :default-src="default_pic" :key="item.index" @click.native="show(index)"></x-img>
       <div>
         <previewer :list="images" ref="previewer"></previewer>
       </div>
@@ -32,7 +32,8 @@
     props: ['userIcon', 'userName', 'commentLevel', 'commentDate', 'content', 'images', 'reply'],
     data () {
       return {
-        previewerList: []
+        previewerList: [],
+        default_pic: require('../../assets/images/default_pic.png') // 默认用户头像
       }
     },
     methods: {
