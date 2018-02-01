@@ -1,0 +1,439 @@
+/*头部开始*/
+header{
+    box-shadow: none !important;
+}
+/*头部结束*/
+a:focus, a:hover{
+    color: #b1b1b1;
+    text-decoration: none;
+}
+
+.modal-body{
+    padding: 0;
+}
+
+header div{
+    height: 4rem;
+    width: auto;
+    background-color: white;
+    position: relative;
+    /*border-bottom:1px solid #999 ;*/
+}
+
+.public_return_black{
+    width: 4rem;
+    height: 4rem;
+    display: inline-block;
+    position: absolute;
+}
+.left_retrun{
+    position: absolute;
+    top: 1.3rem;
+    left: 1.2rem;
+    color: #999;
+}
+.search_details{
+    position: absolute;
+    left: 4.3rem;
+    top: 1.5rem;
+}
+.mall_home{
+    position: absolute;
+    right: 1.2rem;
+    width: 1.6rem;
+    top: 1.2rem;
+}
+header input{
+    width:25rem ;
+    height: 2.6rem;
+    border-radius:2rem ;
+    font-size: 1.3rem;
+    margin-top: 0.7rem;
+    margin-left: 3.2rem;
+    padding-left: 3rem;
+    border: 2px solid #e5e5e5;
+    color: #666;
+}
+section{
+    background-color: #F6F6F6;
+}
+.span_center{
+    margin-left: 11rem;
+    font-size: 1.4rem;
+}
+
+.search_box{
+    height: 4.1rem;
+    background-color: white;
+    border: 1px solid #666;
+}
+.memo_pad{
+    background-color: white;
+    padding: 0.8rem 0 0.8rem 1.2rem;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+    position: fixed;
+    top: 4rem;
+    left: 0;
+    z-index: 999;
+    width: 100%;
+}
+.memo_pad ul {
+    padding-left: 0;
+}
+.memo_pad li{
+    font-size: 1.4rem;
+    margin-right: 0.9rem;
+    color: #b1b1b1;
+    display: inline-block;
+    padding-right: 1.8rem;
+    position: relative;
+}
+.memo_pad li img{
+    vertical-align: initial;
+}
+.memo_pad li:last-child{
+    margin-right: 0 ;
+}
+
+.up_down{
+
+}
+.filter_nor{
+    position: absolute;
+    right: 0;
+    top: .8rem;
+}
+.sort{
+    color:#A9A9A9 ;
+}
+.filter_col{
+    color:#53A8F4;
+}
+.mall_list{
+    background-color: white;
+    margin-top: 8.5rem;
+}
+.flex_div{
+    position: relative;
+}
+.item_commodity{
+    position: relative;
+    border-bottom: 1px solid #E9EDEE;
+    padding: 1.2rem;
+}
+.item_commodity div{
+    display: inline-block;
+    width: 8rem;
+    height: 8rem;
+    border-radius: .3rem;
+    overflow: hidden;
+}
+.item_commodity_divimg {
+
+}
+.item_commodity_divimg img {
+    width: 100%;
+    height: 100%;
+}
+.item_commodity_comment{
+    width: 20.6rem!important;
+    margin-left: 1rem;
+}
+
+.item_commodity_comment .comment_one{
+    font-size: 1.4rem;
+    color: #666;
+    margin-bottom: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.item_commodity_comment .comment_two{
+    font-size: 1.2rem;
+    color: #999;
+    margin-bottom: 1.2rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.item_commodity_comment .comment_span,.item_commodity_comment .comment_span_two {
+    font-size: 1rem;
+    color: #999;
+}
+.item_commodity_comment .comment_span_three{
+    font-size: 1.2rem;
+    color: #D9AD65;
+    margin-top: 0.2rem;
+}
+
+.item_commodity p,span{
+
+}
+.img_item{
+}
+#myModal8 .modal-dialog{
+    width: 28rem;
+    background-color: white;
+    position: absolute;
+    /*border: 1px solid red;*/
+    right: 0;
+    margin: 0;
+}
+.style_screen{
+    position: relative;
+    /*height: 51rem;*/
+    height: 100%;
+
+}
+.font_color{
+    color: #b1b1b1;
+    position: absolute;
+    bottom: -1rem;
+    right: 1.2rem;
+    padding-right: 1.7rem;
+}
+.style_size{
+    font-size: 1.4rem;
+    color: #666;
+}
+.down_list{
+    width: 1.2rem;
+}
+.header_font{
+    /*overflow: hidden;*/
+    margin-bottom: 1rem;
+    margin-top: 1.6rem;
+    color: #666;
+    font-size: 1.4rem;
+    padding-left: 1.2rem;
+
+}
+
+.down_arrow{
+    margin-left: 18rem;
+    position: absolute;
+
+}
+.changeColor{
+    color: #222!important;
+    border-color: #222!important;
+
+}
+.well{
+    background-color: white;
+    border: none;
+}
+.well{
+    padding: 0.1rem;
+    border-bottom: 2px solid #dcdcdc;
+    margin-bottom: 0;
+}
+.well ul{
+    margin-left: 1.2rem;
+    margin-bottom: 1.2rem;
+}
+.well ul li{
+    width: 5.7rem;
+    height: 2.4rem;
+    border: 2px solid #999;
+    color: #999;
+    border-radius:.3rem;
+    display: inline-block;
+    text-align: center;
+    line-height: 2.3rem;
+    font-size: 1.1rem;
+    margin-right: .7rem;
+    margin-bottom: .7rem;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.price_range{
+    border-bottom: 2px solid #dcdcdc;
+    padding-bottom: 2rem;
+}
+.price_range input{
+    width: 5.5rem;
+    height: 3rem;
+    font-size: 1.1rem;
+    border: 2px solid #999;
+    margin-left: 1.2rem;
+    padding-left: 1rem;
+    border-radius: .3rem;
+}
+.all_brand_btn{
+    /*height: 3rem;*/
+    background-color: white;
+    text-align: center;
+    line-height: 3rem;
+    font-size: 1rem;
+    border-bottom: 2px solid #dcdcdc;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+}
+.all_brand_btn span{
+    color: #959292;
+    font-size: 1.2rem;
+}
+.all_brand_btn span img{
+    vertical-align: initial;
+}
+.reset_btn{
+    width: 50%;
+    font-size: 1.2rem;
+    height: 3.6rem;
+    color: #666;
+    float:left;
+}
+.modal-footer .btn+.btn{
+    margin-left: 0;
+}
+.last_btn{
+    background-color: #333;
+    color: white;
+    float: left;
+}
+.modal-footer {
+    padding: 0;
+    border-top: 1px solid #e5e5e5;
+}
+.model_content{
+    /*width: 32rem!important;*/
+    /*height: 58rem!important;*/
+    /*margin-top: -28px;*/
+    /*margin-left: 2.2rem;*/
+
+}
+#myModal_brand {
+    margin-left: 4.1rem;
+}
+#myModal_brand  .modal-body{
+    margin-bottom: 3.6rem;
+    overflow: hidden;
+}
+
+.modal-body{
+    position: relative;
+}
+.brand_content{
+    font-size: 1.4rem;
+    color: #666;
+    margin-top: 1.2rem;
+    margin-bottom: 1.2rem;
+}
+.footer_size{
+
+    width: 32rem;
+    position: absolute;
+
+}
+.footer_size button{
+    width:49.7%;
+    height: 3.8rem;
+    font-size: 1.2rem
+}
+.btn_brand{
+    background-color: white;
+    color: #6C6C6C;
+    border: 1px solid #999;
+}
+.btn_brandRight{
+    background-color: #333;
+    color: white;
+}
+.modal-footer {
+    border-top: none;
+}
+.back_btn{
+    width: 10rem;
+    margin-left: -4.2rem;
+}
+/*第三个页面*/
+.brands_more{
+
+}
+.brands_more {
+
+}
+.brands_more  li {
+    list-style: none;
+    width: 25rem;
+    height: 2.4rem;
+    /*border: 1px solid #999;*/
+    color: #959292;
+    /*border-radius:0.5rem;*/
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+    font-size: 1.4rem;
+    margin-left: 1.2rem;
+    padding-top: 1rem;
+    padding-bottom: 3rem;
+    border-bottom: 2px solid #dcdcdc;
+    position: relative;
+}
+.brands_more li img{
+    position: absolute;
+    right: 0;
+    top: 2rem;
+}
+.nullGoods{
+    text-align: center;
+    background-color: white;
+    padding-top: 2rem;
+}
+.nullGoods span{
+    font-size: 1.4rem;
+    color: #9b9b9b;
+}
+.div_search{
+    width: 32rem;
+    position: relative;
+    margin-bottom: 1.2rem;
+}
+.brand_search{
+    width: 25.4rem;
+    height: 3rem;
+    border-radius: 2rem;
+    border: 1px solid #9b9b9b;
+    font-size: 1.3rem;
+    padding-left: 1.2rem;
+    margin-left: 1.2rem;
+}
+.img_search{
+    position: absolute;
+    right: 7rem;
+    top:1rem;
+}
+.screen_model .modal-dialog,
+.screen_model .modal-content ,
+#myModal_brand .modal-dialog,
+#myModal_brand .modal-content
+{
+    height: 100%;
+    overflow-y: auto;
+}
+.screen_model .modal-footer,
+#myModal_brand .modal-footer
+{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+.screen_model .modal-body,
+#myModal_brand .modal-body
+{
+    margin-bottom: 3.6rem;
+}
+@media (min-width: 768px){
+    #myModal_brand .modal-dialog {
+        width: 28rem;
+        margin: 0;
+        top:0;
+        left: 0;
+    }
+}
+

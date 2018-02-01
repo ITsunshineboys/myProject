@@ -70,7 +70,7 @@
       }
     },
     watch: {
-      'cur_city': 'getData'
+      // 'cur_city': 'getData'
     }
   }
 </script>
@@ -114,7 +114,8 @@
     color: #666;
     font-size: 16px;
     padding-left: 14px;
-    margin-top: 10px;
+    margin-top: 50px;
+    padding-top: 0!important;
   }
   /*选择城市按钮*/
   .city_btn {

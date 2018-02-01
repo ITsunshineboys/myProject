@@ -1,0 +1,140 @@
+.body{
+    background: #F6F6F6;
+}
+
+.ng-scope{
+    background: #f6f6f6;
+}
+.header img{
+    width: 100%;
+}
+
+.intelligent_div{
+    font-size: 1.4rem;
+    padding: 0 1.2rem;
+    position: relative;
+    top:-5.5rem;
+}
+.intelligent_div_box{
+    padding: 2rem;
+    border-radius: .3rem;
+    background: #FFFFFF;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+}
+.intelligent_div a{
+    text-decoration: none;
+    display: block;
+}
+.font{
+    color: #333;
+}
+.intel{
+    color: #666;
+}
+a{
+    text-decoration: none!important;
+}
+
+.address{
+    color: #333;
+    display: inline-block;
+}
+.adress_img{
+    display: inline-block;
+    margin-top: -0.1rem;
+}
+.intelligent_div button{
+    width: 100%;
+    background-color: #D9AD65 ;
+    position: relative;
+    border-radius: 3rem;
+    color: white;
+    border: none;
+    padding: 1rem 4rem;
+    font-size: 1.4rem;
+    margin-top: 2rem;
+}
+.exhibition{
+     margin-top: -3rem;
+}
+.exhibition ul{
+    padding-left: 0;
+    padding: 0 1.2rem;
+}
+.exhibition ul li {
+    width: 100%;
+    margin-bottom: 1.6rem;
+    overflow: hidden;
+    border-radius: .3rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+}
+.exhibition ul li img{
+    width: 100%;
+}
+.exhibition span{
+    display: block;
+    width: 4rem;
+    height: 2rem;
+    text-align: center;
+    line-height: 2rem;
+    background-color: #FF9C15;
+    opacity: .8;
+    color: white;
+    position: relative;
+    left: 25rem;
+    top: 3rem;
+    border-radius: 1rem;
+    font-size: 1.1rem;
+}
+.exhibition h1{
+    position: absolute;
+    top:10.5rem;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: white;
+    left: 1rem;
+}
+.exhibition p{
+    position: absolute;
+    top: 13rem;
+    left: 1rem;
+    color: white;
+    font-size: 1.2rem;
+}
+/*底部栏样式开始*/
+.tab_bottom{
+    position: fixed;
+    width: 100%;
+    height: 4rem;
+    /*line-height: 4rem;*/
+    bottom: 0;
+    background:rgba(255,255,255,1);
+    box-shadow: 0 -1px 0 rgba(0,0,0,.2);
+    z-index: 1000;
+}
+.tab_bottom ul{
+    width: 100%;
+    display: flex;
+    padding: 0 4rem;
+    justify-content:space-between ;
+}
+.tab_bottom ul li{
+    /*margin-left: 5rem;*/
+    text-align: center;
+}
+.tab_bottom ul li span{
+    font-size: 1rem;
+    display: inline-block;
+    color:#999;
+    margin-top:.42rem;
+}
+.tab_bottom ul li img{
+    margin-top: .5rem;
+}
+.span_active span{
+    color: #D9AD65!important;
+}
+/*底部栏样式结束*/
+section{
+    margin-bottom:5.6rem;
+}
