@@ -1555,13 +1555,13 @@ class OwnerController extends Controller
     public function actionViewIdentity()
     {
         $identity = Yii::$app->user->identity->viewIdentity();
-        $supplier['supplier']['type_org'] = StringService::formatArr(Supplier::TYPE_ORG);
-        $supplier['supplier']['type_shop'] = StringService::formatArr(Supplier::TYPE_SHOP);
+//        $supplier['supplier']['type_org'] = StringService::formatArr(Supplier::TYPE_ORG);
+//        $supplier['supplier']['type_shop'] = StringService::formatArr(Supplier::TYPE_SHOP);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'view-identity' => array_merge($identity, $supplier)
+                'view-identity' => $identity
             ],
         ]);
     }

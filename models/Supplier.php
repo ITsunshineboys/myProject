@@ -900,7 +900,7 @@ class Supplier extends ActiveRecord
         }
 
         if (isset($data['status'])) {
-            $data['status_desc'] = self::STATUSES[$data['status']];
+            $data['status' . ModelService::SUFFIX_FIELD_DESCRIPTION] = self::STATUSES[$data['status']];
         }
 
         if (isset($data['quality_guarantee_deposit'])) {
@@ -908,7 +908,7 @@ class Supplier extends ActiveRecord
         }
 
         if (isset($data['type_org'])) {
-            $data['type_org'] = self::TYPE_ORG[$data['type_org']];
+            $data['type_org' . ModelService::SUFFIX_FIELD_DESCRIPTION] = self::TYPE_ORG[$data['type_org']];
         }
 
         if (isset($data['category_id'])) {
@@ -918,9 +918,8 @@ class Supplier extends ActiveRecord
         }
 
         if (isset($data['type_shop'])) {
-            $data['type_shop'] = self::TYPE_SHOP[$data['type_shop']];
+            $data['type_shop' . ModelService::SUFFIX_FIELD_DESCRIPTION] = self::TYPE_SHOP[$data['type_shop']];
         }
-        
 
         $ym = date('Ym');
         if (isset($data['sales_amount_month'])) {
