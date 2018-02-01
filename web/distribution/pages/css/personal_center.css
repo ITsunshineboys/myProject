@@ -11,6 +11,16 @@
 .personal_center img{
     width:1.47rem;
 }
+.personal_center .header i{
+    font-size: 36px;
+    /*position: relative;*/
+    /*left: .32rem;*/
+}
+.personal_center .header{
+    text-align: left;
+    background-color: #000;
+    color: #53A8F4;
+}
 .personal_center  .avatar > div p{
     position: absolute;
     bottom: 0;

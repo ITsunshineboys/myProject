@@ -2490,9 +2490,11 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
+
     /**
      * 用户去评论
      * @return string
+     * @throws Exception
      */
     public function actionCommentSub()
     {
@@ -2575,7 +2577,7 @@ class OrderController extends Controller
             ->where(['id'=>$order['comment_id']])
             ->asArray()
             ->one();
-         if(!$comment)
+        if(!$comment)
         {
             $code=200;
             return Json::encode([
@@ -2584,21 +2586,18 @@ class OrderController extends Controller
                 'data'=>[]
             ]);
         }
-
-
-
-        if (6 <$comment['score'] && $comment['score']<= 10 )
+        if (in_array($comment['score'],GoodsComment::SCORE_GOOD))
         {
             $comment['score']=GoodsComment::DESC_SCORE_GOOD;
-        }else if (2< $comment['score'] && $comment['score']<= 6 )
+        }
+        else if(in_array($comment['score'],GoodsComment::SCORE_MEDIUM))
         {
             $comment['score']=GoodsComment::DESC_SCORE_MEDIUM;
         }else{
             $comment['score']=GoodsComment::DESC_SCORE_POOR;
         }
         $comment['create_time']=date('Y-m-d H:i',0);
-
-         if ($comment){
+        if ($comment){
             $comment['image']=CommentImage::find()
                 ->select('image')
                 ->where(['comment_id'=>$order['comment_id']])
@@ -2614,7 +2613,6 @@ class OrderController extends Controller
             }else{
                 $comment['reply']='';
             }
-
         }
         $code=200;
         return Json::encode([
@@ -3707,6 +3705,15 @@ class OrderController extends Controller
                             {
                                echo 'fail';
                                exit;
+                            }
+
+                            $supplier=Supplier::findOne($GoodsOrder->supplier_id);
+                            $code=UserNewsRecord::AddOrderNewRecord(User::findOne($supplier->uid),'订单已付款，请发货',\Yii::$app->params['supplierRoleId'],"订单号{$orders[$k]},{$Goods->goods_name}",$orders[$k],$Goods->sku,GoodsOrder::STATUS_DESC_DETAILS);
+                            if (!$code==200)
+                            {
+                                $code=1000;
+                                $tran->rollBack();
+                                return $code;
                             }
                         }
                         if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
@@ -4876,8 +4883,17 @@ class OrderController extends Controller
                         {
                            return false;
                         }
+
+                        $supplier=Supplier::findOne($GoodsOrder->supplier_id);
+                        $code=UserNewsRecord::AddOrderNewRecord(User::findOne($supplier->uid),'订单已付款，请发货',\Yii::$app->params['supplierRoleId'],"订单号{$orders[$k]},{$Goods->goods_name}",$orders[$k],$Goods->sku,GoodsOrder::STATUS_DESC_DETAILS);
+                        if (!$code==200)
+                        {
+                            $code=1000;
+                            $tran->rollBack();
+                            return $code;
+                        }
                     }
-                    if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=GoodsOrder::PAY_STATUS_UNPAID)
+                    if ( !$GoodsOrder || $GoodsOrder ->pay_status!=GoodsOrder::PAY_STATUS_UNPAID)
                     {
                         return false;
                     }
@@ -5687,6 +5703,25 @@ class OrderController extends Controller
             'code' => 200,
             'msg' => 'ok',
             'data'=>OrderGoods::FindOrderNumBer($user)
+        ]);
+    }
+
+
+
+    public  function  actionVerificationWxPaySuccess()
+    {
+        $goodsOrder=GoodsOrder::FindByOrderNo(\Yii::$app->request->get('order_no'),'pay_status');
+        if (!$goodsOrder)
+        {
+            $code=1000;
+        }else
+        {
+            $code=$goodsOrder->pay_status==GoodsOrder::PAY_STATUS_PAID?200:1098;
+        }
+
+        return Json::encode([
+            'code' => $code,
+            'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code]
         ]);
     }
 

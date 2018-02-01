@@ -73,12 +73,14 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
     $scope.upload_dis=true;
     console.log($scope.data);
     Upload.upload({
-      url:baseUrl+'/site/upload',
+      url:'/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
       console.log(response);
       if(!response.data.data){
-        $scope.img_flag="上传图片格式不正确，请重新上传"
+        $scope.img_flag="上传图片格式不正确，请重新上传";
+        $scope.upload_txt="上传";
+        $scope.upload_dis=false;
       }else{
         $scope.img_flag='';
         $scope.upload_img_src=response.data.data.file_path;
@@ -101,12 +103,14 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
     $scope.upload_txt="上传中...";
     $scope.upload_dis=true;
     Upload.upload({
-      url:baseUrl+'/site/upload',
+      url:'/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
       console.log(response);
       if(!response.data.data){
-        $scope.img_link_flag="上传图片格式不正确，请重新上传"
+        $scope.img_link_flag="上传图片格式不正确，请重新上传";
+        $scope.upload_txt="上传";
+        $scope.upload_dis=false;
       }else{
         $scope.img_link_flag='';
         $scope.upload_link_img_src=response.data.data.file_path;
@@ -228,7 +232,7 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
 
   //商家添加--确认按钮
   $scope.recommend_shop_add_btn=function (valid) {
-    if(valid&&$scope.upload_img_src){
+    if(valid && $scope.upload_img_src && !$scope.img_flag){
       $scope.variable_add_modal='modal';
       _ajax.post('/mall/recommend-add',{
           district_code:510100,
@@ -262,7 +266,7 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
     if($scope.recommend_link_url.indexOf('http://')){
       $scope.recommend_link_url='http://'+$scope.recommend_link_url
     }
-    if(valid&&$scope.upload_link_img_src){
+    if(valid&&$scope.upload_link_img_src&&!$scope.img_link_flag){
       $scope.variable_link_add_modal='modal';
       _ajax.post('/mall/recommend-add',{
           district_code:510100,
@@ -340,7 +344,7 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
   //编辑确认按钮
   $scope.recommend_shop_edit=function (valid) {
     console.log($scope.edit_item)
-    if(valid){
+    if(valid && !$scope.img_flag && !$scope.img_link_flag){
       $scope.variable_modal="modal";
       if($scope.edit_item.from_type=='商家'){
         if($scope.upload_img_src==''){
@@ -381,7 +385,6 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
     }else{
       $scope.submitted = true;
       $scope.variable_modal="";
-      // $scope.img_link_flag='请上传图片';
     }
   };
 

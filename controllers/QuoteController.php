@@ -352,6 +352,8 @@ class QuoteController extends Controller
         $material = [22,9,12,13]; // 龙骨 丝杆 细木工板 石膏板分类 id   13
         $goods_ = Goods::priceDetail(3,$material);
 
+
+
         $category = array_values(Effect::array_group_by($goods_,'title'));
 
         foreach ($category as $v){
@@ -362,6 +364,7 @@ class QuoteController extends Controller
         foreach ($goods_c as $one){
             $id [] = $one['id'];
         }
+
         $goods['specification'] = GoodsCategory::attrValue($id);
 
         $series = Series::findBySeries();
@@ -2491,8 +2494,9 @@ class QuoteController extends Controller
      */
     public function actionDecorationAddClassify()
     {
+        $get=\Yii::$app->request->get();
         $category_id = (int)trim(\Yii::$app->request->get('category_id',''));
-
+        if(!isset($get['id'])){
         $d_add = DecorationAdd::find()->where(['c_id'=>$category_id])->one();
         if ($d_add){
             $code=1087;
@@ -2501,9 +2505,11 @@ class QuoteController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
+    }
+
         $goods  = Goods::priceDetail(self::CATEGORY_LEVEL,$category_id);
 
-        if (isset($goods['0'])) {
+        if ( isset($goods['0'])) {
             $max        = BasisDecorationService::profitMargin($goods);
             $goods_attr = GoodsAttr::frontDetailsByGoodsId($max['id']);
         } else {
@@ -3096,7 +3102,13 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-        var_dump(AssortGoods::find()->asArray()->all());
+
+        $row2=EngineeringStandardCarpentryCraft::find()->where(['type_id'=>71])->all();
+        foreach ($row2 as $a){
+            $a->unit=2;
+            $b=$a->save(false);
+        }
+        var_dump($b);
 
     }
 }

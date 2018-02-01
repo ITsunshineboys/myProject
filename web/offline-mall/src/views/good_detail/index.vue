@@ -23,8 +23,7 @@
     </div>
 
     <!--轮播-->
-    <swiper loop auto :list="banner_list" height="375px" dots-class="custom-bottom" dots-position="center"
-            :show-desc-mask="false"></swiper>
+    <swiper loop auto :list="banner_list" height="375px" dots-class="custom-bottom" dots-position="center" :show-desc-mask="false"></swiper>
     <div class="good-detail">
       <div class="title-container">
         <p>{{good_detail.title}}</p>
@@ -38,16 +37,6 @@
       <group>
         <cell-box is-link class="choose-count" @click.native="showCount('count')">
           选择数量
-
-
-
-
-
-
-
-
-
-
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -128,32 +117,32 @@
           <flexbox orient="vertical" class="pro-params" align="flex-start">
             <flexbox-item>
               <flexbox justify="space-between">
-                <span>产品编码</span>
-                <span>{{good_detail.sku}}</span>
+                <flexbox-item>产品编码</flexbox-item>
+                <flexbox-item :span="257/375" class="attr-content">{{good_detail.sku}}</flexbox-item>
               </flexbox>
             </flexbox-item>
             <flexbox-item>
               <flexbox justify="space-between">
-                <span>产品品牌</span>
-                <span>{{good_detail.brand_name}}</span>
+                <flexbox-item>产品品牌</flexbox-item>
+                <flexbox-item :span="257/375" class="attr-content">{{good_detail.brand_name}}</flexbox-item>
               </flexbox>
             </flexbox-item>
             <flexbox-item>
               <flexbox justify="space-between" v-if="good_detail.series_name">
-                <span>系列</span>
-                <span>{{good_detail.series_name}}</span>
+                <flexbox-item>系列</flexbox-item>
+                <flexbox-item :span="257/375" class="attr-content">{{good_detail.series_name}}</flexbox-item>
               </flexbox>
             </flexbox-item>
             <flexbox-item v-if="good_detail.style_name">
               <flexbox justify="space-between">
-                <span>风格</span>
-                <span>{{good_detail.style_name}}</span>
+                <flexbox-item>风格</flexbox-item>
+                <flexbox-item :span="257/375" class="attr-content">{{good_detail.style_name}}</flexbox-item>
               </flexbox>
             </flexbox-item>
             <flexbox-item v-if="good_detail.attr!==''">
               <flexbox justify="space-between" v-for="item in good_detail.attrs" :key="item.id">
-                <span>{{item.name}}</span>
-                <span>{{item.value}}</span>
+                <flexbox-item>{{item.name}}</flexbox-item>
+                <flexbox-item :span="257/375" class="attr-content">{{item.value}}</flexbox-item>
               </flexbox>
             </flexbox-item>
           </flexbox>
@@ -249,7 +238,7 @@
                   @isShow="showOfflineAlert"></offlinealert>
 
     <!--加入购物车成功提示-->
-    <toast v-model="cart_success" width="200px" position="middle" :time="2000" :is-show-mask="true">
+    <toast v-model="show_cart_success" width="200px" position="middle" :time="2000" :is-show-mask="true">
       <i class="iconfont icon-checkbox-circle-chec"></i>
       <p>成功添加到购物车</p>
     </toast>
@@ -330,7 +319,8 @@
         show_offlinegood: false,    // 线下商品简介
         show_goodshort_alert: false, // 商品不足弹窗
         show_offline: false,        // 商品下架提示
-        cart_success: false,        // 添加购物车成功toast
+
+        show_cart_success: false,   // 添加购物车成功toast
         count_cart: false,          // 加入购物车按钮显示
         count_now: false,           // 立即购买按钮显示
         default_count: false,       // 两个按钮显示
@@ -361,14 +351,7 @@
         checkin: 1,                    // 是否登录默认登录
         afterservice_arr: ['上门维修', '上门退货', '上门换货', '退货', '换货'],
         safeguard_arr: ['提供发票', '上门安装'],
-        user_icon: require('../../assets/images/user_icon_default.png'), // 默认用户头像
-        share_content: [
-          {image: require('../../assets/images/weixin.png'), title: '微信'},
-          {image: require('../../assets/images/pengyouquan.png'), title: '朋友圈'},
-          {image: require('../../assets/images/sina.png'), title: '新浪微博'},
-          {image: require('../../assets/images/qq.png'), title: 'QQ'},
-          {image: require('../../assets/images/qzone.png'), title: 'QQ空间'}
-        ]
+        user_icon: require('../../assets/images/user_icon_default.png') // 默认用户头像
       }
     },
     created () {
@@ -492,7 +475,7 @@
             }, (res) => {
               if (res.code === 200) {
                 this.showCount('all')
-                this.cart_success = true // 购物车添加成功弹窗显示
+                this.show_cart_success = true // 购物车添加成功弹窗显示
                 window.AndroidWebView.showInfoFromJs(res.data)
               }
             })
@@ -729,9 +712,16 @@
     font-size: 16px;
     color: rgba(102, 102, 102, 1);
     line-height: 16px;
-    font-size: 16px;
   }
 
+  @media (max-width: 360px){
+    .good-container .weui-cell {
+      padding: 16px 14px;
+      font-size: 14px;
+      color: rgba(102, 102, 102, 1);
+      line-height: 16px;
+    }
+  }
   /*选择数量cell end*/
 
   /*选择数量弹窗 start*/
@@ -863,6 +853,36 @@
     vertical-align: text-top;
   }
 
+  @media (max-width: 360px){
+    .good-container .icon-blue {
+      font-size: 18px;
+      color: #222222;
+    }
+
+    .good-container .service span {
+      font-size: 14px;
+      color: rgba(153, 153, 153, 1);
+      vertical-align: text-top;
+    }
+  }
+
+  @media (max-width: 320px){
+    .good-container .service {
+      line-height: 18px;
+      margin-right:16px;
+    }
+
+    .good-container .icon-blue {
+      font-size: 16px;
+      color: #222222;
+    }
+
+    .good-container .service span {
+      font-size: 14px;
+      color: rgba(153, 153, 153, 1);
+      vertical-align: text-top;
+    }
+  }
   /*售后服务cell end*/
 
   /* 售后弹窗服务弹窗 start */
@@ -1055,6 +1075,8 @@
   /*图文详情 start*/
   .good-container .description-container {
     min-height: 10px;
+    padding-top: 15px;
+    padding-bottom: 10px;
   }
 
   .good-container .description {
@@ -1086,6 +1108,11 @@
 
   .good-container .pro-params > div:last-child {
     margin-bottom: 50px;
+  }
+
+  .good-container .pro-params .attr-content {
+    text-align: right;
+    line-height: 18px;
   }
     /*产品参数 end*/
   /*图文详情&产品参数 end*/

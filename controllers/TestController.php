@@ -187,69 +187,6 @@ class TestController extends Controller
         return $this->render('login');
     }
 
-    /**
-     * 验证银行卡测试时
-     */
-    public function actionVerificationBank()
-    {
-       $bank_card='13121564684864546123';
-       $id_card='511302199112131914';
-       $id_name='何友志';
-       $bank=Bank::find()->where(['bank_card'=>$bank_card])->one();
-       if ($bank)
-       {
-           $code=$id_card==$bank_card->id_card?200:1000;
-
-       }else
-       {
-           $tran=Yii::$app->db->transaction;
-           $url='';
-           try{
-                $result=StringService::httpGet($url);
-                if ($result)
-                {
-
-                    $code=200;
-                }else
-                {
-                    $code=1000;
-                }
-               $bank=new Bank();
-               $bank->bank_card=$result['bank_card'];
-               $bank->id_card=$result['id_card'];
-               $bank->id_name=$result['id_name'];
-               if (!$bank->save(false))
-               {
-                   $tran->rollBack();
-               }
-               $tran->commit();
-
-           }catch (\Exception $e){
-               $tran->rollBack();
-               $code=500;
-               return Json::encode([
-                   'code' => $code,
-                   'msg'  => Yii::$app->params['errorCodes'][$code]
-               ]);
-           }
-       }
-        return Json::encode([
-            'code' => $code,
-            'msg'  => 200?'ok':Yii::$app->params['errorCodes'][$code]
-        ]);
-
-
-
-    }
-
-    /**
-     * Test wxa
-     */
-    public function actionWx()
-    {
-        return $this->render('wx');
-    }
-
 
     public  function  actionReturnPost()
     {
@@ -257,164 +194,24 @@ class TestController extends Controller
         echo json_encode($data);
     }
 
-
-    public  function  actionUpData()
-    {
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $lists=ShippingCart::find()
-            ->where(['uid'=>$user->id,'role_id'=>$user->last_role_id_app])
-            ->all();
-        foreach ($lists as &$list)
-        {
-            $list->delete();
-        }
-    }
-
-    public  function  actionDelInvalidData()
-    {
-        $GoodsOrder=GoodsOrder::find()->all();
-        foreach ($GoodsOrder as &$list)
-        {
-            $supplier=Supplier::findOne($list->supplier_id);
-            if (!$supplier)
-            {
-                $OrderGoods=OrderGoods::find()->where(['order_no'=>$list->order_no])->all();
-                foreach ($OrderGoods as &$orderGoods)
-                {
-                    $res1=$orderGoods->delete();
-                    if (!$res1)
-                    {
-                        echo 2;
-                    }
-                }
-                $res=$list->delete();
-                if (!$res)
-                {
-                    echo 2;
-                }
-            }
-        }
-        echo 1;
-    }
-
-
-    /**
-     * @return string
-     */
-    public  function  actionBalanceAdd()
-    {
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $user=User::findOne($user->id);
-        $user->balance=100000000;
-        $user->availableamount=100000000;
-        $user->save(false);
-    }
-
-    /**
-     * @return string
-     */
-    public  function  actionBalanceDelete()
-    {
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $user=User::findOne($user->id);
-        $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
-        $supplier->balance=0;
-        $supplier->availableamount=0;
-        $supplier->save(false);
-    }
-
-    /**
-     * 获取支付测试数据
-     * @return string
-     */
-    public function actionAliPayGetNotify(){
-        $data=(new Query())->from('alipayreturntest')->all();
-        return Json::encode([
-            'code' => 200,
-            'msg'  => 'ok',
-            'data' => $data
-        ]);
-    }
-
-    /**
-     * 测试接口
-     * @return int
-     */
-    public  function  actionPlatformUp()
-    {
-        $request    = Yii::$app->request;
-        $order_no   = trim($request->post('order_no',''));
-        $sku        = trim($request->post('sku',''));
-        $handle_type= trim($request->post('handle_type',''));
-
-        $OrderPlatForm=OrderPlatForm::find()
-            ->where(['order_no'=>$order_no])
-            ->andWhere(['sku'=>$sku])
-            ->one();
-        $OrderPlatForm->handle=$handle_type;
-        $res=$OrderPlatForm->save(false);
-        if (!$res){
-            $code=500;
-            return $code;
-        }
-    }
-
-    public  function  actionTestData()
-    {
-//        $request    = Yii::$app->request;
-//        $order_no   = trim($request->post('order_no',''));
-//        $sku        = trim($request->post('sku',''));
-//        $time=trim($request->post('time',''));
-//        $express=Express::find()->where(['order_no'=>$order_no,'sku'=>$sku])->one();
-//        if ($express)
-//        {
-//            $express->receive_time=strtotime($time);
-//            $express->save(false);
-//        }else
-//        {
-//            echo 2;
-//        };
-        $user=User::find()->all();
-        return Json::encode($user);
-    }
-
-    public  function actionSendData(){
-        $requestData= "{'OrderCode':'','ShipperCode':'STO','LogisticCode':'3345244122453'}";
-
-        //商户ID：1297184
-       // API key：0cdb787d-0542-4bef-bd2e-02826d7e52d4
-        $datas = array(
-            'EBusinessID' => '1297184',
-            'RequestType' => '1002',
-            'RequestData' => urlencode($requestData) ,
-            'DataType' => '2',
-        );
-        $datas['DataSign'] = Express::encrypt($requestData, '0cdb787d-0542-4bef-bd2e-02826d7e52d4');
-        $result=Express::sendPost('http://api.kdniao.cc/Ebusiness/EbusinessOrderHandle.aspx', $datas);
-        var_dump($result);die;
-    }
-
+//    /**
+//     * @return string
+//     */
+//    public  function  actionBalanceAdd()
+//    {
+//        $user = Yii::$app->user->identity;
+//        if (!$user){
+//            $code=1052;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+//        $user=User::findOne($user->id);
+//        $user->balance=100000000;
+//        $user->availableamount=100000000;
+//        $user->save(false);
+//    }
 
     /**
      * 添加测试订单数据
@@ -706,35 +503,5 @@ class TestController extends Controller
             ]);
         }
     }
-
-    public  static  function  actionTest()
-    {
-        $user=\Yii::$app->user->identity;
-        $supplier = UserRole::roleUser($user, Yii::$app->params['supplierRoleId']);
-        var_dump($supplier);
-    }
-
-    public  static  function  actionTest1()
-    {
-     return Json::encode(GoodsComment::find()->all());
-
-    }
-
-
-    /**
-     * @throws \Exception
-     * @throws \yii\db\StaleObjectException
-     */
-    public  function  actionDelInvalidAddress()
-    {
-        $user=User::find()->where(['mobile'=>\Yii::$app->request->post('mobile')])->one();
-
-       $res=UserAddress::deleteAll('uid='.$user->id);
-       var_dump($res);
-    }
-
-
-
-
 
 }

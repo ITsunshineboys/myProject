@@ -4801,7 +4801,7 @@ class MallController extends Controller
                     ]);
                 }
 
-                $operator = UserRole::roleUser($user, Yii::$app->params['lhzzRoleId']);
+                $operator = UserRole::roleUser($user, Yii::$app->session[User::LOGIN_ROLE_ID]);
                 if (!$operator) {
                     $tran->rollBack();
                     $code = 500;
@@ -4971,7 +4971,7 @@ class MallController extends Controller
                     ]);
                 }
 
-                $operator = UserRole::roleUser($user, Yii::$app->params['lhzzRoleId']);
+                $operator = UserRole::roleUser($user, Yii::$app->session[User::LOGIN_ROLE_ID]);
                 if (!$operator) {
                     $tran->rollBack();
                     $code = 500;

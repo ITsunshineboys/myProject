@@ -1420,15 +1420,17 @@ class GoodsOrder extends ActiveRecord
             $list['complete_time']=0;
             $list['RemainingTime']=0;
             //待收货订单状态判断操作
+            $express=Express::find()
+                ->where(['order_no'=>$list['order_no'],'sku'=>$list['sku']])
+                ->one();
             if ($list['status']==self::ORDER_TYPE_DESC_UNRECEIVED){
-                $express=Express::find()
-                    ->where(['order_no'=>$list['order_no'],'sku'=>$list['sku']])
-                    ->one();
+
                 if ($express)
                 {
                     $list['send_time']=$express->create_time;
                     $list['RemainingTime']=Express::findRemainingTime($express);
-                    if ($list['RemainingTime']<=0){
+                    if ($list['RemainingTime']<=0)
+                    {
                         $list['complete_time']=$express->receive_time;
                         $list['status']=self::ORDER_TYPE_DESC_COMPLETED;
                         $list['is_unusual']=0;
@@ -1448,9 +1450,6 @@ class GoodsOrder extends ActiveRecord
             //已完成订单状态判断操作
             if ($list['status']==self::ORDER_TYPE_DESC_COMPLETED)
             {
-                $express=Express::find()
-                    ->where(['order_no'=>$list['order_no'],'sku'=>$list['sku']])
-                    ->one();
                 if ($express){
                     $list['send_time']=$express->create_time;
                     $list['RemainingTime']=Express::findRemainingTime($express);
@@ -2131,6 +2130,16 @@ class GoodsOrder extends ActiveRecord
                     if ($Goods['order_status']!=0)
                     {
                         $code=1000;
+                        $tran->rollBack();
+                        return $code;
+                    }
+
+                    $supplier=Supplier::findOne($GoodsOrder->supplier_id);
+                    $code=UserNewsRecord::AddOrderNewRecord(User::findOne($supplier->uid),'订单已付款，请发货',\Yii::$app->params['supplierRoleId'],"订单号{$orders[$k]},{$Goods->goods_name}",$orders[$k],$Goods->sku,self::STATUS_DESC_DETAILS);
+                    if (!$code==200)
+                    {
+                        $code=1000;
+                        $tran->rollBack();
                         return $code;
                     }
                 }
@@ -2168,6 +2177,8 @@ class GoodsOrder extends ActiveRecord
                     return $code;
                 }
             }
+
+
             $tran->commit();
         }catch (\Exception $e){
             $tran->rollBack();
@@ -3358,21 +3369,21 @@ class GoodsOrder extends ActiveRecord
                         $code=1000;
                         return $code;
                     }
-//                    $shoppingCart= ShippingCart::find()
-//                        ->where(['uid'=>$user->id])
-//                        ->andWhere(['role_id'=>$user->last_role_id_app])
-//                        ->andWhere(['goods_id'=>$goods['goods_id']])
-//                        ->one();
-//                    if ($shoppingCart)
-//                    {
-//                        $resS=$shoppingCart->delete();
-//                        if (!$resS)
-//                        {
-//                            $tran->rollBack();
-//                            $code=500;
-//                            return $code;
-//                        }
-//                    }
+                    $shoppingCart= ShippingCart::find()
+                        ->where(['uid'=>$user->id])
+                        ->andWhere(['role_id'=>$user->last_role_id_app])
+                        ->andWhere(['goods_id'=>$goods['goods_id']])
+                        ->one();
+                    if ($shoppingCart)
+                    {
+                        $resS=$shoppingCart->delete();
+                        if (!$resS)
+                        {
+                            $tran->rollBack();
+                            $code=500;
+                            return $code;
+                        }
+                    }
                     $time=time();
                     $Goods=Goods::findOne($goods['goods_id']);
                     if ($Goods->left_number<$goods['goods_num'])
@@ -3723,8 +3734,7 @@ class GoodsOrder extends ActiveRecord
                     $trans->rollBack();
                     return $code;
                 }
-                $supplier=Supplier::findOne($GoodsOrder->supplier_id);
-                $code=UserNewsRecord::AddOrderNewRecord(User::findOne($GoodsOrder->user_id),'取消订单反馈',$GoodsOrder->role_id,"您的订单{$order_no},已被{$supplier->shop_name}商家驳回.",$order_no,$goods->sku,self::STATUS_DESC_DETAILS);
+                $code=UserNewsRecord::AddOrderNewRecord(User::findOne($GoodsOrder->user_id),'取消订单反馈',$GoodsOrder->role_id,"订单号{$order_no},该订单已取消",$order_no,$goods->sku,self::STATUS_DESC_DETAILS);
                 if ($code!=200)
                 {
                     $trans->rollBack();
@@ -3760,6 +3770,9 @@ class GoodsOrder extends ActiveRecord
         }
         return 200;
     }
+
+
+
 
 
 

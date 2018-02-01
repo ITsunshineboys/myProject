@@ -125,10 +125,12 @@ class GoodsComment extends ActiveRecord
         return $stat;
     }
 
-   /**
+    /**
      * @param $postData
      * @param $user
+     * @param $uploadsData
      * @return int
+     * @throws Exception
      */
     public  static  function  addComment($postData,$user,$uploadsData)
     {
@@ -233,8 +235,12 @@ class GoodsComment extends ActiveRecord
             }
             $supplier->comprehensive_score=$list['score'];
             $supplier->logistics_speed_score=$list['logistics_speed_score'];
+            $supplier->store_service_score=$list['store_service_score'];
+            $supplier->delivery_service_score=$list['shipping_score'];
             $res2=$supplier->save(false);
             if (!$res2){
+
+
                 $code=500;
                 $tran->rollBack();
                 return $code;
@@ -342,6 +348,8 @@ class GoodsComment extends ActiveRecord
             }
             $supplier->comprehensive_score=$list['score'];
             $supplier->logistics_speed_score=$list['logistics_speed_score'];
+            $supplier->store_service_score=$list['store_service_score'];
+            $supplier->delivery_service_score=$list['shipping_score'];
             $res2=$supplier->save(false);
             if (!$res2){
                 $code=1000;
@@ -495,11 +503,13 @@ class GoodsComment extends ActiveRecord
         $order=[];
         foreach ($orders as $k =>$v){
             if ($orders[$k]['comment_id']){
-                $order[$k]=self::find()
+                $comment_data=self::find()
                     ->where(['id'=>$orders[$k]['comment_id']])
                     ->one();
-            }else{
-                unset($order[$k]['comment_id']);
+                if ($comment_data)
+                {
+                    $order[]=$comment_data;
+                }
             }
         }
         $count=count($order);
@@ -521,16 +531,18 @@ class GoodsComment extends ActiveRecord
                 }
             }
             $data['well_probability']=round($score_list['good_score']/$count,2)*100;
-            $data['shipping_score']=round(($score_list['shipping_score']+$postData['shipping_score'])/$count+1,1);
-            $data['store_service_score']=round(($score_list['store_service_score']+$postData['store_service_score'])/$count+1,1);
-            $data['logistics_speed_score']=round(($score_list['logistics_speed_score']+$postData['logistics_speed_score'])/$count+1,1);
-            $data['score']=round(($score_list['score']+$postData['score'])/$count+1,1);
+            $data['shipping_score']=round(($score_list['shipping_score']+$postData['shipping_score'])/($count+1),1);
+            $data['store_service_score']=round(($score_list['store_service_score']+$postData['store_service_score'])/($count+1),1);
+            $data['logistics_speed_score']=round(($score_list['logistics_speed_score']+$postData['logistics_speed_score'])/($count+1),1);
+            $data['score']=round(($score_list['score']+$postData['score'])/($count+1),1);
             $data['count']=$count;
         }else{
             $data['logistics_speed_score']=0;
             $data['score']=0;
+            $data['count']=0;
+            $data['shipping_score']=0;
+            $data['store_service_score']=0;
         }
-
       return $data;
     }
 

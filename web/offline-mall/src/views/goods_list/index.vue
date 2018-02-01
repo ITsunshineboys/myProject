@@ -41,20 +41,20 @@
           <checker v-model="filterParams.seriesParams" default-item-class="btn" selected-item-class="btn-primary" v-if="seriesData.length !== 0">
             <checker-item v-for="obj in seriesData" :value="obj.id" :key="obj.id">{{obj.name}}</checker-item>
           </checker>
-          <p v-else>暂无风格</p>
+          <p v-else>暂无系列</p>
         </div>
         <cell :title="'价格区间'" :border-intent="false" disabled></cell>
         <div class="modal-filter-style price-range">
-          <input type="number" placeholder="最低价" v-model="filterParams.priceMin">
+          <input type="number" placeholder="最低价" v-model="filterParams.priceMin" maxlength="8">
           <span class="iconfont icon-reduce"></span>
-          <input type="number" placeholder="最高价" v-model="filterParams.priceMax">
+          <input type="number" placeholder="最高价" v-model="filterParams.priceMax" maxlength="8">
         </div>
         <cell :title="'品牌'" :is-link="true" :border-intent="false" :arrow-direction="isBrandOpen ? 'up' : 'down'" @click.native="isBrandOpen = !isBrandOpen"></cell>
         <div class="modal-filter-style" v-if="isBrandOpen">
           <checker v-model="filterParams.brandParams" default-item-class="btn" selected-item-class="btn-primary" type="checkbox" v-if="brandData.length !== 0">
             <checker-item v-for="obj in brandData" :value="obj.id" :key="obj.id">{{obj.name}}</checker-item>
           </checker>
-          <p v-else>暂无风格</p>
+          <p v-else>暂无品牌</p>
         </div>
         <div class="btn-group">
           <button class="btn-reset" type="button" @click="filterReset">重置</button>
@@ -112,12 +112,13 @@
           brandParams: [],  // 筛选模态框里，选中的品牌（可多选）
           priceMin: '',     // 最低价
           priceMax: ''      // 最高价
-        }
+        },
+        minWatch: null,     // 最小价格监听
+        maxWatch: null      // 最大价格监听
       }
     },
     methods: {
       tabHandle (str) {
-        this.goodsListData = []     // 初始化数据
         this.sortName = str
         switch (str) {      // 只有在价格和好评率会做排序
           case 'platform_price':
@@ -125,22 +126,35 @@
             this.platformPriceSortNum = this.platformPriceSortNum === 4 ? 3 : 4     // 第一次点击价格 tab 为降序：3
             this.favourableCommentRateSortNum = 4                                   // 将好评率改为升序
             this.goodsListParams['sort[]'] = this.sortName + ':' + this.platformPriceSortNum
+            this.goodsListParams.page = 1
             break
           case 'favourable_comment_rate':
             // 点击好评率 tab 默认将默认为降序
             this.favourableCommentRateSortNum = this.favourableCommentRateSortNum === 4 ? 3 : 4     // 第一次点击好评率 tab 为降序：3
             this.platformPriceSortNum = 4                                                           // 将价格改为升序
             this.goodsListParams['sort[]'] = this.sortName + ':' + this.favourableCommentRateSortNum
+            this.goodsListParams.page = 1
             break
           case 'sold_number':
             this.goodsListParams['sort[]'] = this.sortName + ':' + 3
+            this.goodsListParams.page = 1
         }
+        this.goodsListData = []     // 初始化数据
         this.getGoodsList()
       },
       getGoodsList () {     // 商品列表数据请求
         this.goodsListParams.category_id = this.$route.params.id      // 获取三级分类ID
         this.axios.get('/mall/category-goods', this.goodsListParams, res => {
-          console.log(res)
+          console.log(res, '商品列表数据')
+          let data = res.data
+          this.goodsListData = data.category_goods
+          this.totalPage = Math.ceil(data.total / 12)     // 计算总页数
+          this.isLoading = false      // 加载成功，取消加载样式
+        })
+      },
+      getMoreGoodsList () {     // 获取更多商品数据
+        this.goodsListParams.category_id = this.$route.params.id      // 获取三级分类ID
+        this.axios.get('/mall/category-goods', this.goodsListParams, res => {
           let data = res.data
           this.goodsListData = this.goodsListData.concat(data.category_goods)
           this.totalPage = Math.ceil(data.total / 12)     // 计算总页数
@@ -148,6 +162,26 @@
         })
       },
       filterModalData () {      // 模态框数据请求
+        if (typeof this.minWatch === 'function') {
+          this.minWatch()     // 停止监听
+        }
+        if (typeof this.maxWatch === 'function') {
+          this.maxWatch()
+        }
+        this.minWatch = this.$watch('filterParams.priceMin', function (n, o) {
+          if (n === o) return
+          let reg = /^[0-9]{0,8}$/
+          if (!reg.test(n)) {
+            this.filterParams.priceMin = o
+          }
+        })
+        this.maxWatch = this.$watch('filterParams.priceMax', function (n, o) {
+          if (n === o) return
+          let reg = /^[0-9]{0,8}$/
+          if (!reg.test(n)) {
+            this.filterParams.priceMax = o
+          }
+        })
         this.isModalOpen = true     // 显示筛选模态框
         this.axios.get('/mall/category-brands-styles-series', {category_id: this.$route.params.id}, res => {
           console.log(res, '风格、系列和品牌')
@@ -207,15 +241,14 @@
           if (this.goodsListParams.page < this.totalPage) {      // 判断当前页是否小于最后一页
             this.loadingText = '加载中...'
             this.goodsListParams.page++     // 当前页 + 1
-            this.getGoodsList()
+            this.getMoreGoodsList()
           } else {
-            this.loadingText = '没用更多数据了'
+            this.loadingText = '没有更多数据了'
           }
         }
       }
     },
     created () {
-      // this.goodsListData = []
       this.getGoodsList()
     },
     mounted () {

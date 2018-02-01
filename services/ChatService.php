@@ -1241,10 +1241,11 @@ class ChatService
             $url = $this->url . 'chatmessages';
         }
         $header = array($this->getToken());
+
         $result = $this->postCurl($url, '', $header, "GET");
+
         return $result;
     }
-
     /**
      * 导出聊天记录---分页
      * @param $ql

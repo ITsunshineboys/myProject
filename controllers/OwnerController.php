@@ -5,7 +5,6 @@ namespace app\controllers;
 use app\models\Apartment;
 use app\models\AssortGoods;
 use app\models\BrainpowerInitalSupervise;
-use app\models\CarpentryAdd;
 use app\models\CoefficientManagement;
 use app\models\DecorationAdd;
 use app\models\District;
@@ -29,6 +28,7 @@ use app\models\ProjectView;
 use app\models\Series;
 use app\models\StairsDetails;
 use app\models\Style;
+use app\models\Supplier;
 use app\models\Worker;
 use app\models\WorkerCraftNorm;
 use app\models\WorkerType;
@@ -37,7 +37,9 @@ use app\models\WorksData;
 use app\models\WorksWorkerData;
 use app\services\BasisDecorationService;
 use app\services\ExceptionHandleService;
-use app\services\LogisticsService;
+use app\services\FileService;
+use app\services\StringService;
+use Faker\Provider\File;
 use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -1448,7 +1450,7 @@ class OwnerController extends Controller
             }
         }
 
-//        $material[] = BasisDecorationService::lamp($lamp,$get);
+        $material[] = BasisDecorationService::lamp($lamp,$get);
         $material[]= BasisDecorationService::formula($goods,$get);
 
 
@@ -1552,11 +1554,14 @@ class OwnerController extends Controller
      */
     public function actionViewIdentity()
     {
+        $identity = Yii::$app->user->identity->viewIdentity();
+//        $supplier['supplier']['type_org'] = StringService::formatArr(Supplier::TYPE_ORG);
+//        $supplier['supplier']['type_shop'] = StringService::formatArr(Supplier::TYPE_SHOP);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'view-identity' => Yii::$app->user->identity->viewIdentity()
+                'view-identity' => $identity
             ],
         ]);
     }
@@ -1832,7 +1837,10 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-        echo pinyin("汗");
+        $a = GoodsCategory::find()->where(["id"=>1515])->one();
+//        $b = GoodsAttr::find()->where(['goods_id'=>$a['id']])->one();
+//        $c = GoodsStyle::find()->where(['goods_id'=>$a['id']])->one();
+
     }
 
 }

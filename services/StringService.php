@@ -620,4 +620,24 @@ class StringService
         $log->messages[] = [$msg, $level, $category, time()];
         $log->export();
     }
+
+    /**
+     * Format array
+     *
+     * @param array $data data to format
+     * @param string $keyName key name default id
+     * @param string $valueName value name default name
+     * @return array
+     */
+    public static function formatArr(array $data, $keyName = 'id', $valueName = 'name')
+    {
+        $res = [];
+        foreach ($data as $k => $v) {
+            $res[] = [
+                $keyName => $k,
+                $valueName => $v
+            ];
+        }
+        return $res;
+    }
 }

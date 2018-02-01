@@ -34,20 +34,23 @@
         </div>
 
         <div ng-if="detail.review_status!='待审核'">
-        <div class="form-group">
-            <span class="col-md-1 control-label">审核时间</span>
-            <div class="col-md-11 form-control-static" ng-bind="detail.review_time"></div>
-        </div>
+            <div class="form-group">
+                <span class="col-md-1 control-label">审核时间</span>
+                <div class="col-md-11 form-control-static" ng-bind="detail.review_time"></div>
+            </div>
 
+            <div class="form-group">
+                <span class="col-md-1 control-label">审核备注</span>
+                <div class="col-md-11 form-control-static" ng-bind="detail.reason"></div>
+            </div>
+        </div>
         <div class="form-group">
-            <span class="col-md-1 control-label">审核备注</span>
-            <div class="col-md-11 form-control-static" ng-bind="detail.reason"></div>
-        </div>
-        </div>
-
-        <div class="btns">
-            <button class="btn btn-primary" ui-sref="edit_class({id:id,title:title})" ng-if="detail.review_status=='不通过'">编辑</button>
-            <button class="btn btn-default" ui-sref="class_manage">返回</button>
+            <div class="col-md-1 control-label" ng-if="detail.review_status=='不通过'">
+                <button class="btn btn-primary" ui-sref="edit_class({id:id,title:title})">编辑</button>
+            </div>
+            <div class="col-md-1 control-label">
+                <button class="btn btn-default" ui-sref="class_manage">返回</button>
+            </div>
         </div>
     </form>
 </div>

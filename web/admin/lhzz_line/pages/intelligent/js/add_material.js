@@ -51,7 +51,7 @@ app.controller('add_material_ctrl',function ($rootScope,$scope,$stateParams,$sta
         }
     })
     $scope.getKeywordMaterialsList = function () {
-        if($scope.params.keyword!==''){
+        if($scope.keyword!==''){
             $scope.Config.currentPage = 1
             $scope.params.keyword = $scope.keyword
             tablePages()

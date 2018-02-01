@@ -69,7 +69,7 @@ app.controller('commodity_online', ['_ajax','$scope', '$stateParams','$http', fu
 
     /*本月销量排序*/
     $scope.sortVolumn =  () => {
-        $scope.table.roles.length = 0;
+        $scope.table.roles = [];
         $scope.pageConfig.currentPage = 1;
         $scope.time_ascorder = false;
         $scope.time_desorder = false;
@@ -89,7 +89,7 @@ app.controller('commodity_online', ['_ajax','$scope', '$stateParams','$http', fu
 
     //上架时间排序
     $scope.sortTime = () => {
-        $scope.table.roles.length = 0;
+        $scope.table.roles = [];
         $scope.pageConfig.currentPage = 1;
         $scope.volumn_ascorder = false;
         $scope.volumn_desorder = false;
@@ -119,7 +119,7 @@ app.controller('commodity_online', ['_ajax','$scope', '$stateParams','$http', fu
 
     /*全选*/
     $scope.checkAll = function () {
-        !$scope.table.roles.length ? $scope.table.roles = $scope.tabledetail.map(function (item) {
+        $scope.table.roles.length !==  $scope.tabledetail.length ? $scope.table.roles = $scope.tabledetail.map(function (item) {
             return item.id;
         }) : $scope.table.roles.length = 0;
         $scope.keyword = '';

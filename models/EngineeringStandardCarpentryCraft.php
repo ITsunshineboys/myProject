@@ -14,6 +14,7 @@ class EngineeringStandardCarpentryCraft extends ActiveRecord
 
     const UNIT = [
         1 => 'm',
+        2 => '㎡'
     ];
 
     /**
@@ -37,13 +38,16 @@ class EngineeringStandardCarpentryCraft extends ActiveRecord
                 ->asArray()
                 ->where(['status'=>4])
                 ->all();
-           foreach ($row as &$a){
+            foreach ($row as &$a){
 
-              $a['title']=$a['worker_name'];
-              $a['unit'] = self::UNIT[1];
-              $a['value']='';
-               unset($a['worker_name']);
-           }
+                $a['title']=$a['worker_name'];
+                $a['unit'] = self::UNIT[1];
+                if($row['id']==71){
+                    $a['unit']=self::UNIT[2];
+                }
+                $a['value']='';
+                unset($a['worker_name']);
+            }
 
         }else{
             foreach ($row as &$one){
@@ -51,12 +55,11 @@ class EngineeringStandardCarpentryCraft extends ActiveRecord
                 $one['unit'] = self::UNIT[$one['unit']];
                 $one['value'] = $one['value'] / 100;
                 if($one['value']==0){
-                    $one['value']='其它';//TODO 修改
+                    $one['value']='其它';
                 }
             }
 
         }
-
         return $row;
 
     }

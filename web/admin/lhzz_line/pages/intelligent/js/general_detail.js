@@ -107,9 +107,14 @@ app.controller('general_detail_ctrl',function (_ajax,$scope,$rootScope,$statePar
         })
     }
     //移除二级标题
-    $scope.removeTwoTitle = function (parent_index,index) {
+    $scope.removeTwoTitle = function (item,index) {
+        let parent_index = $scope.one_title.findIndex(function (item1) {
+            return item1.id == item.id
+        })
         if($scope.one_title[parent_index].two_title[index].id!=undefined){
             $scope.del_id.push($scope.one_title[parent_index].two_title[index].id)
+        }else{
+
         }
         $scope.one_title[parent_index].two_title.splice(index,1)
     }

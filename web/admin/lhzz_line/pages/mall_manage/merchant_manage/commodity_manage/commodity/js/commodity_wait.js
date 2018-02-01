@@ -120,7 +120,7 @@ app.controller('commodity_wait', ['_ajax','$scope', '$stateParams','$http', func
 
     /*全选*/
     $scope.checkAll = function () {
-        !$scope.table.roles.length ? $scope.table.roles = $scope.tabledetail.map(function (item) {
+        $scope.table.roles.length !==  $scope.tabledetail.length ? $scope.table.roles = $scope.tabledetail.map(function (item) {
             return item.id;
         }) : $scope.table.roles.length = 0;
         $scope.keyword = '';

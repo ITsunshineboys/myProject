@@ -18,8 +18,8 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
 
     /*下架原因初始化*/
     $scope.offlinereason = {
-        single:'',
-        batch:''
+        single: '',
+        batch: ''
     }
 
     /*分类选择下拉框初始化*/
@@ -48,7 +48,7 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
     firstClass();
     /*分类选择一级下拉框*/
     function firstClass() {
-        _ajax.get('/mall/categories-manage-admin',{},function (res) {
+        _ajax.get('/mall/categories-manage-admin', {}, function (res) {
             $scope.firstclass = res.data.categories;
             $scope.dropdown.firstselect = res.data.categories[0].id;
         })
@@ -56,7 +56,7 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
 
     /*分类选择二级下拉框*/
     function subClass(obj) {
-        _ajax.get('/mall/categories-manage-admin',{pid:obj},function (res) {
+        _ajax.get('/mall/categories-manage-admin', {pid: obj}, function (res) {
             $scope.secondclass = res.data.categories;
             $scope.dropdown.secselect = res.data.categories[0].id;
         })
@@ -74,9 +74,8 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
 
     /*分类筛选方法*/
     $scope.$watch('dropdown.firstselect', function (value, oldValue) {
-        if (value == oldValue) {
-            return
-        }
+        if (value == oldValue) return
+        if (value === 0 && $scope.params.keyword !== '') return
         $scope.params['sort[]'] = 'online_time:3';
         subClass(value);
         $scope.params.pid = value;
@@ -88,9 +87,6 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
 
 
     $scope.$watch('dropdown.secselect', function (value, oldValue) {
-        if (value == oldValue) {
-            return
-        }
         $scope.params['sort[]'] = 'online_time:3';
         if (value == oldValue) {
             return
@@ -103,6 +99,7 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
             tableList()
         } else {
             //二级分类id为0
+            if ($scope.dropdown.firstselect === 0 && $scope.params.keyword !== '') return
             $scope.params.pid = $scope.dropdown.firstselect;
             $scope.table.keyword = '';
             $scope.params.keyword = '';
@@ -125,7 +122,7 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
     /*列表数据获取*/
     function tableList() {
         $scope.params.page = $scope.pageConfig.currentPage;
-        _ajax.get('/mall/category-list-admin',$scope.params,function (res) {
+        _ajax.get('/mall/category-list-admin', $scope.params, function (res) {
             $scope.pageConfig.totalItems = res.data.category_list_admin.total;
             $scope.listdata = res.data.category_list_admin.details;
         })
@@ -134,11 +131,10 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
 
     /*全选*/
     $scope.checkAll = function () {
-        !$scope.table.roles.length ? $scope.table.roles = $scope.listdata.map(function (item) {
+       $scope.table.roles.length !==  $scope.listdata.length ? $scope.table.roles = $scope.listdata.map(function (item) {
             return item.id;
-        }) : $scope.table.roles.length = 0;
+        }) : $scope.table.roles = [];
     };
-
 
 
     /*已上架单个分类下架种类统计*/
@@ -149,7 +145,7 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
     /*单个确认下架*/
     $scope.sureOffline = function () {
         let data = {id: singleoffid, offline_reason: $scope.offlinereason.single};
-        _ajax.post('/mall/category-status-toggle',data,function (res) {
+        _ajax.post('/mall/category-status-toggle', data, function (res) {
             $scope.offlinereason.single = '';
             $scope.pageConfig.currentPage = 1;
             tableList();
@@ -165,7 +161,7 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
     $scope.sureBatchOffline = function () {
         let batchoffids = $scope.table.roles.join(',');
         let data = {ids: batchoffids, offline_reason: $scope.offlinereason.batch};
-        _ajax.post('/mall/category-disable-batch',data,function (res) {
+        _ajax.post('/mall/category-disable-batch', data, function (res) {
             $scope.offlinereason.batch = '';
             $scope.pageConfig.currentPage = 1;
             tableList()

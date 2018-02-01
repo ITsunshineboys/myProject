@@ -114,7 +114,6 @@ class DistributionController extends Controller
             ]);
         }
         $user=Distribution::findByMobile($mobile);
-        $time=time();
         if($user)
         {
             $sms['mobile']=$mobile;
@@ -242,23 +241,50 @@ class DistributionController extends Controller
         $data=explode('&', base64_decode(base64_decode($session['distribution_token'])));
         if (!$data)
         {
-            $code=1052;
+            $code=1097;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $mobile=$data[0];
-        $create_time=$data[1];
-        $Distribution=Distribution::find()
-            ->where(['mobile'=>$mobile,'create_time'=>$create_time])
-            ->one();
-        if (!$Distribution){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
+        if (count($data)<2)
+        {
+            $user=\Yii::$app->user->identity;
+            if (!$user)
+            {
+                $code=1097;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $mobile=$user->mobile;
+//            $create_time=$user->create_time;
+            $Distribution=Distribution::find()
+                ->where(['mobile'=>$mobile])
+                ->one();
+            if (!$Distribution){
+                $code=1097;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $session['distribution_token']=base64_encode(base64_encode($mobile.'&'.$Distribution->create_time));
+        }else
+        {
+            $mobile=$data[0];
+            $create_time=$data[1];
+            $Distribution=Distribution::find()
+                ->where(['mobile'=>$mobile,'create_time'=>$create_time])
+                ->one();
+            if (!$Distribution){
+                $code=1097;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
         }
         $data=Distribution::DistributionUserCenter($mobile);
         $code=200;
@@ -279,7 +305,7 @@ class DistributionController extends Controller
         $data=explode('&', base64_decode(base64_decode($session['distribution_token'])));
         if (!$data)
         {
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -291,7 +317,7 @@ class DistributionController extends Controller
             ->where(['mobile'=>$mobile,'create_time'=>$create_time])
             ->one();
         if (!$Distribution){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -685,6 +711,36 @@ class DistributionController extends Controller
         ]);
     }
 
+
+    public function  actionCorrelateOrderList()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user
+            || $user->last_role_id_app!=\Yii::$app->params['lhzzRoleId']
+        )
+        {
+            $code=403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $page=trim($request->get('page',1));
+        $size=trim($request->get('size', Distribution::PAGE_SIZE_DEFAULT));
+        $request = Yii::$app->request;
+        $mobile= trim($request->get('mobile'));
+        if (!$mobile)
+        {
+            $code=1000;
+            return Json::encode
+            ([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Distribution::GetDistributionCorrelateList($mobile,$page,$size);
+    }
     /**
      * 获取关联订单
      * @return string
@@ -693,7 +749,7 @@ class DistributionController extends Controller
     {
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]

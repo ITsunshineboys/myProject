@@ -57,7 +57,6 @@ class User extends ActiveRecord implements IdentityInterface
         'nickname',
         'gender',
         'birthday',
-        'district_name',
         'signature',
         'aite_cube_no',
         'balance',
@@ -254,14 +253,6 @@ class User extends ActiveRecord implements IdentityInterface
             $offset = $external ? Yii::$app->params['offsetAiteCubeNo'] : Yii::$app->params['offsetAiteCubeNoInternal'];
             $user->aite_cube_no = $user->id + $offset;
             if (!$user->save()) {
-                $transaction->rollBack();
-                return $code;
-            }
-
-            $userRole = new UserRole;
-            $userRole->user_id = $user->id;
-            $userRole->role_id = Yii::$app->params['ownerRoleId']; // owner
-            if (!$userRole->save()) {
                 $transaction->rollBack();
                 return $code;
             }
@@ -1640,17 +1631,7 @@ class User extends ActiveRecord implements IdentityInterface
                 return $code;
             }
 
-            UserRole::deleteAll(['user_id' => $this->id, 'role_id' => Yii::$app->params['ownerRoleId']]);
-            $userRole = new UserRole;
-            $userRole->user_id = $this->id;
-            $userRole->role_id = Yii::$app->params['ownerRoleId'];
-            $userRole->review_apply_time = time();
-            $userRole->review_status = Role::AUTHENTICATION_STATUS_IN_PROCESS;
-            if ($operator) {
-                $userRole->review_status = Role::AUTHENTICATION_STATUS_APPROVED;
-                $userRole->reviewer_uid = $operator->id;
-            }
-            if (!$userRole->save()) {
+            if (!UserRole::addUserRole($this->id, Yii::$app->params['ownerRoleId'], $operator)) {
                 $tran->rollBack();
                 return $code;
             }
@@ -1846,8 +1827,10 @@ class User extends ActiveRecord implements IdentityInterface
             ? array_merge($modelData, $this->_extraData(self::FIELDS_USER_CENTER_EXTRA))
             : $modelData;
         self::_formatData($viewData);
+        UserAddress::_getReceiveDistrict($viewData,$this->id);
         return $viewData;
     }
+
 
     /**
      * Get view data(lhzz)

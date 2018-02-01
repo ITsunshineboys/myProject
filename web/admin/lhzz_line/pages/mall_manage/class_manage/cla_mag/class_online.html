@@ -1,5 +1,5 @@
 <div class="search form-inline clearfix">
-    <button class="btn btn-default" ng-click=checkAll()>全选</button>
+    <button class="btn btn-default" ng-click="checkAll()">全选</button>
     <button class="btn btn-default" data-toggle="modal" data-target="#batchoffline_modal">下架</button>
     <span class="class-choose">分类选择</span>
     <!--/*分类选择一级下拉框*/-->
@@ -28,11 +28,11 @@
             <th>分类名称</th>
             <th>分类级别</th>
             <th ng-click="sortTime()">
-                <span>下架时间</span>
+                <span>上架时间</span>
                 <span class="sort">
-                            <i class="iconfont icon-up" ng-class="{'active':sortStyleFunc() == 4}"></i>
-                            <i class="iconfont icon-down" ng-class="{'active':sortStyleFunc() == 3}"></i>
-                        </span>
+                            <i class="iconfont icon-up" ng-class="{'actived':sortStyleFunc() == 4}"></i>
+                            <i class="iconfont icon-down" ng-class="{'actived':sortStyleFunc() == 3}"></i>
+                </span>
             </th>
             <th>添加人员</th>
             <th>状态</th>

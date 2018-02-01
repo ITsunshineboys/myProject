@@ -7,7 +7,7 @@
           <img :src="storeData.icon">
         </div>
         <div class="store-name">
-          <p>{{storeData.shop_name}}</p>
+          <p class="title">{{storeData.shop_name}}</p>
           <p class="experience-shop" v-if="storeData.is_line_supplier === 1" @click="isShowAlert = true">线下体验店</p>
         </div>
       </div>
@@ -151,7 +151,7 @@
         }
       },
       getStoreShopGoods () {     // 请求店铺首页推荐商品
-        this.axios.get('/supplier/recommend-second', {supplier_id: this.$route.params.id}, res => {
+        this.axios.get('/supplier/recommend-second', this.recommendParams, res => {
           console.log(res, '店铺推荐商品')
           let data = res.data
           this.recommendGoods = this.recommendGoods.concat(data.recommend_second)
@@ -160,7 +160,7 @@
         })
       },
       getStoreData () {     // 请求店铺数据
-        this.axios.get('/supplier/index', this.recommendParams, res => {
+        this.axios.get('/supplier/index', {supplier_id: this.$route.params.id}, res => {
           console.log(res, '店铺首页数据')
           let data = res.data.index
           this.storeData = data
@@ -173,6 +173,11 @@
           this.offlineInfo.address = data.district
           this.offlineInfo.phone = data.line_supplier_mobile
           this.uid = data.supplier_uid
+        })
+      },
+      getFansData () {      // 点击关注之后更新关注状态和粉丝数
+        this.axios.get('/supplier/index', {supplier_id: this.$route.params.id}, res => {
+          this.storeData = res.data.index
         })
       },
       /**
@@ -221,8 +226,7 @@
           status: this.storeData.is_follow === 1 ? 0 : 1
         }
         this.axios.post('/user-follow/user-follow-shop', params, res => {
-          window.AndroidWebView.clearCache()
-          this.getStoreData()
+          this.getFansData()
         })
       },
       handleScroll () {
@@ -249,7 +253,7 @@
               this.recommendParams.page++     // 当前页 + 1
               this.getStoreShopGoods()      // 请求店铺推荐商品数据
             } else {
-              this.loadingText = '没用更多数据了'
+              this.loadingText = '没有更多数据了'
             }
           } else {
             if (this.allGoodsParams.page < this.totalPage) {      // 判断当前页是否小于最后一页
@@ -257,7 +261,7 @@
               this.allGoodsParams.page++     // 当前页 + 1
               this.getAllGoodsData()        // 请求全部商品数据
             } else {
-              this.loadingText = '没用更多数据了'
+              this.loadingText = '没有更多数据了'
             }
           }
         }
@@ -288,12 +292,21 @@
     z-index: 10;
     width: 100%;
   }
+
   .store {
     margin-top: 46px;
     margin-bottom: 10px;
     padding: 9px 14px;
     color: #999;
     background-color:  #fff;
+  }
+
+  .store-name .title {
+    max-width: 205px;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   .store-img {
@@ -448,6 +461,10 @@
       width: 140px;
       height: 140px;
     }
+
+    .store-name .title {
+      max-width: 150px;
+    }
   }
 
   /* galaxy S5 */
@@ -459,6 +476,10 @@
     .store-goods-item img {
       width: 160px;
       height: 160px;
+    }
+
+    .store-name .title {
+      max-width: 190px;
     }
   }
 
@@ -472,6 +493,10 @@
     .store-goods-item img {
       width: 180px;
       height: 180px;
+    }
+
+    .store-name .title {
+      max-width: 240px;
     }
   }
 </style>
