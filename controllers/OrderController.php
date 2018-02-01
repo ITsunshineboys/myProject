@@ -2490,9 +2490,11 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
+
     /**
      * 用户去评论
      * @return string
+     * @throws Exception
      */
     public function actionCommentSub()
     {

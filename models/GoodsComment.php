@@ -125,10 +125,12 @@ class GoodsComment extends ActiveRecord
         return $stat;
     }
 
-   /**
+    /**
      * @param $postData
      * @param $user
+     * @param $uploadsData
      * @return int
+     * @throws Exception
      */
     public  static  function  addComment($postData,$user,$uploadsData)
     {
@@ -233,8 +235,12 @@ class GoodsComment extends ActiveRecord
             }
             $supplier->comprehensive_score=$list['score'];
             $supplier->logistics_speed_score=$list['logistics_speed_score'];
+            $supplier->store_service_score=$list['store_service_score'];
+            $supplier->shipping_score=$list['shipping_score'];
             $res2=$supplier->save(false);
             if (!$res2){
+
+
                 $code=500;
                 $tran->rollBack();
                 return $code;
@@ -531,6 +537,9 @@ class GoodsComment extends ActiveRecord
         }else{
             $data['logistics_speed_score']=0;
             $data['score']=0;
+            $data['count']=0;
+            $data['shipping_score']=0;
+            $data['store_service_score']=0;
         }
       return $data;
     }
