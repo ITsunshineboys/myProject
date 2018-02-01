@@ -257,14 +257,6 @@ class User extends ActiveRecord implements IdentityInterface
                 return $code;
             }
 
-            $userRole = new UserRole;
-            $userRole->user_id = $user->id;
-            $userRole->role_id = Yii::$app->params['ownerRoleId']; // owner
-            if (!$userRole->save()) {
-                $transaction->rollBack();
-                return $code;
-            }
-
             $operator = isset($data['operator']) ? $data['operator'] : null;
             if (!UserMobile::addByUserAndOperator($user, $operator)) {
                 $transaction->rollBack();
@@ -1639,17 +1631,7 @@ class User extends ActiveRecord implements IdentityInterface
                 return $code;
             }
 
-            UserRole::deleteAll(['user_id' => $this->id, 'role_id' => Yii::$app->params['ownerRoleId']]);
-            $userRole = new UserRole;
-            $userRole->user_id = $this->id;
-            $userRole->role_id = Yii::$app->params['ownerRoleId'];
-            $userRole->review_apply_time = time();
-            $userRole->review_status = Role::AUTHENTICATION_STATUS_IN_PROCESS;
-            if ($operator) {
-                $userRole->review_status = Role::AUTHENTICATION_STATUS_APPROVED;
-                $userRole->reviewer_uid = $operator->id;
-            }
-            if (!$userRole->save()) {
+            if (!UserRole::addUserRole($this->id, Yii::$app->params['ownerRoleId'], $operator)) {
                 $tran->rollBack();
                 return $code;
             }
