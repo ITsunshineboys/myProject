@@ -1113,9 +1113,9 @@ class OwnerController extends Controller
         foreach ($brick as $one_brick){
             foreach ($one_brick['attr'] as $attr_){
 
-                if ( //$attr_['value'] == '卫生间'
+                if ( $attr_['value'] == '卫生间'
 //                     && strpos($one_brick['series_name'],$series->series) !== false
-                     strpos($one_brick['style_name'],$style->style) !== false
+                     && strpos($one_brick['style_name'],$style->style) !== false
                 ){
                     var_dump($one_brick);
                     $toilet_goods[] = $one_brick;
