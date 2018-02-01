@@ -22,9 +22,9 @@
         <span class="iconfont icon-filter"></span>
       </div>
     </div>
-    <scroller :on-infinite="init" ref="scrollerDom" style="top: 190px;">
-      <goods-list :goods-list="goodsListData"></goods-list>
-    </scroller>
+
+    <goods-list :goods-list="goodsListData"></goods-list>
+    <p v-show="isLoading" class="tip-loading">{{loadingText}}</p>
 
     <!-- 筛选 -->
     <popup class="modal-filter" position="right" v-model="isModalOpen">
@@ -41,20 +41,20 @@
           <checker v-model="filterParams.seriesParams" default-item-class="btn" selected-item-class="btn-primary" v-if="seriesData.length !== 0">
             <checker-item v-for="obj in seriesData" :value="obj.id" :key="obj.id">{{obj.name}}</checker-item>
           </checker>
-          <p v-else>暂无风格</p>
+          <p v-else>暂无系列</p>
         </div>
         <cell :title="'价格区间'" :border-intent="false" disabled></cell>
         <div class="modal-filter-style price-range">
-          <input type="number" placeholder="最低价" v-model="filterParams.priceMin">
+          <input type="number" placeholder="最低价" v-model="filterParams.priceMin" maxlength="8">
           <span class="iconfont icon-reduce"></span>
-          <input type="number" placeholder="最高价" v-model="filterParams.priceMax">
+          <input type="number" placeholder="最高价" v-model="filterParams.priceMax" maxlength="8">
         </div>
         <cell :title="'品牌'" :is-link="true" :border-intent="false" :arrow-direction="isBrandOpen ? 'up' : 'down'" @click.native="isBrandOpen = !isBrandOpen"></cell>
         <div class="modal-filter-style" v-if="isBrandOpen">
           <checker v-model="filterParams.brandParams" default-item-class="btn" selected-item-class="btn-primary" type="checkbox" v-if="brandData.length !== 0">
             <checker-item v-for="obj in brandData" :value="obj.id" :key="obj.id">{{obj.name}}</checker-item>
           </checker>
-          <p v-else>暂无风格</p>
+          <p v-else>暂无品牌</p>
         </div>
         <div class="btn-group">
           <button class="btn-reset" type="button" @click="filterReset">重置</button>
@@ -87,6 +87,8 @@
         isStyleOpen: false,     // 风格是否显示
         isSeriesOpen: false,    // 系列是否显示
         isBrandOpen: false,     // 品牌是否显示
+        isLoading: false,       // 判断是否在加载状态
+        loadingText: '加载中...',     // 加载提示信息，默认为加载中...
         sortName: 'sold_number',      // tab排序名称  sold_number(销量优先)  platform_price(价格) favourable_comment_rate(好评率)
         platformPriceSortNum: 4,      // 价格排序方式   3：降序 4：升序
         favourableCommentRateSortNum: 4,      // 好评率排序方式   3：降序 4：升序
@@ -110,11 +112,10 @@
           brandParams: [],  // 筛选模态框里，选中的品牌（可多选）
           priceMin: '',     // 最低价
           priceMax: ''      // 最高价
-        }
+        },
+        minWatch: null,     // 最小价格监听
+        maxWatch: null      // 最大价格监听
       }
-    },
-    activated () {
-      this.getGoodsList()
     },
     methods: {
       tabHandle (str) {
@@ -125,28 +126,62 @@
             this.platformPriceSortNum = this.platformPriceSortNum === 4 ? 3 : 4     // 第一次点击价格 tab 为降序：3
             this.favourableCommentRateSortNum = 4                                   // 将好评率改为升序
             this.goodsListParams['sort[]'] = this.sortName + ':' + this.platformPriceSortNum
+            this.goodsListParams.page = 1
             break
           case 'favourable_comment_rate':
             // 点击好评率 tab 默认将默认为降序
             this.favourableCommentRateSortNum = this.favourableCommentRateSortNum === 4 ? 3 : 4     // 第一次点击好评率 tab 为降序：3
             this.platformPriceSortNum = 4                                                           // 将价格改为升序
             this.goodsListParams['sort[]'] = this.sortName + ':' + this.favourableCommentRateSortNum
+            this.goodsListParams.page = 1
             break
-          default:
-            this.allGoodsParams['sort[]'] = this.sortName + ':' + 3
+          case 'sold_number':
+            this.goodsListParams['sort[]'] = this.sortName + ':' + 3
+            this.goodsListParams.page = 1
         }
+        this.goodsListData = []     // 初始化数据
         this.getGoodsList()
       },
       getGoodsList () {     // 商品列表数据请求
         this.goodsListParams.category_id = this.$route.params.id      // 获取三级分类ID
         this.axios.get('/mall/category-goods', this.goodsListParams, res => {
-          console.log(res)
+          console.log(res, '商品列表数据')
+          let data = res.data
+          this.goodsListData = data.category_goods
+          this.totalPage = Math.ceil(data.total / 12)     // 计算总页数
+          this.isLoading = false      // 加载成功，取消加载样式
+        })
+      },
+      getMoreGoodsList () {     // 获取更多商品数据
+        this.goodsListParams.category_id = this.$route.params.id      // 获取三级分类ID
+        this.axios.get('/mall/category-goods', this.goodsListParams, res => {
           let data = res.data
           this.goodsListData = this.goodsListData.concat(data.category_goods)
-          this.totalPage = Math.ceil(data.total / 12)
+          this.totalPage = Math.ceil(data.total / 12)     // 计算总页数
+          this.isLoading = false      // 加载成功，取消加载样式
         })
       },
       filterModalData () {      // 模态框数据请求
+        if (typeof this.minWatch === 'function') {
+          this.minWatch()     // 停止监听
+        }
+        if (typeof this.maxWatch === 'function') {
+          this.maxWatch()
+        }
+        this.minWatch = this.$watch('filterParams.priceMin', function (n, o) {
+          if (n === o) return
+          let reg = /^[0-9]{0,8}$/
+          if (!reg.test(n)) {
+            this.filterParams.priceMin = o
+          }
+        })
+        this.maxWatch = this.$watch('filterParams.priceMax', function (n, o) {
+          if (n === o) return
+          let reg = /^[0-9]{0,8}$/
+          if (!reg.test(n)) {
+            this.filterParams.priceMax = o
+          }
+        })
         this.isModalOpen = true     // 显示筛选模态框
         this.axios.get('/mall/category-brands-styles-series', {category_id: this.$route.params.id}, res => {
           console.log(res, '风格、系列和品牌')
@@ -157,13 +192,22 @@
         })
       },
       filterFinish () {     // 完成筛选
-        // 商品列表请求参数
-        this.goodsListParams.platform_price_min = this.filterParams.priceMin * 100   // 最低价
-        this.goodsListParams.platform_price_max = this.filterParams.priceMax * 100   // 最高价
+        if (this.filterParams.priceMin !== '' && this.filterParams.priceMax !== '') {     // 判断价格最小值和最大值是否都有值
+          if (this.filterParams.priceMin > this.filterParams.priceMax) {
+            // 如果价格最小值大于最大值，则将价格对换
+            let tempPrice = this.filterParams.priceMax
+            this.filterParams.priceMax = this.filterParams.priceMin
+            this.filterParams.priceMin = tempPrice
+          }
+        }
+        this.goodsListParams.platform_price_min = this.filterParams.priceMin * 100
+        this.goodsListParams.platform_price_max = this.filterParams.priceMax * 100
         this.goodsListParams.brand_id = this.filterParams.brandParams.join(',')       // 品牌id，可传多个
         this.goodsListParams.style_id = this.filterParams.styleParams                 // 风格id
         this.goodsListParams.series_id = this.filterParams.seriesParams               // 系列id
+        this.goodsListParams.page = 1
         this.isModalOpen = false      // 隐藏模态框
+        this.goodsListData = []       // 数据初始化
         this.getGoodsList()           // 请求商品列表数据
       },
       filterReset () {      // 重置筛选
@@ -179,22 +223,39 @@
         this.goodsListParams.brand_id = null                // 品牌id，可传多个
         this.goodsListParams.style_id = null                // 风格id
         this.goodsListParams.series_id = null               // 系列id
+        this.goodsListParams.page = 1
         this.isModalOpen = false      // 隐藏模态框
+        this.goodsListData = []       // 数据初始化
         this.getGoodsList()           // 请求商品列表数据
       },
-      init (done) {
-        let vm = this
-        if (vm.goodsListParams.page >= vm.totalPage) {
-          this.$refs.scrollerDom.finishInfinite(2)
-          console.log(this.$refs)
-          return
+      handleScroll () {
+        let scrollTop = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset     // 滚动条位置
+        sessionStorage.setItem('pos', scrollTop)      // 记录滚动条位置
+        if (this.isLoading) return    // 如果还在加载中，就跳出函数
+        let node = document.querySelector('.goods-item:last-child')     // 获取最后一个商品的DOM节点
+        let top = document.documentElement.clientHeight     // 获取网页可视高度
+        let nodeTop = node.getBoundingClientRect().top + 100      // 获取商品距离可视区域的距离
+        console.log(nodeTop, top)
+        if (nodeTop <= top) {
+          this.isLoading = true           // 显示加载提示
+          if (this.goodsListParams.page < this.totalPage) {      // 判断当前页是否小于最后一页
+            this.loadingText = '加载中...'
+            this.goodsListParams.page++     // 当前页 + 1
+            this.getMoreGoodsList()
+          } else {
+            this.loadingText = '没有更多数据了'
+          }
         }
-        setTimeout(() => {
-          vm.goodsListParams.page ++
-          vm.getGoodsList()
-          done()
-        }, 1500)
       }
+    },
+    created () {
+      this.getGoodsList()
+    },
+    mounted () {
+      window.addEventListener('scroll', this.handleScroll)
+    },
+    beforeDestroy () {
+      window.removeEventListener('scroll', this.handleScroll)
     }
   }
 </script>
@@ -230,7 +291,7 @@
   }
 
   .goods-list {
-    /*margin-top: 100px;*/
+    margin-top: 100px;
     background-color: #fff;
   }
 

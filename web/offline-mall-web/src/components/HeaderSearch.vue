@@ -1,7 +1,6 @@
 <template>
   <div>
-    <x-header :left-options="{backText: '', preventGoBack: backWay}" @on-click-back="goHome" class="header-search"
-              :backWay="backWay">
+    <x-header :left-options="{backText: '', preventGoBack: backWay}" @on-click-back="goHome" class="header-search" :backWay="backWay">
 
       <router-link :to="'/search'" v-if="search==='true'">
         <search class="search" placeholder="请输入想购买的商品" cancel-text=""></search>
