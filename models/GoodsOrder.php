@@ -3764,4 +3764,7 @@ class GoodsOrder extends ActiveRecord
 
 
 
+
+
+
 }

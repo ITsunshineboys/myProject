@@ -5688,4 +5688,16 @@ class OrderController extends Controller
 
 
 
+    public  function  actionVerificationWxPaySuccess()
+    {
+        $goodsOrder=GoodsOrder::FindByOrderNo(\Yii::$app->request->get('order_no'),'pay_status');
+        $code=$goodsOrder->pay_status==GoodsOrder::PAY_STATUS_PAID?200:1000;
+        return Json::encode([
+            'code' => $code,
+            'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code]
+        ]);
+    }
+
+
+
 }
