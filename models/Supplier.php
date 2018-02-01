@@ -261,6 +261,7 @@ class Supplier extends ActiveRecord
 
             $supplier->shop_no = Yii::$app->params['supplierRoleId']
                 . (Yii::$app->params['offsetGeneral'] + $supplier->id);
+            $operator && $supplier->status = self::STATUS_OFFLINE;
             if (!$supplier->save(false)) {
                 $transaction->rollBack();
 
@@ -268,26 +269,16 @@ class Supplier extends ActiveRecord
                 return $code;
             }
 
-            UserRole::deleteAll(['user_id' => $user->id, 'role_id' => Yii::$app->params['supplierRoleId']]);
-            $userRole = new UserRole;
-            $userRole->user_id = $user->id;
-            $userRole->role_id = Yii::$app->params['supplierRoleId'];
-            $userRole->review_apply_time = time();
-            $userRole->review_status = Role::AUTHENTICATION_STATUS_IN_PROCESS;
-            if ($operator) {
-                $userRole->review_time = time();
-                $userRole->review_status = Role::AUTHENTICATION_STATUS_APPROVED;
-                $userRole->reviewer_uid = $operator->id;
+            if (!UserRole::addUserRole($user->id, Yii::$app->params['supplierRoleId'], $operator)) {
+                $transaction->rollBack();
 
-                $supplier->status = self::STATUS_OFFLINE;
-                if (!$supplier->save(false)) {
-                    $transaction->rollBack();
-
-                    $code = 500;
-                    return $code;
-                }
+                $code = 500;
+                return $code;
             }
-            if (!$userRole->save()) {
+
+            if (!in_array(Yii::$app->params['ownerRoleId'], UserRole::findRoleIdsByUserIdAndReviewStatus())
+                && !UserRole::addUserRole($user->id, Yii::$app->params['ownerRoleId'], $operator)
+            ) {
                 $transaction->rollBack();
 
                 $code = 500;
@@ -325,21 +316,6 @@ class Supplier extends ActiveRecord
 
                     $code = 500;
                     return $code;
-                }
-
-                if (!UserRole::roleUser($user, Yii::$app->params['ownerRoleId'])) {
-                    UserRole::deleteAll(['user_id' => $user->id, 'role_id' => Yii::$app->params['ownerRoleId']]);
-                    $userRole = new UserRole;
-                    $userRole->user_id = $user->id;
-                    $userRole->role_id = Yii::$app->params['ownerRoleId'];
-                    $userRole->review_apply_time = time();
-                    $userRole->review_status = Role::AUTHENTICATION_STATUS_IN_PROCESS;
-                    if (!$userRole->save()) {
-                        $transaction->rollBack();
-
-                        $code = 500;
-                        return $code;
-                    }
                 }
             }
 
@@ -421,6 +397,7 @@ class Supplier extends ActiveRecord
 
             $supplier->shop_no = Yii::$app->params['supplierRoleId']
                 . (Yii::$app->params['offsetGeneral'] + $supplier->id);
+            $operator && $supplier->status = self::STATUS_OFFLINE;
             if (!$supplier->save()) {
                 $transaction->rollBack();
 
@@ -428,26 +405,7 @@ class Supplier extends ActiveRecord
                 return $code;
             }
 
-            UserRole::deleteAll(['user_id' => $user->id, 'role_id' => Yii::$app->params['supplierRoleId']]);
-            $userRole = new UserRole;
-            $userRole->user_id = $user->id;
-            $userRole->role_id = Yii::$app->params['supplierRoleId'];
-            $userRole->review_apply_time = time();
-            $userRole->review_status = Role::AUTHENTICATION_STATUS_IN_PROCESS;
-            if ($operator) {
-                $userRole->review_time = time();
-                $userRole->review_status = Role::AUTHENTICATION_STATUS_APPROVED;
-                $userRole->reviewer_uid = $operator->id;
-
-                $supplier->status = self::STATUS_OFFLINE;
-                if (!$supplier->save()) {
-                    $transaction->rollBack();
-
-                    $code = 500;
-                    return $code;
-                }
-            }
-            if (!$userRole->save()) {
+            if (!UserRole::addUserRole($user->id, Yii::$app->params['supplierRoleId'], $operator)) {
                 $transaction->rollBack();
 
                 $code = 500;
@@ -480,24 +438,13 @@ class Supplier extends ActiveRecord
                 }
             }
 
-            if (!User::checkIdentityAuthorized($user->identity_no)) {
-                UserRole::deleteAll(['user_id' => $user->id, 'role_id' => Yii::$app->params['ownerRoleId']]);
-                $userRole = new UserRole;
-                $userRole->user_id = $user->id;
-                $userRole->role_id = Yii::$app->params['ownerRoleId'];
-                $userRole->review_apply_time = time();
-                $userRole->review_status = Role::AUTHENTICATION_STATUS_IN_PROCESS;
-                if ($operator) {
-                    $userRole->review_time = time();
-                    $userRole->review_status = Role::AUTHENTICATION_STATUS_APPROVED;
-                    $userRole->reviewer_uid = $operator->id;
-                }
-                if (!$userRole->save()) {
-                    $transaction->rollBack();
+            if (!User::checkIdentityAuthorized($user->identity_no)
+                && !UserRole::addUserRole($user->id, Yii::$app->params['ownerRoleId'], $operator)
+            ) {
+                $transaction->rollBack();
 
-                    $code = 500;
-                    return $code;
-                }
+                $code = 500;
+                return $code;
             }
 
             Yii::$app->cache->delete(UserRole::CACHE_KEY_PREFIX_ROLES_STATUS . $user->id);

@@ -1420,15 +1420,17 @@ class GoodsOrder extends ActiveRecord
             $list['complete_time']=0;
             $list['RemainingTime']=0;
             //待收货订单状态判断操作
+            $express=Express::find()
+                ->where(['order_no'=>$list['order_no'],'sku'=>$list['sku']])
+                ->one();
             if ($list['status']==self::ORDER_TYPE_DESC_UNRECEIVED){
-                $express=Express::find()
-                    ->where(['order_no'=>$list['order_no'],'sku'=>$list['sku']])
-                    ->one();
+
                 if ($express)
                 {
                     $list['send_time']=$express->create_time;
                     $list['RemainingTime']=Express::findRemainingTime($express);
-                    if ($list['RemainingTime']<=0){
+                    if ($list['RemainingTime']<=0)
+                    {
                         $list['complete_time']=$express->receive_time;
                         $list['status']=self::ORDER_TYPE_DESC_COMPLETED;
                         $list['is_unusual']=0;
@@ -1448,9 +1450,6 @@ class GoodsOrder extends ActiveRecord
             //已完成订单状态判断操作
             if ($list['status']==self::ORDER_TYPE_DESC_COMPLETED)
             {
-                $express=Express::find()
-                    ->where(['order_no'=>$list['order_no'],'sku'=>$list['sku']])
-                    ->one();
                 if ($express){
                     $list['send_time']=$express->create_time;
                     $list['RemainingTime']=Express::findRemainingTime($express);

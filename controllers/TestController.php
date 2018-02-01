@@ -761,7 +761,12 @@ class TestController extends Controller
 
     public  static  function  actionTest1()
     {
-     return Json::encode(GoodsComment::find()->all());
+
+             $data=Express::find()
+                 ->where(['order_no'=>\Yii::$app->request->get('order_no')])
+                 ->asArray()
+                 ->one();
+             var_dump($data);
 
     }
 

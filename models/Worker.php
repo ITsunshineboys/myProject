@@ -187,11 +187,13 @@ class Worker extends \yii\db\ActiveRecord
                 $code = 500;
                 return $code;
             }
+
             if($post['identity_no'] && !StringService::checkIdentityCardNo($post['identity_no'])){
                 $transaction->rollBack();
                 $code = 1000;
                 return $code;
             }
+
             $user=User::find()->where(['id'=>$uid])->one();
             $user->identity_no=$post['identity_no'];
             $user->identity_card_front_image=$post['identity_card_front_image'];
@@ -201,18 +203,13 @@ class Worker extends \yii\db\ActiveRecord
                 $code = 500;
                 return $code;
             }
-            UserRole::deleteAll(['user_id' => $uid, 'role_id' => self::WorkerRoleId]);
-            $userRole = new UserRole;
-            $userRole->user_id = $user->id;
-            $userRole->role_id = self::WorkerRoleId;
-            $userRole->review_apply_time = time();
-            $userRole->review_status = Role::AUTHENTICATION_STATUS_IN_PROCESS;
 
-            if(!$userRole->save(false)){
+            if (!UserRole::addUserRole($uid, Yii::$app->params['workerRoleId'], $operator)) {
                 $transaction->rollBack();
                 $code = 500;
                 return $code;
             }
+
             $transaction->commit();
             $code=200;
             return $code;
