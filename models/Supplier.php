@@ -914,7 +914,6 @@ class Supplier extends ActiveRecord
         if (isset($data['category_id'])) {
             $cat = GoodsCategory::findOne($data['category_id']);
             $data['category_name'] = $cat->fullTitle();
-            unset($data['category_id']);
         }
 
         if (isset($data['type_shop'])) {
