@@ -937,8 +937,8 @@ class OwnerController extends Controller
 
         // 商品属性
         $putty_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['putty'],'');
-        $undercoat_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['emulsion_varnish_primer'],'');
-        $finishing_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['emulsion_varnish_surface'],'');
+        $undercoat_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['emulsion_varnish_primer'],'体积');
+        $finishing_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['emulsion_varnish_surface'],'体积');
         $wire_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['concave_line'],'长');
         $land_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['land_plaster'],'');
 
