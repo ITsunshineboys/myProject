@@ -1529,7 +1529,7 @@ class Goods extends ActiveRecord
             'style_ids' => $styleIds,
             'style_name' => join(',', Style::findNames(['in', 'id', $styleIds])), // $this->style_id ? Style::findOne($this->style_id)->style : '',
             'series_name' => $this->series_id ? Series::findOne($this->series_id)->series : '',
-            'attrs' => GoodsAttr::frontDetailsByGoodsId($this->id),
+            'attrs' => GoodsAttr::frontDetailsByGoodsId($this->category_id),
             'images' => GoodsImage::imagesByGoodsId($this->id),
         ];
     }

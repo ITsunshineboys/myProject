@@ -4187,7 +4187,7 @@ class MallController extends Controller
 
         $data = $goods->adminView();
         $data = LineSupplierGoods::extraData($data);
-        var_dump($data);die;
+
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
