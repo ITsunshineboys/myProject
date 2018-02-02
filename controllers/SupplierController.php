@@ -161,13 +161,11 @@ class SupplierController extends Controller
     {
         $user = Yii::$app->user->identity;
         $supplier = Supplier::find()->where(['uid' => $user->id])->one();
-        $viewCertification = $supplier->viewCertification();
-        isset($viewCertification['identity_no']) && $viewCertification['identity_no'] = User::changeIdentityNo($viewCertification['identity_no']);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'certification-view' => $viewCertification,
+                'certification-view' => $supplier->viewCertification(),
             ],
         ]);
     }

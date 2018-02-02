@@ -1798,12 +1798,12 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function viewIdentity()
     {
-        $this->transformIdentityNo();
         $modelData = ModelService::selectModelFields($this, self::FIELDS_VIEW_IDENTITY);
         $viewData = $modelData
             ? array_merge($modelData, $this->_extraData(self::FIELDS_VIEW_IDENTITY_EXTRA))
             : $modelData;
         self::_formatData($viewData);
+        isset($viewData['identity_no']) && $viewData['identity_no'] = self::changeIdentityNo($viewData['identity_no']);
         return $viewData;
     }
 

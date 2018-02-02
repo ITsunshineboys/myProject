@@ -966,6 +966,7 @@ class Supplier extends ActiveRecord
             ? array_merge($modelData, $this->_extraData(self::FIELDS_VIEW_APP_EXTRA))
             : $modelData;
         $this->_formatData($viewData);
+        isset($viewData['identity_no']) && $viewData['identity_no'] = User::changeIdentityNo($viewData['identity_no']);
         return $viewData;
     }
 
