@@ -291,7 +291,7 @@ class GoodsOrder extends ActiveRecord
         $tran = Yii::$app->db->beginTransaction();
         try{
 
-            $code=self::AddNewPayOrderData($post['out_trade_no'],$post['total_amount'],$Goods->supplier_id,1,$time,1,0,$pay_name,$buyer_message,$address,$invoice->toArray(),0,\Yii::$app->params['ownerRoleId']);
+            $code=self::AddNewPayOrderData($post['out_trade_no'],$post['total_amount'],$Goods->supplier_id,self::PAY_STATUS_PAID,$time,1,0,$pay_name,$buyer_message,$address,$invoice->toArray(),0,\Yii::$app->params['ownerRoleId']);
             if ($code!=200)
             {
                 $tran->rollBack();
