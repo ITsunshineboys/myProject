@@ -4954,7 +4954,6 @@ class OrderController extends Controller
             if ($user)
             {
                 $code=ShippingCart::MergeShippingCartNoLogin($session_id,$user);
-                echo $code;die;
                 $data=ShippingCart::ShippingList($user);
             }else
             {
