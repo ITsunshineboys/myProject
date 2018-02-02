@@ -249,21 +249,18 @@ class Wxpay  extends ActiveRecord
         {
             $cache = Yii::$app->cache;
             $data = $cache->get(self::ACCESS_TOKEN);
-            if ($data)
-            {
-                $access_token=$data;
-            }else{
+//            if ($data)
+//            {
+//                $access_token=$data;
+//            }else{
                 $sendUrl = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx9814aafe9b6b847f&secret=4560eeb7b386701ddc7085827f65e40e';
                 $content =self::curl($sendUrl,false,0); //请求发送短信
                 if($content){
                     $result = json_decode($content,true);
                     $access_token=$result['access_token'];
-                    $data = $cache->set(self::ACCESS_TOKEN,$access_token,7200);
-                }else{
-                    //返回内容异常，以下可根据业务逻辑自行修改
-                    echo "请求发送短信失败";
+                    $cache->set(self::ACCESS_TOKEN,$access_token,7200);
                 }
-            }
+//            }
             $ticket=$cache->get(self::TICKET);
             if (!$ticket)
             {
@@ -277,7 +274,7 @@ class Wxpay  extends ActiveRecord
                     }else{
                         $ticket=$result['ticket'];
                     }
-                    $data = $cache->set(self::TICKET,$ticket,7200);
+                    $cache->set(self::TICKET,$ticket,7200);
                 }
             }
             $noncestr=WxPayApi::getNonceStr();
