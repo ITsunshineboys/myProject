@@ -3108,13 +3108,9 @@ class QuoteController extends Controller
     public function actionTest()
     {
 
-        $row2=EngineeringStandardCarpentryCraft::find()->where(['type_id'=>71])->all();
 
-        foreach ($row2 as $a){
-            $a->unit=2;
-            $b=$a->save(false);
-        }
-        var_dump($b);
+        var_dump(GoodsAttr::find()->asArray()->where(['category_id'=>38])->all());
+
 
     }
 }
