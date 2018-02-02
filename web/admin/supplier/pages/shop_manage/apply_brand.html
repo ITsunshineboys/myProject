@@ -64,8 +64,8 @@
                 <p>
                     <button class="btn btn-default btn-upload" type="button" ng-disabled="uploadDisabled"
                             ngf-select="upload(licensed.file, $invalidFiles, 'licensed')"
-                            ngf-pattern="'.jpg, .png, .jpge'"
-                            ngf-accept="'.jpg, .png, .jpge'"
+                            ngf-pattern="'.jpg,.png,.jpge'"
+                            ngf-accept="'.jpg,.png,.jpge'"
                             ng-model="licensed.file">{{licensed.text}}</button>
                 </p>
                 <p class="red_mark" ng-if="licensed.isNull">
@@ -93,8 +93,8 @@
                 <p>
                     <button class="btn btn-default" type="button" ng-disabled="uploadDisabled"
                             ngf-select="upload(obj.file, $invalidFiles, 'licensedArray', 'array', $index)"
-                            ngf-pattern="'.jpg, .png, .jpge'"
-                            ngf-accept="'.jpg, .png, .jpge'"
+                            ngf-pattern="'.jpg,.png,.jpge'"
+                            ngf-accept="'.jpg,.png,.jpge'"
                             ng-model="obj.file">{{obj.text}}</button>
                 </p>
                 <p class="red_mark" ng-if="obj.isNull">
