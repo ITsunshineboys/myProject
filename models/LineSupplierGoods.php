@@ -358,7 +358,10 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
 
     public static function extraData($goods)
     {
-        $lineGoods=self::find()->where(['goods_id'=>$goods['id']])->one();
+        $lineGoods=self::find()
+            ->where(['goods_id'=>$goods['id']])
+            ->andWhere(['status'=>LineSupplierGoods::STATUS_ON_LINE])
+            ->one();
         if ($lineGoods)
         {
             $lineSupplier=LineSupplier::findOne($lineGoods->line_supplier_id);
