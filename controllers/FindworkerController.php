@@ -491,7 +491,7 @@ class FindworkerController extends Controller{
      * 获取工种
      * @return string
      */
-    public function actionWorkerParentype(){
+    public function actionWorkerParentType(){
         $user_id = \Yii::$app->user->identity;
         $code=1052;
         if(!$user_id){
@@ -509,7 +509,7 @@ class FindworkerController extends Controller{
     /**
      * 实名认证 -去除
      */
-    public function  actionCertification(){
+    public function  actionWorkerCertification(){
         $user_id = \Yii::$app->user->identity;
         $code=1052;
         if(!$user_id){
@@ -543,6 +543,11 @@ class FindworkerController extends Controller{
         $skills['worker_skill']=WorkerSkill::getWorkerSkillname($user_id->getId());
 
         $skills['other_skill']=WorkerSkill::getOtherSkillname($user_id->getId());
+        foreach ($skills as  &$skill){
+           if($skill==null){
+               $skill=[];
+           }
+        }
 
        return Json::encode([
            'code'=>200,
