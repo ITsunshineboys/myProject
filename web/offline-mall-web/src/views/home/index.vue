@@ -6,9 +6,9 @@
           <p style="white-space:nowrap;overflow: hidden;text-overflow: ellipsis"><i class="iconfont icon-location"></i>{{city}}</p>
         </router-link>
       </flexbox-item>
-      <flexbox-item style="margin: 0" :span="18/25">
+      <flexbox-item style="margin: 0" :span="20/25">
         <router-link to="search">
-          <search v-model="search" cancel-text="" placeholder="超级无敌地暖片" ref="search"></search>
+          <search v-model="search" cancel-text="" placeholder="请输入想购买的商品" ref="search"></search>
         </router-link>
       </flexbox-item>
     </flexbox>
@@ -28,8 +28,9 @@
           <flexbox-item style="margin-left: 3.46%!important;" :span="56/125" class="command_list" :class="{odd_col:index%2==0,even_col:index%2==1}"
                         v-for="(item,index) in recommended_list" :key="index">
             <router-link :to="'/good-detail/' + item.url">
-              <div style="width: 100%;height: 160px" :style="{'background-image':'url('+item.image+')',backgroundSize:'contain',backgroundRepeat:'no-repeat',backgroundPosition:'center center' }">
-                <!--<img style="width: 100%;" :src="item.image" alt="">-->
+              <!--<div style="width: 160px;height: 160px;border-radius: 2px;overflow: hidden;" :style="{'background-image':'url('+item.image+')',backgroundSize:'contain',backgroundRepeat:'no-repeat',backgroundPosition:'center center' }">-->
+              <div style="width: 100%;height: 160px;border-radius: 2px;overflow: hidden;background-color: #f4f4f4;">
+                <img style="width: 100%;" :src="item.image" alt="">
               </div>
             <p class="command_title nowrap">{{item.title}}</p>
             <p class="command_description nowrap">{{item.description}}</p>
@@ -203,7 +204,7 @@
 
   .search_header form:after {
     border-radius: 25px !important;
-    background-color: #C8C8C8 !important;
+    background-color: #ece9ee !important;
   }
 
   .search_header .vux-search-box {
@@ -223,6 +224,26 @@
     border-bottom: 0 !important;
   }
 
+  .search_header .weui-search-bar {
+    padding: 0;
+  }
+
+  .search_header .weui-search-bar:before {
+    border-top: none;
+  }
+
+  .search_header .weui-search-bar__box .weui-search-bar__input {
+    font-size: 12px;
+  }
+
+  .search_header .weui-search-bar:after {
+    border: none;
+  }
+
+  .search_header .weui-icon-search {
+    font-size: 12px;
+  }
+
   /*定位*/
   .location {
     text-align: center;
@@ -236,6 +257,12 @@
 
   .location a {
     color: #222 !important;
+  }
+
+  .icon-location {
+    vertical-align: initial;
+    margin-right: 2px;
+    line-height: 45px;
   }
 
   /*推荐*/
@@ -257,12 +284,13 @@
 
   .command_list { /*推荐列表项*/
     margin-bottom: 9px;
-    box-shadow: 0px 2px 4px 0px #F6F6F6;
+    /*box-shadow: 0px 2px 4px 0px #F6F6F6;*/
   }
 
   .command_title { /*推荐商品名称*/
     font-size: 14px;
     color: #000;
+    margin-top: 6px;
   }
 
   .command_description { /*推荐商品特色*/
@@ -272,7 +300,8 @@
 
   .command_price { /*推荐商品价格*/
     font-size: 14px;
-    color: #FF7900;
+    color: #D9AD65;
+    margin-bottom: 10px;
   }
 
   /*分类*/

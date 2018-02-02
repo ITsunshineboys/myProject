@@ -440,8 +440,8 @@
   }
 
   .good-container .guide-icon .iconfont {
-    position: absolute;
-    top: 32px;
+    position: fixed;
+    top: 14px;
     z-index: 200;
     font-size: 15px;
     color: #FFFFFF;
@@ -461,6 +461,16 @@
 
   .good-container .guide-icon .icon-return {
     left: 14px;
+    font-size: 10px;
+  }
+
+  .good-container .guide-icon .icon-return:before {
+    display: block;
+    margin: 3px 1px;
+  }
+
+  .good-container .guide-icon .icon-share {
+    right: 54px;
   }
 
   .good-container .guide-icon .icon-home {
@@ -483,7 +493,7 @@
   }
 
   .good-container .pop-down ul {
-    position: absolute;
+    position: fixed;
     top: 69px;
     right: 6px;
     padding-left: 0;
@@ -583,7 +593,7 @@
 
   /*选择数量cell start*/
   .good-container .choose-count {
-    border-bottom: 1px solid #E9EDEE;
+    border-bottom: 0px solid #E9EDEE;
   }
 
   .good-container .weui-cells {
@@ -612,7 +622,7 @@
   .good-container .count-top {
     overflow: hidden;
     padding: 15px 0 10px 14px;
-    border-bottom: 1px solid #E9EDEE;
+    border-bottom: 0px solid #E9EDEE;
   }
 
   .good-container .count-cover-img {
@@ -665,7 +675,6 @@
     font-size: 16px;
     line-height: 0;
     color: #222;
-    border: 1px solid #ececec;
   }
 
   .good-container .vux-number-selector svg {
@@ -698,9 +707,12 @@
 
   .good-container .icon-close {
     position: absolute;
-    right: 10px;
+    right: 0px;
+    top: 9px;
     font-size: 18px;
     color: #999;
+    width: 30px;
+    height: 30px;
   }
 
   /*购买数量-button end*/
@@ -762,6 +774,10 @@
   /*售后服务cell end*/
 
   /* 售后弹窗服务弹窗 start */
+  .good-container .vux-popup-dialog {
+    background: #fff;
+  }
+
   .good-container .after-service-container {
     background: #fff;
   }
@@ -781,7 +797,7 @@
     color: rgba(102, 102, 102, 1);
     text-align: center;
     line-height: 63px;
-    border-bottom: 2px solid #CDD3D7;
+    border-bottom: 1px solid #e9edee;
   }
 
   .good-container .after-service > div {
@@ -846,6 +862,11 @@
 
   .good-container .comment-count span:first-child {
     margin-right: 10px;
+  }
+
+  .comment-container {
+    border-top: 1px solid #E9EDEE !important;
+    border-bottom: 1px solid #E9EDEE !important;
   }
 
   /*评价flex end*/
@@ -915,9 +936,9 @@
 
   .good-container .shop-intro > span {
     display: inline-block;
-    width: 2px;
+    width: 1px;
     height: 20px;
-    background: #CDD3D7;
+    background: #e9edee;
   }
 
   /*进店逛逛 start*/
@@ -981,7 +1002,7 @@
     font-size: 14px;
     color: rgba(153, 153, 153, 1);
     line-height: 14px;
-    border-bottom: 1px solid #CDD3D7;
+    border-bottom: 1px solid #e9edee;
   }
 
   .good-container .pro-params > div:last-child {
@@ -1003,6 +1024,8 @@
     text-align: center;
     height: 48px;
     background: #fff;
+    box-shadow: 0 -1px 0 rgba(0,0,0,0.05);
+    -webkit-box-shadow: 0 -1px 0 rgba(0,0,0,0.05);
   }
 
   .good-container .bottom-tabbar > div {
@@ -1069,7 +1092,7 @@
     line-height: 86px;
     font-size: 16px;
     color: rgba(102, 102, 102, 1);
-    border-bottom: 2px solid #CDD3D7;
+    border-bottom: 1px solid #e9edee;
   }
 
   .good-container .goodshort-alert .weui-dialog .weui-dialog__bd > div:nth-child(2) {

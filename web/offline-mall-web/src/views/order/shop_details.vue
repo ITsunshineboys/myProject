@@ -42,7 +42,7 @@
   .shop_name{
     margin: 10px 0 0 15px;
     padding: 5px 0;
-    border-bottom: 2px solid #E9EDEE;
+    border-bottom: 1px solid #E9EDEE;
   }
   .shop_name > span{
     color: #666666;

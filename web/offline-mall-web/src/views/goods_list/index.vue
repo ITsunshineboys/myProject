@@ -283,7 +283,7 @@
   }
 
   .btn-filter {
-    border-left: 1px solid #cdd3d7;
+    border-left: 1px solid #e9edee;
   }
 
   .btn-filter > .iconfont {

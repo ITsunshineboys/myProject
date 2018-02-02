@@ -110,6 +110,7 @@
 
   .search form ~ a {
     display: block !important;
+    margin-top: 2px;
   }
 
   .search form > label {
