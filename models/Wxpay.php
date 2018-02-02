@@ -285,8 +285,8 @@ class Wxpay  extends ActiveRecord
             $timestamp=time();
             $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
            $url=$http_type . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+           $url='http://ac.cdlhzz.cn/aitelife-shop-web/';
             $appid=WxPayConfig::APPID;
-
             $str="jsapi_ticket=".$ticket."&noncestr=".$noncestr.'&timestamp='.$timestamp.'&url='.$url;
             $sign=sha1($str);
 
@@ -364,6 +364,7 @@ class Wxpay  extends ActiveRecord
      * @param $orderAmount
      * @param $orders
      * @return mixed
+     * @throws \yii\base\WxPayException
      */
     public  static function OrderAppPay($orderAmount,$orders)
     {
@@ -396,6 +397,7 @@ class Wxpay  extends ActiveRecord
 
     /**
      * @return mixed
+     * @throws \yii\base\WxPayException
      */
     public  static  function  OrderWebPay()
     {
@@ -430,6 +432,7 @@ class Wxpay  extends ActiveRecord
      * @param $money
      * @param $user
      * @return mixed
+     * @throws \yii\base\WxPayException
      */
     public  static  function  UserRecharge($money,$user)
     {

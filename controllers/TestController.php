@@ -538,7 +538,8 @@ class TestController extends Controller
 
     public  function  actionTest()
     {
-       echo 1123;die;
+       $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
+        echo  $http_type . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     }
 
 }
