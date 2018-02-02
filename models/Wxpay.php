@@ -271,6 +271,7 @@ class Wxpay  extends ActiveRecord
                 if($content){
 
                     $result = json_decode($content,true);
+
                     var_dump($result);die;
 
                     if ($result['expires_in']==7200)
