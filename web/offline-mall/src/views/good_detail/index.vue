@@ -302,11 +302,6 @@
     },
     data () {
       return {
-        andriodFunc: {
-          androidShare: this.androidShare,         // 跳转分享
-          androidMsgCenter: this.skipMessageCenter, // 跳转消息中心
-          androidCart: this.skipCart // 跳转购物车
-        },
         isFromAndroid: false,       // 由安卓页面跳转至此页面
         good_id: '',                // 商品id
         role_id: 6,                 // 角色id
@@ -325,7 +320,7 @@
         count_now: false,           // 立即购买按钮显示
         default_count: false,       // 两个按钮显示
         show_description: true,     // 显示图文详情
-        good_detail: {
+        gooddetail: {
           line_goods: {
             is_offline_goods: ''
           },
