@@ -38,7 +38,7 @@
       <!--买家留言-->
       <div class="cell-buy">
         <group>
-          <x-textarea v-model="buyer_message" :title="'买家留言'" :placeholder="'选填：对本次交易的说明'" :max=30 :show-counter="false" :rows="1" autosize></x-textarea>
+          <x-textarea class="buy_textarea" v-model="buyer_message" :title="'买家留言'" :placeholder="'选填：对本次交易的说明'" :max=30 :show-counter="false" :rows="1" autosize></x-textarea>
         </group>
       </div>
     </div>
@@ -184,7 +184,7 @@
                     goods_id: this.$route.query.goods_id,
                     goods_num: this.$route.query.goods_num,
                     address_id: sessionStorage.getItem('address_id'),
-                    invoice_id: sessionStorage.getItem('invoice_id  '),
+                    invoice_id: sessionStorage.getItem('invoice_id'),
                     freight: this.freight,
                     buyer_message: this.buyer_message
                   }, (res) => {
@@ -193,6 +193,7 @@
                     div.innerHTML = res // 将返回的form 放入div
                     document.body.appendChild(div)
                     document.forms[0].submit()
+                    sessionStorage.removeItem('invoice_id')
                   })
                 }
               } else {
@@ -355,6 +356,9 @@
   .cell-buy .weui-textarea{
     height: 24px;
     line-height: 24px;
+  }
+  .buy_textarea textarea{
+    text-align: right;
   }
   /*底部*/
   .footer-box{

@@ -115,8 +115,12 @@
   .phone-box .weui-label{
     margin-right: 10px;
     border-right: 1px solid #CDD3D7;
+    font-size: 16px;
   }
 
+  .consignee-box .weui-input{
+    font-size: 16px;
+  }
   .address-detail-box .weui-label{
     margin-right: 10px;
     border-right: 1px solid #CDD3D7;
@@ -131,10 +135,11 @@
     border: 0;
   }
 
-  .address-detail-box .weui-textarea,
+
   .choose-address-box .vux-cell-value{
     font-size: 14px;
   }
+
   .save-btn{
     font-size: 18px !important;
     margin-top: 30px !important;

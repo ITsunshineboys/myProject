@@ -51,7 +51,7 @@
 <script>
   import {Grid, GridItem, Swiper, SwiperItem, Search, Flexbox, FlexboxItem, Card} from 'vux'
   import JsonData from '../../assets/city'
-
+  import wx from 'weixin-js-sdk'
   export default {
     name: 'home',
     data () {
@@ -66,7 +66,8 @@
           {image: require('../../assets/images/Quote.png'), title: '报价', url: '/mall/index.html'},
           {image: require('../../assets/images/shop.png'), title: '商城'},
           {image: require('../../assets/images/Mine.png'), title: '我的', url: '/distribution-web/index.html'}
-        ]
+        ],
+        wxData: {}
       }
     },
     components: {
@@ -118,25 +119,63 @@
     mounted () {
       this.axios.get('/order/iswxlogin', {}, (res) => {
         res.code === 200 ? sessionStorage.setItem('wxCodeFlag', true) : sessionStorage.getItem('wxCodeFlag', false)
-        if (sessionStorage.getItem('wxCodeFlag') && !sessionStorage.getItem('wxStatus')) {
-          this.axios.post('/order/find-open-id', {
-            url: location.href
-          }, (res) => {
-            console.log(res)
-            console.log(res.data)
-            location.href = res.data
-            sessionStorage.setItem('wxStatus', true)
-          })
-        } else if (sessionStorage.getItem('wxCodeFlag') && sessionStorage.getItem('wxStatus')) {
-          this.openID = location.href.split('code=')[1].split('&state')[0]
-          this.axios.post('/order/get-open-id', {
-            code: this.openID
-          }, (res) => {
-            console.log(this.openID)
-            sessionStorage.setItem('openID', res.data)
-            console.log(res)
-          })
-        }
+        this.wxData = res.data
+//        if (sessionStorage.getItem('wxCodeFlag') && !sessionStorage.getItem('wxStatus')) {
+//          this.axios.post('/order/find-open-id', {
+//            url: location.href
+//          }, (res) => {
+//            console.log(res)
+//            console.log(res.data)
+//            location.href = res.data
+//            sessionStorage.setItem('wxStatus', true)
+//          })
+//        } else if (sessionStorage.getItem('wxCodeFlag') && sessionStorage.getItem('wxStatus')) {
+//          this.openID = location.href.split('code=')[1].split('&state')[0]
+//          this.axios.post('/order/get-open-id', {
+//            code: this.openID
+//          }, (res) => {
+//            console.log(this.openID)
+//            sessionStorage.setItem('openID', res.data)
+//            console.log(res)
+//          })
+//        }
+        wx.config({
+          debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+          appId: this.wxData.appId, // 必填，公众号的唯一标识
+          timestamp: this.wxData.timestamp, // 必填，生成签名的时间戳
+          nonceStr: this.wxData.nonceStr, // 必填，生成签名的随机串
+          signature: this.wxData.signature, // 必填，签名，见附录1
+          jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        })
+      })
+      wx.ready(function () {
+        wx.onMenuShareAppMessage({
+          title: '微信分享给朋友', // 分享标题
+          desc: 'This is a test!', // 分享描述
+          link: 'http://www.baidu.com', // 分享链接
+          imgUrl: 'http://img1.3lian.com/img013/v2/4/d/101.jpg', // 分享图标
+          type: '', // 分享类型,music、video或link，不填默认为link
+          dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+          success: function () {
+            // 用户确认分享后执行的回调函数
+            alert('确认分享后')
+          },
+          cancel: function () {
+            // 用户取消分享后执行的回调函数
+            alert('取消分享')
+          }
+        })
+//            wx.onMenuShareTimeline({
+//              title: shareTitle, // 分享标题
+//              link: shareUrl,
+//              imgUrl: imgUrl, // 分享图标
+//              success: function() {
+//                // 用户确认分享后执行的回调函数
+//              },
+//              cancel: function() {
+//                // 用户取消分享后执行的回调函数
+//              }
+//            });
       })
     }
   }
@@ -239,5 +278,5 @@
     margin-bottom: 10px;
     background-color: #fff;
   }
-  
+
 </style>
