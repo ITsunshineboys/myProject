@@ -31,7 +31,7 @@
           <flexbox-item style="margin-left: 3.46%!important;" :span="56/125" class="command_list" :class="{odd_col:index%2==0,even_col:index%2==1}"
                         v-for="(item,index) in recommended_list" :key="index">
             <router-link :to="'/good-detail/' + item.url">
-              <div style="width: 100%;height: 160px" :style="{'background-image':'url('+item.image+')',backgroundSize:'contain',backgroundRepeat:'no-repeat',backgroundPosition:'center center' }">
+              <div style="width: 160px;height: 160px;border-radius: 2px;overflow: hidden;" :style="{'background-image':'url('+item.image+')',backgroundSize:'contain',backgroundRepeat:'no-repeat',backgroundPosition:'center center' }">
                 <!--<img style="width: 100%;" :src="item.image" alt="">-->
               </div>
             <p class="command_title nowrap">{{item.title}}</p>
@@ -229,6 +229,7 @@
   .command_title { /*推荐商品名称*/
     font-size: 14px;
     color: #000;
+    margin-top: 6px;
   }
 
   .command_description { /*推荐商品特色*/
@@ -238,7 +239,8 @@
 
   .command_price { /*推荐商品价格*/
     font-size: 14px;
-    color: #FF7900;
+    color: #D9AD65;
+    margin-bottom: 10px;
   }
 
   /*分类*/
