@@ -131,9 +131,6 @@
       window.AndroidWebView.showTable()
     },
     mounted () {
-      this.$nextTick(() => {
-        console.log(document.getElementsByClassName('vux-swiper-item'))
-      })
       this.axios.get('/order/iswxlogin', {}, (res) => {
         res.code === 200 ? sessionStorage.setItem('wxCodeFlag', true) : sessionStorage.getItem('wxCodeFlag', false)
         if (sessionStorage.getItem('wxCodeFlag') && !sessionStorage.getItem('wxStatus')) {
