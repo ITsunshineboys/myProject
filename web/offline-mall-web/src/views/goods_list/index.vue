@@ -193,7 +193,7 @@
       },
       filterFinish () {     // 完成筛选
         if (this.filterParams.priceMin !== '' && this.filterParams.priceMax !== '') {     // 判断价格最小值和最大值是否都有值
-          if (this.filterParams.priceMin > this.filterParams.priceMax) {
+          if (this.filterParams.priceMin * 100 > this.filterParams.priceMax * 100) {
             // 如果价格最小值大于最大值，则将价格对换
             let tempPrice = this.filterParams.priceMax
             this.filterParams.priceMax = this.filterParams.priceMin
