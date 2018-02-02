@@ -448,11 +448,12 @@ class ShippingCart extends \yii\db\ActiveRecord
 
 
     /**
-     * H5  与  app  购物车交互
+     *  H5  与  app  购物车交互
      * @param $session_id
      * @param $user
      * @return int
      * @throws Exception
+     * @throws \Exception
      */
     public  static  function  MergeShippingCartNoLogin($session_id,$user)
     {
@@ -470,6 +471,11 @@ class ShippingCart extends \yii\db\ActiveRecord
                 {
                     $data->goods_num+=$list->goods_num;
                     if (!$data->save(false))
+                    {
+                        $tran->rollBack();
+                    }
+                    $res=$list->delete();
+                    if (!$res)
                     {
                         $tran->rollBack();
                     }
