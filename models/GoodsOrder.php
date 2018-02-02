@@ -274,13 +274,13 @@ class GoodsOrder extends ActiveRecord
         $return_insurance=$arr[7];
         $buyer_message=$arr[8];
         $Goods=Goods::findOne($goods_id);
-//        if (
-//            !$Goods
+        if (
+            !$Goods
 //            ||($freight*100+$return_insurance*100+$Goods->platform_price*$goods_num)!=$post['total_amount']*100
-//        )
-//        {
-//            return false;
-//        }
+        )
+        {
+            return false;
+        }
         $post['total_amount']=$freight*100+$return_insurance*100+$Goods->platform_price*$goods_num;
         $address=UserAddress::findOne($address_id);
         $invoice=Invoice::findOne($invoice_id);
