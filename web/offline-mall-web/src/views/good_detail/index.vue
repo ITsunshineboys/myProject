@@ -67,41 +67,14 @@
         <flexbox slot="content" justify="space-between" class="shop-intro">
           <div>
             <span>{{good_detail.supplier.goods_number}}</span><br/>商品数
-
-
-
-
-
-
-
-
-
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.follower_number}}</span><br/>粉丝数
-
-
-
-
-
-
-
-
-
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
-
-
-
-
-
-
-
-
-
           </div>
         </flexbox>
         <flexbox slot="footer" justify="center" class="view-shop-btn">
@@ -198,8 +171,6 @@
         <flexbox class="count-bottom-btn">
           <flexbox-item alt="now" @click.native="buyNow">
             立即购买
-
-
           </flexbox-item>
         </flexbox>
       </div>
@@ -339,6 +310,7 @@
       }
     },
     created () {
+      window.scrollTo(0, 0)
       if (this.$route.query.system === 'android') this.isFromAndroid = true
       this.good_id = this.$route.params.id // 商品id
       this.axios.get('/mall/goods-view', {id: this.good_id}, (res) => {
