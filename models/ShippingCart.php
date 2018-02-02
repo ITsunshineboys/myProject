@@ -452,6 +452,7 @@ class ShippingCart extends \yii\db\ActiveRecord
      * @param $session_id
      * @param $user
      * @return int
+     * @throws Exception
      */
     public  static  function  MergeShippingCartNoLogin($session_id,$user)
     {
@@ -460,11 +461,26 @@ class ShippingCart extends \yii\db\ActiveRecord
         try{
             foreach ( $shipping_cart as &$list)
             {
-                $list->uid=$user->id;
-                $list->role_id=$user->last_role_id_app;
-                if (!$list->save(false))
+                $data=self::find()
+                    ->where(['uid'=>$user->id])
+                    ->andWhere(['role_id'=>$user->last_role_id_app])
+                    ->andWhere(['goods_id'=>$list->goods_id])
+                    ->one();
+                if ($data)
                 {
-                    $tran->rollBack();
+                    $data->goods_num+=$list->goods_num;
+                    if (!$data->save(false))
+                    {
+                        $tran->rollBack();
+                    }
+                }else
+                {
+                    $list->uid=$user->id;
+                    $list->role_id=$user->last_role_id_app;
+                    if (!$list->save(false))
+                    {
+                        $tran->rollBack();
+                    }
                 }
             }
             $tran->commit();

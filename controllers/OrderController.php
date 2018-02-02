@@ -4928,9 +4928,11 @@ class OrderController extends Controller
             return true;
         }
     }
+
     /**
      * 获取购物车列表
      * @return string
+     * @throws Exception
      */
     public function  actionFindShippingCartList()
     {
