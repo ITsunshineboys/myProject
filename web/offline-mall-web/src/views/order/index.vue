@@ -364,6 +364,7 @@
     bottom: 0;
     width: 100%;
     background-color: #fff;
+    box-shadow: 0 -1px 0 rgba(0,0,0,0.05);
   }
   .footer-box:after{
     content: '';
@@ -408,5 +409,9 @@
   .agreement-box > a {
     font-size: 12px;
     color: #222!important;
+  }
+  #app .vux-header + * {
+    padding-top: 0;
+    margin-top: 56px;
   }
 </style>

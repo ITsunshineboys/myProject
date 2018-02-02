@@ -57,7 +57,9 @@
         <swiper :list="carousel" :show-desc-mask="false" dots-position="center" dots-class="dots" :loop="true" :auto="true" height="145px"></swiper>
         <div class="store-goods-list" flex>
           <router-link class="store-goods-item" v-for="obj in recommendGoods" :to="'/good-detail/' + obj.url" tag="div" :key="obj.id" @click.native="recordScroll">
-            <img :src="obj.image">
+            <div class="store-goods-imgbox">
+              <img :src="obj.image">
+            </div>
             <p class="store-goods-title">{{obj.title}}</p>
             <p class="store-goods-desc">{{obj.description}}</p>
             <p class="store-goods-price">￥{{obj.show_price}}</p>
@@ -301,6 +303,7 @@
     left: 0;
     z-index: 10;
     width: 100%;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.05);
   }
 
   .store {
@@ -370,18 +373,26 @@
   }
 
   .store-goods-list {
-    padding: 10px 14px;
     flex-wrap: wrap;
     background-color: #fff;
   }
 
   .store-goods-item {
-    margin-bottom: 10px;
-    margin-right: 3%;
-    width: 168px;
+    flex: 0 0 44.8%;
+    margin-left: 3.46% !important;
+    margin-top: 14px;
+    overflow: hidden;
     /*-webkit-box-shadow: 0 2px 4px 0 #F6F6F6;*/
     /*-moz-box-shadow: 0 2px 4px 0 #F6F6F6;*/
     /*box-shadow: 0 2px 4px 0 #F6F6F6;*/
+  }
+
+  .store-goods-item .store-goods-imgbox {
+    width: 100%;
+    height: 160px;
+    background: #f4f4f4;
+    overflow: hidden;
+    border-radius: 2px;
   }
 
   .store-goods-item:nth-child(2n) {
@@ -389,8 +400,7 @@
   }
 
   .store-goods-item img {
-    width: 168px;
-    height: 168px;
+    width: 100%;
   }
 
   .store-goods-title {
@@ -398,6 +408,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    margin-top: 6px;
   }
 
   .store-goods-desc {
@@ -410,7 +421,7 @@
 
   .store-goods-price {
     font-size: 14px;
-    color: #ff7900;
+    color: #D9AD65;
   }
 
   .all-goods .goods-list {

@@ -114,12 +114,12 @@
   .consignee-box .weui-label,
   .phone-box .weui-label{
     margin-right: 10px;
-    border-right: 1px solid #CDD3D7;
+    border-right: 1px solid #e9edee;
   }
 
   .address-detail-box .weui-label{
     margin-right: 10px;
-    border-right: 1px solid #CDD3D7;
+    border-right: 1px solid #e9edee;
   }
 
   .choose-address-box .weui-cells,

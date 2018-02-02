@@ -110,6 +110,7 @@
 
   .search form ~ a {
     display: block !important;
+    margin-top: 2px;
   }
 
   .search form > label {
@@ -121,7 +122,7 @@
   }
 
   .search .weui-search-bar {
-    padding-bottom: 16px !important;
+    padding-bottom: 8px !important;
   }
 
   .search .weui-search-bar__input {

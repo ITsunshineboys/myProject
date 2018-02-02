@@ -55,6 +55,8 @@
     width: 88px;
     height: 88px;
     flex: 0 0 auto;
+    overflow: hidden;
+    border-radius: 2px;
   }
 
   .goods-item-img img {

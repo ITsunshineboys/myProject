@@ -12,7 +12,7 @@
         </router-link>
       </flexbox-item>
       <flexbox-item @click.native="goMessage" :span="3/25" style="margin: 0;text-align: center;">
-        <i style="font-size:24px;" class="iconfont icon-news-square"></i>
+        <i style="font-size:18px;line-height: 31px;" class="iconfont icon-news-square"></i>
       </flexbox-item>
     </flexbox>
     <swiper dots-position="center" :list="banner_list" loop auto height="171px" :aspect-ratio="375/171" :show-desc-mask="false"></swiper>
@@ -31,8 +31,9 @@
           <flexbox-item style="margin-left: 3.46%!important;" :span="56/125" class="command_list" :class="{odd_col:index%2==0,even_col:index%2==1}"
                         v-for="(item,index) in recommended_list" :key="index">
             <router-link :to="'/good-detail/' + item.url">
-              <div style="width: 160px;height: 160px;border-radius: 2px;overflow: hidden;" :style="{'background-image':'url('+item.image+')',backgroundSize:'contain',backgroundRepeat:'no-repeat',backgroundPosition:'center center' }">
-                <!--<img style="width: 100%;" :src="item.image" alt="">-->
+              <!--<div style="width: 160px;height: 160px;border-radius: 2px;overflow: hidden;" :style="{'background-image':'url('+item.image+')',backgroundSize:'contain',backgroundRepeat:'no-repeat',backgroundPosition:'center center' }">-->
+              <div style="width: 100%;height: 160px;border-radius: 2px;overflow: hidden;background-color: #f4f4f4;">
+                <img style="width: 100%;" :src="item.image" alt="">
               </div>
             <p class="command_title nowrap">{{item.title}}</p>
             <p class="command_description nowrap">{{item.description}}</p>
@@ -169,7 +170,7 @@
 
   .search_header form:after {
     border-radius: 25px !important;
-    background-color: #C8C8C8 !important;
+    background-color: #ece9ee !important;
   }
 
   .search_header .vux-search-box {
@@ -189,6 +190,27 @@
     border-bottom: 0 !important;
   }
 
+  .search_header .weui-search-bar {
+    padding: 0;
+  }
+
+  .search_header .weui-search-bar:before {
+    border-top: none;
+  }
+
+  .search_header .weui-search-bar__box .weui-search-bar__input {
+    font-size: 12px;
+  }
+
+  .search_header .weui-search-bar:after {
+    border: none;
+  }
+
+  .search_header .weui-icon-search {
+    font-size: 12px;
+  }
+
+
   /*定位*/
   .location {
     text-align: center;
@@ -202,6 +224,12 @@
 
   .location a {
     color: #222 !important;
+  }
+
+  .icon-location {
+    vertical-align: initial;
+    margin-right: 2px;
+    line-height: 45px;
   }
 
   /*推荐*/
