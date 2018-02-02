@@ -538,7 +538,7 @@ class TestController extends Controller
 
     public  function  actionTest()
     {
-        echo substr(123456,6-5,4);
+       echo 1;die;
     }
 
 }
