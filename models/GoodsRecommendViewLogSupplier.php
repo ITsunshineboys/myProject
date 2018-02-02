@@ -45,7 +45,7 @@ class GoodsRecommendViewLogSupplier extends ActiveRecord
      */
     public function validateRecommendId($attribute)
     {
-        if (!GoodsRecommend::findOne($this->$attribute)) {
+        if (!GoodsRecommendSupplier::findOne($this->$attribute)) {
             $this->addError($attribute);
             return false;
         }
