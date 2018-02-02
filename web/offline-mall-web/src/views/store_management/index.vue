@@ -49,9 +49,15 @@
     </div>
     <div class="store-goods">
       <div class="store-home" v-if="tabActive == 0">
-        <swiper :list="carousel" :show-desc-mask="false" dots-position="center" dots-class="dots" :loop="true" :auto="true" height="145px"></swiper>
+        <swiper :show-desc-mask="false" dots-position="center" dots-class="dots" loop auto height="145px">
+          <swiper-item v-for="(obj, index) in carousel" :key="index">
+            <router-link :to="obj.url" @click.native="recordClicks(obj.id)">
+              <img :src="obj.img">
+            </router-link>
+          </swiper-item>
+        </swiper>
         <div class="store-goods-list" flex>
-          <router-link class="store-goods-item" v-for="obj in recommendGoods" :to="'/good-detail/' + obj.url" tag="div" :key="obj.id" @click.native="recordScroll">
+          <router-link class="store-goods-item" v-for="obj in recommendGoods" :to="'/good-detail/' + obj.url" tag="div" :key="obj.id" @click.native="recordScroll(obj.id)">
            <div class="store-goods-imgbox">
               <img :src="obj.image">
            </div>
@@ -75,7 +81,7 @@
 </template>
 
 <script>
-  import {Tab, TabItem, Swiper} from 'vux'
+  import {Tab, TabItem, Swiper, SwiperItem} from 'vux'
   import vHeader from '@/components/HeaderSearch'
   import GoodsList from '@/components/GoodsList'
   import OfflineAlert from '@/components/OfflineAlert'
@@ -85,6 +91,7 @@
       Tab,
       TabItem,
       Swiper,
+      SwiperItem,
       vHeader,
       GoodsList,
       OfflineAlert
@@ -180,6 +187,7 @@
           this.storeData = data
           this.carousel = data.carousel.map(item => {
             return {
+              id: item.id,
               url: '/good-detail/' + item.url,
               img: item.image
             }
@@ -189,7 +197,11 @@
           this.uid = data.supplier_uid
         })
       },
-      recordScroll () {
+      recordClicks (id) {
+        this.axios.post('/mall/recommend-click-record-supplier', {recommend_id: id})
+      },
+      recordScroll (id) {
+        this.axios.post('/mall/recommend-click-record-supplier', {recommend_id: id})
         let scrollTop = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset     // 滚动条位置
         sessionStorage.setItem('storePos', scrollTop)      // 记录滚动条位置
       },
