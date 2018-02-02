@@ -1721,7 +1721,7 @@ class OwnerController extends Controller
         //   楼梯  数据
         if ($effect['stairway'] != 0){
             $stairs = Goods::findByCategory(BasisDecorationService::goodsNames()['stairs']);
-            $stairs_details = StairsDetails::find()->select(['attribute'])->where(['id'=>$get['stairs']])->one();
+            $stairs_details = StairsDetails::find()->select(['attribute'])->where(['id'=>$effect['stair_id']])->one();
 
             $condition_stairs=[];
             foreach ($stairs as &$one_stairs_price) {
