@@ -15,7 +15,13 @@
         <i style="font-size:18px;line-height: 31px;" class="iconfont icon-news-square"></i>
       </flexbox-item>
     </flexbox>
-    <swiper dots-position="center" :list="banner_list" loop auto height="171px" :aspect-ratio="375/171" :show-desc-mask="false"></swiper>
+    <swiper dots-position="center" loop auto height="171px" :aspect-ratio="375/171" :show-desc-mask="false">
+      <swiper-item @click.native="getClickRecord(item)" v-for="(item,index) in banner_list">
+        <router-link :to="'/good-detail/'+item.url">
+          <img :src="item.image">
+        </router-link>
+      </swiper-item>
+    </swiper>
     <flexbox :gutter="0" class="category" wrap="wrap">
       <flexbox-item style="text-align: center;padding: 12px 0;" :span="1/4" v-for="(item,index) in category_list"
                     :key="index">
@@ -28,7 +34,7 @@
     <card :header="{title:'推荐'}" class="command">
       <flexbox align="flex-start" :gutter="0" slot="content" wrap="wrap">
 
-          <flexbox-item style="margin-left: 3.46%!important;" :span="56/125" class="command_list" :class="{odd_col:index%2==0,even_col:index%2==1}"
+          <flexbox-item @click.native="getClickRecord(item)"  style="margin-left: 3.46%!important;" :span="56/125" class="command_list" :class="{odd_col:index%2==0,even_col:index%2==1}"
                         v-for="(item,index) in recommended_list" :key="index">
             <router-link :to="'/good-detail/' + item.url">
               <!--<div style="width: 160px;height: 160px;border-radius: 2px;overflow: hidden;" :style="{'background-image':'url('+item.image+')',backgroundSize:'contain',backgroundRepeat:'no-repeat',backgroundPosition:'center center' }">-->
@@ -91,6 +97,13 @@
     methods: {
       goMessage () {
         window.AndroidWebView.skipMessageCenter()
+      },
+      getClickRecord (item) {
+        this.axios.post('/mall/recommend-click-record', {
+          recommend_id: item.id
+        }, (res) => {
+          console.log(res)
+        })
       }
     },
     created () {
@@ -103,13 +116,7 @@
         district_code: this.cur_city[1]
       }, (res) => {
         console.log(res)
-        const imgList = res.data.carousel
-        this.banner_list = imgList.map((item, index) => ({
-          url: '/good-detail/' + item.url,
-          img: item.image,
-          title: '',
-          id: item.id
-        }))
+        this.banner_list =res.data.carousel
       })
       this.axios.get('/mall/categories', {}, (res) => {
         console.log(res)
@@ -124,6 +131,9 @@
       window.AndroidWebView.showTable()
     },
     mounted () {
+      this.$nextTick(() => {
+        console.log(document.getElementsByClassName('vux-swiper-item'))
+      })
       this.axios.get('/order/iswxlogin', {}, (res) => {
         res.code === 200 ? sessionStorage.setItem('wxCodeFlag', true) : sessionStorage.getItem('wxCodeFlag', false)
         if (sessionStorage.getItem('wxCodeFlag') && !sessionStorage.getItem('wxStatus')) {
