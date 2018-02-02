@@ -284,8 +284,7 @@ class Wxpay  extends ActiveRecord
             $noncestr=WxPayApi::getNonceStr();
             $timestamp=time();
             $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
-           $url=$http_type .  $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
-var_dump($url);die;
+           $url=$_SERVER['HTTP_REFERER'];
             $appid=WxPayConfig::APPID;
             $str="jsapi_ticket=".$ticket."&noncestr=".$noncestr.'&timestamp='.$timestamp.'&url='.$url;
             $sign=sha1($str);
