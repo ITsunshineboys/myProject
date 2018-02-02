@@ -351,7 +351,6 @@
   .attention .iconfont {
     font-size: 20px;
   }
-
   .fans span:first-child {
     margin-top: 3px;
   }
