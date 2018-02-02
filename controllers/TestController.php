@@ -507,7 +507,7 @@ class TestController extends Controller
     }
 
     /**
-     * Handle goods style
+     * Handle goods style 
      *
      * @return string
      * @throws Exception
