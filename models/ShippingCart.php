@@ -477,11 +477,11 @@ class ShippingCart extends \yii\db\ActiveRecord
                     {
                         $tran->rollBack();
                     }
-//                    $res=$list->delete();
-//                    if (!$res)
-//                    {
-//                        $tran->rollBack();
-//                    }
+                    $res=$list->delete();
+                    if (!$res)
+                    {
+                        $tran->rollBack();
+                    }
                 }else
                 {
                     $list->uid=$user->id;
