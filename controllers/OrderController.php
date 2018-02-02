@@ -552,6 +552,11 @@ class OrderController extends Controller
         }
 
     }
+    public  function  actionTestWx()
+    {
+        $data=Wxpay::GetWxJsSign();
+        var_dump($data);
+    }
     /**
      * 智能报价-样板间支付定金提交
      * @return string
