@@ -2327,6 +2327,7 @@ class OrderController extends Controller
                     $where=GoodsOrder::GetTypeWhere($type);
                     $where .=" and a.supplier_id={$supplier->id}  ";
                 }
+                $where.=' and a.order_refer = 2';
                 break;
         }
 
