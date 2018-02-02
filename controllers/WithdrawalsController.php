@@ -1224,6 +1224,8 @@ class WithdrawalsController extends Controller
                     echo "success";
                     exit;
                 }
+
+
                 if ($access)
                 {
                     echo "success";
