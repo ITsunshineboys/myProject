@@ -457,7 +457,10 @@ class ShippingCart extends \yii\db\ActiveRecord
      */
     public  static  function  MergeShippingCartNoLogin($session_id,$user)
     {
-        $shipping_cart=self::find()->where(['session_id'=>$session_id])->all();
+        $shipping_cart=self::find()
+            ->where(['session_id'=>$session_id])
+            ->andWhere(['uid'=>0])
+            ->all();
         $tran = Yii::$app->db->beginTransaction();
         try{
             foreach ( $shipping_cart as &$list)
@@ -474,11 +477,11 @@ class ShippingCart extends \yii\db\ActiveRecord
                     {
                         $tran->rollBack();
                     }
-                    $res=$list->delete();
-                    if (!$res)
-                    {
-                        $tran->rollBack();
-                    }
+//                    $res=$list->delete();
+//                    if (!$res)
+//                    {
+//                        $tran->rollBack();
+//                    }
                 }else
                 {
                     $list->uid=$user->id;
