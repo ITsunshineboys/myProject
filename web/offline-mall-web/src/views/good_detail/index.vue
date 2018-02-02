@@ -9,8 +9,7 @@
     </div>
 
     <!--轮播-->
-    <swiper loop auto :list="banner_list" height="375px" dots-class="custom-bottom" dots-position="center"
-            :show-desc-mask="false"></swiper>
+    <swiper loop auto :list="banner_list" height="375px" dots-class="custom-bottom" dots-position="center" :show-desc-mask="false"></swiper>
     <div class="good-detail">
       <div class="title-container">
         <p>{{good_detail.title}}</p>
@@ -378,6 +377,7 @@
         this.axios.get('/mall/goods-view', {id: this.good_id}, (res) => {
           this.good_detail.status = res.data.goods_view.status
           this.good_detail.left_number = res.data.goods_view.left_number
+          this.good_detail.line_goods.is_offline_goods = res.data.goods_view.line_goods.is_offline_goods
           // 商品下架
           if (this.good_detail.status !== 2) {
             this.show_offline = true
@@ -398,6 +398,7 @@
         this.axios.get('/mall/goods-view', {id: this.good_id}, (res) => {
           this.good_detail.status = res.data.goods_view.status
           this.good_detail.left_number = res.data.goods_view.left_number
+          this.good_detail.line_goods.is_offline_goods = res.data.goods_view.line_goods.is_offline_goods
           // 商品下架
           if (this.good_detail.status !== 2) {
             this.show_offline = true
