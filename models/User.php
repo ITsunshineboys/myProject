@@ -1812,7 +1812,18 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function transformIdentityNo()
     {
-        $this->identity_no && $this->identity_no = preg_replace('/(\d{6})(\d{8})(.*)/', '$1xxxxxxxx$3', $this->identity_no);
+        $this->identity_no && $this->identity_no = self::changeIdentityNo($this->identity_no);
+    }
+
+    /**
+     * Transform identity no
+     *
+     * @param string $identityNo identity no
+     * @return string
+     */
+    public static function changeIdentityNo($identityNo)
+    {
+        return $identityNo ? preg_replace('/(\d{6})(\d{8})(.*)/', '$1xxxxxxxx$3', $identityNo) : '';
     }
 
     /**
