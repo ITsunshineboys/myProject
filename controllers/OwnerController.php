@@ -1110,35 +1110,35 @@ class OwnerController extends Controller
         $series = Series::find()->select('id,series')->where(['id'=>$get['series']])->one();
         $style = Style::find()->select('id,style')->where(['id'=>$get['style']])->one();
 
-        foreach ($brick as $one_brick){
-            foreach ($one_brick['attr'] as $attr_){
+        foreach ($brick as $oneBrick){
+
+            foreach ($oneBrick['attr'] as $attr_){
 
                 if ( $attr_['value'] == '卫生间'
-                     && strpos($one_brick['series_name'],$series->series) !== false
-                    &&  strpos($one_brick['style_name'],$style->style) !== false
+                     && strpos($oneBrick['series_name'],$series->series) !== false
+                     && strpos($oneBrick['style_name'],$style->style) !== false
                 ){
-                    $toilet_goods[] = $one_brick;
+                    $toilet_goods[] = $oneBrick;
                 }
 
 
                 if ($attr_['value'] == '厨房'
-                    && strpos($one_brick['series_name'],$series->series) !== false
-                    && strpos($one_brick['style_name'],$style->style) !== false
+                    && strpos($oneBrick['series_name'],$series->series) !== false
+                    && strpos($oneBrick['style_name'],$style->style) !== false
                 ){
-                    $kitchen_goods[] = $one_brick;
+                    $kitchen_goods[] = $oneBrick;
                 }
 
 
                 if ($attr_['value'] == '客厅'
-                    && strpos($one_brick['series_name'],$series->series) !== false
-                    && strpos($one_brick['style_name'],$style->style) !== false
+                    && strpos($oneBrick['series_name'],$series->series) !== false
+                    && strpos($oneBrick['style_name'],$style->style) !== false
                 ){
-                    $hall_goods[] = $one_brick;
+                    $hall_goods[] = $oneBrick;
                 }
             }
 
         }
-
 
         $max_toilet_goods[] = BasisDecorationService::profitMargin($toilet_goods);
         $max_kitchen_goods[] = BasisDecorationService::profitMargin($kitchen_goods);
