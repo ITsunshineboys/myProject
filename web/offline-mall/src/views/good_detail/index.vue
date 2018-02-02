@@ -320,7 +320,7 @@
         count_now: false,           // 立即购买按钮显示
         default_count: false,       // 两个按钮显示
         show_description: true,     // 显示图文详情
-        gooddetail: {
+        good_detail: {
           line_goods: {
             is_offline_goods: ''
           },
