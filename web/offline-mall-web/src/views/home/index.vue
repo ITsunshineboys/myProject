@@ -239,30 +239,5 @@
     margin-bottom: 10px;
     background-color: #fff;
   }
-
-  /*底部导航*/
-  /*.nav {*/
-  /*background-color: #fff;*/
-  /*padding: 8px 0;*/
-  /*position: fixed;*/
-  /*bottom: 0;*/
-  /*}*/
-
-  /*购物车*/
-  /*.shopcart {*/
-  /*background-color: #fff;*/
-  /*text-align: center;*/
-  /*height: 60px;*/
-  /*width: 60px;*/
-  /*border-radius: 60px;*/
-  /*border: 1px solid #222;*/
-  /*position: fixed;*/
-  /*top: calc(50% - 30px);*/
-  /*right: 30px;*/
-  /*}*/
-
-  /*.shopcart i {*/
-  /*font-size: 24px;*/
-  /*color: #222;*/
-  /*}*/
+  
 </style>
