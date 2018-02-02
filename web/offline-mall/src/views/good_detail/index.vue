@@ -350,6 +350,7 @@
       }
     },
     created () {
+      window.scrollTo(0, 0)
       if (this.$route.query.system === 'android') this.isFromAndroid = true
       this.good_id = this.$route.params.id // 商品id
       this.axios.get('/mall/goods-view', {id: this.good_id}, (res) => {
@@ -1231,4 +1232,3 @@
   }
   /*商品下架弹窗 end*/
 </style>
-
