@@ -3110,11 +3110,11 @@ class QuoteController extends Controller
 
 
        $a= GoodsAttr::find()->where(['id'=>1474])->one();
-//       $a->goods_id=49;
-       $a->unit=4;
-       $b=$a->save(false);
-       var_dump($b);die;
-        var_dump(GoodsCategory::find()->asArray()->where(['id'=>38])->one());
+       var_dump($a);die;
+//       $a->unit=4;
+//       $b=$a->save(false);
+//       var_dump($b);die;
+
         var_dump(Goods::find()->asArray()->where(['id'=>49])->one());
 
 
