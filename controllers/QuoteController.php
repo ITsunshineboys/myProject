@@ -3109,7 +3109,7 @@ class QuoteController extends Controller
     {
 
 
-        var_dump(GoodsAttr::find()->asArray()->where(['category_id'=>38])->all());
+        var_dump(GoodsAttr::find()->asArray()->where(['goods_id'=>559])->all());
         var_dump(GoodsCategory::find()->asArray()->where(['id'=>38])->one());
 
 
