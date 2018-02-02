@@ -111,7 +111,7 @@
         district_code: this.cur_city[1]
       }, (res) => {
         console.log(res)
-        this.banner_list =res.data.carousel
+        this.banner_list = res.data.carousel
       })
       this.axios.get('/mall/categories', {}, (res) => {
         console.log(res)
