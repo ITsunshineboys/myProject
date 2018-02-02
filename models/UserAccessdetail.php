@@ -225,7 +225,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
     {
         $data[]=[
             'name'=>'充值金额',
-            'value'=>$accessDetail['access_money']*0.01
+            'value'=>sprintf('%.2f',$accessDetail['access_money']*0.01)
         ];
         switch ($accessDetail['recharge_pay_type'])
         {
