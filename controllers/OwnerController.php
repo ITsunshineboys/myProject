@@ -1116,7 +1116,7 @@ class OwnerController extends Controller
 
                 if ( $attr_['value'] == '卫生间'
                      && strpos($oneBrick['series_name'],$series->series) !== false
-                    &&  strpos($oneBrick['style_name'],$style->style) !== false
+                     && strpos($oneBrick['style_name'],$style->style) !== false
                 ){
                     $toilet_goods[] = $oneBrick;
                 }
