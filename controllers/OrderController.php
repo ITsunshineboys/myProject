@@ -4934,6 +4934,7 @@ class OrderController extends Controller
      * 获取购物车列表
      * @return string
      * @throws Exception
+     * @throws \Exception
      */
     public function  actionFindShippingCartList()
     {

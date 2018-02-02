@@ -65,7 +65,7 @@ class ShippingCart extends \yii\db\ActiveRecord
             ->where(['uid'=>$user->id])
             ->andWhere(['role_id'=>$user->last_role_id_app])
             ->asArray()
-            ->groupBy('goods_id')
+//            ->groupBy('goods_id')
             ->all();
         if (!$data)
         {
@@ -115,7 +115,7 @@ class ShippingCart extends \yii\db\ActiveRecord
                 ->andWhere(['s.role_id'=>$user->last_role_id_app])
                 ->andWhere(['g.supplier_id'=>$supId])
                 ->andWhere('g.status =2')
-                ->groupBy('s.goods_id')
+//                ->groupBy('s.goods_id')
                 ->all();
             foreach ($Goods as &$list)
             {
