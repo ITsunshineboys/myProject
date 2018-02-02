@@ -256,9 +256,13 @@ class Wxpay  extends ActiveRecord
             }else{
                 $sendUrl = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx9814aafe9b6b847f&secret=4560eeb7b386701ddc7085827f65e40e';
                 $content =StringService::httpGet($sendUrl); //请求发送短信
+
+
+
                 if($content)
                 {
                     $result = json_decode($content,true);
+                    var_dump($result);die;
                     $access_token=$result['access_token'];
                     $cache->set(self::ACCESS_TOKEN,$access_token,7200);
                 }
@@ -271,9 +275,6 @@ class Wxpay  extends ActiveRecord
                 if($content){
 
                     $result = json_decode($content,true);
-
-                    var_dump($result);die;
-
                     if ($result['expires_in']==7200)
                     {
                         $ticket=$result['ticket'];
