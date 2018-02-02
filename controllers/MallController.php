@@ -2914,9 +2914,12 @@ class MallController extends Controller
 
         $oldNames = GoodsAttr::findNecessaryAttrs($categoryId);
         $deletedNames = array_diff($oldNames, $names);
+        $quotingPriceGoodsAttrIds = isset(Yii::$app->params['online']['quotingPrice']['goodsAttrIds'])
+            ? Yii::$app->params['online']['quotingPrice']['goodsAttrIds']
+            : [];
         if ($deletedNames
-            && GoodsAttr::IDS_QUOTING_PRICE
-            && array_intersect(GoodsAttr::IDS_QUOTING_PRICE, GoodsAttr::findIdsByName($deletedNames))
+            && $quotingPriceGoodsAttrIds
+            && array_intersect($quotingPriceGoodsAttrIds, GoodsAttr::findIdsByName($deletedNames))
         ) {
             $code = 1095;
             return Json::encode([
