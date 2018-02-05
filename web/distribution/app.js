@@ -1,6 +1,6 @@
 let app = angular.module("app", ['ionic', 'angularCSS','ui.bootstrap'])
 app.config(function ($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise('/login')
+    $urlRouterProvider.otherwise('/authorize')
     $stateProvider
         .state('login', {//登录
             url: '/login?tel',
@@ -26,33 +26,12 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             css:'pages/css/login.css',
             controller:'bind_tel_ctrl'
         })
-    // .state('index',{
-    //     url:'/',
-    //     templateUrl:'pages/index.html',
-    //     controller:'login_ctrl',
-    //     css:'pages/css/index.css'
-    // })
-    // .state('index.login',{//登录首页
-    //     url:'index',
-    //     templateUrl:'pages/login.html',
-    //     css:['pages/css/index.css','pages/css/login.css']
-    // })
-    // .state('index.verification',{//填写验证码
-    //     url:'verification',
-    //     templateUrl:'pages/verification.html',
-    //     css:['pages/css/index.css','pages/css/login.css']
-    // })
-    // .state('personal_center',{//个人中心
-    //     url:'/personal_center',
-    //     templateUrl:'pages/personal_center.html',
-    //     controller:'login_ctrl',
-    //     css:'pages/css/personal_center.css'
-    // })
-    // .state('index.bind_tel',{//绑定手机号
-    //     url:'bind_tel',
-    //     templateUrl:'pages/bind_tel.html',
-    //     css:['pages/css/index.css','pages/css/login.css']
-    // })
+        .state('authorize',{
+            url:'/authorize',
+            templateUrl:'pages/authorize.html',
+            css:'pages/css/authorize.css',
+            controller:'authorize_ctrl'
+        })
 })
     .service('_ajax', function ($http, $state) {
         let baseUrl = ''
