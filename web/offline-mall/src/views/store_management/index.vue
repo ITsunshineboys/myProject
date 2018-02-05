@@ -125,7 +125,7 @@
         offlineInfo: {                 // 线下体验店弹窗信息
           address: '',
           phone: '',
-          desc: ''
+          desc: '线下体验店是与艾特生活线上平台相配套的落地服务，负责接纳客户业务咨询、为消费者提供智能家居体验的区域服务中心'
         },
         sortName: 'sold_number',              // tab排序名称  sold_number(销量优先)  platform_price(价格) favourable_comment_rate(好评率)
         platformPriceSortNum: 4,              // 价格排序方式   3：降序 4：升序
