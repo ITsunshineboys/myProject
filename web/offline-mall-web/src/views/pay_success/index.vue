@@ -26,7 +26,7 @@
         console.log(this.number)
         if (this.number < 1) {
           clearInterval(timeInterval)
-          this.$router.push({path: 'order'})
+          this.$router.push({path: ''})
         }
       }, 1000)
     }
