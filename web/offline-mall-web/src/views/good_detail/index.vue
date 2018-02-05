@@ -16,7 +16,7 @@
         <p>{{good_detail.subtitle}}</p>
         <div class="price">
           <span>¥{{good_detail.platform_price}}</span>
-          <span v-show="good_detail.line_goods.is_offline_goods === '否' ? false:true" @click="show=true">线下体验商品</span>
+          <span v-show="good_detail.line_goods.is_offline_goods === '否' ? false:true" @click="show_offlinegood = true">线下体验商品</span>
         </div>
       </div>
       <divider></divider>
@@ -28,7 +28,7 @@
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
             <i class="iconfont icon-checkbox-circle-line"></i>
-            <span>{{item}}</span>
+            <span>{{item.title}}</span>
           </div>
         </cell-box>
       </group>
@@ -182,20 +182,20 @@
           <flexbox-item>
             <div class="after-service" v-if="pop.show_service">
               <p>售后</p>
-              <div v-for="item in all_after_sale_services" v-if="afterservice_arr.indexOf(item) !== -1"
+              <div v-for="item in all_after_sale_services" v-if="afterservice_arr.indexOf(item.title) !== -1"
                    class="after-service-item">
                 <i class="iconfont icon-checkbox-circle-line"></i>
-                <span>{{item}}</span>
-                <p>清代性灵派诗人袁枚说过这么一句话：“读书不知味,不如束高阁;蠢鱼尔何如,终日食糟粕”，意思就是读书如果不能明白其中的道理，还不如束之高阁，那些只会死读书的书呆子们，相当于在吞食无用的糟粕。</p>
+                <span>{{item.title}}</span>
+                <p>{{item.description}}</p>
               </div>
             </div>
             <div class="after-service safe-guard">
               <p>保障</p>
-              <div v-for="item in all_after_sale_services" v-if="safeguard_arr.indexOf(item) !== -1"
+              <div v-for="item in all_after_sale_services" v-if="safeguard_arr.indexOf(item.title) !== -1"
                    class="after-service-item">
                 <i class="iconfont icon-checkbox-circle-line"></i>
-                <span>{{item}}</span>
-                <p>清代性灵派诗人袁枚说过这么一句话：“读书不知味,不如束高阁;蠢鱼尔何如,终日食糟粕”，意思就是读书如果不能明白其中的道理，还不如束之高阁，那些只会死读书的书呆子们，相当于在吞食无用的糟粕。</p>
+                <span>{{item.title}}</span>
+                <p>{{item.description}}</p>
               </div>
             </div>
           </flexbox-item>
@@ -205,7 +205,7 @@
     </popup>
 
     <!--线下商品介绍弹窗-->
-    <offlinealert :offlineInfo="offlineInfo" :show="show" :isOffline="false" @isShow="showOfflineAlert"></offlinealert>
+    <offlinealert :offlineInfo="offlineInfo" :show="show_offlinegood" :isOffline="false" @isShow="showOfflineAlert"></offlinealert>
 
     <!--库存不足弹窗-->
     <alert class="goodshort-alert" v-model="show_goodshort_alert" :hide-on-blur="true">
@@ -269,7 +269,7 @@
         good_id: '', // 商品id
         role_id: 6, // 角色id
         isShow: false,  // 右上角弹窗
-        show: false,    // 线下商品简介
+        show_offlinegood: false,    // 线下商品简介
         cart_success: false, // 添加购物车成功toast
         show_goodshort_alert: false, // 商品不足弹窗
         show_offline: false,        // 商品下架提示
@@ -324,6 +324,12 @@
           }
         }
 
+        this.offlineInfo = {
+          address: this.good_detail.line_goods.line_district,
+          phone: this.good_detail.line_goods.line_mobile,
+          desc: '线下体验店商品是线下门店销售的可供消费者体验的产品，每个体验店的产品都不尽相同，消费者可提前在网上查询各体验店的商品种类'
+        }
+
         // 售后弹窗显示处理
         this.all_after_sale_services = this.good_detail.after_sale_services
         this.after_sale_services = this.good_detail.after_sale_services.slice(0, 3) // 页面售后显示内容
@@ -340,7 +346,7 @@
       // 判断是否显示售后
       afterServiceShow () {
         for (let [key, value] of this.all_after_sale_services.entries()) {    // eslint-disable-line
-          if (afterserviceArr.indexOf(value) !== -1) {
+          if (afterserviceArr.indexOf(value.title) !== -1) {
             this.pop.show_service = true
           }
         }
@@ -370,7 +376,7 @@
       },
       // 线下商品弹窗处理
       showOfflineAlert: function (bool) {
-        this.show = bool
+        this.show_offlinegood = bool
       },
       // 底部立即购买按钮
       bottomAdd () {

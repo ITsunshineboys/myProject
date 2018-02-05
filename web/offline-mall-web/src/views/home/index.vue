@@ -13,7 +13,7 @@
       </flexbox-item>
     </flexbox>
     <swiper class="swiper_list" dots-position="center" loop auto height="171px" :aspect-ratio="375/171" :show-desc-mask="false">
-      <swiper-item @click.native="getClickRecord(item)" v-for="(item,index) in banner_list">
+      <swiper-item @click.native="getClickRecord(item)" v-for="(item,index) in banner_list" :key="index">
         <router-link :to="'/good-detail/'+item.url">
           <img :src="item.image">
         </router-link>
