@@ -313,15 +313,21 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
         }
 
         //test
-//        if ((int)$post['status']==self::STATUS_OFF_LINE)
-//        {
-//            $goods->status=Goods::STATUS_ONLINE;
-//            if (!$goods->save(false))
-//            {
-//                $code=500;
-//                return $code;
-//            }
-//        }
+        if ($post['status']==self::STATUS_ON_LINE)
+        {
+            $lineSupplier=LineSupplier::findOne($LineSupplierGoods->line_supplier_id);
+            if ($lineSupplier->status==LineSupplier::STATUS_OFF_LINE)
+            {
+                $code=1100;
+                return $code;
+            }
+            $supplier=Supplier::findOne($goods->supplier_id);
+            if ($supplier->status!=Supplier::STATUS_ONLINE)
+            {
+                $code=1101;
+                return $code;
+            }
+        }
         $tran = Yii::$app->db->beginTransaction();
         try{
             $LineSupplierGoods->status=(int)$post['status'];
