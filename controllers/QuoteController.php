@@ -3107,6 +3107,6 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-        var_dump(EffectEarnest::find()->where(['status'=>1])->asArray()->all());
+
     }
 }
