@@ -446,18 +446,43 @@ class Goods extends ActiveRecord
     public static function disableGoodsBySupplierId($supplierId, ActiveRecord $operator)
     {
         $where = ['status' => self::STATUS_ONLINE, 'supplier_id' => $supplierId];
-        self::updateAll([
-            'status' => self::STATUS_OFFLINE,
-            'offline_time' => time(),
-            'offline_reason' => Yii::$app->params['supplier']['offline_reason'],
-            'offline_uid' => $operator->id,
-            'offline_person' => $operator->nickname,
-        ], $where);
+//        self::updateAll([
+//            'status' => self::STATUS_OFFLINE,
+//            'offline_time' => time(),
+//            'offline_reason' => Yii::$app->params['supplier']['offline_reason'],
+//            'offline_uid' => $operator->id,
+//            'offline_person' => $operator->nickname,
+//        ], $where);
+        $tran=\Yii::$app->db->beginTransaction();
+        try{
+            $online_goods=self::findAll($where);
+            foreach ($online_goods as &$online_good)
+            {
+                $online_good->status=self::STATUS_OFFLINE;
+                $online_good->offline_time=time();
+                $online_good->offline_reason=Yii::$app->params['supplier']['offline_reason'];
+                $online_good->offline_uid=$operator->id;
+                $online_good->offline_person=$operator->nickname;
+                if (!$online_good->save(false))
+                {
+                   $tran->rollBack();
+                };
+                LineSupplierGoods::updateAll(['status'=>LineSupplierGoods::STATUS_OFF_LINE],['goods_id'=>$online_good->id]);
+            }
+            $where = ['status' => self::STATUS_WAIT_ONLINE, 'supplier_id' => $supplierId];
+            self::updateAll([
+                'reason' => Yii::$app->params['supplier']['offline_reason'],
+            ], $where);
+            $code=200;
+            $tran->commit();
+            return $code;
+        }catch (\Exception $e)
+        {
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
 
-        $where = ['status' => self::STATUS_WAIT_ONLINE, 'supplier_id' => $supplierId];
-        self::updateAll([
-            'reason' => Yii::$app->params['supplier']['offline_reason'],
-        ], $where);
     }
 
     /**

@@ -5750,11 +5750,15 @@ class MallController extends Controller
             $res = $supplier->online($operator);
         } elseif ($supplier->status == Supplier::STATUS_ONLINE) {
             $res = $supplier->offline($operator);
-            $lineSupplier=LineSupplier::find()->select('id')->where(['supplier_id'=>$supplier->id])->one();
+            $lineSupplier=LineSupplier::find()
+                ->select('id')
+                ->where(['supplier_id'=>$supplier->id])
+                ->one();
             if ($lineSupplier)
             {
-                LineSupplierGoods::updateAll(['status'=>LineSupplierGoods::STATUS_OFF_LINE],'line_supplier_id='.$lineSupplier->id);
+                LineSupplierGoods::updateAll(['status'=>LineSupplierGoods::STATUS_OFF_LINE],['line_supplier_id'=>$lineSupplier->id]);
             }
+
         } else {
             $res = 1000;
         }

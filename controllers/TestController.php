@@ -541,8 +541,8 @@ class TestController extends Controller
     public  function  actionTest()
     {
 
-        $code=LineSupplier::updateAll(['status'=>LineSupplierGoods::STATUS_OFF_LINE],'id=1');
-        echo $code;
+        $data=Goods::findAll(['id'=>4]);
+        var_dump($data);
     }
 
 }
