@@ -833,10 +833,10 @@ class OrderController extends Controller
         }
     }
 
-     /**
+    /**
      * wxpay effect sub
-     * 微信样板间支付
      * @return string
+     * @throws \yii\base\WxPayException
      */
     public function actionWxpayEffectEarnstSub(){
         $request = \Yii::$app->request;
@@ -939,38 +939,50 @@ class OrderController extends Controller
             'data'=>$url
         ]);
     }
-     /**
+
+    /**
      * 获取openID2-微信
      * @return string
+     * @throws \yii\base\WxPayException
      */
     public function  actionWxLinePay()
     {
-            $orders=array(
-                'address_id'=> Yii::$app->session['address_id'],
-                'invoice_id'=> Yii::$app->session['invoice_id'],
-                'goods_id'=> Yii::$app->session['goods_id'],
-                'goods_num'=> Yii::$app->session['goods_num'],
-                'order_price'=> Yii::$app->session['order_price'],
-                'goods_name'=> Yii::$app->session['goods_name'],
-                'pay_name'=> Yii::$app->session['pay_name'],
-                'supplier_id'=> Yii::$app->session['supplier_id'],
-                'freight'=> Yii::$app->session['freight'],
-                'return_insurance'=> Yii::$app->session['return_insurance'],
-                'body'=> Yii::$app->session['body'],
-                'order_no'=> Yii::$app->session['order_no'],
-                'buyer_message'=> Yii::$app->session['buyer_message'],
-                'total_amount'=> Yii::$app->session['total_amount']
-            );
-            if (! Yii::$app->session['address_id']
-                || !Yii::$app->session['goods_id']
-                || !Yii::$app->session['goods_num']
-                || !Yii::$app->session['order_price']
-                || !Yii::$app->session['pay_name']
-                || !Yii::$app->session['supplier_id']
-                || !Yii::$app->session['freight']
-                || !Yii::$app->session['order_no']
-                || !Yii::$app->session['total_amount']
-            )
+        $orders=array(
+            'address_id'=> Yii::$app->session['address_id'],
+            'invoice_id'=> Yii::$app->session['invoice_id'],
+            'goods_id'=> Yii::$app->session['goods_id'],
+            'goods_num'=> Yii::$app->session['goods_num'],
+            'order_price'=> Yii::$app->session['order_price'],
+            'goods_name'=> Yii::$app->session['goods_name'],
+            'pay_name'=> Yii::$app->session['pay_name'],
+            'supplier_id'=> Yii::$app->session['supplier_id'],
+            'freight'=> Yii::$app->session['freight'],
+            'return_insurance'=> Yii::$app->session['return_insurance'],
+            'body'=> Yii::$app->session['body'],
+            'order_no'=> Yii::$app->session['order_no'],
+            'buyer_message'=> Yii::$app->session['buyer_message'],
+            'total_amount'=> Yii::$app->session['total_amount']
+        );
+        if (! Yii::$app->session['address_id']
+            || !Yii::$app->session['goods_id']
+            || !Yii::$app->session['goods_num']
+            || !Yii::$app->session['order_price']
+            || !Yii::$app->session['pay_name']
+            || !Yii::$app->session['supplier_id']
+            || !Yii::$app->session['freight']
+            || !Yii::$app->session['order_no']
+            || !Yii::$app->session['total_amount']
+        )
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $address=UserAddress::findOne(Yii::$app->session['address_id']);
+        {
+            if (!$address)
             {
                 $code=1000;
                 return Json::encode([
@@ -978,17 +990,7 @@ class OrderController extends Controller
                     'msg'  => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-            $address=UserAddress::findOne(Yii::$app->session['address_id']);
-            {
-                if (!$address)
-                {
-                    $code=1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'  => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-            }
+        }
         $invoice=Invoice::findOne(Yii::$app->session['invoice_id']);
         if (!$invoice)
         {
@@ -1022,6 +1024,7 @@ class OrderController extends Controller
 
     /**
      * @return string
+     * @throws \yii\base\WxPayException
      */
     public  function  actionOrderLineWxPay()
     {
@@ -1127,6 +1130,7 @@ class OrderController extends Controller
      * 微信公众号样板间申请定金异步返回
      * @return bool
      * @throws Exception
+     * @throws \yii\base\WxPayException
      */
     public function actionWxPayEffectEarnestNotify(){
         //获取通知的数据
