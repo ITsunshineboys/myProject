@@ -98,9 +98,10 @@ app.controller('edit_experience_goods', ['$rootScope', '$scope', '$stateParams',
     // 选择省获取城市和区数据
     $scope.cityList = function () {
         $scope.city = selectProvince($scope.select_district.province_code); // 城市数据
-        $scope.select_district.city_code = $scope.city[0].code;     // 默认为数据第一个城市
+        $scope.select_district.city_code = $scope.city[0].code;             // 默认为数据第一个城市
         $scope.district = selectProvince($scope.select_district.city_code); // 区数据
-        $scope.params.district_code = $scope.district[0].code; // 默认为数据第一个区
+        $scope.select_district.district_code = $scope.district[0].code;     // 默认为数据第一个区
+        $scope.params.district_code = $scope.district[0].code;
     };
 
     // 选择城市获取区数据
