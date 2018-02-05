@@ -72,10 +72,10 @@
     border: none;
     border-radius: 0.5rem;
 }
-
+/*
 .pay[disabled] span {
     opacity: .25;
-}
+}*/
 
 .help {
     font-size: 1.17rem;
