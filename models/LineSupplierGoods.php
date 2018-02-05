@@ -302,7 +302,10 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
             return $code;
         }
         $goods=Goods::findOne($LineSupplierGoods->goods_id);
-        if ($goods->status!=Goods::STATUS_ONLINE && $goods->status!=Goods::STATUS_OFFLINE)
+        if (
+            $goods->status!=Goods::STATUS_ONLINE
+            && $goods->status!=Goods::STATUS_OFFLINE
+        )
         {
             $code=1088;
             return $code;
