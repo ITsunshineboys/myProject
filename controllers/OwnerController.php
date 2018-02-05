@@ -722,7 +722,6 @@ class OwnerController extends Controller
         $modelling_day = ceil(BasisDecorationService::algorithm(7,$modelling_length,$modelling,$coefficient1,$coefficient3));
         $flat_area_day = ceil(BasisDecorationService::algorithm(7,$flat_area_,$flat_area,$coefficient4,$coefficient5));
 
-
         //人工费
         $labour_charges['price'] = BasisDecorationService::algorithm(8,$modelling_day,$flat_area_day,$labor_cost['univalence']);
         $labour_charges['worker_kind'] = $labor_cost['worker_name'];
@@ -1831,10 +1830,7 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-       $a = 0.162;
-       $b = 0.011;
-       $c = $a * $b;
-       echo $c;
+      var_dump(EngineeringStandardCarpentryCoefficient::deleteAll(['city_code'=>510100]));
 
     }
 

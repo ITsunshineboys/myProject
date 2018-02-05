@@ -155,7 +155,7 @@
             <span>售后</span>
             <div class="margin_left inline_block">
                 <div class="margin_top" ng-repeat="item in good_detail.after_sale_services">
-                    <p ng-show="afterserviceTest(item)">{{item}}</p>
+                    <p ng-show="afterserviceTest(item)">{{item.title}}</p>
                 </div>
             </div>
         </div>
@@ -164,7 +164,7 @@
             <span>保障</span>
             <div class="margin_left inline_block">
                 <div ng-repeat="item in good_detail.after_sale_services">
-                    <p ng-show="safeguardTest(item)">{{item}}</p>
+                    <p ng-show="safeguardTest(item)">{{item.title}}</p>
                 </div>
 
             </div>

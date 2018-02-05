@@ -138,10 +138,10 @@
             jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
           })
           wx.ready(function () {
-            wx.showAllNonBaseMenuItem()
-            wx.showMenuItems({
-              menuList: ['menuItem:share:appMessage', 'menuItem:share:timeline'] // 要显示的菜单项，所有menu项见附录3
-            })
+//            wx.showAllNonBaseMenuItem()
+//            wx.showMenuItems({
+//              menuList: ['menuItem:share:appMessage', 'menuItem:share:timeline'] // 要显示的菜单项，所有menu项见附录3
+//            })
             wx.onMenuShareAppMessage({
               title: '微信分享给朋友', // 分享标题
               desc: 'This is a test!', // 分享描述
@@ -174,23 +174,19 @@
           })
         }
         if (sessionStorage.getItem('wxCodeFlag') && !sessionStorage.getItem('wxStatus')) {
-//          this.axios.post('/order/find-open-id', {
-//            url: location.href
-//          }, (res) => {
-//            console.log(res)
-//            console.log(res.data)
-//            location.href = res.data
-//            sessionStorage.setItem('wxStatus', true)
-//          })
-//        } else if (sessionStorage.getItem('wxCodeFlag') && sessionStorage.getItem('wxStatus')) {
-//          this.openID = location.href.split('code=')[1].split('&state')[0]
-//          this.axios.post('/order/get-open-id', {
-//            code: this.openID
-//          }, (res) => {
-//            console.log(this.openID)
-//            sessionStorage.setItem('openID', res.data)
-//            console.log(res)
-//          })
+          this.axios.post('/order/find-open-id', {
+            url: location.href
+          }, (res) => {
+            location.href = res.data
+            sessionStorage.setItem('wxStatus', true)
+          })
+        } else if (sessionStorage.getItem('wxCodeFlag') && sessionStorage.getItem('wxStatus')) {
+          this.openID = location.href.split('code=')[1].split('&state')[0]
+          this.axios.post('/order/get-open-id', {
+            code: this.openID
+          }, (res) => {
+            sessionStorage.setItem('openID', res.data)
+          })
         }
       })
     }
