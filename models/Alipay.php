@@ -13,7 +13,7 @@ class Alipay extends  ActiveRecord
 {
 
     const ALIPAY_LINPAY_NOTIFY='order/ali-pay-line-notify';
-    const LINE_PAY_SUCCESS='line/#!/pay_success';
+    const LINE_PAY_SUCCESS='aitelife-shop-web/#/success';
     const EFFECT_NOTIFY='order/ali-pay-effect-earnest-notify';
     const EFFECT_SUCCESS='owner/mall/index.html#!/pay_success';
 
