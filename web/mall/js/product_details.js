@@ -18,7 +18,7 @@ app.controller('product_details_ctrl', function ($timeout, _ajax, $scope, $state
         console.log(res);
         let arr = [], arr1 = []
         for (let [key, value] of res.data.goods_view.after_sale_services.entries()) {
-            if (value == '提供发票' || value == '上门安装') {
+            if (value.title == '提供发票' || value.title == '上门安装') {
                 arr.push(value)
             } else {
                 arr1.push(value)
