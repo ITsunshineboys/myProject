@@ -137,11 +137,11 @@
             signature: this.wxData.signature, // 必填，签名，见附录1
             jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
           })
-          wx.showAllNonBaseMenuItem()
-          wx.showMenuItems({
-            menuList: ['menuItem:share:appMessage', 'menuItem:share:timeline'] // 要显示的菜单项，所有menu项见附录3
-          })
           wx.ready(function () {
+            wx.showAllNonBaseMenuItem()
+            wx.showMenuItems({
+              menuList: ['menuItem:share:appMessage', 'menuItem:share:timeline'] // 要显示的菜单项，所有menu项见附录3
+            })
             wx.onMenuShareAppMessage({
               title: '微信分享给朋友', // 分享标题
               desc: 'This is a test!', // 分享描述
