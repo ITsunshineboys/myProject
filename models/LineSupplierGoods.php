@@ -315,6 +315,11 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
         //test
         if ($post['status']==self::STATUS_ON_LINE)
         {
+            if ($goods->status==Goods::STATUS_OFFLINE)
+            {
+                $code=1102;
+                return $code;
+            }
             $lineSupplier=LineSupplier::findOne($LineSupplierGoods->line_supplier_id);
             if ($lineSupplier->status==LineSupplier::STATUS_OFF_LINE)
             {
@@ -327,6 +332,7 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
                 $code=1101;
                 return $code;
             }
+
         }
         $tran = Yii::$app->db->beginTransaction();
         try{
