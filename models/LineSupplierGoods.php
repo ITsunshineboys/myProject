@@ -278,6 +278,7 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
      * 切换线下体验店商品status
      * @param $post
      * @return int
+     * @throws \yii\db\Exception
      */
     public  static  function  SwitchLineSupplierGoodsStatus($post)
     {
@@ -305,6 +306,12 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
         {
             $code=1088;
             return $code;
+        }
+
+        //test
+        if ((int)$post['status']==self::STATUS_OFF_LINE)
+        {
+            $goods->status=Goods::STATUS_ONLINE;
         }
         $tran = Yii::$app->db->beginTransaction();
         try{

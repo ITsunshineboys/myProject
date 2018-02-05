@@ -916,11 +916,13 @@ class SupplierController extends Controller
     /**
      * 开启 or  关闭 线下体验店品状态
      * @return string
+     * @throws \yii\db\Exception
      */
     public  function  actionSwitchLineSupplierGoodsStatus()
     {
         $code=LineSupplierGoods::SwitchLineSupplierGoodsStatus(\Yii::$app->request->post());
-        return Json::encode([
+        return Json::encode
+        ([
             'code' => $code,
             'msg' => 200 == $code ? 'ok' : Yii::$app->params['errorCodes'][$code],
         ]);
