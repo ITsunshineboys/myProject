@@ -39,5 +39,6 @@
     border-radius: .16rem;
     font-size: 36px;
     width: 100%;
-    padding: .4rem 0;
+    height: 1.28rem;
+    border: none;
 }
