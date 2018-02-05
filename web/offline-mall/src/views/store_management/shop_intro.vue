@@ -105,7 +105,6 @@
           status: this.isAttention === 1 ? 0 : 1
         }
         this.axios.post('/user-follow/user-follow-shop', params, res => {
-          window.AndroidWebView.clearCache()
           this.getStoreData()
         })
       },
