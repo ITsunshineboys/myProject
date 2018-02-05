@@ -175,7 +175,7 @@ app.controller('sales_details', ['$rootScope', '$scope', '$interval', '$state', 
     function salesTimer(array) {
         // 遍历数组，查询倒计时，并实现
         for (let obj of array) {
-            if (obj.code === 'user_unconfirm_received' || obj.code === 'supplier_unconfirm_received') {
+            if (obj.code === 'user_unconfirm_received' || obj.code === 'supplier_unconfirm_received' || obj.code === 'countdown') {
                 $scope.sale_temp_time = obj.content;
                 let clear_interval = $interval(function () {
                     if ($scope.sale_temp_time < 1) {
