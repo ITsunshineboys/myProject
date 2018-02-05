@@ -146,7 +146,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
     public static function gettodayapply(){
         $today=self::getToday();
 
-        return $sum=(new Query())->from('effect_earnest')->where('create_time<='.$today[1])->andWhere('create_time>='.$today[0])->andWhere('type=0 and (status = 1 or item = 1)')->count('*');
+        return $sum=(new Query())->from('effect_earnest')->where('create_time<='.$today[1])->andWhere('create_time>='.$today[0])->andWhere('type=0 and status = 1 ')->count('*');
     }
 
     /**
