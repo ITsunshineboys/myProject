@@ -1830,7 +1830,7 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-      var_dump(EngineeringStandardCarpentryCoefficient::deleteAll(['city_code'=>510100]));
+      var_dump(EffectPicture::find()->asArray()->where(['id'=>342])->one());
 
     }
 
