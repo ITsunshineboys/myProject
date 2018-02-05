@@ -251,8 +251,7 @@
     </alert>
 
     <!--商品已下架提示-->
-    <popup class="offline-warning" v-model="show_offline" position="bottom" height="49px" :hide-on-blur="true"
-           :show-mask="false">
+    <popup class="offline-warning" v-model="show_offline" position="bottom" height="49px" :hide-on-blur="true" :show-mask="false">
       <div>该商品已下架</div>
     </popup>
   </div>
