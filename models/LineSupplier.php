@@ -197,6 +197,7 @@ class LineSupplier extends \yii\db\ActiveRecord
             $LineSupplier->status=(int)$post['status'];
             if (!$LineSupplier->save(false))
             {
+                echo 1;die;
                 $code=500;
                 $tran->rollBack();
                 return $code;
