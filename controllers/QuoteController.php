@@ -3107,16 +3107,6 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-
-
-       $a= GoodsAttr::find()->where(['id'=>1474])->one();
-       var_dump($a);die;
-//       $a->unit=4;
-//       $b=$a->save(false);
-//       var_dump($b);die;
-
-        var_dump(Goods::find()->asArray()->where(['id'=>49])->one());
-
-
+        var_dump(EffectEarnest::find()->where(['status'=>1])->asArray()->all());
     }
 }
