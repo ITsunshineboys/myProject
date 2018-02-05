@@ -1,0 +1,43 @@
+.authorize .header{
+    margin: 0!important;
+}
+.authorize .logo{
+    background-color: #fff;
+}
+.authorize .logo > div{
+    height: 4.32rem;
+    margin-left: .37rem;
+    margin-right: .37rem;
+    border-bottom:.05rem solid #E9EDEE ;
+}
+.authorize .logo img{
+    width: 1.73rem;
+    height: 1.73rem;
+}
+.authorize .words{
+    background-color:#fff;
+    padding: .27rem .53rem;
+    font-size: 28px;
+}
+.authorize .words .title{
+    color: #222;
+    padding-top: .27rem;
+    padding-bottom: .27rem;
+}
+.authorize .words :not(.title){
+    color: #959292;
+    padding-top: .16rem;
+    padding-bottom: .16rem;
+}
+.authorize .confirm{
+    background-color:#fff;
+    padding: .69rem .37rem;
+}
+.authorize .confirm button{
+    background-color:#222;
+    color: #fff;
+    border-radius: .16rem;
+    font-size: 36px;
+    width: 100%;
+    padding: .4rem 0;
+}
