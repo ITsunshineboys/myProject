@@ -201,7 +201,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
         }
 
         if($post['stair_id']==1){
-            $post['stairway']=StairsDetails::find()->where(['id'=>$post['stairway']])->one()->id;
+            $post['stairway']=StairsDetails::find()->asArray()->where(['id'=>$post['stairway']])->one()['id'];
         }else{
             $post['stairway']=0;
         }
