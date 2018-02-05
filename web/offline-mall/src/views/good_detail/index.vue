@@ -660,7 +660,7 @@
 
   /*轮播样式 start*/
   .good-container .vux-slider > .vux-indicator.bottom-dots > a > .vux-icon-dot.active {
-    background: #222222;
+    background: #222;
   }
   /*轮播样式 end*/
 
