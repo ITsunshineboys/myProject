@@ -85,7 +85,7 @@ class Alipay extends  ActiveRecord
         {
             return false;
         }
-        $str=$data['id'];
+        $str=$data['data'];
         $total_amount=0.01;
         $passback_params=urlencode($str);
         //超时时间
