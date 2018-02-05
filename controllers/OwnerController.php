@@ -1839,10 +1839,7 @@ die;
      */
     public function actionTest()
     {
-       $a = 0.162;
-       $b = 0.011;
-       $c = $a * $b;
-       echo $c;
+      var_dump(EngineeringStandardCarpentryCoefficient::deleteAll(['city'=>510100]));
 
     }
 
