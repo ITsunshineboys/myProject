@@ -401,7 +401,7 @@ class DistributionController extends Controller
     {
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -896,7 +896,7 @@ class DistributionController extends Controller
     {
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -994,6 +994,82 @@ class DistributionController extends Controller
         {
             $list->delete();
         }
+    }
+
+
+    /**
+     * 验证APP用户是否加入分销
+     * @return string
+     */
+    public  function  actionJudgeWhetherJoinDistribution()
+    {
+        $user=\Yii::$app->user->identity;
+        if (!$user)
+        {
+            $code=403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $Distribution=Distribution::find()
+            ->select('id')
+            ->where(['mobile'=>$user->mobile])
+            ->one();
+        $code=$Distribution?200:1097;
+        return Json::encode([
+            'code' => $code,
+            'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code]
+        ]);
+    }
+
+    /**
+     * 授权加入分销
+     * @return string
+     * @throws Exception
+     */
+    public  function  actionAuthorizedJoinDistribution()
+    {
+        $user=\Yii::$app->user->identity;
+        if (!$user)
+        {
+            $code=403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $distribution=Distribution::find()
+            ->where(['mobile'=>$user->mobile])
+            ->one();
+        if ($distribution)
+        {
+            $code=1099;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $tran=\Yii::$app->db->beginTransaction();
+        try{
+            $distribution= new Distribution();
+            $distribution->mobile=$user->mobile;
+            $distribution->create_time=time();
+            if (!$distribution->save(false))
+            {
+                $tran->rollBack();
+                $code=500;
+            }
+            $tran->commit();
+            $code=200;
+        }catch (\Exception $e){
+            $tran->rollBack();
+            $code=500;
+        }
+        return Json::encode([
+            'code' => $code,
+            'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code]
+        ]);
     }
 
 
