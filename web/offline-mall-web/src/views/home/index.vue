@@ -12,7 +12,7 @@
         </router-link>
       </flexbox-item>
     </flexbox>
-    <swiper dots-position="center" loop auto height="171px" :aspect-ratio="375/171" :show-desc-mask="false">
+    <swiper class="swiper_list" dots-position="center" loop auto height="171px" :aspect-ratio="375/171" :show-desc-mask="false">
       <swiper-item @click.native="getClickRecord(item)" v-for="(item,index) in banner_list">
         <router-link :to="'/good-detail/'+item.url">
           <img :src="item.image">
@@ -323,4 +323,11 @@
     background-color: #fff;
   }
 
+  /*轮播图*/
+  .swiper_list img{
+    width: 100%;
+  }
+  .swiper_list .vux-icon-dot.active{
+    background-color: #D9AD65!important;
+  }
 </style>
