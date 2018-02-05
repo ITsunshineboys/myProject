@@ -174,23 +174,19 @@
           })
         }
         if (sessionStorage.getItem('wxCodeFlag') && !sessionStorage.getItem('wxStatus')) {
-//          this.axios.post('/order/find-open-id', {
-//            url: location.href
-//          }, (res) => {
-//            console.log(res)
-//            console.log(res.data)
-//            location.href = res.data
-//            sessionStorage.setItem('wxStatus', true)
-//          })
-//        } else if (sessionStorage.getItem('wxCodeFlag') && sessionStorage.getItem('wxStatus')) {
-//          this.openID = location.href.split('code=')[1].split('&state')[0]
-//          this.axios.post('/order/get-open-id', {
-//            code: this.openID
-//          }, (res) => {
-//            console.log(this.openID)
-//            sessionStorage.setItem('openID', res.data)
-//            console.log(res)
-//          })
+          this.axios.post('/order/find-open-id', {
+            url: location.href
+          }, (res) => {
+            location.href = res.data
+            sessionStorage.setItem('wxStatus', true)
+          })
+        } else if (sessionStorage.getItem('wxCodeFlag') && sessionStorage.getItem('wxStatus')) {
+          this.openID = location.href.split('code=')[1].split('&state')[0]
+          this.axios.post('/order/get-open-id', {
+            code: this.openID
+          }, (res) => {
+            sessionStorage.setItem('openID', res.data)
+          })
         }
       })
     }
