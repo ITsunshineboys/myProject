@@ -117,7 +117,7 @@
         detailAddress: '', // 详细地址
         invoice_header: '', // 抬头
         buyer_message: '', // 留言
-        checked_flag: false, // 是否勾选“商城购买协议”
+        checked_flag: true, // 是否勾选“商城购买协议”
         paymentMethod: '', // 支付方式
         openID: '' // 微信支付 openID
       }
@@ -160,7 +160,6 @@
                         function (res) {
                           console.log(res)
                           if (res.err_msg === 'get_brand_wcpay_request:ok') {
-                            alert('支付成功！！！')
                             this.$router.push({path: '/'})
                           }     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
                         }
