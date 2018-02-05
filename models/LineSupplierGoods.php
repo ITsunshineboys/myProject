@@ -229,6 +229,7 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
     /**
      * @param $line_goods_id
      * @return int
+     * @throws \yii\db\Exception
      */
     public  static  function  closeLineGoods($line_goods_id)
     {
