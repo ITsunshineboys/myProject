@@ -539,7 +539,7 @@ class TestController extends Controller
     public  function  actionTest()
     {
 
-       $code=Goods::findOne('1');
+       $code=123;
        var_dump($code);
     }
 
