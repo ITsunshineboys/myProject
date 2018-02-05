@@ -514,6 +514,7 @@ class SupplierController extends Controller
     /**
      * 线下体验店商家列表
      * @return string
+     * @throws \yii\db\Exception
      */
     public  function  actionLineSupplierList()
     {
@@ -942,9 +943,11 @@ class SupplierController extends Controller
             'msg' => 200 == $code ? 'ok' : Yii::$app->params['errorCodes'][$code],
         ]);
     }
+
     /**
      * 删除线下体验店商品
      * @return string
+     * @throws \yii\db\Exception
      */
     public  function  actionDelLineSupplierGoods()
     {
