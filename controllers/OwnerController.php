@@ -722,6 +722,10 @@ class OwnerController extends Controller
         $modelling_day = ceil(BasisDecorationService::algorithm(7,$modelling_length,$modelling,$coefficient1,$coefficient3));
         $flat_area_day = ceil(BasisDecorationService::algorithm(7,$flat_area_,$flat_area,$coefficient4,$coefficient5));
 
+var_dump($modelling_length);
+var_dump($modelling);
+var_dump($coefficient1);
+var_dump($coefficient3);
 var_dump($modelling_day);
 var_dump($flat_area_day);
 var_dump($labor_cost['univalence']);
