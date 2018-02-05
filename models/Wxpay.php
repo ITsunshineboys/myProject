@@ -278,6 +278,7 @@ class Wxpay  extends ActiveRecord
             if (!$ticket)
             {
                  $sendUrl = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token='.$access_token.'&type=jsapi';
+//                $content= StringService::httpGet($sendUrl);
                 $content =self::curl($sendUrl,false,0); //请求发送短信
                 if($content){
 

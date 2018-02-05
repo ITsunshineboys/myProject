@@ -630,7 +630,9 @@ class OrderController extends Controller
 
 
     /**
-     * 线下店商城支付宝支付提交订单
+     *  线下店商城支付宝支付提交订单
+     * @return string
+     * @throws \yii\base\Exception
      */
     public function actionOrderLineAliPay(){
         $request=Yii::$app->request;
@@ -715,88 +717,90 @@ class OrderController extends Controller
         }
     }
 
-    /**
-     * 线下店商城支付宝支付提交订单
-     */
-    public function actionAlipaylinesubmit(){
-        $request=Yii::$app->request;
-        //商户订单号，商户网站订单系统中唯一订单号，必填
-        $out_trade_no =GoodsOrder::SetOrderNo();
-        $subject=trim($request->post('goods_name'),' ');
-        //付款金额，必填
-        $total_amount =trim($request->post('order_price'),' ');
-        $goods_id=trim($request->post('goods_id'),' ');
-        $goods_num=trim($request->post('goods_num'),' ');
-        $address_id=trim($request->post('address_id'),' ');
-        $pay_name=PayService::ALI_PAY;
-        $invoice_id=trim($request->post('invoice_id'),' ');
-        $supplier_id=trim($request->post('supplier_id'),' ');
-        $freight=trim($request->post('freight'));
-        $return_insurance=trim($request->post('return_insurance'),' ');
-        $buyer_message=trim($request->post('buyer_message',''));
-        //商品描述，可空
-        $body = trim($request->post('body'),' ');
-        if (
-            !$subject
-            ||!$total_amount
-            ||!$goods_id
-            ||!$goods_num
-            ||!$address_id
-            ||! $invoice_id
-            ||!$supplier_id
-        ){
-            $c=1000;
-            return Json::encode([
-                'code' =>  $c,
-                'msg'  => Yii::$app->params['errorCodes'][$c]
-            ]);
-        }
-
-        //若发票未填-添加发票操作
-        $invoice=Invoice::findOne($invoice_id);
-        if (!$invoice)
-        {
-            $address=UserAddress::findOne($address_id);
-            $in=new Invoice();
-            $in->invoice_type=1;
-            $in->invoice_header_type=1;
-            $in->invoice_header=$address->consignee;
-            $in->invoice_content='明细';
-            $res=$in->save(false);
-            if (!$res)
-            {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-            $invoice_id=$in->id;
-        }
-        if (!$freight)
-        {
-            $freight=0;
-        }
-        $return_insurance=0;
-        //判断金额是否正确
-        $code=GoodsOrder::judgeOrderMoney($goods_id,$total_amount,$goods_num,$return_insurance,$freight);
-        if ($code==1000)
-        {
-            return Json::encode([
-                'code' =>  $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $res=Alipay::AliPayLineSubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message);
-        if ($res)
-        {
-            $c=200;
-            return Json::encode([
-                'code' =>  $c,
-                'msg'  =>'ok'
-            ]);
-        }
-    }
+//    /**
+//     * 线下店商城支付宝支付提交订单
+//     * @return string
+//     * @throws \yii\base\Exception
+//     */
+//    public function actionAlipaylinesubmit(){
+//        $request=Yii::$app->request;
+//        //商户订单号，商户网站订单系统中唯一订单号，必填
+//        $out_trade_no =GoodsOrder::SetOrderNo();
+//        $subject=trim($request->post('goods_name'),' ');
+//        //付款金额，必填
+//        $total_amount =trim($request->post('order_price'),' ');
+//        $goods_id=trim($request->post('goods_id'),' ');
+//        $goods_num=trim($request->post('goods_num'),' ');
+//        $address_id=trim($request->post('address_id'),' ');
+//        $pay_name=PayService::ALI_PAY;
+//        $invoice_id=trim($request->post('invoice_id'),' ');
+//        $supplier_id=trim($request->post('supplier_id'),' ');
+//        $freight=trim($request->post('freight'));
+//        $return_insurance=trim($request->post('return_insurance'),' ');
+//        $buyer_message=trim($request->post('buyer_message',''));
+//        //商品描述，可空
+//        $body = trim($request->post('body'),' ');
+//        if (
+//            !$subject
+//            ||!$total_amount
+//            ||!$goods_id
+//            ||!$goods_num
+//            ||!$address_id
+//            ||! $invoice_id
+//            ||!$supplier_id
+//        ){
+//            $c=1000;
+//            return Json::encode([
+//                'code' =>  $c,
+//                'msg'  => Yii::$app->params['errorCodes'][$c]
+//            ]);
+//        }
+//
+//        //若发票未填-添加发票操作
+//        $invoice=Invoice::findOne($invoice_id);
+//        if (!$invoice)
+//        {
+//            $address=UserAddress::findOne($address_id);
+//            $in=new Invoice();
+//            $in->invoice_type=1;
+//            $in->invoice_header_type=1;
+//            $in->invoice_header=$address->consignee;
+//            $in->invoice_content='明细';
+//            $res=$in->save(false);
+//            if (!$res)
+//            {
+//                $code=1000;
+//                return Json::encode([
+//                    'code' => $code,
+//                    'msg'  => Yii::$app->params['errorCodes'][$code]
+//                ]);
+//            }
+//            $invoice_id=$in->id;
+//        }
+//        if (!$freight)
+//        {
+//            $freight=0;
+//        }
+//        $return_insurance=0;
+//        //判断金额是否正确
+//        $code=GoodsOrder::judgeOrderMoney($goods_id,$total_amount,$goods_num,$return_insurance,$freight);
+//        if ($code==1000)
+//        {
+//            return Json::encode([
+//                'code' =>  $code,
+//                'msg'  => Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+//        $res=Alipay::AliPayLineSubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message);
+//        if ($res)
+//        {
+//            $c=200;
+//            return Json::encode([
+//                'code' =>  $c,
+//                'msg'  =>'ok'
+//            ]);
+//        }
+//    }
 
     /**
      * 支付宝线下店商城异步返回操作-购买回调
