@@ -285,7 +285,7 @@ class OrderRefund extends ActiveRecord
             $arrp[]=[
                 'type'=>'退款结果',
                 'value'=>'成功',
-                'content'=>'',
+                'content'=>$refund_type,
                 'time'=>$OrderPlatform->refund_time,
                 'stage'=>'',
                 'status'=>OrderAfterSale::AFTER_STATUS_OVER
