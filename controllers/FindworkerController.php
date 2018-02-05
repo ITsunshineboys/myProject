@@ -262,7 +262,7 @@ class FindworkerController extends Controller{
          }
 
          $post=\Yii::$app->request->post();
-         $code=WorkerOrder::addorderinfo($user_id->getId(),$post);
+         $code=WorkerOrder::addorderinfo($user_id->getId(),$post);//(ok---水电工,泥瓦工,防水工)
          return Json::encode([
              'code' => $code,
              'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code],

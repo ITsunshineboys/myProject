@@ -922,11 +922,13 @@ class WorkerOrder extends \yii\db\ActiveRecord
      */
     public static function dataeveryday($start_time, $end_time)
     {
+
         $days = ($end_time - $start_time) / 86400 + 1;
         $date = [];
         for ($i = 0; $i < $days; $i++) {
             $date[] = date('Ymd', $start_time + (86400 * $i));
         }
+
         foreach ($date as $v){
             if((date('w',strtotime($v))!=6) && (date('w',strtotime($v))!=0)){
                 $value[]=$v;
@@ -1098,27 +1100,27 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 $code = 500;
                 return $code;
             }
-            $type=WorkerService::getparenttype($array['worker_type_id']);
-            if(!$type){
-                return 1000;
-            }
+//            $type=WorkerService::getparenttype($array['worker_type_id']);
+//            if(!$type){
+//                return 1000;
+//            }
             $ks=array_keys($array);
             foreach ($ks as $k=>$key){
                 if(preg_match('/(items)/',$key,$v)){
                         $data=$array[$key];
                 }
             }
-            switch ($type){
-                case '泥工';
+            switch ($array['worker_type_id']){
+                case 5;
                     $res=self::saveMuditem($data,$worker_order->id);
                     break;
-                case '水电工';
+                case 1;
                     $res=self::savehydropoweritem($data,$worker_order->id);
                     break;
-                case '木工';
+                case 9;
                     $res=self::savecarpentryitem($data,$worker_order->id);
                     break;
-                case '防水工';
+                case 12;
                     $res=self::savewaterproofitme($data,$worker_order->id);
                     break;
                 case '油漆工';
@@ -1136,6 +1138,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
             $transaction->commit();
             return 200;
         } catch (Exception $e) {
+            var_dump($e);die;
             $transaction->rollBack();
             return 500;
         }
@@ -1149,6 +1152,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
      */
     public static function saveMuditem(array $array,$order_id)
     {
+
         foreach ($array as &$v) {
             if(!isset($v['guarantee'])){
                 $v['guarantee']=0;
@@ -1161,7 +1165,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                     'order_id'=>$order_id,
                     'worker_item_id'=>$v['item_id'],
                     'worker_craft_id'=>$v['craft_id'],
-                    'area'=>$v['area'],
+                    'area'=>$v['area']*100,
                     'guarantee'=>$v['guarantee'],
                     'chip'=>$v['chip']
                 ])->execute();
@@ -1174,7 +1178,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         }
     }
     /**
-     *保存水电工条目信息
+     *保存水电工条目信息--OK
      * @param array $array
      * @param $order_no
      * @return bool
@@ -1182,16 +1186,16 @@ class WorkerOrder extends \yii\db\ActiveRecord
     public static function savehydropoweritem(array $array,$order_id){
         foreach ($array as &$v) {
                 foreach ($v as &$data){
-                    if(!$data['craft_id']){
+                    if(!isset($data['craft_id'])){
                         $data['craft_id']=0;
                     }
-                    if(!$data['length']){
+                    if(!isset($data['length'])){
                         $data['length']=0;
                     }
-                    if(!$data['electricity']){
+                    if(!isset($data['electricity'])){
                         $data['electricity']=null;
                     }
-                    if(!$data['count']){
+                    if(!isset($data['count'])){
                         $data['count']=0;
                     }
                     $res= \Yii::$app->db->createCommand()->insert('hydropower_worker_order',[
@@ -1223,7 +1227,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 'order_id'=>$order_id,
                 'worker_item_id'=>$v['item_id'],
                 'worker_craft_id'=>$v['craft_id'],
-                'area'=>$v['area'],
+                'area'=>$v['area']*100  ,
                 'brand'=>$v['brand'],
             ])->execute();
 
@@ -1293,8 +1297,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
                         'worker_item_id' => $data['item_id'],
                         'worker_craft_id' => $data['craft_id'],
                         'count' => $data['count'],
-                        'area'=>$data['area'],
-                        'length' => $data['length'],
+                        'area'=>$data['area']*100,
+                        'length' => $data['length']*100,
                     ])->execute();
                 }
             }
@@ -1330,8 +1334,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
                     'order_id' => $order_id,
                     'worker_item_id' => $data['item_id'],
                     'worker_craft_id' => $data['craft_id'],
-                    'area' => $data['area'],
-                    'length' => $data['length'],
+                    'area' => $data['area']*100,
+                    'length' => $data['length']*100,
                     'stack' => $data['stack'],
                 ])->execute();
             }
