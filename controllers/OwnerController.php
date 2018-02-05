@@ -669,7 +669,6 @@ class OwnerController extends Controller
 
         // 系列系数 风格系数 查询
         $coefficient = EngineeringStandardCarpentryCoefficient::findByAll(['city_code'=>$get['city']]);
-        var_dump($coefficient);die;
         foreach ($coefficient as $one_){
 
             // 系列系数2
@@ -723,14 +722,6 @@ class OwnerController extends Controller
         $modelling_day = ceil(BasisDecorationService::algorithm(7,$modelling_length,$modelling,$coefficient1,$coefficient3));
         $flat_area_day = ceil(BasisDecorationService::algorithm(7,$flat_area_,$flat_area,$coefficient4,$coefficient5));
 
-var_dump($modelling_length);
-var_dump($modelling);
-var_dump($coefficient1);
-var_dump($coefficient3);
-var_dump($modelling_day);
-var_dump($flat_area_day);
-var_dump($labor_cost['univalence']);
-die;
         //人工费
         $labour_charges['price'] = BasisDecorationService::algorithm(8,$modelling_day,$flat_area_day,$labor_cost['univalence']);
         $labour_charges['worker_kind'] = $labor_cost['worker_name'];
