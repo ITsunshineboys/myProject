@@ -1802,7 +1802,10 @@ class GoodsOrder extends ActiveRecord
             foreach ($order_refund as &$refunds)
             {
                 $refunds->handle=$handle;
-                $refunds->handle_reason=$handle_reason;
+                if ($handle_reason)
+                {
+                    $refunds->handle_reason=$handle_reason;
+                }
                 $refunds->handle_time=$time;
                 if(!$refunds->save(false))
                 {
@@ -1811,7 +1814,6 @@ class GoodsOrder extends ActiveRecord
                     return $code;
                 }
             }
-
             $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
             $role=User::findOne($GoodsOrder->user_id);
             $supplier=Supplier::find()

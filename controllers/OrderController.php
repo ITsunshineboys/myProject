@@ -2178,17 +2178,17 @@ class OrderController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        if ($handle==2)
-        {
-            if (!$handle_reason)
-            {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-        }
+//        if ($handle==2)
+//        {
+//            if (!$handle_reason)
+//            {
+//                $code=1000;
+//                return Json::encode([
+//                    'code' => $code,
+//                    'msg' => \Yii::$app->params['errorCodes'][$code]
+//                ]);
+//            }
+//        }
         $order=GoodsOrder::find()
             ->select('id,supplier_id')
             ->where(['order_no'=>$order_no])
