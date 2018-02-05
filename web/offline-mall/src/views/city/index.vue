@@ -114,7 +114,7 @@
     color: #666;
     font-size: 16px;
     padding-left: 14px;
-    margin-top: 50px;
+    margin-top: 54px;
     padding-top: 0!important;
   }
   /*选择城市按钮*/

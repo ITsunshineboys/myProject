@@ -15,10 +15,10 @@
         <i style="font-size:18px;line-height: 31px;" class="iconfont icon-news-square"></i>
       </flexbox-item>
     </flexbox>
-    <swiper dots-position="center" loop auto height="171px" :aspect-ratio="375/171" :show-desc-mask="false">
+    <swiper class="swiper_list" dots-position="center" loop auto height="171px" :aspect-ratio="375/171" :show-desc-mask="false">
       <swiper-item @click.native="getClickRecord(item)" v-for="(item,index) in banner_list">
         <router-link :to="'/good-detail/'+item.url">
-          <img :src="item.image">
+          <img style="width: 100%;" :src="item.image">
         </router-link>
       </swiper-item>
     </swiper>
@@ -283,30 +283,11 @@
     margin-bottom: 10px;
     background-color: #fff;
   }
-
-  /*底部导航*/
-  /*.nav {*/
-  /*background-color: #fff;*/
-  /*padding: 8px 0;*/
-  /*position: fixed;*/
-  /*bottom: 0;*/
-  /*}*/
-
-  /*购物车*/
-  /*.shopcart {*/
-  /*background-color: #fff;*/
-  /*text-align: center;*/
-  /*height: 60px;*/
-  /*width: 60px;*/
-  /*border-radius: 60px;*/
-  /*border: 1px solid #222;*/
-  /*position: fixed;*/
-  /*top: calc(50% - 30px);*/
-  /*right: 30px;*/
-  /*}*/
-
-  /*.shopcart i {*/
-  /*font-size: 24px;*/
-  /*color: #222;*/
-  /*}*/
+  /*轮播图*/
+  .swiper_list img{
+    width: 100%;
+  }
+  .swiper_list .vux-icon-dot.active{
+    background-color: #D9AD65!important;
+  }
 </style>
