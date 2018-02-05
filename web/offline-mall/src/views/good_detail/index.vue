@@ -14,7 +14,7 @@
           <span class="iconfont icon-home"></span>
           <span class="pop-text">商城首页</span>
         </router-link>
-        <li @click="skipMessageCenter">
+        <li @click="androidMessageCenter">
           <span class="iconfont icon-news-circle"></span>
           <span class="pop-text">消息</span>
           <span class="pop-dot"></span>
@@ -30,7 +30,7 @@
         <p>{{good_detail.subtitle}}</p>
         <div class="price">
           <span>¥{{good_detail.platform_price}}</span>
-          <span v-show="good_detail.line_goods.is_offline_goods === '否' ? false:true" @click="show=true">线下体验商品</span>
+          <span v-show="good_detail.line_goods.is_offline_goods === '否' ? false:true" @click="show_offlinegood=true">线下体验商品</span>
         </div>
       </div>
       <divider></divider>
@@ -41,7 +41,7 @@
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
             <i class="iconfont icon-checkbox-circle-line"></i>
-            <span>{{item}}</span>
+            <span>{{item.title}}</span>
           </div>
         </cell-box>
       </group>
@@ -157,7 +157,7 @@
 
         </flexbox-item>
         <span></span>
-        <flexbox-item @click.native="skipCart" :span="77/375">
+        <flexbox-item @click.native="androidCart" :span="77/375">
           <i class="iconfont icon-cart"></i><br/>购物车
 
         </flexbox-item>
@@ -211,20 +211,20 @@
           <flexbox-item>
             <div class="after-service" v-if="pop.show_service">
               <p>售后</p>
-              <div v-for="item in all_after_sale_services" v-if="afterservice_arr.indexOf(item) !== -1"
+              <div v-for="item in all_after_sale_services" v-if="afterservice_arr.indexOf(item.title) !== -1"
                    class="after-service-item">
                 <i class="iconfont icon-checkbox-circle-line"></i>
-                <span>{{item}}</span>
-                <p>清代性灵派诗人袁枚说过这么一句话：“读书不知味,不如束高阁;蠢鱼尔何如,终日食糟粕”，意思就是读书如果不能明白其中的道理，还不如束之高阁，那些只会死读书的书呆子们，相当于在吞食无用的糟粕。</p>
+                <span>{{item.title}}</span>
+                <p>{{item.description}}</p>
               </div>
             </div>
             <div class="after-service safe-guard">
               <p>保障</p>
-              <div v-for="item in all_after_sale_services" v-if="safeguard_arr.indexOf(item) !== -1"
+              <div v-for="item in all_after_sale_services" v-if="safeguard_arr.indexOf(item.title) !== -1"
                    class="after-service-item">
                 <i class="iconfont icon-checkbox-circle-line"></i>
-                <span>{{item}}</span>
-                <p>清代性灵派诗人袁枚说过这么一句话：“读书不知味,不如束高阁;蠢鱼尔何如,终日食糟粕”，意思就是读书如果不能明白其中的道理，还不如束之高阁，那些只会死读书的书呆子们，相当于在吞食无用的糟粕。</p>
+                <span>{{item.title}}</span>
+                <p>{{item.description}}</p>
               </div>
             </div>
           </flexbox-item>
@@ -234,8 +234,7 @@
     </popup>
 
     <!--线下商品介绍弹窗-->
-    <offlinealert :offlineInfo="offlineInfo" :show="show_offlinegood" :isOffline="false"
-                  @isShow="showOfflineAlert"></offlinealert>
+    <offlinealert :offlineInfo="offlineInfo" :show="show_offlinegood" :isOffline="false" @isShow="showOfflineAlert"></offlinealert>
 
     <!--加入购物车成功提示-->
     <toast v-model="show_cart_success" width="200px" position="middle" :time="2000" :is-show-mask="true">
@@ -314,7 +313,6 @@
         show_offlinegood: false,    // 线下商品简介
         show_goodshort_alert: false, // 商品不足弹窗
         show_offline: false,        // 商品下架提示
-
         show_cart_success: false,   // 添加购物车成功toast
         count_cart: false,          // 加入购物车按钮显示
         count_now: false,           // 立即购买按钮显示
@@ -365,10 +363,16 @@
           }
         }
 
+        this.offlineInfo = {
+          address: this.good_detail.line_goods.line_district,
+          phone: this.good_detail.line_goods.line_mobile,
+          desc: '线下体验店商品是线下门店销售的可供消费者体验的产品，每个体验店的产品都不尽相同，消费者可提前在网上查询各体验店的商品种类'
+        }
+
         // 售后弹窗显示处理
         this.all_after_sale_services = this.good_detail.after_sale_services
-        console.log(this.all_after_sale_services)
-        this.after_sale_services = this.good_detail.after_sale_services.slice(0, 3) // 页面售后显示内容
+        this.good_detail.after_sale_services.length > 3 ? this.after_sale_services = this.good_detail.after_sale_services.slice(0, 3) : this.after_sale_services = this.good_detail.after_sale_services // 页面售后显示内容
+
         // 轮播图处理
         const imgList = this.good_detail.images  // 轮播图数组
         imgList.splice(0, 0, this.good_detail.cover_image)
@@ -390,7 +394,7 @@
       // 判断是否显示售后
       afterServiceShow () {
         for (let [key, value] of this.all_after_sale_services.entries()) {    // eslint-disable-line
-          if (afterserviceArr.indexOf(value) !== -1) {
+          if (afterserviceArr.indexOf(value.title) !== -1) {
             this.pop.show_service = true
           }
         }
@@ -424,7 +428,7 @@
       },
       // 线下商品弹窗处理
       showOfflineAlert: function (bool) {
-        this.show = bool
+        this.show_offlinegood = bool
       },
       // 更多
       showMore () {
@@ -507,12 +511,12 @@
         window.AndroidWebView.share('我在【艾特生活】分享了一款好物给你，点击链接查看详情【' + this.good_detail.title + '　　' + this.good_detail.subtitle + '】' + location.href)
       },
       // 跳转消息中心
-      skipMessageCenter () {
+      androidMessageCenter () {
         this.show_more = false
         window.AndroidWebView.skipMessageCenter()
       },
       // 跳转购物车
-      skipCart () {
+      androidCart () {
         window.AndroidWebView.skipShopCart()
       },
       // 联系商家
