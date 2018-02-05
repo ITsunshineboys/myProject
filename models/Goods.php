@@ -56,6 +56,17 @@ class Goods extends ActiveRecord
         '换货',
     ];
 
+    const AFTER_SALE_SERVICES_DESC = [
+        '平台商家按照国家相关法律规定，在售出商品同时提供对应商品的合法票据',
+        '上门安装分为收费和不收费，具体情况以商品页面介绍为准',
+        '本产品提供上门维修服务，维修费用视产品损坏范围及原因分为免费和有偿，详情参考品牌的保修标准及收费标准
+上门换货：因产品质量问题换货，卖家承担上门换货产生的运费和人工服务费；买家自身原因换货，买家承担上门换货产生的运费',
+        '因产品质量问题退货，卖家承担上门退货产生的运费和人工服务费；买家自身原因退货，买家承担上门退货产生的运费和人工服务费',
+        '因产品质量问题换货，卖家承担上门换货产生的运费和人工服务费；买家自身原因换货，买家承担上门换货产生的运费',
+        '因产品质量问题退货，卖家承担退货运费；买家自身原因退货，由买家承担退货运费',
+        '因产品质量问题换货，卖家承担换货产生的运费和人工服务费；因买家自身原因换货的，买家承担换货产生的运费',
+    ];
+
     const FIELDS_ADMIN = [
         'id',
         'sku',
@@ -1612,8 +1623,11 @@ class Goods extends ActiveRecord
     {
         $readableServices = [];
         $services = explode(',', $this->after_sale_services);
-        foreach ($services as $service) {
-            $readableServices[] = self::AFTER_SALE_SERVICES[$service];
+        foreach ($services as $k => $service) {
+            $readableServices[] = [
+                'title' => self::AFTER_SALE_SERVICES[$service],
+                'description' => self::AFTER_SALE_SERVICES_DESC[$service],
+            ];
         }
         return $readableServices;
     }
