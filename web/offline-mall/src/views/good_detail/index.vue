@@ -23,7 +23,7 @@
     </div>
 
     <!--轮播-->
-    <swiper loop auto :list="banner_list" height="375px" dots-class="custom-bottom" dots-position="center" :show-desc-mask="false"></swiper>
+    <swiper loop auto :list="banner_list" height="375px" dots-class="bottom-dots" dots-position="center" :show-desc-mask="false"></swiper>
     <div class="good-detail">
       <div class="title-container">
         <p>{{good_detail.title}}</p>
@@ -367,6 +367,7 @@
 
         // 售后弹窗显示处理
         this.all_after_sale_services = this.good_detail.after_sale_services
+        console.log(this.all_after_sale_services)
         this.after_sale_services = this.good_detail.after_sale_services.slice(0, 3) // 页面售后显示内容
         // 轮播图处理
         const imgList = this.good_detail.images  // 轮播图数组
@@ -656,6 +657,13 @@
   }
 
   /*右上弹窗样式 end*/
+
+  /*轮播样式 start*/
+  .good-container .vux-slider > .vux-indicator.bottom-dots > a > .vux-icon-dot.active {
+    background: #222222;
+  }
+  /*轮播样式 end*/
+
 
   /*商品信息 start*/
   .good-container .title-container {
