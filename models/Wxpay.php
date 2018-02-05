@@ -33,63 +33,63 @@ class Wxpay  extends ActiveRecord
         }
 
 
-    /**
-     * 无登录-微信公众号支付接口
-     * @param $orders
-     * @param $openid
-     * @throws \yii\base\WxPayException
-     */
-   public function WxLineApiPay($orders,$openid){
-        ini_set('date.timezone','Asia/Shanghai');
-        //打印输出数组信息
-        function printf_info($data)
-        {
-            foreach($data as $key=>$value){
-                echo "<font color='#00ff55;'>$key</font> : $value <br/>";
-            }
-        }
-        //、获取用户openid
-        $tools = new PayService();
-        $openId = $openid;
-        //②、统一下单
-        $input = new WxPayUnifiedOrder();
-        $orders['return_insurance']=0;
-        $attach=$orders['goods_id'];
-        $attach.='&'.$orders['goods_num'];
-        $attach.='&'.$orders['address_id'];
-        $attach.='&'.$orders['pay_name'];
-        $attach.='&'.$orders['invoice_id'];
-        $attach.='&'.$orders['supplier_id'];
-        $attach.='&'.$orders['freight'];
-        $attach.='&'.$orders['return_insurance'];
-        $attach.='&'.$orders['order_no'];
-        $attach.='&'.$orders['buyer_message'];
-        if (!$orders['goods_name'])
-        {
-            $goods_name=Goods::findOne($orders['goods_id'])->title;
-        }else{
-            $goods_name=$orders['goods_name'];
-        }
-        $input->SetBody($goods_name);
-        $input->SetAttach($attach);
-        $input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
-        $input->SetTotal_fee($orders['total_amount']*100);
-        $input->SetTime_start(date("YmdHis"));
-        $input->SetTime_expire(date("YmdHis", time() + 600));
-        $input->SetGoods_tag("goods");
-        $input->SetNotify_url(Yii::$app->request->hostInfo.self::LINE_PAY_NOTIFY_URL);
-        $input->SetTrade_type("JSAPI");
-        $input->SetOpenid($openId);
-        $order = WxPayApi::unifiedOrder($input);
-        $jsApiParameters = $tools->GetJsApiParameters($order);
-        $failurl=Yii::$app->request->hostInfo.self::PAY_FAIL_URL;
-        $cancelurl=Yii::$app->request->hostInfo.self::PAY_CANCEL_URL;
-        $successurl=Yii::$app->request->hostInfo.self::PAY_SUCCESS_URL;
-        echo "<script type='text/javascript'>if (typeof WeixinJSBridge == 'undefined'){if( document.addEventListener ){document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);}else if (document.attachEvent){document.attachEvent('WeixinJSBridgeReady', jsApiCall);document.attachEvent('onWeixinJSBridgeReady', jsApiCall);}}else{jsApiCall();}//调用微信JS api 支付
- function jsApiCall(){ WeixinJSBridge.invoke('getBrandWCPayRequest',".$jsApiParameters.",function(res){if(res.err_msg == 'get_brand_wcpay_request:cancel'){window.location.href='".$cancelurl."';};if(res.err_msg == 'get_brand_wcpay_request:ok'){window.location.href='".$successurl."';};if(res.err_msg == 'get_brand_wcpay_request:fail'){window.location.href='".$failurl."';};});}
-</script>";
-        exit;
-    }
+//    /**
+//     * 无登录-微信公众号支付接口
+//     * @param $orders
+//     * @param $openid
+//     * @throws \yii\base\WxPayException
+//     */
+//   public function WxLineApiPay($orders,$openid){
+//        ini_set('date.timezone','Asia/Shanghai');
+//        //打印输出数组信息
+//        function printf_info($data)
+//        {
+//            foreach($data as $key=>$value){
+//                echo "<font color='#00ff55;'>$key</font> : $value <br/>";
+//            }
+//        }
+//        //、获取用户openid
+//        $tools = new PayService();
+//        $openId = $openid;
+//        //②、统一下单
+//        $input = new WxPayUnifiedOrder();
+//        $orders['return_insurance']=0;
+//        $attach=$orders['goods_id'];
+//        $attach.='&'.$orders['goods_num'];
+//        $attach.='&'.$orders['address_id'];
+//        $attach.='&'.$orders['pay_name'];
+//        $attach.='&'.$orders['invoice_id'];
+//        $attach.='&'.$orders['supplier_id'];
+//        $attach.='&'.$orders['freight'];
+//        $attach.='&'.$orders['return_insurance'];
+//        $attach.='&'.$orders['order_no'];
+//        $attach.='&'.$orders['buyer_message'];
+//        if (!$orders['goods_name'])
+//        {
+//            $goods_name=Goods::findOne($orders['goods_id'])->title;
+//        }else{
+//            $goods_name=$orders['goods_name'];
+//        }
+//        $input->SetBody($goods_name);
+//        $input->SetAttach($attach);
+//        $input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
+//        $input->SetTotal_fee($orders['total_amount']*100);
+//        $input->SetTime_start(date("YmdHis"));
+//        $input->SetTime_expire(date("YmdHis", time() + 600));
+//        $input->SetGoods_tag("goods");
+//        $input->SetNotify_url(Yii::$app->request->hostInfo.self::LINE_PAY_NOTIFY_URL);
+//        $input->SetTrade_type("JSAPI");
+//        $input->SetOpenid($openId);
+//        $order = WxPayApi::unifiedOrder($input);
+//        $jsApiParameters = $tools->GetJsApiParameters($order);
+//        $failurl=Yii::$app->request->hostInfo.self::PAY_FAIL_URL;
+//        $cancelurl=Yii::$app->request->hostInfo.self::PAY_CANCEL_URL;
+//        $successurl=Yii::$app->request->hostInfo.self::PAY_SUCCESS_URL;
+//        echo "<script type='text/javascript'>if (typeof WeixinJSBridge == 'undefined'){if( document.addEventListener ){document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);}else if (document.attachEvent){document.attachEvent('WeixinJSBridgeReady', jsApiCall);document.attachEvent('onWeixinJSBridgeReady', jsApiCall);}}else{jsApiCall();}//调用微信JS api 支付
+// function jsApiCall(){ WeixinJSBridge.invoke('getBrandWCPayRequest',".$jsApiParameters.",function(res){if(res.err_msg == 'get_brand_wcpay_request:cancel'){window.location.href='".$cancelurl."';};if(res.err_msg == 'get_brand_wcpay_request:ok'){window.location.href='".$successurl."';};if(res.err_msg == 'get_brand_wcpay_request:fail'){window.location.href='".$failurl."';};});}
+//</script>";
+//        exit;
+//    }
 
     /**
      * 无登录-微信公众号支付接口

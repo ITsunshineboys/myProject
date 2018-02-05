@@ -875,152 +875,152 @@ class OrderController extends Controller
             'data' => $res
         ]);
     }
-    /**
-     *提交订单-线下店商城-微信支付
-     */
-    public function  actionLineplaceorder(){
-        $request=Yii::$app->request;
-        $subject=trim($request->get('goods_name'));
-        //付款金额，必填
-        $total_amount =trim($request->get('order_price'));
-        $goods_id=trim($request->get('goods_id'));
-        $goods_num=trim($request->get('goods_num'));
-        $address_id=trim($request->get('address_id'));
-        $pay_name='线上支付-微信支付';
-        $invoice_id=trim($request->get('invoice_id'));
-        $supplier_id=trim($request->get('supplier_id'));
-        $freight=trim($request->get('freight'));
-        $return_insurance=trim($request->get('return_insurance'));
-        $buyer_message=trim($request->get('buyer_message',''));
-        if (
-            !$total_amount
-            || !$goods_id
-            || !$goods_num
-            || !$address_id
-            || !$pay_name
-            ||! $invoice_id
-            || !$supplier_id
-        )
-        {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        if (!$freight)
-        {
-            $freight=0;
-        }
-        $order_no =GoodsOrder::SetOrderNo();
-        //商品描述，可空
-        $body =$subject;
-        $orders=array(
-            'address_id'=>$address_id,
-            'invoice_id'=>$invoice_id,
-            'goods_id'=>$goods_id,
-            'goods_num'=>$goods_num,
-            'order_price'=>$total_amount,
-            'goods_name'=>$subject,
-            'pay_name'=>$pay_name,
-            'supplier_id'=>$supplier_id,
-            'freight'=>$freight,
-            'return_insurance'=>$return_insurance,
-            'body'=>$body,
-            'order_no'=>$order_no,
-            'buyer_message'=>$buyer_message,
-            'total_amount'=>$total_amount
-        );
-        $url=(new PayService())->GetOrderOpenid($orders);
-        $code=200;
-        return Json::encode([
-            'code'=>$code,
-            'msg'=>'ok',
-            'data'=>$url
-        ]);
-    }
+//    /**
+//     *提交订单-线下店商城-微信支付
+//     */
+//    public function  actionLineplaceorder(){
+//        $request=Yii::$app->request;
+//        $subject=trim($request->get('goods_name'));
+//        //付款金额，必填
+//        $total_amount =trim($request->get('order_price'));
+//        $goods_id=trim($request->get('goods_id'));
+//        $goods_num=trim($request->get('goods_num'));
+//        $address_id=trim($request->get('address_id'));
+//        $pay_name='线上支付-微信支付';
+//        $invoice_id=trim($request->get('invoice_id'));
+//        $supplier_id=trim($request->get('supplier_id'));
+//        $freight=trim($request->get('freight'));
+//        $return_insurance=trim($request->get('return_insurance'));
+//        $buyer_message=trim($request->get('buyer_message',''));
+//        if (
+//            !$total_amount
+//            || !$goods_id
+//            || !$goods_num
+//            || !$address_id
+//            || !$pay_name
+//            ||! $invoice_id
+//            || !$supplier_id
+//        )
+//        {
+//            $code=1000;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg'  => Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+//        if (!$freight)
+//        {
+//            $freight=0;
+//        }
+//        $order_no =GoodsOrder::SetOrderNo();
+//        //商品描述，可空
+//        $body =$subject;
+//        $orders=array(
+//            'address_id'=>$address_id,
+//            'invoice_id'=>$invoice_id,
+//            'goods_id'=>$goods_id,
+//            'goods_num'=>$goods_num,
+//            'order_price'=>$total_amount,
+//            'goods_name'=>$subject,
+//            'pay_name'=>$pay_name,
+//            'supplier_id'=>$supplier_id,
+//            'freight'=>$freight,
+//            'return_insurance'=>$return_insurance,
+//            'body'=>$body,
+//            'order_no'=>$order_no,
+//            'buyer_message'=>$buyer_message,
+//            'total_amount'=>$total_amount
+//        );
+//        $url=(new PayService())->GetOrderOpenid($orders);
+//        $code=200;
+//        return Json::encode([
+//            'code'=>$code,
+//            'msg'=>'ok',
+//            'data'=>$url
+//        ]);
+//    }
 
-    /**
-     * 获取openID2-微信
-     * @return string
-     * @throws \yii\base\WxPayException
-     */
-    public function  actionWxLinePay()
-    {
-        $orders=array(
-            'address_id'=> Yii::$app->session['address_id'],
-            'invoice_id'=> Yii::$app->session['invoice_id'],
-            'goods_id'=> Yii::$app->session['goods_id'],
-            'goods_num'=> Yii::$app->session['goods_num'],
-            'order_price'=> Yii::$app->session['order_price'],
-            'goods_name'=> Yii::$app->session['goods_name'],
-            'pay_name'=> Yii::$app->session['pay_name'],
-            'supplier_id'=> Yii::$app->session['supplier_id'],
-            'freight'=> Yii::$app->session['freight'],
-            'return_insurance'=> Yii::$app->session['return_insurance'],
-            'body'=> Yii::$app->session['body'],
-            'order_no'=> Yii::$app->session['order_no'],
-            'buyer_message'=> Yii::$app->session['buyer_message'],
-            'total_amount'=> Yii::$app->session['total_amount']
-        );
-        if (! Yii::$app->session['address_id']
-            || !Yii::$app->session['goods_id']
-            || !Yii::$app->session['goods_num']
-            || !Yii::$app->session['order_price']
-            || !Yii::$app->session['pay_name']
-            || !Yii::$app->session['supplier_id']
-            || !Yii::$app->session['freight']
-            || !Yii::$app->session['order_no']
-            || !Yii::$app->session['total_amount']
-        )
-        {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $address=UserAddress::findOne(Yii::$app->session['address_id']);
-        {
-            if (!$address)
-            {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-        }
-        $invoice=Invoice::findOne(Yii::$app->session['invoice_id']);
-        if (!$invoice)
-        {
-            $address=UserAddress::findOne(Yii::$app->session['address_id']);
-            $in=new Invoice();
-            $in->invoice_type=1;
-            $in->invoice_header_type=1;
-            $in->invoice_header=$address->consignee;
-            $in->invoice_content='明细';
-            $res=$in->save(false);
-            if (!$res)
-            {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-            $orders['invoice_id']=$in->id;
-        }
-        $openid=(new PayService())->GetOpenid();
-        $model=new Wxpay();
-        $data=$model->WxLineApiPay($orders,$openid);
-        $code=200;
-        return Json::encode([
-            'code'=>$code,
-            'msg'=>'ok',
-            'data'=>$data
-        ]);
-    }
+//    /**
+//     * 获取openID2-微信
+//     * @return string
+//     * @throws \yii\base\WxPayException
+//     */
+//    public function  actionWxLinePay()
+//    {
+//        $orders=array(
+//            'address_id'=> Yii::$app->session['address_id'],
+//            'invoice_id'=> Yii::$app->session['invoice_id'],
+//            'goods_id'=> Yii::$app->session['goods_id'],
+//            'goods_num'=> Yii::$app->session['goods_num'],
+//            'order_price'=> Yii::$app->session['order_price'],
+//            'goods_name'=> Yii::$app->session['goods_name'],
+//            'pay_name'=> Yii::$app->session['pay_name'],
+//            'supplier_id'=> Yii::$app->session['supplier_id'],
+//            'freight'=> Yii::$app->session['freight'],
+//            'return_insurance'=> Yii::$app->session['return_insurance'],
+//            'body'=> Yii::$app->session['body'],
+//            'order_no'=> Yii::$app->session['order_no'],
+//            'buyer_message'=> Yii::$app->session['buyer_message'],
+//            'total_amount'=> Yii::$app->session['total_amount']
+//        );
+//        if (! Yii::$app->session['address_id']
+//            || !Yii::$app->session['goods_id']
+//            || !Yii::$app->session['goods_num']
+//            || !Yii::$app->session['order_price']
+//            || !Yii::$app->session['pay_name']
+//            || !Yii::$app->session['supplier_id']
+//            || !Yii::$app->session['freight']
+//            || !Yii::$app->session['order_no']
+//            || !Yii::$app->session['total_amount']
+//        )
+//        {
+//            $code=1000;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg'  => Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+//        $address=UserAddress::findOne(Yii::$app->session['address_id']);
+//        {
+//            if (!$address)
+//            {
+//                $code=1000;
+//                return Json::encode([
+//                    'code' => $code,
+//                    'msg'  => Yii::$app->params['errorCodes'][$code]
+//                ]);
+//            }
+//        }
+//        $invoice=Invoice::findOne(Yii::$app->session['invoice_id']);
+//        if (!$invoice)
+//        {
+//            $address=UserAddress::findOne(Yii::$app->session['address_id']);
+//            $in=new Invoice();
+//            $in->invoice_type=1;
+//            $in->invoice_header_type=1;
+//            $in->invoice_header=$address->consignee;
+//            $in->invoice_content='明细';
+//            $res=$in->save(false);
+//            if (!$res)
+//            {
+//                $code=1000;
+//                return Json::encode([
+//                    'code' => $code,
+//                    'msg'  => Yii::$app->params['errorCodes'][$code]
+//                ]);
+//            }
+//            $orders['invoice_id']=$in->id;
+//        }
+//        $openid=(new PayService())->GetOpenid();
+//        $model=new Wxpay();
+//        $data=$model->WxLineApiPay($orders,$openid);
+//        $code=200;
+//        return Json::encode([
+//            'code'=>$code,
+//            'msg'=>'ok',
+//            'data'=>$data
+//        ]);
+//    }
 
     /**
      * @return string
