@@ -285,6 +285,7 @@ class Wxpay  extends ActiveRecord
             $timestamp=time();
             $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
            $url=$_SERVER['HTTP_REFERER'];
+           
             $appid=WxPayConfig::APPID;
             $str="jsapi_ticket=".$ticket."&noncestr=".$noncestr.'&timestamp='.$timestamp.'&url='.$url;
             $sign=sha1($str);

@@ -105,23 +105,41 @@ class WithdrawalsController extends Controller
             ]);
         }
         $request=Yii::$app->request;
-        $bankname=trim($request->post('bankname',''));
+        $bankname=trim($request->post('bankname'));
         $bankcard=(int)trim($request->post('bankcard'));
-        $username=trim($request->post('username',''));
-        $position=trim($request->post('position',''));
-        $bankbranch=trim($request->post('bankbranch',''));
-        $role_id=trim($request->post('role_id',''));
+        $username=trim($request->post('username'));
+        $position=trim($request->post('position'));
+        $bankbranch=trim($request->post('bankbranch'));
+        $role_id=trim($request->post('role_id'));
         if (
             !$bankname
-            || !$bankcard
-            || !$username
-            || !$position
         )
         {
             $code=1000;
             return Json::encode([
                 'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
+                'msg' => '请输入银行卡名'
+            ]);
+        }
+        if (
+        !$bankcard
+        )
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => '请输入银行卡号'
+            ]);
+        }
+
+        if (
+        !$username
+        )
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => '请输入持卡人姓名'
             ]);
         }
         if (!$role_id)
