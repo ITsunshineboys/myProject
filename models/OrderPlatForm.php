@@ -255,6 +255,23 @@ class OrderPlatForm extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
+
+            $user_transaction_no=GoodsOrder::SetTransactionNo(Role::GetUserRoleNumber($role,$GoodsOrder->role_id));
+            $user_access_detail=new UserAccessdetail();
+            $user_access_detail->uid=$GoodsOrder->user_id;
+            $user_access_detail->role_id=$GoodsOrder->role_id;
+            $user_access_detail->access_type=UserAccessdetail::ACCESS_TYPE_REFUND;
+            $user_access_detail->access_money=$refund_money;
+            $user_access_detail->order_no=$order_no;
+            $user_access_detail->sku=$sku;
+            $user_access_detail->create_time=$time;
+            $user_access_detail->transaction_no=$user_transaction_no;
+            if(!$user_access_detail->save(false))
+            {
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
             //消息推送
             $data=UserNewsRecord::AddOrderNewRecord(User::findOne($GoodsOrder->user_id), '平台介入，关闭订单退款', $GoodsOrder->role_id,"订单号{$order_no},商品编号{$sku}.您的订单已由平台介入关闭，退款金额".StringService::formatPrice($refund_money*0.01)."元已打入您的余额，请注意查看。", $order_no, $sku,GoodsOrder::STATUS_DESC_DETAILS);
             if ($data!=200)
