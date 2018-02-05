@@ -288,6 +288,6 @@
     width: 100%;
   }
   .swiper_list .vux-icon-dot.active{
-    background-color: #D9AD65!important;
+    background-color: #222!important;
   }
 </style>
