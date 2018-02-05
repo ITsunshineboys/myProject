@@ -1839,7 +1839,7 @@ die;
      */
     public function actionTest()
     {
-      var_dump(EngineeringStandardCarpentryCoefficient::deleteAll(['city'=>510100]));
+      var_dump(EngineeringStandardCarpentryCoefficient::deleteAll(['city_code'=>510100]));
 
     }
 
