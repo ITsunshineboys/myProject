@@ -1,18 +1,12 @@
-app.controller('personal_center_ctrl',function ($uibModal,$scope,$state,$stateParams,_ajax) {
+app.controller('personal_center_ctrl', function ($uibModal, $scope, $state, $stateParams, _ajax) {
     sessionStorage.clear()
-    _ajax.get('/site/check-is-login',{},function (res) {
-        if(res.code == 403){
-            window.AndroidWebView.skipNotLogin()
-        }else if(res.code == 200){
-            //获取个人中心数据
-            _ajax.get('/distribution/distribution-user-center',{},function (res) {
-                $scope.all_data = res.data
-                sessionStorage.setItem('all_data',JSON.stringify($scope.all_data))
-                console.log($scope.all_data)
-                sessionStorage.removeItem('basic_data')
-                $state.go('personal_center')
-            })
-        }
+    //获取个人中心数据
+    _ajax.get('/distribution/distribution-user-center', {}, function (res) {
+        $scope.all_data = res.data
+        sessionStorage.setItem('all_data', JSON.stringify($scope.all_data))
+        console.log($scope.all_data)
+        sessionStorage.removeItem('basic_data')
+        $state.go('personal_center')
     })
     //跳转绑定手机号
     $scope.go_bind_tel = function () {
@@ -25,19 +19,19 @@ app.controller('personal_center_ctrl',function ($uibModal,$scope,$state,$statePa
             }
         }
         all_modal.$inject = ['$scope', '$uibModalInstance']
-        if($scope.all_data.son.length == 0){
+        if ($scope.all_data.son.length == 0) {
             $state.go('bind_tel')
-        }else{
+        } else {
             $uibModal.open({
                 templateUrl: 'pages/cur_model.html',
                 controller: all_modal,
-                windowClass:'cur_modal',
-                backdrop:'static'
+                windowClass: 'cur_modal',
+                backdrop: 'static'
             })
         }
     }
     //返回前一页
     $scope.goPrev = function () {
-        
+
     }
 })
