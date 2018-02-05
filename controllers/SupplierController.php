@@ -606,6 +606,7 @@ class SupplierController extends Controller
     /**
      * 开启或者关闭线下体验店
      * @return string
+     * @throws \yii\db\Exception
      */
     public  function  actionSwitchLineSupplierStatus()
     {

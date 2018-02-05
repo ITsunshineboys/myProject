@@ -66,6 +66,7 @@ class LineSupplier extends \yii\db\ActiveRecord
      * @param int $page
      * @param int $size
      * @return array
+     * @throws Exception
      */
     public static function pagination($where = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT)
     {
@@ -124,6 +125,7 @@ class LineSupplier extends \yii\db\ActiveRecord
     /**
      * @param $line_supplier_id
      * @return int
+     * @throws Exception
      */
     public  static  function  closeLineSupplier($line_supplier_id)
     {
