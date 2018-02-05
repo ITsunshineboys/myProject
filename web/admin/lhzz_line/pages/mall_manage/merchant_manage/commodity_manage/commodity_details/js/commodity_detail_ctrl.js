@@ -113,7 +113,7 @@ app.controller('commodity_detail', ['_ajax', '$rootScope', '$scope', '$http', '$
     /*判断是否显示售后*/
     function afterServiceShow() {
         for (let [key, value] of $scope.good_detail.after_sale_services.entries()) {
-            if (afterservice_arr.indexOf(value) != -1) {
+            if (afterservice_arr.indexOf(value.title) != -1) {
                 $scope.show_service = true;
             }
         }
@@ -122,7 +122,7 @@ app.controller('commodity_detail', ['_ajax', '$rootScope', '$scope', '$http', '$
 
     /*售后显示内容判断*/
     $scope.afterserviceTest = (obj) => {
-        if (afterservice_arr.indexOf(obj) != -1) {
+        if (afterservice_arr.indexOf(obj.title) != -1) {
             return true;
         } else {
             return false;
@@ -131,7 +131,7 @@ app.controller('commodity_detail', ['_ajax', '$rootScope', '$scope', '$http', '$
 
     /*保障显示内容判断*/
     $scope.safeguardTest = function (obj) {
-        if (safeguard_arr.indexOf(obj) != -1) {
+        if (safeguard_arr.indexOf(obj.title) != -1) {
             return true;
         } else {
             return false;
