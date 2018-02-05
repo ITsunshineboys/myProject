@@ -669,6 +669,7 @@ class OwnerController extends Controller
 
         // 系列系数 风格系数 查询
         $coefficient = EngineeringStandardCarpentryCoefficient::findByAll(['city_code'=>$get['city']]);
+        var_dump($coefficient);die;
         foreach ($coefficient as $one_){
 
             // 系列系数2
