@@ -414,8 +414,4 @@
     font-size: 12px;
     color: #222!important;
   }
-  #app .vux-header + * {
-    padding-top: 0;
-    margin-top: 56px;
-  }
 </style>

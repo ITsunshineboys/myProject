@@ -2,7 +2,9 @@
   <div>
     <x-header :left-options="{backText: ''}">商城购买协议</x-header>
     <div class="bg-white">
+      <p>
 
+      </p>
     </div>
   </div>
 </template>
