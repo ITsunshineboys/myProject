@@ -1,6 +1,6 @@
 let app = angular.module("app", ['ionic', 'angularCSS','ui.bootstrap'])
 app.config(function ($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise('/authorize')
+    $urlRouterProvider.otherwise('/')
     $stateProvider
         .state('login', {//登录
             url: '/login?tel',
