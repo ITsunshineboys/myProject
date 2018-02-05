@@ -151,6 +151,7 @@ class LineSupplier extends \yii\db\ActiveRecord
      * 开关线下体验店商家
      * @param $post
      * @return int
+     * @throws Exception
      */
     public  static  function  SwitchLineSupplierStatus($post)
     {
@@ -200,7 +201,7 @@ class LineSupplier extends \yii\db\ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
-            if ((int)$post['status']==self::STATUS_OFF_LINE)
+            if ($post['status']==self::STATUS_OFF_LINE)
             {
                 $where='line_supplier_id='.$LineSupplier->id;
                 LineSupplier::updateAll(['status'=>LineSupplierGoods::STATUS_OFF_LINE],$where);

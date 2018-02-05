@@ -36,7 +36,9 @@ class Alipay extends  ActiveRecord
      * @return bool|mixed|\SimpleXMLElement|string|\vendor\alipay\提交表单HTML文本
      * @throws \yii\base\Exception
      */
-    public static function  AliPayLineSubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message){
+    public static function  AliPayLineSubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message)
+    {
+        $total_amount=0.01;
         $notify_url="https://".$_SERVER["SERVER_NAME"].'/'.self::ALIPAY_LINPAY_NOTIFY;
         $return_url=Yii::$app->request->hostInfo.'/'.self::LINE_PAY_SUCCESS;
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
@@ -48,7 +50,7 @@ class Alipay extends  ActiveRecord
         $payRequestBuilder->setBody($body);
         $payRequestBuilder->setSubject($subject);
         $payRequestBuilder->setOutTradeNo($out_trade_no);
-        $payRequestBuilder->setTotalAmount($total_amount=0.01);
+        $payRequestBuilder->setTotalAmount($total_amount);
         $payRequestBuilder->setTimeExpress($timeout_express);
         $payRequestBuilder->setPassback_params($passback_params);
         $payResponse = new AlipayTradeService($config);
@@ -61,7 +63,8 @@ class Alipay extends  ActiveRecord
      * @param $post
      * @param $phone
      * @param $out_trade_no
-     * @return bool
+     * @return bool|mixed|\SimpleXMLElement|string|\vendor\alipay\提交表单HTML文本
+     * @throws \yii\base\Exception
      */
     public  static function  EffectEarnestSubmit($post,$phone,$out_trade_no)
     {

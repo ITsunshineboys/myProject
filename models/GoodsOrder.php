@@ -261,6 +261,7 @@ class GoodsOrder extends ActiveRecord
      * @param $post
      * @return bool
      * @throws yii\db\Exception
+     * @throws yii\web\ServerErrorHttpException
      */
     public static function AliPayLineNotifyDataBase($arr,$post)
     {
@@ -421,6 +422,7 @@ class GoodsOrder extends ActiveRecord
      * @param $msg
      * @return bool
      * @throws yii\db\Exception
+     * @throws yii\web\ServerErrorHttpException
      */
     public static function  WxPayLineNotifyDataBase($arr,$msg)
     {

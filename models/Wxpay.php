@@ -192,10 +192,13 @@ class Wxpay  extends ActiveRecord
     /**
      * 查询订单
      * @param $transaction_id
+     * @param $total_fee
+     * @param $appid
+     * @param $mch_id
      * @return bool
      * @throws \yii\base\WxPayException
      */
-    public static function Queryorder($transaction_id)
+    public static function Queryorder($transaction_id,$total_fee,$appid,$mch_id)
     {
         $input = new WxPayOrderQuery();
         $input->SetTransaction_id($transaction_id);
@@ -205,6 +208,24 @@ class Wxpay  extends ActiveRecord
             && $result["return_code"] == "SUCCESS"
             && $result["result_code"] == "SUCCESS")
         {
+            if (array_key_exists("total_fee", $result)){
+                if ($result['total_fee']!=$total_fee)
+                {
+                    return false;
+                }
+            }
+            if (array_key_exists("appid", $result)){
+                if ($result['appid']!=$appid)
+                {
+                    return false;
+                }
+            }
+            if (array_key_exists("mch_id", $result)){
+                if ($result['mch_id']!=$mch_id)
+                {
+                    return false;
+                }
+            }
             return true;
         }
         return false;
@@ -216,7 +237,7 @@ class Wxpay  extends ActiveRecord
      * @return bool
      * @throws \yii\base\WxPayException
      */
-    public static function QueryApporder($transaction_id)
+    public static function QueryApporder($transaction_id,$total_fee,$appid,$mch_id)
     {
         $input = new WxPayOrderQuery();
         $input->SetTransaction_id($transaction_id);
@@ -226,30 +247,49 @@ class Wxpay  extends ActiveRecord
             && $result["return_code"] == "SUCCESS"
             && $result["result_code"] == "SUCCESS")
         {
+
+            if (array_key_exists("total_fee", $result)){
+                if ($result['total_fee']!=$total_fee)
+                {
+                    return false;
+                }
+            }
+            if (array_key_exists("appid", $result)){
+                if ($result['appid']!=$appid)
+                {
+                    return false;
+                }
+            }
+            if (array_key_exists("mch_id", $result)){
+                if ($result['mch_id']!=$mch_id)
+                {
+                    return false;
+                }
+            }
             return true;
         }
         return false;
     }
 
 
-
-        /**
-         * 重写回调处理函数
-         * @param $data
-         * @return bool
-         */
-        public static function NotifyProcess($data)
-        {
-            $notfiyOutput = array();
-            if(!array_key_exists("transaction_id", $data)){
-                return false;
-            }
-            //查询订单，判断订单真实性
-            if(!self::Queryorder($data["transaction_id"])){
-                return false;
-            }
-            return true;
-        }
+//        /**
+//         * 重写回调处理函数
+//         * @param $data
+//         * @return bool
+//         * @throws \yii\base\WxPayException
+//         */
+//        public static function NotifyProcess($data)
+//        {
+//            $notfiyOutput = array();
+//            if(!array_key_exists("transaction_id", $data)){
+//                return false;
+//            }
+//            //查询订单，判断订单真实性
+//            if(!self::Queryorder($data["transaction_id"])){
+//                return false;
+//            }
+//            return true;
+//        }
 
 
         /**

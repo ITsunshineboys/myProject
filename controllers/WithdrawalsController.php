@@ -1153,9 +1153,12 @@ class WithdrawalsController extends Controller
             'data'=>$data
         ]);
     }
+
     /**
      * 微信充值数据库操作
-     * @return bool|string
+     * @return bool
+     * @throws Exception
+     * @throws \yii\base\WxPayException
      */
     public  function  actionWxRechargeDatabase()
     {
@@ -1165,7 +1168,7 @@ class WithdrawalsController extends Controller
         $msg=Json::decode($data);
         if ($msg['result_code']=='SUCCESS'){
             $transaction_id=$msg['transaction_id'];
-            $result = Wxpay::QueryApporder($transaction_id);
+            $result = Wxpay::QueryApporder($transaction_id,$msg['total_fee'],$msg['appid'],$msg['mch_id']);
             if (!$result)
             {
                 return false;
@@ -1178,11 +1181,11 @@ class WithdrawalsController extends Controller
             $user=User::find()->where(['id'=>$uid])->one();
             if (!$user)
             {
-               return true;
+               return false;
             }
             if ($access)
             {
-                return true;
+                return false;
             }
             $tran=Yii::$app->db->beginTransaction();
             try{

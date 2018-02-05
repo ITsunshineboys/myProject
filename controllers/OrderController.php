@@ -805,6 +805,7 @@ class OrderController extends Controller
     /**
      * 支付宝线下店商城异步返回操作-购买回调
      * @throws Exception
+     * @throws \yii\web\ServerErrorHttpException
      */
     public function actionAliPayLineNotify(){
         $post=Yii::$app->request->post();
@@ -1145,7 +1146,7 @@ class OrderController extends Controller
         {
             $transaction_id=$arr['transaction_id'];
             //查询订单
-            $result = Wxpay::Queryorder($transaction_id);
+            $result = Wxpay::Queryorder($transaction_id,$arr['total_fee'],$arr['appid'],$arr['mch_id']);
             if (!$result)
             {
                 return false;
@@ -1172,6 +1173,9 @@ class OrderController extends Controller
     /**
      * 微信线下支付异步操作
      * @return bool
+     * @throws Exception
+     * @throws \yii\base\WxPayException
+     * @throws \yii\web\ServerErrorHttpException
      */
     public function actionOrderLineWxPayNotify(){
         //获取通知的数据
@@ -1181,7 +1185,7 @@ class OrderController extends Controller
         if ($msg['result_code']=='SUCCESS')
         {
             $transaction_id=$msg['transaction_id'];
-            $result = Wxpay::Queryorder($transaction_id);
+            $result = Wxpay::Queryorder($transaction_id,$msg['total_fee'],$msg['appid'],$msg['mch_id']);
             if (!$result)
             {
                 return false;
@@ -4852,6 +4856,7 @@ class OrderController extends Controller
     /**
      * @return bool
      * @throws Exception
+     * @throws \yii\base\WxPayException
      */
     public  function  actionWxNotifyDatabase()
     {
@@ -4861,7 +4866,7 @@ class OrderController extends Controller
         $msg=Json::decode($data);
         if ($msg['result_code']=='SUCCESS'){
             $transaction_id=$msg['transaction_id'];
-            $result = Wxpay::QueryApporder($transaction_id);
+            $result = Wxpay::QueryApporder($transaction_id,$msg['total_fee'],$msg['appid'],$msg['mch_id']);
             if (!$result)
             {
                 return false;
