@@ -309,10 +309,15 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
         }
 
         //test
-        if ((int)$post['status']==self::STATUS_OFF_LINE)
-        {
-            $goods->status=Goods::STATUS_ONLINE;
-        }
+//        if ((int)$post['status']==self::STATUS_OFF_LINE)
+//        {
+//            $goods->status=Goods::STATUS_ONLINE;
+//            if (!$goods->save(false))
+//            {
+//                $code=500;
+//                return $code;
+//            }
+//        }
         $tran = Yii::$app->db->beginTransaction();
         try{
             $LineSupplierGoods->status=(int)$post['status'];
@@ -336,6 +341,7 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
      * 删除线下体验店商品
      * @param $line_goods_id
      * @return int
+     * @throws \yii\db\Exception
      */
     public  static  function  DelLineSupplierGoods($line_goods_id)
     {
