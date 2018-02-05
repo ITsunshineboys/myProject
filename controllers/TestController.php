@@ -539,8 +539,8 @@ class TestController extends Controller
     public  function  actionTest()
     {
 
-        $code=Goods::updateAll(['status' => Goods::STATUS_OFFLINE,],'id=19999');
-        echo $code;
+       $code=Goods::findOne('1');
+       var_dump($code);
     }
 
 }
