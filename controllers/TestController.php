@@ -539,7 +539,7 @@ class TestController extends Controller
     public  function  actionTest()
     {
 
-       $code=123;
+       $code=12;
        var_dump($code);
     }
 
