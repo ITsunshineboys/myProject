@@ -12,6 +12,7 @@ use app\models\Goods;
 use app\models\GoodsRecommendViewLog;
 use app\models\GoodsRecommendViewLogSupplier;
 use app\models\GoodsStyle;
+use app\models\LineSupplier;
 use app\models\LineSupplierGoods;
 use app\models\Series;
 use app\models\Style;
@@ -3538,9 +3539,11 @@ class MallController extends Controller
     }
 
     /**
-     * Toggle goods status action.
+     * * Toggle goods status action.
      *
      * @return string
+     * @return string
+     * @throws \yii\db\Exception
      */
     public function actionGoodsStatusToggle()
     {
@@ -3601,6 +3604,24 @@ class MallController extends Controller
                 !$offlineReason && $offlineReason = Yii::$app->params['lhzz']['offline_reason'];
                 $model->offline_reason = $offlineReason;
             }
+
+            $lineGoods=LineSupplierGoods::find()->where(['goods_id'=>$model->id])->all();
+            if ($lineGoods)
+            {
+                foreach ($lineGoods as &$lineGood)
+                {
+                    $code=LineSupplierGoods::closeLineGoods($lineGood->id);
+                    if ($code!=200)
+                    {
+                        return Json::encode
+                        ([
+                            'code' => $code,
+                            'msg' => Yii::$app->params['errorCodes'][$code],
+                        ]);
+                    }
+                }
+            }
+
         }
 
         $model->scenario = Goods::SCENARIO_TOGGLE;
@@ -5729,6 +5750,11 @@ class MallController extends Controller
             $res = $supplier->online($operator);
         } elseif ($supplier->status == Supplier::STATUS_ONLINE) {
             $res = $supplier->offline($operator);
+            $lineSupplier=LineSupplier::find()->select('id')->where(['supplier_id'=>$supplier->id])->one();
+            if ($lineSupplier)
+            {
+                LineSupplierGoods::updateAll(['status'=>LineSupplierGoods::STATUS_OFF_LINE],'line_supplier_id='.$lineSupplier->id);
+            }
         } else {
             $res = 1000;
         }

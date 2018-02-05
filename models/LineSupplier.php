@@ -190,6 +190,7 @@ class LineSupplier extends \yii\db\ActiveRecord
             $code=1000;
             return $code;
         }
+
         $tran = Yii::$app->db->beginTransaction();
         try{
             $LineSupplier->status=(int)$post['status'];
@@ -198,6 +199,11 @@ class LineSupplier extends \yii\db\ActiveRecord
                 $code=500;
                 $tran->rollBack();
                 return $code;
+            }
+            if ((int)$post['status']==self::STATUS_OFF_LINE)
+            {
+                $where='line_supplier_id='.$LineSupplier->id;
+                LineSupplier::updateAll(['status'=>LineSupplierGoods::STATUS_OFF_LINE],$where);
             }
             $tran->commit();
             $code=200;
