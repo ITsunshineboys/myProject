@@ -197,16 +197,15 @@ class LineSupplier extends \yii\db\ActiveRecord
             $LineSupplier->status=(int)$post['status'];
             if (!$LineSupplier->save(false))
             {
-                echo 1;die;
                 $code=500;
                 $tran->rollBack();
                 return $code;
             }
-            if ($post['status']==self::STATUS_OFF_LINE)
-            {
-                $where='line_supplier_id='.$LineSupplier->id;
-                LineSupplier::updateAll(['status'=>LineSupplierGoods::STATUS_OFF_LINE],$where);
-            }
+//            if ($post['status']==self::STATUS_OFF_LINE)
+//            {
+//                $where='line_supplier_id='.$LineSupplier->id;
+//                LineSupplier::updateAll(['status'=>LineSupplierGoods::STATUS_OFF_LINE],$where);
+//            }
             $tran->commit();
             $code=200;
             return $code;
