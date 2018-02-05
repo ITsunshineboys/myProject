@@ -1,6 +1,7 @@
 <?php
 
 namespace app\controllers;
+use app\models\EffectEarnest;
 use app\models\OrderGoodsAttr;
 use app\models\OrderGoodsBrand;
 use app\models\OrderGoodsDescription;
@@ -557,9 +558,11 @@ class OrderController extends Controller
         $data=Wxpay::GetWxJsSign();
         var_dump($data);
     }
+
     /**
      * 智能报价-样板间支付定金提交
      * @return string
+     * @throws \yii\base\Exception
      */
     public function actionEffectEarnstAlipaySub(){
         $request = \Yii::$app->request;
@@ -841,6 +844,7 @@ class OrderController extends Controller
     /**
      * wxpay effect sub
      * @return string
+     * @throws Exception
      * @throws \yii\base\WxPayException
      */
     public function actionWxpayEffectEarnstSub(){
@@ -855,8 +859,17 @@ class OrderController extends Controller
             ]);
         }
 //        $out_trade_no =GoodsOrder::SetOrderNo();
-        $id=Effect::addneweffect($post);
-        if (!$id)
+
+        $user=\Yii::$app->user->identity;
+        if (!$user){
+            $uid='';
+            $item=0;
+        }else{
+            $uid=$user->getId();
+            $item=1;
+        }
+        $data=EffectEarnest::appAddEffect($uid,$post,$item);
+        if ($data['code']!=200)
         {
             $code=1000;
             return json_encode([
@@ -864,6 +877,7 @@ class OrderController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        $id=$data['data'];
         $openId=$request->post('wxpayCode', '');
         if (!$openId)
         {

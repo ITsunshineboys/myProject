@@ -177,7 +177,9 @@ class EffectEarnest extends \yii\db\ActiveRecord
      * app 申请或保存样板间
      * @param $uid
      * @param $post
-     * @return bool|string
+     * @param $item
+     * @return array|bool
+     * @throws Exception
      */
     public static function appAddEffect($uid,$post,$item){
 
@@ -244,7 +246,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
 
             if(!$res){
                 $tran->rollBack();
-                return false;
+                return ['code'=>500,'data'=>''];
             }
             $id=\Yii::$app->db->lastInsertID;
             //如果有材料
@@ -261,7 +263,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
                 }
                 if(!$res){
                     $tran->rollBack();
-                    return false;
+                    return ['code'=>500,'data'=>''];
                 }
 
             }
@@ -309,7 +311,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
             $effect_earnest->item=$item;
             if(!$effect_earnest->save(false)){
                 $tran->rollBack();
-                return false;
+                return ['code'=>500,'data'=>''];
             }
             $effect_picture=new EffectPicture();
             $effect_picture->effect_id=$id;
@@ -317,13 +319,13 @@ class EffectEarnest extends \yii\db\ActiveRecord
             $effect_picture->series_id=$post['series'];
             if(!$effect_picture->save(false)){
                 $tran->rollBack();
-                return false;
+                return ['code'=>500,'data'=>''];
             }
             $tran->commit();
-            return true;
+            return ['code'=>200,'data'=>$id];
         }catch (Exception $e){
             $tran->rollBack();
-            return false;
+            return ['code'=>500,'data'=>''];
         }
 
     }

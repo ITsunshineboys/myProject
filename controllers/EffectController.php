@@ -306,9 +306,11 @@ class EffectController extends Controller
 
         ]);
     }
+
     /**
      * app 保存/申请样板间
      * @return string
+     * @throws \yii\db\Exception
      */
     public function actionAppApplyEffect(){
         $user = Yii::$app->user->identity;
@@ -329,21 +331,12 @@ class EffectController extends Controller
             $uid=$user->getId();
             $item=1;
         }
-        $code=EffectEarnest::appAddEffect($uid,$post,$item);
-        if(!$code){
-            $code=500;
-            return Json::encode([
-                'code' =>$code,
-                'msg' =>\Yii::$app->params['errorCodes'][$code]
-
-            ]);
-        }
+        $data=EffectEarnest::appAddEffect($uid,$post,$item);
+        $code=$data['code'];
         return Json::encode([
-            'code' => 200,
-            'msg' =>'ok'
-
+            'code' =>$code,
+            'msg' =>$code==200?'ok':\Yii::$app->params['errorCodes'][$code]
         ]);
-
     }
     /**
      * app 样板间保存/申请详情

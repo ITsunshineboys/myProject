@@ -72,12 +72,20 @@ class Alipay extends  ActiveRecord
         $notify_url="https://".$_SERVER["SERVER_NAME"].'/'.self::EFFECT_NOTIFY;
         $return_url=Yii::$app->request->hostInfo."/".self::EFFECT_SUCCESS;
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
-        $id=Effect::addneweffect($post);
-        if (!$id)
+        $user=\Yii::$app->user->identity;
+        if (!$user){
+            $uid='';
+            $item=0;
+        }else{
+            $uid=$user->getId();
+            $item=1;
+        }
+        $data=EffectEarnest::appAddEffect($uid,$post,$item);
+        if ($data['code']!=200)
         {
             return false;
         }
-        $str=$id;
+        $str=$data['id'];
         $total_amount=0.01;
         $passback_params=urlencode($str);
         //超时时间
