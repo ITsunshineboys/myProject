@@ -201,11 +201,11 @@ class LineSupplier extends \yii\db\ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
-//            if ($post['status']==self::STATUS_OFF_LINE)
-//            {
-//                $where='line_supplier_id='.$LineSupplier->id;
-//                LineSupplier::updateAll(['status'=>LineSupplierGoods::STATUS_OFF_LINE],$where);
-//            }
+            if ($post['status']==self::STATUS_OFF_LINE)
+            {
+                $where='line_supplier_id='.$LineSupplier->id;
+                LineSupplierGoods::updateAll(['status'=>LineSupplierGoods::STATUS_OFF_LINE],$where);
+            }
             $tran->commit();
             $code=200;
             return $code;

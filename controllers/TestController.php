@@ -13,6 +13,8 @@ use app\models\GoodsOrder;
 use app\models\GoodsStat;
 use app\models\GoodsStyle;
 use app\models\Invoice;
+use app\models\LineSupplier;
+use app\models\LineSupplierGoods;
 use app\models\LogisticsDistrict;
 use app\models\LogisticsTemplate;
 use app\models\OrderAfterSale;
@@ -539,8 +541,8 @@ class TestController extends Controller
     public  function  actionTest()
     {
 
-       $code=12;
-       var_dump($code);
+        $code=LineSupplier::updateAll(['status'=>LineSupplierGoods::STATUS_OFF_LINE],'id=1');
+        echo $code;
     }
 
 }
