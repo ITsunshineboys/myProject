@@ -19,10 +19,10 @@ class WorkerItem extends \yii\db\ActiveRecord
     const UNITS = [
         '无',
         'L',
-        'M',
-        'M^2',
-        'Kg',
-        'MM'
+        'm',
+        '㎡',
+        'kg',
+        'mm'
     ];
     const STATUSTNULL=0;
     const STATUSNOTNULL=1;
