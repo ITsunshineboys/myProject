@@ -1058,7 +1058,6 @@ class DistributionController extends Controller
             if (!$distribution->save(false))
             {
                 $tran->rollBack();
-                $code=500;
             }
             $tran->commit();
             $code=200;
