@@ -15,6 +15,7 @@
 #show_img_size{
   width: 30px;
   height: 30px;
+  cursor: pointer;
 }
 .shop_left{
   margin-left: 10px;
