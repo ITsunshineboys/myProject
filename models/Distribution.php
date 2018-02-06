@@ -109,7 +109,7 @@ class Distribution extends ActiveRecord
                         $add_data=0;
                         foreach ($orderGoods as &$list_order)
                         {
-                            if (!$list_order['order_status']==2)
+                            if ($list_order['order_status']!=2)
                             {
                                 $goodsOrder_online_money+=($list_order['goods_price']*0.01*$list_order['goods_number']+$list_order['freight']*0.01);
                                 $add_data=1;
