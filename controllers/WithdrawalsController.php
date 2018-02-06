@@ -1976,7 +1976,7 @@ class WithdrawalsController extends Controller
             $bank_card=Yii::$app->request->get('bank_card');
             if (!$bank_card)
             {
-                $code=1000;
+                $code=1105;
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code]
