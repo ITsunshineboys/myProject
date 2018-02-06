@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\AppVersion;
+use app\models\ChatRecord;
 use app\models\ContactForm;
 use app\models\LoginForm;
 use app\models\User;
@@ -1888,10 +1889,25 @@ class SiteController extends Controller
             ->andWhere(['role_id'=>$user->last_role_id_app])
             ->andWhere(['status'=>0])
             ->count();
+        if ($userNews=0)
+        {
+            $chatNews=ChatRecord::find()->where(['to_uid'=>$user->id])->andWhere(['to_role_id'=>$user->last_role_id_app])
+                ->andWhere(['status'=>0])->count();
+            if ($chatNews>0)
+            {
+                $status=1;
+            }else
+            {
+                $status=2;
+            }
+        }else
+        {
+            $status=1;
+        }
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
-            'data' =>$userNews>0?1:2
+            'data' =>$status
         ]);
     }
 
