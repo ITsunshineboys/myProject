@@ -3111,7 +3111,6 @@ class GoodsOrder extends ActiveRecord
                     $time=time();
                     $refund->handle=OrderRefund::HANDLE_DISAGREE;
                     $refund->handle_time=$time;
-                    $refund->refund_time=$time;
                     $refund->save(false);
                 }
                 $data=[
