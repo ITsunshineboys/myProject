@@ -1592,6 +1592,8 @@ class GoodsOrder extends ActiveRecord
                     return false;
                 }
             }
+            $time=time();
+            OrderRefund::updateAll(['handle'=>OrderRefund::HANDLE_DISAGREE,'handle_time'=>$time],['order_no'=>$order_no,'sku'=>$sku,'handle'=>OrderRefund::HANDLE_UN_HANDLE]);
 
             $trans->commit();
             return true;
@@ -1790,30 +1792,31 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
-            $order_refund=OrderRefund::find()
-                ->where(['order_no'=>$order_no,'sku'=>$sku,'handle'=>0])
-                ->all();
-            if (!$order_refund)
-            {
-                $code=1000;
-                $tran->rollBack();
-                return $code;
-            }
-            foreach ($order_refund as &$refunds)
-            {
-                $refunds->handle=$handle;
-                if ($handle_reason)
-                {
-                    $refunds->handle_reason=$handle_reason;
-                }
-                $refunds->handle_time=$time;
-                if(!$refunds->save(false))
-                {
-                    $code=500;
-                    $tran->rollBack();
-                    return $code;
-                }
-            }
+            OrderRefund::updateAll(['handle'=>$handle,'handle_reason'=>$handle_reason,'handle_time'=>$time],['order_no'=>$order_no,'sku'=>$sku,'handle'=>0]);
+//            $order_refund=OrderRefund::find()
+//                ->where(['order_no'=>$order_no,'sku'=>$sku,'handle'=>0])
+//                ->all();
+//            if (!$order_refund)
+//            {
+//                $code=1000;
+//                $tran->rollBack();
+//                return $code;
+//            }
+//            foreach ($order_refund as &$refunds)
+//            {
+//                $refunds->handle=$handle;
+//                if ($handle_reason)
+//                {
+//                    $refunds->handle_reason=$handle_reason;
+//                }
+//                $refunds->handle_time=$time;
+//                if(!$refunds->save(false))
+//                {
+//                    $code=500;
+//                    $tran->rollBack();
+//                    return $code;
+//                }
+//            }
             $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
             $role=User::findOne($GoodsOrder->user_id);
             $supplier=Supplier::find()
@@ -2847,7 +2850,6 @@ class GoodsOrder extends ActiveRecord
             if ($arr[$k]['status_code']==self::ORDER_TYPE_UNPAID)
             {
                 $output['amount_order'] = StringService::formatPrice($arr[0]['amount_order']*0.01);
-
             }else
             {
                 $output['amount_order'] = StringService::formatPrice($freight*0.01 + $amount_order);
@@ -3104,11 +3106,12 @@ class GoodsOrder extends ActiveRecord
                         'apply_refund_reason'=>'',
                     ];
                 }
-                if ($refund->handle==0)
+                if ($refund->handle==OrderRefund::HANDLE_UN_HANDLE)
                 {
-                    $refund->handle=2;
+                    $time=time();
+                    $refund->handle=OrderRefund::HANDLE_DISAGREE;
+                    $refund->handle_time=$time;
                     $refund->save(false);
-
                 }
                 $data=[
                     'refund_status'=>2,
