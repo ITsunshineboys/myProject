@@ -1790,30 +1790,31 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
-            $order_refund=OrderRefund::find()
-                ->where(['order_no'=>$order_no,'sku'=>$sku,'handle'=>0])
-                ->all();
-            if (!$order_refund)
-            {
-                $code=1000;
-                $tran->rollBack();
-                return $code;
-            }
-            foreach ($order_refund as &$refunds)
-            {
-                $refunds->handle=$handle;
-                if ($handle_reason)
-                {
-                    $refunds->handle_reason=$handle_reason;
-                }
-                $refunds->handle_time=$time;
-                if(!$refunds->save(false))
-                {
-                    $code=500;
-                    $tran->rollBack();
-                    return $code;
-                }
-            }
+            OrderRefund::updateAll(['handle'=>$handle,'handle_reason'=>$handle_reason,'handle_time'=>$time],['order_no'=>$order_no,'sku'=>$sku,'handle'=>0]);
+//            $order_refund=OrderRefund::find()
+//                ->where(['order_no'=>$order_no,'sku'=>$sku,'handle'=>0])
+//                ->all();
+//            if (!$order_refund)
+//            {
+//                $code=1000;
+//                $tran->rollBack();
+//                return $code;
+//            }
+//            foreach ($order_refund as &$refunds)
+//            {
+//                $refunds->handle=$handle;
+//                if ($handle_reason)
+//                {
+//                    $refunds->handle_reason=$handle_reason;
+//                }
+//                $refunds->handle_time=$time;
+//                if(!$refunds->save(false))
+//                {
+//                    $code=500;
+//                    $tran->rollBack();
+//                    return $code;
+//                }
+//            }
             $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
             $role=User::findOne($GoodsOrder->user_id);
             $supplier=Supplier::find()

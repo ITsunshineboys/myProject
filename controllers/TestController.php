@@ -541,7 +541,7 @@ class TestController extends Controller
     public  function  actionTest()
     {
 
-        $data=Goods::updateAll(['status'=>2],['id'=>1]);
+        $data=OrderRefund::find()->where(['order_no'=>'0206188775','sku'=>'12300001635'])->all();
         var_dump($data);
     }
 
