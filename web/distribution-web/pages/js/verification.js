@@ -99,6 +99,7 @@ app.controller('verification_ctrl',function ($state,$scope,$stateParams,_ajax,$u
                     backdrop:'static'
                 })
             }else{
+                $interval.cancel($scope.timer)
                 $state.go('personal_center')
             }
         })

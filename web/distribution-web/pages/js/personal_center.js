@@ -32,6 +32,6 @@ app.controller('personal_center_ctrl', function ($uibModal, $scope, $state, $sta
     }
     //返回前一页
     $scope.goPrev = function () {
-
+        $state.go('login')
     }
 })
