@@ -331,7 +331,7 @@ class UserChat extends \yii\db\ActiveRecord
 
         foreach ($data['chat_record'] as &$v){
             $v['type']= UserChat::TYPE[$v['type']];
-//            $v['content']=ChatRecord::userTextDecode($v['content']);
+            $v['content']=ChatRecord::userTextDecode($v['content']);
            $chat= ChatRecord::find()->where(['id'=>$v['id']])->one();
            $chat->status=1;
            $chat->del_status=0;
