@@ -540,6 +540,11 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
         console.log(res);
     })
   }
+  /*图片放大显示*/
+  $scope.showImgs = (src) => {
+    console.log(src)
+    $scope.showImg = src;
+  }
 });
 
 
