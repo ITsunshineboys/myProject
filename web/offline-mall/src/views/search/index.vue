@@ -47,8 +47,8 @@
       getGoods (value) {
         let that = this
         this.$nextTick(() => {
-          if (value.length > 20) {
-            this.search = value.substr(0, 20)
+          if (that.search.length > 20) {
+            this.search = that.search.substr(0, 20)
           }
           that.axios.get('/mall/search', {
             keyword: that.search

@@ -43,11 +43,11 @@
       XButton
     },
     methods: {
-      getGoods (value) {
+      getGoods () {
         let that = this
         this.$nextTick(() => {
-          if (value.length > 20) {
-            this.search = value.substr(0, 20)
+          if (that.search.length > 20) {
+            that.search = that.search.substr(0, 20)
           }
           that.axios.get('/mall/search', {
             keyword: that.search
