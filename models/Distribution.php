@@ -83,18 +83,18 @@ class Distribution extends ActiveRecord
                         ->where(['order_no'=>$goodsOrder_line_data_list['order_no']])
                         ->asArray()
                         ->all();
-                    foreach ($orderGoods as &$list)
+                    foreach ($orderGoods as &$lists)
                     {
-                        if (!$list['order_status']==2)
+                        if ($lists['order_status']!=2)
                         {
-                            $goodsOrder_line_money+=($list['goods_price']*0.01*$list['goods_number']+$list['freight']*0.01);
+                            $goodsOrder_line_money+=($lists['goods_price']*0.01*$lists['goods_number']+$lists['freight']*0.01);
                             $goodsOrder_line_count+=1;
                         }
                     }
 
                 }
 
-                $user=User::find()->where(['mobile'=>$data->mobile])->one();
+                $user=User::find()->where(['mobile'=>$list['mobile']])->one();
                 if ($user)
                 {
                     $goodsOrder_online=GoodsOrder::Find()->where(['user_id'=>$user->id,'order_refer'=>2]);
@@ -107,11 +107,11 @@ class Distribution extends ActiveRecord
                             ->asArray()
                             ->all();
                         $add_data=0;
-                        foreach ($orderGoods as &$list)
+                        foreach ($orderGoods as &$list_order)
                         {
-                            if (!$list['order_status']==2)
+                            if ($list_order['order_status']!=2)
                             {
-                                $goodsOrder_online_money+=($list['goods_price']*0.01*$list['goods_number']+$list['freight']*0.01);
+                                $goodsOrder_online_money+=($list_order['goods_price']*0.01*$list_order['goods_number']+$list_order['freight']*0.01);
                                 $add_data=1;
                             }
 

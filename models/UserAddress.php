@@ -159,7 +159,9 @@ class UserAddress extends  ActiveRecord
      * @param $consignee
      * @param $mobile
      * @param $user_id
+     * @param $default
      * @return int
+     * @throws \yii\db\Exception
      */
     public static function UserAddressAdd($district_code,$region,$consignee,$mobile,$user_id,$default)
     {
