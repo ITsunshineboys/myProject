@@ -17,7 +17,7 @@
         <li @click="androidMessageCenter">
           <span class="iconfont icon-news-circle"></span>
           <span class="pop-text">消息</span>
-          <span class="pop-dot"></span>
+          <span class="pop-dot" v-show="msgFlag || show_msgdot"></span>
         </li>
       </ul>
     </div>
@@ -317,6 +317,8 @@
         count_now: false,           // 立即购买按钮显示
         default_count: false,       // 两个按钮显示
         show_description: true,     // 显示图文详情
+        show_msgdot: false,         // 默认不显示消息提示点
+        msgFlag: false,              // 消息中心默认按未登录显示
         good_detail: {
           line_goods: {
             is_offline_goods: ''
@@ -432,6 +434,18 @@
       // 更多
       showMore () {
         this.show_more = !this.show_more
+        if (this.show_more) {
+          this.axios.get('/site/check-is-login', {}, (res) => {
+            if (res.code === 403) {
+              this.msgFlag = false
+            } else {
+              this.msgFlag = true
+              this.axios.get('/site/user-check-news', {}, (res) => {
+                res.data === 1 ? this.show_msgdot = false : this.show_msgdot = true
+              })
+            }
+          })
+        }
       },
       // 底部按钮加入购物车&立即购买
       bottomAdd: function (obj) {
@@ -512,7 +526,11 @@
       // 跳转消息中心
       androidMessageCenter () {
         this.show_more = false
-        window.AndroidWebView.skipMessageCenter()
+        if (this.msgFlag) {
+          window.AndroidWebView.skipMessageCenter()
+        } else {
+          window.AndroidWebView.storeskipIntent()
+        }
       },
       // 跳转购物车
       androidCart () {
