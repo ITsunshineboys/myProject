@@ -117,7 +117,7 @@ class WithdrawalsController extends Controller
             !$bankname
         )
         {
-            $code=1000;
+            $code=1104;
             return Json::encode([
                 'code' => $code,
                 'msg' => '请输入银行卡名'
@@ -127,7 +127,7 @@ class WithdrawalsController extends Controller
         !$bankcard
         )
         {
-            $code=1000;
+            $code=1105;
             return Json::encode([
                 'code' => $code,
                 'msg' => '请输入银行卡号'
@@ -138,7 +138,7 @@ class WithdrawalsController extends Controller
         !$username
         )
         {
-            $code=1000;
+            $code=1106;
             return Json::encode([
                 'code' => $code,
                 'msg' => '请输入持卡人姓名'
