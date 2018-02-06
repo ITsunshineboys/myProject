@@ -11,7 +11,8 @@ use yii\db\Exception;
 class UserBankInfo extends \yii\db\ActiveRecord
 {
 
-
+    const  CACHE_SET_BANK_USER_ID='cache_set_bank_user_id_';
+    const  CACHE_SET_BANK_ROLE_ID='cache_set_bank_role_id_';
     const DEBIT_CARD='借记卡';
     const CREDIT_CARD='信用卡';
     const EXCHANGE_CARD='贷记卡';
@@ -48,6 +49,7 @@ class UserBankInfo extends \yii\db\ActiveRecord
      * @param $role_id
      * @param $user
      * @return int
+     * @throws Exception
      */
     public static  function  SetBankCard($bankname,$bankcard,$username,$position,$bankbranch,$role_id,$user)
     {
@@ -148,6 +150,10 @@ class UserBankInfo extends \yii\db\ActiveRecord
             }
         }else
         {
+//            $cache = Yii::$app->cache;
+//            $data = $cache->get(self::CACHE_SET_BANK_USER_ID . $user->id.'_'.self::CACHE_SET_BANK_ROLE_ID.$user->last_role_id_app);
+//            $cacheData = 'ResetmobileSmscode' . $user->id . date('Y-m-d H', time());
+//            $data = $cache->set(User::CACHE_PREFIX_GET_MOBILE . $user->id, $cacheData, 60 * 60);
             $cardType=Yii::$app->request->post('cardtype');
             if (!$cardType)
             {

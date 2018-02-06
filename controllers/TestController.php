@@ -541,7 +541,7 @@ class TestController extends Controller
     public  function  actionTest()
     {
 
-        $data=Goods::findAll(['id'=>4]);
+        $data=Goods::updateAll(['status'=>2],['id'=>1]);
         var_dump($data);
     }
 
