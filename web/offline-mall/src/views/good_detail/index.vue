@@ -441,7 +441,7 @@
             } else {
               this.msgFlag = true
               this.axios.get('/site/user-check-news', {}, (res) => {
-                res.data === 1 ? this.show_msgdot = false : this.show_msgdot = true
+                res.data === 1 ? this.show_msgdot = true : this.show_msgdot = false
               })
             }
           })
