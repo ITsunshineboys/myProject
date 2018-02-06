@@ -38,6 +38,7 @@ use app\models\StairsDetails;
 use app\models\Style;
 use app\models\Toponymy;
 use app\models\User;
+use app\models\UserNewsRecord;
 use app\models\WorkerCraftNorm;
 use app\models\WorkerRank;
 use app\models\WorkerType;
@@ -3107,6 +3108,6 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-
+    var_dump(UserNewsRecord::find()->where(['to_uid'=>293])->all());
     }
 }
