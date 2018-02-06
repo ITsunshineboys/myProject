@@ -500,7 +500,7 @@ class DistributionController extends Controller
                             $test_data1=0;
                             foreach ($orderGoods as &$alist)
                             {
-                                if (!$alist['order_status']==2)
+                                if ($alist['order_status']!=2)
                                 {
                                     $total_amount+=($alist['goods_price']*0.01*$alist['goods_number']+$alist['freight']*0.01);
                                     $test_data1=1;
@@ -529,7 +529,7 @@ class DistributionController extends Controller
                         $test_data=0;
                         foreach ($orderGoods as &$alist)
                         {
-                            if (!$alist['order_status']==2)
+                            if ($alist['order_status']!=2)
                             {
                                 $total_amount+=($alist['goods_price']*0.01*$alist['goods_number']+$alist['freight']*0.01);
                                 $test_data=1;
@@ -804,7 +804,7 @@ class DistributionController extends Controller
                         ->all();
                     foreach ($orderGoods as &$orders)
                     {
-                        if (!$orders['order_status']==2)
+                        if ($orders['order_status']!=2)
                         {
                             $list[]=[
                                 'mobile'=>$user->mobile,
@@ -834,7 +834,7 @@ class DistributionController extends Controller
                     ->all();
                 foreach ($orderGoods as &$orders)
                 {
-                    if (!$orders['order_status']==2)
+                    if ($orders['order_status']!=2)
                     {
                         $list[]=[
                             'mobile'=>$subset['mobile'],
