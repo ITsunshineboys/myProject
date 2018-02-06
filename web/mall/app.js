@@ -68,6 +68,10 @@ let app = angular.module("app", ["ui.bootstrap", "ui.router", "ngAnimate", 'angu
                 css: ['css/deposit.css', 'zui-1.7.0-dist/dist/css/zui.min.css'],
                 controller: 'depositCtrl'
             })
+            .state('explain', { // 什么是定金
+                url: '/explain',
+                templateUrl: 'depositExplain.html'
+            })
             .state('pay_success', { // 支付成功
                 url: '/pay_success',
                 templateUrl: 'pay-success.html',

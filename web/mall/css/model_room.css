@@ -375,7 +375,7 @@ button {
 }
 
 .primary_btn {
-    /*width: 6rem;*/
+    width: 6rem;
     height: 4rem;
     font-size: 1.3rem;
     color: #fff;
