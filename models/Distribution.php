@@ -85,7 +85,7 @@ class Distribution extends ActiveRecord
                         ->all();
                     foreach ($orderGoods as &$list)
                     {
-                        if (!$list['order_status']==2)
+                        if ($list['order_status']!=2)
                         {
                             $goodsOrder_line_money+=($list['goods_price']*0.01*$list['goods_number']+$list['freight']*0.01);
                             $goodsOrder_line_count+=1;
@@ -94,7 +94,7 @@ class Distribution extends ActiveRecord
 
                 }
 
-                $user=User::find()->where(['mobile'=>$data->mobile])->one();
+                $user=User::find()->where(['mobile'=>$data['mobile']])->one();
                 if ($user)
                 {
                     $goodsOrder_online=GoodsOrder::Find()->where(['user_id'=>$user->id,'order_refer'=>2]);
