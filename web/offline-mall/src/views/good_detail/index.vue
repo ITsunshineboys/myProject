@@ -17,7 +17,7 @@
         <li @click="androidMessageCenter">
           <span class="iconfont icon-news-circle"></span>
           <span class="pop-text">消息</span>
-          <span class="pop-dot" v-show="msgFlag || show_msgdot"></span>
+          <span class="pop-dot" v-show="msgFlag && show_msgdot"></span>
         </li>
       </ul>
     </div>
