@@ -1597,6 +1597,7 @@ class GoodsOrder extends ActiveRecord
             }
 
             $trans->commit();
+            return true;
         } catch (\Exception $e) {
             $trans->rollBack();
             return false;
