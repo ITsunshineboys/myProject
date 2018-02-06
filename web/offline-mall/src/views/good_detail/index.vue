@@ -444,6 +444,7 @@
       showMore () {
         this.show_more = !this.show_more
         if (this.show_more) {
+          window.AndroidWebView.clearCache()
           this.axios.get('/site/check-is-login', {}, (res) => {
             if (res.code === 403) {
               this.msgFlag = false
