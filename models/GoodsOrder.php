@@ -1442,10 +1442,7 @@ class GoodsOrder extends ActiveRecord
                             ->asArray()
                             ->one()['supplier_id'];
                         $money=($list['freight']+$list['supplier_price']*$list['goods_number']);
-                        $res=self::changeOrderStatus($list['order_no'],$list['sku'],$supplier_id,$money);
-                        if (!$res || $res==false){
-                            return false;
-                        }
+                        self::changeOrderStatus($list['order_no'],$list['sku'],$supplier_id,$money);
                     }
                 }
             };
