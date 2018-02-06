@@ -298,5 +298,8 @@ ALTER TABLE `app_version`  ADD  `version_code` varchar(30) DEFAULT NULL;
 
  ALTER TABLE express MODIFY sku varchar(50) NOT NULL ;
 
+--all 2018.02.06 hj
+ALTER TABLE `line_supplier_goods` ADD `supllier_id` int(11) NOT NULL COMMENT '商家id' AFTER `goods_id`;
+
 
 

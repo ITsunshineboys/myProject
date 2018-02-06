@@ -1005,12 +1005,9 @@ class Supplier extends ActiveRecord
                 return $code;
             }
 
-            $code= Goods::disableGoodsBySupplierId($this->id, $operator);
-            if ($code!=200)
-            {
-                $tran->rollBack();
-                return $code;
-            }
+            Goods::disableGoodsBySupplierId($this->id, $operator);
+            LineSupplierGoods::updateAll(['status' => LineSupplierGoods::STATUS_OFF_LINE], ['supplier_id' => $this->id]);
+
             $tran->commit();
             return 200;
         } catch (\Exception $e) {

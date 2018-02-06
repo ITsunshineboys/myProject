@@ -5747,24 +5747,14 @@ class MallController extends Controller
 
         $operator = UserRole::roleUser(Yii::$app->user->identity, Yii::$app->session[User::LOGIN_ROLE_ID]);
         if ($supplier->status == Supplier::STATUS_OFFLINE) {
-            $res = $supplier->online($operator);
+            $code = $supplier->online($operator);
         } elseif ($supplier->status == Supplier::STATUS_ONLINE) {
-            $res = $supplier->offline($operator);
-            $lineSupplier=LineSupplier::find()
-                ->select('id')
-                ->where(['supplier_id'=>$supplier->id])
-                ->one();
-            if ($lineSupplier)
-            {
-                LineSupplierGoods::updateAll(['status'=>LineSupplierGoods::STATUS_OFF_LINE],['line_supplier_id'=>$lineSupplier->id]);
-            }
-
-        } else {
-            $res = 1000;
+            $code = $supplier->offline($operator);
         }
+
         return Json::encode([
-            'code' => $res,
-            'msg' => 200 == $res ? 'OK' : Yii::$app->params['errorCodes'][$res]
+            'code' => $code,
+            'msg' => 200 == $code ? 'OK' : Yii::$app->params['errorCodes'][$code]
         ]);
     }
 

@@ -35,7 +35,7 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
     {
         return [
             [['line_supplier_id', 'goods_id', 'create_time'], 'required'],
-            [['line_supplier_id', 'goods_id', 'create_time', 'status'], 'integer'],
+            [['line_supplier_id', 'goods_id', 'supplier_id', 'create_time', 'status'], 'integer'],
         ];
     }
 
@@ -72,11 +72,18 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
         {
             return $code;
         }
+        $supplier=Supplier::findOne($goods->supplier_id);
+        if (!$supplier)
+        {
+            $code=500;
+            return $code;
+        }
         $tran = Yii::$app->db->beginTransaction();
         try{
             $LineGoods=new self();
             $LineGoods->line_supplier_id=$LineSupplier->id;
             $LineGoods->goods_id=$goods->id;
+            $LineGoods->supplier_id=$supplier->id;
             $LineGoods->create_time=time();
             $LineGoods->status=1;
             if (!$LineGoods->validate())
@@ -149,10 +156,17 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
         {
             return $code;
         }
+        $supplier=Supplier::findOne($goods->supplier_id);
+        if (!$supplier)
+        {
+            $code=500;
+            return $code;
+        }
         $tran = Yii::$app->db->beginTransaction();
         try{
             $LineSupplierGoods->line_supplier_id=$LineSupplier->id;
             $LineSupplierGoods->goods_id=$goods->id;
+            $LineSupplierGoods->supplier_id=$supplier->id;
             $LineSupplierGoods->create_time=time();
             $LineSupplierGoods->status=$post['status'];
             if (!$LineSupplierGoods->save(false))
