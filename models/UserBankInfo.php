@@ -53,6 +53,13 @@ class UserBankInfo extends \yii\db\ActiveRecord
      */
     public static  function  SetBankCard($bankname,$bankcard,$username,$position,$bankbranch,$role_id,$user)
     {
+        $cache = Yii::$app->cache;
+//        $cacheData = $cache->get(self::CACHE_SET_BANK_USER_ID . $user->id.'_'.self::CACHE_SET_BANK_ROLE_ID.$user->last_role_id_app);
+//        if ($cacheData>=3)
+//        {
+//            $code=1103;
+//            return $code;
+//        }
         $time=time();
         if ($role_id==Yii::$app->params['supplierRoleId'])
         {
@@ -150,10 +157,7 @@ class UserBankInfo extends \yii\db\ActiveRecord
             }
         }else
         {
-//            $cache = Yii::$app->cache;
-//            $data = $cache->get(self::CACHE_SET_BANK_USER_ID . $user->id.'_'.self::CACHE_SET_BANK_ROLE_ID.$user->last_role_id_app);
-//            $cacheData = 'ResetmobileSmscode' . $user->id . date('Y-m-d H', time());
-//            $data = $cache->set(User::CACHE_PREFIX_GET_MOBILE . $user->id, $cacheData, 60 * 60);
+
             $cardType=Yii::$app->request->post('cardtype');
             if (!$cardType)
             {
@@ -243,6 +247,21 @@ class UserBankInfo extends \yii\db\ActiveRecord
                     $trans->rollBack();
                     return $code;
                 }
+
+                $data = $cache->get(self::CACHE_SET_BANK_USER_ID . $user->id.'_'.self::CACHE_SET_BANK_ROLE_ID.$user->last_role_id_app);
+                if ($data === false) {
+                    $cacheData = 1;
+                    $cache->set(self::CACHE_SET_BANK_USER_ID . $user->id.'_'.self::CACHE_SET_BANK_ROLE_ID.$user->last_role_id_app, $cacheData, strtotime(date('Y-m-d', time() + 23 * 60 * 60 + 59 * 60)) - time());
+                } else {
+                    $cacheData = $data + 1;
+                    if ($cacheData > 3) {
+                        $code = 1103;
+                        $trans->rollBack();
+                        return $code;
+                    }
+                    $cache->set(self::CACHE_SET_BANK_USER_ID . $user->id.'_'.self::CACHE_SET_BANK_ROLE_ID.$user->last_role_id_app, $cacheData, strtotime(date('Y-m-d', time() + 23 * 60 * 60 + 59 * 60)) - time());
+                }
+
                 $trans->commit();
                 $code=200;
                 return $code;

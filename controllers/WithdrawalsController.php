@@ -90,9 +90,11 @@ class WithdrawalsController extends Controller
         ],
     ];
     }
+
     /**
      * 添加/修改银行卡信息
      * @return string
+     * @throws Exception
      */
     public function  actionSetBankCard()
     {
@@ -275,9 +277,11 @@ class WithdrawalsController extends Controller
             'data'=>$data
         ]);
     }
+
     /**
      * 判断是否设置过交易密码
      * @return string
+     * @throws \yii\base\Exception
      */
     public function actionCheckIssetPayPwd()
     {
@@ -392,7 +396,7 @@ class WithdrawalsController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-    $code=1000;
+        $code=1000;
         if (Yii::$app->getSecurity()->validatePassword(User::FIRST_SET_PAYPASSWORD.$user->id.date('Y-m-d',time()), $key)==true){
             $pay_pwd_first=trim($request->post('pay_pwd_first',''));
             $pay_pwd_secend=trim($request->post('pay_pwd_secend',''));
