@@ -1593,7 +1593,7 @@ class GoodsOrder extends ActiveRecord
                 }
             }
             $time=time();
-            OrderRefund::updateAll(['handle'=>OrderRefund::HANDLE_DISAGREE,'handle_time'=>$time,'refund_time'=>$time],['order_no'=>$order_no,'sku'=>$sku,'handle'=>OrderRefund::HANDLE_UN_HANDLE]);
+            OrderRefund::updateAll(['handle'=>OrderRefund::HANDLE_DISAGREE,'handle_time'=>$time],['order_no'=>$order_no,'sku'=>$sku,'handle'=>OrderRefund::HANDLE_UN_HANDLE]);
 
             $trans->commit();
             return true;
