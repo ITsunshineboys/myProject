@@ -105,6 +105,7 @@ app.controller('verification_ctrl',function ($state,$scope,$stateParams,_ajax,$u
     }
     //返回上一页
     $scope.goPrev = function () {
+        $interval.cancel($scope.timer)
         history.go(-1)
     }
 })

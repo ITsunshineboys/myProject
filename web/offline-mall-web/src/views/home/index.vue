@@ -46,9 +46,9 @@
       </flexbox>
     </card>
     <div style="height: 48px;"></div>
-    <flexbox class="nav" wrap="wrap" style="padding-top:1%;background-color:#fff;position: fixed;bottom: 0;">
-    <flexbox-item style="text-align: center;margin: 0;" @click.native="goNewModule(item)" :span="1/3" v-for="(item,index) in nav_list" :key="index">
-    <img width="23px" height="23px" :src="item.image">
+    <flexbox class="nav" wrap="wrap" style="background-color:#fff;position: fixed;bottom: 0;">
+    <flexbox-item style="text-align: center;margin: 0;padding-top: 4px;" @click.native="goNewModule(item)" :span="1/3" v-for="(item,index) in nav_list" :key="index">
+    <img width="20px" :src="item.image">
     <p :style="{color:index==1?'#D9AD65':'#999'}" style="font-size: 12px;">{{item.title}}</p>
     </flexbox-item>
     </flexbox>
