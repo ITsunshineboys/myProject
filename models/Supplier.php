@@ -1007,15 +1007,8 @@ class Supplier extends ActiveRecord
 
             Goods::disableGoodsBySupplierId($this->id, $operator);
             LineSupplierGoods::updateAll(['status' => LineSupplierGoods::STATUS_OFF_LINE], ['supplier_id' => $this->id]);
-            $lineSupplier=LineSupplier::find()
-                ->where(['supplier_id'=>$this->id])
-                ->one();
-            $lineSupplier->status=LineSupplier::STATUS_OFF_LINE;
-            if ($lineSupplier->save(false))
-            {
-                $tran->rollBack();
-                return $code;
-            }
+            LineSupplier::updateAll(['status' => LineSupplier::STATUS_OFF_LINE], ['supplier_id' => $this->id]);
+
             $tran->commit();
             return 200;
         } catch (\Exception $e) {
