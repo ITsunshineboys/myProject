@@ -32,8 +32,7 @@
       return {
         search: '',
         good_list: '',
-        history_list: [],
-        zzz: ''
+        history_list: []
       }
     },
     components: {
