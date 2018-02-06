@@ -43,17 +43,25 @@
       XButton
     },
     methods: {
-      getGoods () {
-        this.axios.get('/mall/search', {
-          keyword: this.search
-        }, (res) => {
-          console.log(res)
-          if (res.data.search.categories.length !== 0) {
-            this.good_list = res.data.search.categories
-          } else {
-            this.good_list = res.data.search.goods
+      getGoods (value) {
+        let that = this
+        this.$nextTick(() => {
+          if (value.length > 20) {
+            this.search = value.substr(0, 20)
           }
-          console.log(this.good_list)
+          that.axios.get('/mall/search', {
+            keyword: that.search
+          }, (res) => {
+            console.log(res)
+            if (res.data.search.categories.length !== 0) {
+              that.good_list = res.data.search.categories
+            } else if (res.data.search.goods.length !== 0) {
+              that.good_list = res.data.search.goods
+            } else {
+              that.good_list = []
+            }
+            console.log(this.good_list)
+          })
         })
       },
       cancelSearch () {
