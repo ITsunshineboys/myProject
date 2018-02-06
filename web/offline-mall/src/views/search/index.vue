@@ -1,6 +1,6 @@
 <template>
   <div>
-    <search maxlength="5" v-model="search" @on-cancel="cancelSearch" @on-change="getGoods" class="search" cancel-text="取消"
+    <search v-model="search" @on-cancel="cancelSearch" @on-change="getGoods" class="search" cancel-text="取消"
             placeholder="请输入想要购买的商品，如：冰箱" ref="search"></search>
     <group  @click.native="goDetail(item)" v-if="search!=''&&good_list.length!=0" v-for="(item,index) of good_list" :key="index"
            :class="{hide_margin:index!=0,hide_top:index==0,hide_bottom:index==good_list.length-1}" class="search_list"
@@ -31,7 +31,8 @@
       return {
         search: '',
         good_list: '',
-        history_list: []
+        history_list: [],
+        zzz: ''
       }
     },
     components: {
@@ -43,7 +44,12 @@
       XButton
     },
     methods: {
-      getGoods () {
+      getGoods (value) {
+        if (value.length > 5) {
+          let tempText = value.split(0, 5)
+          console.log(tempText)
+          this.search = tempText
+        }
         this.axios.get('/mall/search', {
           keyword: this.search
         }, (res) => {
