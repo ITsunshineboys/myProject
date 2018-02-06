@@ -490,3 +490,14 @@ select.form-control:focus {
     color: #ff0000
 }
 /* color end */
+
+/*enlarge picture start*/
+.modal-img {
+    display: flex;
+    width: 700px;
+    justify-content: center;
+}
+.modal-img img {
+    width: 100%;
+}
+/*enlarge picture end*/
