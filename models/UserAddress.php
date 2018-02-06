@@ -137,7 +137,7 @@ class UserAddress extends  ActiveRecord
             }else{
                 if (!array_key_exists($pro.$ci.'00',$code))
                 {
-                    $ci_f=$ci-1;
+                    $ci_f='0'.($ci-1);
                     $position=$code[86][$pro.'0000'].','.$code[$pro.'0000'][$pro.$ci_f.'00'].','.$code[$pro.$ci_f.'00'][$pro.$ci.$dis];
                 }else
                 {
