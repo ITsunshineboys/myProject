@@ -52,7 +52,6 @@
           that.axios.get('/mall/search', {
             keyword: that.search
           }, (res) => {
-            console.log(res)
             if (res.data.search.categories.length !== 0) {
               that.good_list = res.data.search.categories
             } else if (res.data.search.goods.length !== 0) {
