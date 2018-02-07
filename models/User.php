@@ -235,7 +235,7 @@ class User extends ActiveRecord implements IdentityInterface
         $user->create_time = $user->login_time = time();
         $user->login_role_id = Yii::$app->params['ownerRoleId'];
         $user->nickname = Yii::$app->params['user']['default_nickname'];
-        $user->icon = Yii::$app->params['user']['deault_icon_path'];
+        $user->icon = Yii::$app->params['user']['default_icon_path'];
 
         if (!$user->validate()) {
             ModelService::uniqueError($user, 'mobile') && $code = 1019;

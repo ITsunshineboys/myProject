@@ -220,7 +220,7 @@ class Supplier extends ActiveRecord
 //            ? (int)$attrs['support_offline_shop']
 //            : self::OFFLINE_SHOP_NOT_SUPPORT;
         $supplier->support_offline_shop = self::OFFLINE_SHOP_NOT_SUPPORT;
-        $supplier->icon = Yii::$app->params['user']['deault_icon_path'];
+        $supplier->icon = Yii::$app->params['user']['default_icon_path'];
         $supplier->quality_guarantee_deposit = isset($attrs['quality_guarantee_deposit'])
             ? (int)$attrs['quality_guarantee_deposit']
             : Yii::$app->params['supplier']['quality_guarantee_deposit'];
@@ -358,7 +358,7 @@ class Supplier extends ActiveRecord
 //            ? (int)$attrs['support_offline_shop']
 //            : self::OFFLINE_SHOP_NOT_SUPPORT;
         $supplier->support_offline_shop = self::OFFLINE_SHOP_NOT_SUPPORT;
-        $supplier->icon = Yii::$app->params['user']['deault_icon_path'];
+        $supplier->icon = Yii::$app->params['user']['default_icon_path'];
         $supplier->quality_guarantee_deposit = isset($attrs['quality_guarantee_deposit'])
             ? (int)$attrs['quality_guarantee_deposit']
             : Yii::$app->params['supplier']['quality_guarantee_deposit'];
