@@ -1020,6 +1020,9 @@ class Supplier extends ActiveRecord
                     ['status' => LineSupplierGoods::STATUS_OFF_LINE],
                     ['line_supplier_id' => $lineSupplier->id]);
             }
+            LineSupplierGoods::updateAll(
+                ['status' => LineSupplierGoods::STATUS_OFF_LINE],
+                ['supplier_id' => $this->id]);
 
 
 
