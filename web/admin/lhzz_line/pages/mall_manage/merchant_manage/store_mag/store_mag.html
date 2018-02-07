@@ -112,7 +112,8 @@
                     <h4 class="modal-title">提示</h4>
                 </div>
                 <div class="modal-body">
-                    <p>是否确认{{storestatus=='已闭店'?'开启':'关闭'}}店铺</p>
+                    <p ng-show="storestatus==='已闭店'">是否确认开启店铺</p>
+                    <p ng-show="storestatus!=='已闭店'">关闭店铺，将关闭对应线下体验店并下架所有商品，是否确认关闭</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="sureCloseStore()">确认</button>
