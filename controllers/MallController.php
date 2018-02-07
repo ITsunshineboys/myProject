@@ -934,6 +934,7 @@ class MallController extends Controller
             $recommend->supplier_id = $supplier->id;
             $recommend->supplier_name = $supplier->shop_name;
             $recommend->url = $goods->id;
+            $recommend->platform_price = $goods->platform_price;
         }
 
         if (!$recommend->save()) {
@@ -987,6 +988,7 @@ class MallController extends Controller
             $recommend->supplier_id = $supplier->id;
             $recommend->supplier_name = $supplier->shop_name;
             $recommend->url = $goods->id;
+            $recommend->platform_price = $goods->platform_price;
         }
 
         if (!$recommend->validate()) {
