@@ -372,6 +372,7 @@
           }
         }
 
+        // 线下体验店信息
         this.offlineInfo = {
           address: this.good_detail.line_goods.line_district,
           phone: this.good_detail.line_goods.line_mobile,
