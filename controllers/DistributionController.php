@@ -798,12 +798,12 @@ class DistributionController extends Controller
                     $orderGoods=OrderGoods::find()
                         ->select('order_status')
                         ->where(['order_no'=>$UserOrder['order_no']])
+                        ->andWhere(['order_status'=>1])
+                        ->andWhere(['shipping_status'=>2])
                         ->asArray()
-                        ->all();
+                        ->one();
                     foreach ($orderGoods as &$orders)
                     {
-                        if ($orders['order_status']!=2)
-                        {
                             $list[]=[
                                 'mobile'=>$user->mobile,
                                 'order_no'=>$UserOrder['order_no'],
@@ -812,7 +812,6 @@ class DistributionController extends Controller
                                 'remarks'=>$UserOrder['remarks']
                             ];
                             $total_amount+=$UserOrder['amount_order']*0.01;
-                        }
                     }
 
                 }
@@ -828,12 +827,13 @@ class DistributionController extends Controller
                 $orderGoods=OrderGoods::find()
                     ->select('order_status')
                     ->where(['order_no'=>$consigneeOrder['order_no']])
+                    ->andWhere(['order_status'=>1])
+                    ->andWhere(['shipping_status'=>2])
                     ->asArray()
-                    ->all();
+                    ->one();
                 foreach ($orderGoods as &$orders)
                 {
-                    if ($orders['order_status']!=2)
-                    {
+
                         $list[]=[
                             'mobile'=>$subset['mobile'],
                             'order_no'=>$consigneeOrder['order_no'],
@@ -842,7 +842,6 @@ class DistributionController extends Controller
                             'remarks'=>$consigneeOrder['remarks']
                         ];
                         $total_amount+=$consigneeOrder['amount_order']*0.01;
-                    }
                 }
 
             }
