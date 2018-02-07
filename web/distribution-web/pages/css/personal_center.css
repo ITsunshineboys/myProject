@@ -41,7 +41,7 @@
     height: 1.76rem;
 }
 .personal_center  .avatar > ul li{
-    padding: .37rem 0;
+    padding: .37rem 0 .37rem .3rem;
 }
 .personal_center  .avatar > ul li p:first-child{
     font-size:28px;
