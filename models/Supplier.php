@@ -1013,6 +1013,10 @@ class Supplier extends ActiveRecord
                 return $code;
             }
 
+            LineSupplierGoods::updateAll(
+                ['status' => LineSupplierGoods::STATUS_OFF_LINE],
+                ['supplier_id' => $this->id]);
+
             $tran->commit();
             return 200;
         } catch (\Exception $e) {
