@@ -98,6 +98,12 @@ class Goods extends ActiveRecord
         'logistics_template_id',
     ];
 
+    const ATTRS_RECOMMEND = [
+        'platform_price',
+        'title',
+        'description'
+    ];
+
     /**
      * @var array online status list
      */
@@ -1706,9 +1712,20 @@ class Goods extends ActiveRecord
     public function afterSave($insert, $changedAttributes)
     {
         parent::afterSave($insert, $changedAttributes);
+
         if (isset($changedAttributes['status']) && $changedAttributes['status'] == self::STATUS_ONLINE) {
             GoodsRecommend::updateAll(['status' => GoodsRecommend::STATUS_OFFLINE], ['sku' => $this->sku]);
             GoodsRecommendSupplier::updateAll(['status' => GoodsRecommendSupplier::STATUS_OFFLINE], ['sku' => $this->sku]);
+        }
+
+        // recommendation-related attributes should be updated when edit goods
+        if (array_intersect(self::ATTRS_RECOMMEND, $changedAttributes)) {
+            $updatedAttrs = [];
+            foreach (self::ATTRS_RECOMMEND as $attr) {
+                $updatedAttrs[$attr] = $this->$attr;
+            }
+            GoodsRecommend::updateAll($updatedAttrs, ['sku' => $this->sku]);
+            GoodsRecommendSupplier::updateAll($updatedAttrs, ['sku' => $this->sku]);
         }
     }
 
