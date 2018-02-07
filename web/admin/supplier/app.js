@@ -1,4 +1,4 @@
-const app = angular.module("app", ["ui.router", "ng.ueditor","ngFileUpload","angularCSS","shop_style", "freight_template",
+const app = angular.module("app", ["ui.router", "ng.ueditor","ngFileUpload","angularCSS","shop_style",
     "systemoffline_Module", "wait_online_Module", "commodity_manage",
     "up_shelves_detail_module", "index_module", "shopmanageModule", "applybrandModule", "authorizedetailModule",
   /*三阶段王杰---开始*/
@@ -183,18 +183,16 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
                 third_category_title: ''
             }
         })
-        .state("freight_template", {   //商品管理添加物流模板
-            url: "/freight_template",
-            templateUrl: "pages/commodity_manage/freight_template.html",
+        .state('add_template', {    //商品管理添加物流模板
+            url: '/add_template',
+            templateUrl: "pages/commodity_manage/add_template.html",
             params: {logistics_flag:''}
-            //controller: "shop_style_ctrl"
         })
         .state("template_details", {   //商品管理物流模板详情
             url: "/template_details?id&name",
             templateUrl: "pages/commodity_manage/template_details.html",
             params: {logistics_flag:''}
         })
-
         .state("up_shelves_detail", {   //商品管理==>已上架商品详情
             url: "/up_shelves_detail",
             templateUrl: "pages/commodity_manage/up_shelves_detail.html",
