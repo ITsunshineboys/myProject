@@ -1008,7 +1008,7 @@ class Supplier extends ActiveRecord
             Goods::disableGoodsBySupplierId($this->id, $operator);
 
             $lineSupplier = LineSupplier::find()->where(['supplier_id' => $this->id])->one();
-            if (!$lineSupplier || 200 != LineSupplier::closeLineSupplier($lineSupplier->id)) {
+            if ($lineSupplier && 200 != LineSupplier::closeLineSupplier($lineSupplier->id)) {
                 $tran->rollBack();
                 return $code;
             }
