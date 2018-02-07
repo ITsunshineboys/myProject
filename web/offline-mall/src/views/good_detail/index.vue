@@ -250,12 +250,11 @@
       </slot>
     </alert>
 
-    <alert class="goodshort-alert" v-model="test" :hide-on-blur="true">
-      <slot name="default" class="alert-content">
-        {{testcontent}}
-      </slot>
-    </alert>
-
+    <!--<alert class="goodshort-alert" v-model="test" :hide-on-blur="true">-->
+      <!--<slot name="default" class="alert-content">-->
+        <!--{{testcontent}}-->
+      <!--</slot>-->
+    <!--</alert>-->
 
     <!--商品已下架提示-->
     <popup class="offline-warning" v-model="show_offline" position="bottom" height="49px" :hide-on-blur="true" :show-mask="false">
@@ -307,7 +306,7 @@
     },
     data () {
       return {
-        test: false,
+//        test: false,
         isFromAndroid: false,       // 由安卓页面跳转至此页面
         good_id: '',                // 商品id
         role_id: 6,                 // 角色id
@@ -451,7 +450,6 @@
             } else {
               this.msgFlag = true
               this.axios.get('/site/user-check-news', {}, (res) => {
-                this.test = true
                 this.testcontent = res.data
                 this.show_msgdot = res.data === 1
               })
