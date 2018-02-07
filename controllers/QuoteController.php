@@ -2734,14 +2734,14 @@ class QuoteController extends Controller
                 $rows->quantity=$one_post['quantity'];
                 $dm=$rows->save(false);
 
-            } elseif (isset($one_post['style'])) {
+            } elseif (isset($one_post['series'])) {
                 $dm = \Yii::$app->db->createCommand()
                     ->insert(DecorationMessage::tableName(), [
                         'decoration_add_id'=>$post['id'],
-                        'series_id' => $one_post['style'],
+                        'series_id' => $one_post['series'],
                         'quantity' => $one_post['quantity'],
                     ])->execute();
-            } elseif (isset($one_post['series'])) {
+            } elseif (isset($one_post['style'])) {
                 $dm = \Yii::$app->db->createCommand()
                     ->insert(DecorationMessage::tableName(), [
                         'decoration_add_id'=>$post['id'],
