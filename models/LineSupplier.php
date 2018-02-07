@@ -174,6 +174,7 @@ class LineSupplier extends \yii\db\ActiveRecord
             ->select('id')
             ->where(['shop_no'=>$post['shop_no']])
             ->one();
+        var_dump($supplier->toArray());die;
         if (!$supplier)
         {
             $code=1000;
@@ -185,7 +186,6 @@ class LineSupplier extends \yii\db\ActiveRecord
             $code=1089;
             return $code;
         }
-        var_dump($supplier->status);die;
        if ($supplier->status!=Supplier::STATUS_ONLINE)
        {
            if ((int)$post['status']==self::STATUS_ON_LINE)
