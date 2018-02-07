@@ -287,6 +287,7 @@ class DistributionController extends Controller
             }
         }
         $data=Distribution::DistributionUserCenter($mobile);
+        $data['icon']=$user?$user->icon:\Yii::$app->params['user']['default_icon_path'];
         $code=200;
         return Json::encode([
             'code' => $code,
