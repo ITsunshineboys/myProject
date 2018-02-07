@@ -1011,7 +1011,7 @@ class Supplier extends ActiveRecord
 
             if ($lineSupplier) {
                 $lineSupplier->status=LineSupplier::STATUS_OFF_LINE;
-                if ($lineSupplier->save(false))
+                if (!$lineSupplier->save(false))
                 {
                     $tran->rollBack();
                     return $code;
