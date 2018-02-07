@@ -247,6 +247,7 @@ class DistributionController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+
         if (count($data)<2)
         {
             $user=\Yii::$app->user->identity;
@@ -271,6 +272,7 @@ class DistributionController extends Controller
                 ]);
             }
             $session['distribution_token']=base64_encode(base64_encode($mobile.'&'.$Distribution->create_time));
+            $icon=$user?$user->icon:\Yii::$app->params['user']['default_icon_path'];
         }else
         {
             $mobile=$data[0];
@@ -285,9 +287,10 @@ class DistributionController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
+            $icon=\Yii::$app->params['user']['default_icon_path'];
         }
         $data=Distribution::DistributionUserCenter($mobile);
-        $data['icon']=$user?$user->icon:\Yii::$app->params['user']['default_icon_path'];
+        $data['icon']=$icon;
         $code=200;
         return Json::encode([
             'code' => $code,
