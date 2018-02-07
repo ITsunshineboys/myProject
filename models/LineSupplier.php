@@ -171,10 +171,9 @@ class LineSupplier extends \yii\db\ActiveRecord
             return $code;
         }
         $supplier=Supplier::find()
-            ->select('id')
+            ->select('id,status')
             ->where(['shop_no'=>$post['shop_no']])
             ->one();
-        var_dump($supplier->toArray());die;
         if (!$supplier)
         {
             $code=1000;
