@@ -802,8 +802,10 @@ class DistributionController extends Controller
                         ->andWhere(['shipping_status'=>2])
                         ->asArray()
                         ->one();
-                    foreach ($orderGoods as &$orders)
+                    if ($orderGoods)
                     {
+                        foreach ($orderGoods as &$orders)
+                        {
                             $list[]=[
                                 'mobile'=>$user->mobile,
                                 'order_no'=>$UserOrder['order_no'],
@@ -812,7 +814,9 @@ class DistributionController extends Controller
                                 'remarks'=>$UserOrder['remarks']
                             ];
                             $total_amount+=$UserOrder['amount_order']*0.01;
+                        }
                     }
+
 
                 }
             }
@@ -831,8 +835,11 @@ class DistributionController extends Controller
                     ->andWhere(['shipping_status'=>2])
                     ->asArray()
                     ->one();
-                foreach ($orderGoods as &$orders)
+
+                if ($orderGoods)
                 {
+                    foreach ($orderGoods as &$orders)
+                    {
 
                         $list[]=[
                             'mobile'=>$subset['mobile'],
@@ -842,7 +849,9 @@ class DistributionController extends Controller
                             'remarks'=>$consigneeOrder['remarks']
                         ];
                         $total_amount+=$consigneeOrder['amount_order']*0.01;
+                    }
                 }
+
 
             }
         }
