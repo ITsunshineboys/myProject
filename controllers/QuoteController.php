@@ -2736,16 +2736,18 @@ class QuoteController extends Controller
 
             } elseif (isset($one_post['style'])) {
                 $dm = \Yii::$app->db->createCommand()
-                    ->update(DecorationMessage::tableName(), [
-                        'series_id' => $one_post['series'],
+                    ->insert(DecorationMessage::tableName(), [
+                        'decoration_add_id'=>$post['id'],
+                        'series_id' => $one_post['style'],
                         'quantity' => $one_post['quantity'],
-                    ], ['decoration_add_id' => $one_post['id']])->execute();
+                    ])->execute();
             } elseif (isset($one_post['series'])) {
                 $dm = \Yii::$app->db->createCommand()
-                    ->update(DecorationMessage::tableName(), [
+                    ->insert(DecorationMessage::tableName(), [
+                        'decoration_add_id'=>$post['id'],
                         'style_id' => $one_post['style'],
                         'quantity' => $one_post['quantity'],
-                    ], ['decoration_add_id' => $one_post['id']])->execute();
+                    ])->execute();
             } elseif (isset($one_post['min_area'])) {
                 $dm = \Yii::$app->db->createCommand()
                     ->update(DecorationMessage::tableName(), [
