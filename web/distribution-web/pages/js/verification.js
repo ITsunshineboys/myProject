@@ -49,6 +49,7 @@ app.controller('verification_ctrl',function ($state,$scope,$stateParams,_ajax,$u
         let all_modal = function ($scope, $uibModalInstance) {
             $scope.big_word = big_word
             $scope.btn_word = '确认'
+            $scope.small_word = '请重新输入'
             $scope.is_small = true
             $scope.common_house = function () {
                 $uibModalInstance.close()
@@ -57,8 +58,8 @@ app.controller('verification_ctrl',function ($state,$scope,$stateParams,_ajax,$u
         all_modal.$inject = ['$scope', '$uibModalInstance']
         let all_modal1 = function ($scope, $uibModalInstance) {
             $scope.big_word = big_word
+            $scope.small_word = '请重新发送'
             $scope.btn_word = '重新发送'
-            $scope.is_small = false
             $scope.common_house = function () {
                 $uibModalInstance.close()
                 _ajax.post('/distribution/distribution-login-mobile',{

@@ -8,7 +8,7 @@ app.controller('login_ctrl',function ($scope,$state,$stateParams,$uibModal) {
         let all_modal = function ($scope, $uibModalInstance) {
             $scope.btn_word = '确认'
             $scope.big_word = '手机号输入不正确'
-            $scope.is_small = true
+            $scope.small_word = '请重新输入'
             $scope.common_house = function () {
                 $uibModalInstance.close()
             }

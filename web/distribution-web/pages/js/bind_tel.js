@@ -8,6 +8,7 @@ app.controller('bind_tel_ctrl',function ($uibModal,_ajax,$scope,$state,$statePar
         let all_modal = function ($scope, $uibModalInstance) {
             $scope.btn_word = '确认'
             $scope.big_word = '手机号输入不正确'
+            $scope.small_word = '请重新输入'
             $scope.common_house = function () {
                 $uibModalInstance.close()
             }
@@ -16,6 +17,7 @@ app.controller('bind_tel_ctrl',function ($uibModal,_ajax,$scope,$state,$statePar
         let all_modal1 = function ($scope, $uibModalInstance) {
             $scope.btn_word = '确认'
             $scope.big_word = '该手机号未加入分销系统'
+            $scope.small_word = '请重新输入'
             $scope.common_house = function () {
                 $uibModalInstance.close()
             }
@@ -24,7 +26,7 @@ app.controller('bind_tel_ctrl',function ($uibModal,_ajax,$scope,$state,$statePar
         let all_modal2 = function ($scope, $uibModalInstance) {
             $scope.btn_word = '确认'
             $scope.big_word = big_word
-            $scope.is_small = false
+            $scope.small_word = ''
             $scope.common_house = function () {
                 $uibModalInstance.close()
             }

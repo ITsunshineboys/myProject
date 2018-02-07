@@ -1,7 +1,7 @@
 <!--<div ng-controller="all_modal">-->
 <div class="modal-body">
     <p>{{big_word}}</p>
-    <p ng-if="is_small">请重新输入</p>
+    <p ng-if="small_word!=''">{{small_word}}</p>
 </div>
 <div class="modal-footer" ng-click="common_house()">
     {{btn_word}}
