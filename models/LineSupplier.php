@@ -185,6 +185,7 @@ class LineSupplier extends \yii\db\ActiveRecord
             $code=1089;
             return $code;
         }
+        var_dump($supplier->status);die;
        if ($supplier->status!=Supplier::STATUS_ONLINE)
        {
            if ((int)$post['status']==self::STATUS_ON_LINE)
