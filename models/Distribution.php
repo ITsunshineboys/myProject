@@ -75,21 +75,21 @@ class Distribution extends ActiveRecord
             foreach ($son as &$list)
             {
                 $list['time']=date('Y-m-d H:i',$list['applydis_time']);
-                $goodsOrder_line=GoodsOrder::Find()->where(['consignee_mobile'=>$list['mobile'],'order_refer'=>1]);
+                $goodsOrder_line=GoodsOrder::Find()
+                    ->where(['consignee_mobile'=>$list['mobile'],'order_refer'=>1]);
                 $goodsOrder_line_data=$goodsOrder_line->asArray()->all();
                 foreach ($goodsOrder_line_data as &$goodsOrder_line_data_list)
                 {
                     $orderGoods=OrderGoods::find()
                         ->where(['order_no'=>$goodsOrder_line_data_list['order_no']])
+                        ->andWhere(['order_status'=>1])
+                        ->andWhere(['shipping_status'=>2])
                         ->asArray()
                         ->all();
                     foreach ($orderGoods as &$lists)
                     {
-                        if ($lists['order_status']!=2)
-                        {
                             $goodsOrder_line_money+=($lists['goods_price']*0.01*$lists['goods_number']+$lists['freight']*0.01);
                             $goodsOrder_line_count+=1;
-                        }
                     }
 
                 }
@@ -104,17 +104,15 @@ class Distribution extends ActiveRecord
 //                        $goodsOrder_online_money+=$goodsOrder_online_data_list['amount_order']*0.01;
                         $orderGoods=OrderGoods::find()
                             ->where(['order_no'=>$goodsOrder_online_data_list['order_no']])
+                            ->andWhere(['order_status'=>1])
+                            ->andWhere(['shipping_status'=>2])
                             ->asArray()
                             ->all();
                         $add_data=0;
                         foreach ($orderGoods as &$list_order)
                         {
-                            if ($list_order['order_status']!=2)
-                            {
                                 $goodsOrder_online_money+=($list_order['goods_price']*0.01*$list_order['goods_number']+$list_order['freight']*0.01);
                                 $add_data=1;
-                            }
-
                         }
                         if ($add_data==1)
                         {

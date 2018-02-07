@@ -495,17 +495,15 @@ class DistributionController extends Controller
                         {
                             $orderGoods=OrderGoods::find()
                                 ->where(['order_no'=>$UserOrder['order_no']])
+                                ->andWhere(['order_status'=>1])
+                                ->andWhere(['shipping_status'=>2])
                                 ->asArray()
                                 ->all();
                             $test_data1=0;
                             foreach ($orderGoods as &$alist)
                             {
-                                if ($alist['order_status']!=2)
-                                {
                                     $total_amount+=($alist['goods_price']*0.01*$alist['goods_number']+$alist['freight']*0.01);
                                     $test_data1=1;
-                                }
-
                             }
                             if ($test_data1==1)
                             {
@@ -524,23 +522,20 @@ class DistributionController extends Controller
                     {
                         $orderGoods=OrderGoods::find()
                             ->where(['order_no'=>$consigneeOrder['order_no']])
+                            ->andWhere(['order_status'=>1])
+                            ->andWhere(['shipping_status'=>2])
                             ->asArray()
                             ->all();
                         $test_data=0;
                         foreach ($orderGoods as &$alist)
                         {
-                            if ($alist['order_status']!=2)
-                            {
                                 $total_amount+=($alist['goods_price']*0.01*$alist['goods_number']+$alist['freight']*0.01);
                                 $test_data=1;
-                            }
-
                         }
                         if ($test_data==1)
                         {
                             $order_subsetnum+=1;
                         }
-//                        $total_amount+=$consigneeOrder['amount_order']*0.01;
                     }
                 }
                 $list['subset_amount']= StringService::formatPrice($total_amount);
@@ -593,7 +588,6 @@ class DistributionController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-//        $profit=$data['profit']==0?100.00:GoodsOrder::switchMoney($data['profit']*0.01);
         $profit=$data['profit']==0?0.00: StringService::formatPrice($data['profit']*0.01);
         $subset=Distribution::find()
             ->select('mobile,applydis_time')
