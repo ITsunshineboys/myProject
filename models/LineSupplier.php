@@ -139,6 +139,11 @@ class LineSupplier extends \yii\db\ActiveRecord
                 $code=500;
                 return $code;
             }
+
+            LineSupplierGoods::updateAll(
+                ['status' => LineSupplierGoods::STATUS_OFF_LINE],
+                ['line_supplier_id' => $line_supplier_id]);
+
             $tran->commit();
             $code=200;
             return $code;
