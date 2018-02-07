@@ -20,7 +20,7 @@
         <li @click="skipMessageCenter">
           <span class="iconfont icon-news-circle"></span>
           <span class="pop-text">消息</span>
-          <span class="pop-dot"></span>
+          <!--<span class="pop-dot"></span>-->
         </li>
       </ul>
     </div>
