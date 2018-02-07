@@ -1830,7 +1830,6 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-      var_dump(EffectPicture::find()->asArray()->where(['id'=>342])->one());
 
     }
 
