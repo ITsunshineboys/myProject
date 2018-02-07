@@ -85,7 +85,7 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
             $LineGoods->goods_id=$goods->id;
             $LineGoods->supplier_id=$supplier->id;
             $LineGoods->create_time=time();
-            $LineGoods->status=1;
+            $LineGoods->status=self::STATUS_OFF_LINE;
             if (!$LineGoods->validate())
             {
                 $tran->rollBack();
