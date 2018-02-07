@@ -19,11 +19,11 @@
                 <p>关联订单数</p>
             </li>
             <li>
-                <p>￥{{all_data.order_money}}</p>
+                <p>{{all_data.order_money | currency:'￥'}}</p>
                 <p>关联消费金额</p>
             </li>
             <li>
-                <p>￥{{all_data.MyProfit}}</p>
+                <p>{{all_data.MyProfit | currency:'￥'}}</p>
                 <p>我的收益</p>
             </li>
         </ul>
