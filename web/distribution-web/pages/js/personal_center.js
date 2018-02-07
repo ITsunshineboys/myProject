@@ -3,6 +3,8 @@ app.controller('personal_center_ctrl', function ($uibModal, $scope, $state, $sta
     //获取个人中心数据
     _ajax.get('/distribution/distribution-user-center', {}, function (res) {
         $scope.all_data = res.data
+        $scope.all_data.order_money = +$scope.all_data.order_money
+        $scope.all_data.MyProfit = +$scope.all_data.MyProfit
         sessionStorage.setItem('all_data', JSON.stringify($scope.all_data))
         console.log($scope.all_data)
         sessionStorage.removeItem('basic_data')
