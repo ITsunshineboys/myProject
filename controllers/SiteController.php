@@ -1889,7 +1889,7 @@ class SiteController extends Controller
             ->andWhere(['role_id'=>$user->last_role_id_app])
             ->andWhere(['status'=>0])
             ->count();
-        if ($userNews=0)
+        if ($userNews==0)
         {
             $chatNews=ChatRecord::find()->where(['to_uid'=>$user->id])->andWhere(['to_role_id'=>$user->last_role_id_app])
                 ->andWhere(['status'=>0])->count();
