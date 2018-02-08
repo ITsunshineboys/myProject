@@ -229,7 +229,8 @@
         this.cover_image = res.data.cover_image // 商品图片
         this.platform_price = res.data.platform_price // 商品价格
         this.goods_num = res.data.goods_num // 数量
-        this.market_price = res.data.market_price // 优惠价
+        this.market_price = res.data.market_price // 平台价
+        this.discount_price = res.data.discount_price // 优惠价
         this.freight = res.data.freight // 运费
         this.allCost = res.data.allCost // 总价
         this.shopObj = {
