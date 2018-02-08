@@ -1569,7 +1569,7 @@ class Goods extends ActiveRecord
             ->orderBy(['id' => SORT_DESC])
             ->one()
         ) {
-            $goodsComment->create_time = date('Y-m-d');
+            $goodsComment->create_time = date('Y-m-d', $goodsComment->create_time);
         }
 
         GoodsStat::updateDailyViewedNumberAndIpNumberBySupplierId($this->supplier_id, $ip);
