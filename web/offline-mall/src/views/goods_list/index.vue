@@ -126,19 +126,17 @@
             this.platformPriceSortNum = this.platformPriceSortNum === 4 ? 3 : 4     // 第一次点击价格 tab 为降序：3
             this.favourableCommentRateSortNum = 4                                   // 将好评率改为升序
             this.goodsListParams['sort[]'] = this.sortName + ':' + this.platformPriceSortNum
-            this.goodsListParams.page = 1
             break
           case 'favourable_comment_rate':
             // 点击好评率 tab 默认将默认为降序
             this.favourableCommentRateSortNum = this.favourableCommentRateSortNum === 4 ? 3 : 4     // 第一次点击好评率 tab 为降序：3
             this.platformPriceSortNum = 4                                                           // 将价格改为升序
             this.goodsListParams['sort[]'] = this.sortName + ':' + this.favourableCommentRateSortNum
-            this.goodsListParams.page = 1
             break
           case 'sold_number':
             this.goodsListParams['sort[]'] = this.sortName + ':' + 3
-            this.goodsListParams.page = 1
         }
+        this.goodsListParams.page = 1
         this.goodsListData = []     // 初始化数据
         this.getGoodsList()
       },

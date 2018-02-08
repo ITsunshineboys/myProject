@@ -232,6 +232,14 @@
         this.axios.get('/supplier/goods', this.allGoodsParams, res => {
           console.log(res, '全部商品列表')
           let data = res.data
+          this.allGoodsData = data.supplier_goods
+          this.totalPage = Math.ceil(data.total / 12)     // 计算总页数
+          this.isLoading = false      // 加载成功取消加载状态
+        })
+      },
+      getMoreAllGoodsData () {
+        this.axios.get('/supplier/goods', this.allGoodsParams, res => {
+          let data = res.data
           this.allGoodsData = this.allGoodsData.concat(data.supplier_goods)
           this.totalPage = Math.ceil(data.total / 12)     // 计算总页数
           this.isLoading = false      // 加载成功取消加载状态
@@ -297,7 +305,7 @@
             if (this.allGoodsParams.page < this.totalPage) {      // 判断当前页是否小于最后一页
               this.loadingText = '加载中...'
               this.allGoodsParams.page++     // 当前页 + 1
-              this.getAllGoodsData()        // 请求全部商品数据
+              this.getMoreAllGoodsData()        // 请求全部商品数据
             } else {
               this.loadingText = '没有更多数据了'
             }
