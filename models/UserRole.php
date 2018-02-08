@@ -94,7 +94,18 @@ class UserRole extends ActiveRecord
         $ownerRoleId = Yii::$app->params['ownerRoleId'];
         $sql = "select r.name from {{%{$roleTbl}}} r, {{%{$userRoleTbl}}} ur";
         $sql .= " where r.id = ur.role_id and ur.user_id = {$userId} and (ur.role_id = {$ownerRoleId} or review_status = " . Role::AUTHENTICATION_STATUS_APPROVED . ")";
-        return Yii::$app->db->createCommand($sql)->queryColumn();
+
+        $roleNames = Yii::$app->db->createCommand($sql)->queryColumn();
+        if (!self::find()->where(['user_id' => $userId])->exists()) {
+            if (User::find()->where(['id' => $userId])->exists()) {
+                $role = Role::findOne(Yii::$app->params['ownerRoleId']);
+                if ($role) {
+                    return array_merge($roleNames, [$role->name]);
+                }
+            }
+        }
+
+        return $roleNames;
     }
 
     /**
