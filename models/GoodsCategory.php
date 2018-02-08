@@ -341,6 +341,54 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
+     * Check if parent and root categories are all online in batch
+     *
+     * @param array $ids category ids
+     * @return int
+     */
+    public static function checkParentOnlineByIds(array $ids)
+    {
+        $successCode = 200;
+
+        $categories = self::find()
+            ->where(['in', 'id', $ids])
+            ->all();
+        foreach ($categories as $category) {
+            $checkParentOnlineRes = $category->checkParentOnline();
+            if ($successCode != $category->checkParentOnline()) {
+                return $checkParentOnlineRes;
+            }
+        }
+
+        return $successCode;
+    }
+
+    /**
+     * Check if parent and root categories are all online
+     *
+     * @return int
+     */
+    public function checkParentOnline()
+    {
+        $successCode = 200;
+
+        if ($this->pid > 0) {
+            $parent = self::findOne($this->pid);
+            if (!$parent) {
+                return 500;
+            }
+
+            if ($parent->deleted > 0) {
+                return 1108;
+            }
+
+            return $parent->pid == 0 ? $successCode : $parent->checkParentOnline();
+        }
+
+        return $successCode;
+    }
+
+    /**
      * Check if can enable category records
      *
      * @param  string $ids category record ids separated by commas

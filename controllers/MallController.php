@@ -1304,6 +1304,14 @@ class MallController extends Controller
         $now = time();
         $operator = UserRole::roleUser(Yii::$app->user->identity, Yii::$app->session[User::LOGIN_ROLE_ID]);
         if ($model->deleted == GoodsCategory::STATUS_ONLINE) {
+            $checkParentOnlineRes = $model->checkParentOnline();
+            if (200 != $checkParentOnlineRes) {
+                return Json::encode([
+                    'code' => $checkParentOnlineRes,
+                    'msg' => Yii::$app->params['errorCodes'][$checkParentOnlineRes],
+                ]);
+            }
+
             $model->deleted = GoodsCategory::STATUS_OFFLINE;
             $model->online_time = $now;
             $model->online_person = $operator->nickname;
@@ -1430,6 +1438,14 @@ class MallController extends Controller
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $checkParentOnlineRes = GoodsCategory::checkParentOnlineByIds(explode(ModelService::SEPARATOR_GENERAL, $ids));
+        if (200 != $checkParentOnlineRes) {
+            return Json::encode([
+                'code' => $checkParentOnlineRes,
+                'msg' => Yii::$app->params['errorCodes'][$checkParentOnlineRes],
             ]);
         }
 
