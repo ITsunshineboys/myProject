@@ -1719,7 +1719,7 @@ class Goods extends ActiveRecord
         }
 
         // recommendation-related attributes should be updated when edit goods
-        if (array_intersect(self::ATTRS_RECOMMEND, array_keys($changedAttributes))) {
+        if (!$insert && array_intersect(self::ATTRS_RECOMMEND, array_keys($changedAttributes))) {
             $updatedAttrs = [];
             foreach (self::ATTRS_RECOMMEND as $k => $attr) {
                 if (isset($changedAttributes[$attr])) {
