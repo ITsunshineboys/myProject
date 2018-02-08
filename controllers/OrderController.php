@@ -3663,7 +3663,7 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         };
-        $data=Alipay::OrderAppPay($orderAmount,$postData['list']);
+        $data=Alipay::OrderAppPay($postData['total_amount'],$postData['list']);
         $code=200;
         return Json::encode([
             'code' => $code,
@@ -4856,7 +4856,7 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         };
-        $data=Wxpay::OrderAppPay($orderAmount,$postData['list']);
+        $data=Wxpay::OrderAppPay($postData['total_amount'],$postData['list']);
         $code=200;
         return Json::encode
         ([
