@@ -582,7 +582,7 @@ class MallController extends Controller
             $recommend->status = GoodsRecommend::STATUS_ONLINE;
         }
 
-        if (!$recommend->save()) {StringService::writeLog('test', json_encode($recommend->errors), 'recommend-toggle');
+        if (!$recommend->save()) {
             $code = 500;
             return Json::encode([
                 'code' => $code,

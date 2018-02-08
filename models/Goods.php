@@ -1722,7 +1722,9 @@ class Goods extends ActiveRecord
         if (array_intersect(self::ATTRS_RECOMMEND, array_keys($changedAttributes))) {
             $updatedAttrs = [];
             foreach (self::ATTRS_RECOMMEND as $attr) {
-                $updatedAttrs[$attr] = $this->$attr;
+                if (isset($changedAttributes[$attr])) {
+                    $updatedAttrs[$attr] = $this->$attr;
+                }
             }
 
             GoodsRecommend::updateAll($updatedAttrs, ['sku' => $this->sku]);
