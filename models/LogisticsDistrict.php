@@ -139,7 +139,6 @@ class LogisticsDistrict extends ActiveRecord
             {
                 $position=$code[86][$pro.'0000'].','.$code[$pro.'0000'][$pro.$ci.'00'].','.$code[$pro.$ci.'00'][$pro.$ci.$dis];
             }
-//            $position=$code[86][$pro.'0000'].$code[$pro.'0000'][$pro.$ci.'00'].$code[$pro.$ci.'00'][$pro.$ci.$dis];
         }
         return $position;
     }
