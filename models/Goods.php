@@ -1718,9 +1718,6 @@ class Goods extends ActiveRecord
             GoodsRecommendSupplier::updateAll(['status' => GoodsRecommendSupplier::STATUS_OFFLINE], ['sku' => $this->sku]);
         }
 
-        if ($insert) {
-            StringService::writeLog('test', var_export($changedAttributes, true), 'goods-add');
-        }
         // recommendation-related attributes should be updated when edit goods
         if (!$insert && array_intersect(self::ATTRS_RECOMMEND, array_keys($changedAttributes))) {
             $updatedAttrs = [];
