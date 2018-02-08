@@ -60,12 +60,12 @@
                            ng-class="{'reg-error': licensed.isName}" ng-focus="licensed.isName = false" ng-model="licensed.name">
                 </p>
                 <p><img ngf-thumbnail="licensed.file || 'lib/images/default.png'" class="picstyle"></p>
-                <p class="tip-msg">图片大小5M内，支持JPG、PNG、JPGE</p>
+                <p class="tip-msg">图片大小5M内，支持JPG、PNG、JPEG</p>
                 <p>
                     <button class="btn btn-default btn-upload" type="button" ng-disabled="uploadDisabled"
                             ngf-select="upload(licensed.file, $invalidFiles, 'licensed')"
-                            ngf-pattern="'.jpg,.png,.jpge'"
-                            ngf-accept="'.jpg,.png,.jpge'"
+                            ngf-pattern="'.jpg,.png,.jpeg'"
+                            ngf-accept="'.jpg,.png,.jpeg'"
                             ng-model="licensed.file">{{licensed.text}}</button>
                 </p>
                 <p class="red_mark" ng-if="licensed.isNull">
