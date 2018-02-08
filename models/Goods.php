@@ -1723,7 +1723,7 @@ class Goods extends ActiveRecord
             StringService::writeLog('test', json_encode($changedAttributes), 'recommend');
         }
 
-        if (array_intersect(self::ATTRS_RECOMMEND, $changedAttributes)) {
+        if (array_intersect(self::ATTRS_RECOMMEND, array_keys($changedAttributes))) {
             $updatedAttrs = [];
             foreach (self::ATTRS_RECOMMEND as $attr) {
                 $updatedAttrs[$attr] = $this->$attr;
