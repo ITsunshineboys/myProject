@@ -101,8 +101,7 @@ class Goods extends ActiveRecord
     const ATTRS_RECOMMEND = [
         'platform_price',
         'title',
-        'subtitle',
-        'description'
+        'subtitle'
     ];
 
     /**
@@ -1724,7 +1723,8 @@ class Goods extends ActiveRecord
             $updatedAttrs = [];
             foreach (self::ATTRS_RECOMMEND as $attr) {
                 if (isset($changedAttributes[$attr])) {
-                    $updatedAttrs[$attr] = $this->$attr;
+                    $field = 'subtitle' != $attr ? $attr : 'description';
+                    $updatedAttrs[$field] = $this->$attr;
                 }
             }
 
