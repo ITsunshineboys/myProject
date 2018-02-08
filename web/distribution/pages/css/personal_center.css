@@ -39,6 +39,7 @@
     border-radius:1.47rem;
     border: 1px solid #fff;
     left: calc(50% - 0.735rem)!important;
+    text-align: center;
 }
 .personal_center  .avatar > p{
     width: 100%;
