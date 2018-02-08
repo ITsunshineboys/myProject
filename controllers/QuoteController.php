@@ -3111,6 +3111,6 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-    var_dump(ChatRecord::find()->where(['to_uid'=>293])->all());
+
     }
 }
