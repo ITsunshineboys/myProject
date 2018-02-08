@@ -915,9 +915,7 @@ class MallController extends Controller
     {
         $recommend = new GoodsRecommend;
         $recommend->attributes = Yii::$app->request->post();
-        $recommend->platform_price *= 100;
         $recommend->district_code = trim(Yii::$app->request->post('district_code', ''));
-
         $code = 1000;
 
         $recommend->scenario = GoodsRecommend::SCENARIO_ADD;
@@ -927,6 +925,8 @@ class MallController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
+        $recommend->platform_price *= 100;
 
         if ($recommend->sku) {
             $goods = Goods::find()->where(['sku' => $recommend->sku])->one();

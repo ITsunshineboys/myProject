@@ -378,11 +378,7 @@ class GoodsCategory extends ActiveRecord
                 return 500;
             }
 
-            if ($parent->deleted > 0) {
-                return 1108;
-            }
-
-            return $parent->pid == 0 ? $successCode : $parent->checkParentOnline();
+            return $parent->deleted == 0 ? $parent->checkParentOnline() : 1108;
         }
 
         return $successCode;
