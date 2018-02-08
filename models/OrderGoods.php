@@ -484,24 +484,22 @@ class OrderGoods extends ActiveRecord
                (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where o.order_status=2 and o.customer_service=0  and  g.user_id={$user->id} and g.role_id = {$user->last_role_id_app}   and g.order_refer=2 ) as canceled ,
                (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where o.order_status=1  and  o.customer_service!=0  and  g.user_id={$user->id} and g.role_id = {$user->last_role_id_app}    and g.order_refer=2)  as customer_service ")->one();
         }
-
         $userNews=UserNewsRecord::find()
             ->where(['uid'=>$user->id])
             ->andWhere(['role_id'=>$user->last_role_id_app])
             ->andWhere(['status'=>0])
             ->count();
-
         return [
-                'all'=>$data['all_order']>99?99:$data['all_order'],
-                'unpaid'=>$data['unpaid']>99?99:$data['unpaid'],
-                'unshipped'=>$data['unshipped']>99?99:$data['unshipped'],
-                'unreceiveed'=>$data['unreceived']>99?99:$data['unreceived'],
-                'completed'=>$data['completed']>99?99:$data['completed'],
-                'canceled'=>$data['canceled']>99?99:$data['canceled'],
-                'customer_service'=>$data['customer_service']>99?99:$data['customer_service'],
-                'have_read_news'=>$userNews>0?1:2,
-                'uncomment'=>$data['uncomment']>99?99:$data['uncomment']
-            ];
+            'all'=>$data['all_order']>99?99:$data['all_order'],
+            'unpaid'=>$data['unpaid']>99?99:$data['unpaid'],
+            'unshipped'=>$data['unshipped']>99?99:$data['unshipped'],
+            'unreceiveed'=>$data['unreceived']>99?99:$data['unreceived'],
+            'completed'=>$data['completed']>99?99:$data['completed'],
+            'canceled'=>$data['canceled']>99?99:$data['canceled'],
+            'customer_service'=>$data['customer_service']>99?99:$data['customer_service'],
+            'have_read_news'=>$userNews>0?1:2,
+            'uncomment'=>$data['uncomment']>99?99:$data['uncomment']
+        ];
     }
 
 

@@ -845,7 +845,8 @@ class GoodsOrder extends ActiveRecord
         $array['goods_num']=$goods_num;
         $array['return_insurance']=0.00;
         $array['platform_price']= StringService::formatPrice($array['platform_price']*0.01);
-        $array['market_price']= StringService::formatPrice($array['market_price']*0.01);
+        $array['market_price']= StringService::formatPrice($array['market_price']*0.01*$goods_num);
+        $array['discount_price']=StringService::formatPrice($array['platform_price']*0.01*$goods_num);
         $array['freight']= StringService::formatPrice($array['freight']);
         $array['allCost']= StringService::formatPrice($array['platform_price']*$goods_num+$array['freight']);
         return $array;
