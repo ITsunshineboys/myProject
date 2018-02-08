@@ -983,6 +983,13 @@ class MallController extends Controller
 
         $recommend->attributes = $postData;
 
+        if (!$recommend->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         if (!empty($postData['sku'])) {
             $goods = Goods::find()->where(['sku' => $recommend->sku])->one();
             $supplier = Supplier::findOne($goods->supplier_id);
@@ -991,13 +998,6 @@ class MallController extends Controller
             $recommend->url = $goods->id;
             $recommend->platform_price = $goods->platform_price;
             $recommend->description = $goods->subtitle;
-        }
-
-        if (!$recommend->validate()) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
         }
 
         if (!$recommend->save()) {
