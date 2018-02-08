@@ -51,6 +51,7 @@
   }
   .shop-icon:before{
     vertical-align: top;
+    line-height: 22px;
   }
   .shop-name-w{
     color: #666666;
