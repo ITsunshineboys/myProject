@@ -101,6 +101,7 @@ class Goods extends ActiveRecord
     const ATTRS_RECOMMEND = [
         'platform_price',
         'title',
+        'subtitle',
         'description'
     ];
 
