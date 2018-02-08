@@ -1719,11 +1719,20 @@ class Goods extends ActiveRecord
         }
 
         // recommendation-related attributes should be updated when edit goods
+        if (YII_DEBUG) {
+            StringService::writeLog('test', json_encode($changedAttributes), 'recommend');
+        }
+
         if (array_intersect(self::ATTRS_RECOMMEND, $changedAttributes)) {
             $updatedAttrs = [];
             foreach (self::ATTRS_RECOMMEND as $attr) {
                 $updatedAttrs[$attr] = $this->$attr;
             }
+
+            if (YII_DEBUG) {
+                StringService::writeLog('test', json_encode($updatedAttrs), 'recommend');
+            }
+
             GoodsRecommend::updateAll($updatedAttrs, ['sku' => $this->sku]);
             GoodsRecommendSupplier::updateAll($updatedAttrs, ['sku' => $this->sku]);
         }
