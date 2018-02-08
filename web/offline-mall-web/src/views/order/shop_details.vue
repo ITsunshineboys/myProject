@@ -1,8 +1,8 @@
 <template>
     <div class="bg-white">
       <div class="shop_name">
-        <i class="iconfont icon-Group"></i>
-        <span>{{shopObj.shop_name}}</span>
+        <i class="iconfont icon-store shop-icon"></i>
+        <span class="shop-name-w">{{shopObj.shop_name}}</span>
       </div>
       <div class="goods_box">
         <div class="goods_left">
@@ -48,6 +48,19 @@
     color: #666666;
     font-size: 14px;
     margin-left: 5px;
+  }
+  .shop-icon:before{
+    vertical-align: top;
+  }
+  .shop-name-w{
+    color: #666666;
+    font-size: 14px;
+    margin-left: 5px;
+    display: inline-block;
+    width: 50%;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
   }
   .goods_box{
     height: 120px;

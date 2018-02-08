@@ -75,7 +75,7 @@
     },
     methods: {
       btnClick () {
-        let invoicerReg = /^(?!(?:\d+)$)[\dA-Z]{18}$/
+        let invoicerReg = /^(?!(?:\d+)$)(?!(?:[A-Z]+)$)[\dA-Z]{18}$/
         this.cardFlag === true ? this.taxpayerValue = '' : this.taxpayerValue = this.taxpayerValue
         if (this.cardFlag) {
           this.modalStatus = {
@@ -92,6 +92,7 @@
             console.log(res)
             if (res.code === 200) {
               sessionStorage.setItem('invoice_id', res.data.invoice_id)
+              sessionStorage.removeItem('invoice_unit')
             }
           })
         } else {
@@ -110,6 +111,7 @@
               console.log(res)
               if (res.code === 200) {
                 sessionStorage.setItem('invoice_id', res.data.invoice_id)
+                sessionStorage.setItem('invoice_unit', true)
               }
             })
           } else {
@@ -134,9 +136,10 @@
       }
     },
     activated () {
-      this.chooseSelect = true
-      this.chooseDefault = false
-      this.cardFlag = true
+      if (sessionStorage.getItem('invoice_unit')) {
+        this.chooseSelect = false
+        this.chooseDefault = true
+      }
       if (sessionStorage.getItem('invoice_id')) {
         this.axios.get('/order/get-line-order-invoice-data', {
           invoice_id: sessionStorage.getItem('invoice_id')

@@ -3,7 +3,7 @@
       <x-header :left-options="{backText: ''}">编辑收货地址</x-header>
           <div class="bg-white address-box">
             <x-input class="consignee-box" v-model="consignee" title="收货人" label-width="5rem" :placeholder="'请输入姓名'" :max=10></x-input>
-            <x-input class="phone-box" v-model="phoneNumber" title="联系电话" name="mobile"  placeholder="请输入联系电话" :max="11"></x-input>
+            <x-input class="phone-box" @on-change="phoneChange" v-model="phoneNumber" title="联系电话" name="mobile"  placeholder="请输入联系电话" :max="11"></x-input>
             <group class="choose-address-box" label-width="5rem" label-align="left">
               <x-address class="address-txt" :confirm-text="'确认'" :title="'地址选择'" v-model="addressValue" raw-value :list="addressData" value-text-align="right"></x-address>
             </group>
@@ -64,7 +64,8 @@
         phoneNumber: '',
         addressValue: ['四川省', '成都市', '锦江区'],
         detailAddress: '',
-        addressData: ChinaAddressV4Data
+        addressData: ChinaAddressV4Data,
+        phoneReg: /[^0-9]/
       }
     },
     methods: {
@@ -96,6 +97,16 @@
       },
       hide () {                 // 关闭模态框时，跳转回订单页
         this.$router.go(-1)
+      },
+      phoneChange () {
+        this.$nextTick(() => {
+          let a = this.phoneReg.test(this.phoneNumber)
+          console.log(a)
+          if (a) {
+            this.phoneNumber = this.phoneNumber.replace(/[^0-9]/ig, '')
+            console.log(this.phoneNumber)
+          }
+        })
       }
     }
   }

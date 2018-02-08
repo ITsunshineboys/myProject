@@ -192,7 +192,7 @@
                     div.innerHTML = res // 将返回的form 放入div
                     document.body.appendChild(div)
                     document.forms[0].submit()
-                    sessionStorage.removeItem('invoice_id')
+//                    sessionStorage.removeItem('invoice_id')
                   })
                 }
               } else {
