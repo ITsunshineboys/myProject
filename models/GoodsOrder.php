@@ -755,7 +755,11 @@ class GoodsOrder extends ActiveRecord
                 }
             }
             $arr[$k]['is_after']=$isAfter;
-            $arr[$k]['shop_name']=Supplier::find()->select(['shop_name'])->where(['id'=>$arr[$k]['supplier_id']])->one()->shop_name;
+            $supplier=Supplier::find()
+                ->where(['id'=>$arr[$k]['supplier_id']])
+                ->select('shop_name')
+                ->one();
+            $arr[$k]['shop_name']=$supplier?$supplier->shop_name:'';
             unset($arr[$k]['supplier_id']);
             unset($arr[$k]['consignee_mobile']);
             unset($arr[$k]['id']);
