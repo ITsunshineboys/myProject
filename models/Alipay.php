@@ -38,7 +38,7 @@ class Alipay extends  ActiveRecord
      */
     public static function  AliPayLineSubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message)
     {
-        $total_amount=0.01;
+//        $total_amount=0.01;
         $notify_url="https://".$_SERVER["SERVER_NAME"].'/'.self::ALIPAY_LINPAY_NOTIFY;
         $return_url=Yii::$app->request->hostInfo.'/'.self::LINE_PAY_SUCCESS;
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
@@ -86,7 +86,7 @@ class Alipay extends  ActiveRecord
             return false;
         }
         $str=$data['data'];
-        $total_amount=0.01;
+        $total_amount=89;
         $passback_params=urlencode($str);
         //超时时间
         $timeout_express="1m";
@@ -136,7 +136,7 @@ class Alipay extends  ActiveRecord
         $payRequestBuilder->setBody('此订单包含一条或多条商品数据');
         $payRequestBuilder->setSubject('艾特魔方商城订单');
         $payRequestBuilder->setOutTradeNo($out_trade_no);
-        $payRequestBuilder->setTotalAmount(0.01);
+        $payRequestBuilder->setTotalAmount($orderAmount);
         $payRequestBuilder->setTimeExpress($timeout_express);
         $payRequestBuilder->setPassback_params($passback_params);
         $payResponse = new AlipayTradeService($config);

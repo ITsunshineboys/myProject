@@ -605,9 +605,9 @@ class OrderController extends Controller
         if ($result){
             if ($post['trade_status'] == 'TRADE_SUCCESS') {
                 $id=urldecode($post['passback_params']);
-                // if ($post['total_amount'] !=89){
-                //     exit;
-                // }
+                 if ($post['total_amount'] !=89){
+                     exit;
+                 }
                 $effect=Effect::findOne($id);
                 if (!$effect)
                 {
@@ -2361,7 +2361,6 @@ class OrderController extends Controller
                 $where.=' and a.order_refer = 2';
                 break;
         }
-
         if ($type==GoodsOrder::ORDER_TYPE_ALL)
         {
             $where.=' and z.customer_service=0';
@@ -3657,7 +3656,7 @@ class OrderController extends Controller
             }
         }
         $orderAmount=GoodsOrder::CalculationCost($orders);
-        if ( $postData['total_amount']*100 != $orderAmount){
+        if ( ($postData['total_amount']*100) != $orderAmount){
             $code=1000;
             return Json::encode([
                 'code' => $code,
@@ -3688,11 +3687,11 @@ class OrderController extends Controller
                 $orders=explode(',',urldecode($post['passback_params']));
                 $total_amount=$post['total_amount'];
                 $orderAmount=GoodsOrder::CalculationCost($orders);
-//                if (!$total_amount*100==$orderAmount)
-//                {
-//                    echo 'fail';
-//                    exit;
-//                }
+                if (($total_amount*100)!=$orderAmount)
+                {
+                    echo 'fail';
+                    exit;
+                }
                 $tran = Yii::$app->db->beginTransaction();
                 try{
                     $Ord= GoodsOrder::find()
@@ -4807,6 +4806,7 @@ class OrderController extends Controller
     /**
      * 去付款-微信app支付
      * @return string
+     * @throws \yii\base\WxPayException
      */
     public  function actionAppOrderWxPay()
     {
@@ -4848,15 +4848,14 @@ class OrderController extends Controller
                 ]);
             }
         }
-        $orderAmount=123;
-//        $orderAmount=GoodsOrder::CalculationCost($orders);
-//        if ($postData['total_amount']*100  != $orderAmount){
-//            $code=1000;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg' => Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        };
+        $orderAmount=GoodsOrder::CalculationCost($orders);
+        if ($postData['total_amount']*100  != $orderAmount){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        };
         $data=Wxpay::OrderAppPay($orderAmount,$postData['list']);
         $code=200;
         return Json::encode
@@ -4888,7 +4887,7 @@ class OrderController extends Controller
             $orders= explode(',',base64_decode($msg['attach']));
             $total_amount=$msg['total_fee'];
             $orderAmount=GoodsOrder::CalculationCost($orders);
-            if (!$total_amount==$orderAmount)
+            if ($total_amount!=$orderAmount)
             {
                 return false;
             }

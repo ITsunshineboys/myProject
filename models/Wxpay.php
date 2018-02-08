@@ -172,7 +172,7 @@ class Wxpay  extends ActiveRecord
 //                return $code;
 //            }
         $attach=$id;
-        $total_amount=0.01;
+        $total_amount=89;
         $input->SetBody(self::EFFECT_BODY);
         $input->SetAttach($attach);
         $input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
@@ -431,7 +431,7 @@ class Wxpay  extends ActiveRecord
         $tools = new PayService();
         $input = new WxPayUnifiedOrder();
         $attach=base64_encode($orders);
-        $total_amount=0.01;
+        $total_amount=$orderAmount;
         $input->SetBody('艾特智造-商城订单');
         $input->SetAttach($attach);
         $input->SetOut_trade_no(WxPayConfig::APP_MCHID.date("YmdHis"));

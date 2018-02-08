@@ -689,19 +689,19 @@ class GoodsOrder extends ActiveRecord
                 case \Yii::$app->params['ownerRoleId']:
                     $arr[$k]['role_id']=OrderGoods::PLATFORM_PRICE_DESC;
                     break;
-                case 6:
+                case \Yii::$app->params['supplierRoleId']:
                     $arr[$k]['role_id']=OrderGoods::SUPPLIER_PRICE_DESC;
                     break;
-                case 5:
+                case \Yii::$app->params['decorationCompanyRoleId']:
                     $arr[$k]['role_id']=OrderGoods::COMPANY_PRICE_DESC;
                     break;
-                case 4:
+                case \Yii::$app->params['managerRoleId']:
                     $arr[$k]['role_id']=OrderGoods::MANAGER_PRICE_DESC;
                     break;
-                case 3:
+                case \Yii::$app->params['designerRoleId']:
                     $arr[$k]['role_id']=OrderGoods::DESIGNER_PRICE_DESC;
                     break;
-                case 2:
+                case \Yii::$app->params['workerRoleId']:
                     $arr[$k]['role_id']=OrderGoods::WORKER_PRICE_DESC;
                     break;
             }
@@ -3325,6 +3325,7 @@ class GoodsOrder extends ActiveRecord
      * @param $suppliers
      * @param $total_amount
      * @return array|int
+     * @throws \Exception
      * @throws yii\db\Exception
      */
     public static  function AppBuy($user,$address_id,$suppliers,$total_amount)

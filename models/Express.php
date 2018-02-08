@@ -310,7 +310,7 @@ class Express extends ActiveRecord
       {
           $time=time();
           //15*24*60*60
-          $RemainingTime=$express->create_time+2*60-$time;
+          $RemainingTime=$express->create_time+15*24*60*60-$time;
           return $RemainingTime;
       }
 
