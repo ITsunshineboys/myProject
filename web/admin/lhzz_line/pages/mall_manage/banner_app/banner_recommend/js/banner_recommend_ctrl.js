@@ -233,7 +233,6 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
   //商家添加--确认按钮
   $scope.recommend_shop_add_btn=function (valid) {
     if(valid && $scope.upload_img_src && !$scope.img_flag){
-      $scope.variable_add_modal='modal';
       _ajax.post('/mall/recommend-add',{
           district_code:510100,
           url:$scope.recommend_shop_url,
@@ -244,6 +243,9 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
           type:0,
           sku:$scope.shop_model
       },function (res) {
+        if (res.code==200) {
+          $('#recommend_shop_modal_add').modal('hide')
+        }
           banner_list_fn();
       })
     }else{

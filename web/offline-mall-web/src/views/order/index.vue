@@ -48,7 +48,7 @@
         <cell title="商品价格" :value="'￥'+market_price "></cell>
       </div>
       <div class="discount-price-box">
-        <cell title="优惠价格" :value="'￥'+platform_price"></cell>
+        <cell title="优惠价格" :value="'￥'+discount_price"></cell>
       </div>
       <div class="ship-cost-box">
         <cell  title="+运费" :value="'￥'+freight"></cell>
@@ -104,9 +104,10 @@
         shop_name: '', // 店铺名称
         goods_name: '', // 商品名称
         cover_image: '', // 封面图
-        platform_price: '', // 平台价 优惠价
+        platform_price: '', // 平台价
         goods_num: '',  // 数量
         market_price: '', // 市场价
+        discount_price: '', // 优惠价格
         freight: '', // 运费
         allCost: '', // 需付款金额
         consignee: '', // 收货人
