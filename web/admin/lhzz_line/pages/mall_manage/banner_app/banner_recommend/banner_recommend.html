@@ -136,9 +136,6 @@
                 <div class="modal-content">
                     <form class="form-horizontal" name="shop_form" novalidate>
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
                             <h4 class="modal-title">添加Banner</h4>
                         </div>
                         <div class="modal-body">
@@ -146,8 +143,8 @@
                                 <button class="btn btn-primary">商家</button>
                                 <span data-dismiss="modal" data-toggle="modal" data-target="#recommend_link_modal_add" ng-click="clear_add_content()">链接</span>
                             </div>
-                            <div id="shop_num_null" ng-if="(shop_form.shop_num_name.$invalid &&submitted)||(shop_form.shop_num_name.$error.required && num_blur)">
-                                <span class="shop_left">商品编号不能为空</span>
+                            <div id="shop_num_null" ng-if="(shop_form.shop_num_name.$invalid &&submitted)||(shop_form.shop_num_name.$error.required && num_blur)||banner_num_error">
+                                <span class="shop_left">{{shop_sku_error}}</span>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-3 control-label">
@@ -211,7 +208,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button ng-click="recommend_shop_add_btn(shop_form.$valid)" data-dismiss="modal" id="recommend_shop_add_btn" type="button" class="btn btn-primary" ng-disabled="upload_dis">确认</button>
+                            <button ng-click="recommend_shop_add_btn(shop_form.$valid)" id="recommend_shop_add_btn" type="button" class="btn btn-primary" ng-disabled="upload_dis">确认</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear_add_content()">取消</button>
                         </div>
                     </form>
@@ -226,9 +223,6 @@
                 <div class="modal-content">
                     <form class="form-horizontal" name="link_form" novalidate>
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
                             <h4 class="modal-title">添加Banner</h4>
                         </div>
                         <div class="modal-body">
@@ -396,15 +390,12 @@
                 <div class="modal-content">
                     <form class="form-horizontal" name="edit_form" novalidate>
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
                             <h4 class="modal-title">推荐——{{edit_item.from_type}}编辑</h4>
                         </div>
                         <!--商家-->
                         <div class="modal-body" ng-if="edit_item.from_type=='商家'">
-                            <div id="shop_num_null2" ng-if="(edit_form.edit_shop_num.$invalid &&submitted)||(edit_form.edit_shop_num.$error.required && edit_shop_num_blur)">
-                                <span class="shop_left">商品编号不能为空</span>
+                            <div id="shop_num_null2" ng-if="(edit_form.edit_shop_num.$invalid &&submitted)||(edit_form.edit_shop_num.$error.required && edit_shop_num_blur)||banner_num_error">
+                                <span class="shop_left">{{shop_sku_error}}</span>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-3 control-label">
@@ -517,8 +508,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-dismiss="{{variable_modal}}" ng-click="recommend_shop_edit(edit_form.$valid)" ng-disabled="upload_dis">确认</button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" ng-click="recommend_shop_edit(edit_form.$valid)" ng-disabled="upload_dis">确认</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear_add_content()">取消</button>
                         </div>
                     </form>
                 </div>

@@ -224,12 +224,35 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
   $scope.link_check=0;//推荐--添加--链接添加(是否启用) 默认为0 停用
   $scope.shop_edit_check=0;//推荐--添加--商家编辑(是否启用) 默认为0 停用
   $scope.recommend_shop_add_get=function () {
-    _ajax.get('/mall/goods-by-sku',{sku:$scope.shop_model},function (res) {
-        $scope.recommend_shop_url=res.data.detail.url; //商品链接
-        $scope.recommend_shop_title=res.data.detail.title; //商品标题
+    $http.get('/mall/goods-by-sku',{
+      params:{
+        sku:$scope.shop_model
+      }
+    }).then(function (res) {
+      console.log(res)
+      if(res.data.code==200){
+        if(res.data.data.detail.length===0){
+          //Banner - sku错误提示
+          $scope.banner_num_error=true;
+          $scope.recommend_shop_url='';
+          $scope.recommend_shop_title='';
+          $scope.shop_sku_error='商品编号错误，请重新添加';
+        }else{
+          $scope.banner_num_error=false;
+          $scope.recommend_shop_url=res.data.data.detail.url; //商品链接
+          $scope.recommend_shop_title=res.data.data.detail.title; //商品标题
+        }
+      }else if(res.data.code==1000){
+        $scope.banner_num_error=true;
+        $scope.recommend_shop_url='';
+        $scope.recommend_shop_title='';
+        $scope.shop_sku_error='商品编号错误，请重新添加';
+      }else if(res.data.code==403){
+        window.location.href='login.html';
+      }
     })
   };
-
+  $scope.shop_sku_error='商品编号不能为空'
   //商家添加--确认按钮
   $scope.recommend_shop_add_btn=function (valid) {
     if(valid && $scope.upload_img_src && !$scope.img_flag){
@@ -243,17 +266,22 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
           type:0,
           sku:$scope.shop_model
       },function (res) {
+        console.log(res);
         if (res.code==200) {
           $('#recommend_shop_modal_add').modal('hide')
-        }
           banner_list_fn();
+        }else{
+          $scope.banner_num_error=true;
+          $scope.recommend_shop_url='';
+          $scope.recommend_shop_title='';
+          $scope.shop_sku_error='商品编号错误，请重新添加';
+        }
       })
     }else{
       $scope.submitted = true;
     }
     if(!$scope.upload_img_src){
       $scope.img_flag='请上传图片';
-      $scope.variable_add_modal='';
     }
   };
 
@@ -303,7 +331,6 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
     console.log($scope.edit_item);
     if(item.goods_status==2 ||item.goods_status==undefined){
       $scope.recommend_shop_modal_edit='#recommend_shop_modal_edit';
-        $scope.variable_modal="";//默认modal为空
         $scope.img_flag='';//清空 “格式不正确”
         //判断是否启用的选取状态
         if($scope.edit_item.status=='停用'){
@@ -335,19 +362,37 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
 
   //商家编辑 - 获取按钮
   $scope.recommend_shop_edit_get=function () {
-    _ajax.get('/mall/goods-by-sku',{sku:+$scope.shop_edit_sku},function (res) {
-        console.log(res);
-        $scope.recommend_shop_edit_url=res.data.detail.url; //商品链接
-        $scope.recommend_shop_edit_title=res.data.detail.title; //商品标题
-        $scope.recommend_shop_edit_subtitle=res.data.detail.subtitle; //商品副标题
-        $scope.recommend_shop_edit_platform_price=res.data.detail.platform_price; //平台价格
+    $http.get('/mall/goods-by-sku',{
+      params:{
+        sku:+$scope.shop_edit_sku
+      }
+    }).then(function (res) {
+      if(res.data.code==200){
+        if(res.data.data.detail.length===0){
+          // sku错误提示
+          $scope.banner_num_error=true;
+          $scope.recommend_shop_edit_url='';
+          $scope.recommend_shop_edit_title='';
+          $scope.shop_sku_error='商品编号错误，请重新添加';
+        }else{
+          $scope.banner_num_error=false;
+          $scope.recommend_shop_edit_url=res.data.data.detail.url; //商品链接
+          $scope.recommend_shop_edit_title=res.data.data.detail.title; //商品标题
+        }
+      }else if(res.data.code==1000){
+        $scope.banner_num_error=true;
+        $scope.recommend_shop_edit_url='';
+        $scope.recommend_shop_edit_title='';
+        $scope.shop_sku_error='商品编号错误，请重新添加';
+      }else if(res.data.code==403){
+        window.location.href='login.html';
+      }
     })
   };
   //编辑确认按钮
   $scope.recommend_shop_edit=function (valid) {
     console.log($scope.edit_item)
     if(valid && !$scope.img_flag && !$scope.img_link_flag){
-      $scope.variable_modal="modal";
       if($scope.edit_item.from_type=='商家'){
         if($scope.upload_img_src==''){
           $scope.upload_img_src=$scope.recommend_shop_edit_img;
@@ -362,7 +407,15 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
             type:0,
             sku:+$scope.shop_edit_sku
         },function (res) {
+          if (res.code==200) {
+            $('#recommend_shop_modal_edit').modal('hide')
             banner_list_fn();
+          }else{
+            $scope.banner_num_error=true;
+            $scope.recommend_shop_edit_url='';
+            $scope.recommend_shop_edit_title='';
+            $scope.shop_sku_error='商品编号错误，请重新添加';
+          }
         })
       }
       if($scope.edit_item.from_type=='链接'){
@@ -386,7 +439,6 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
       }
     }else{
       $scope.submitted = true;
-      $scope.variable_modal="";
     }
   };
 
@@ -519,6 +571,8 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
     $scope.recommend_shop_title='';
     $scope.recommend_shop_subtitle='';
     $scope.recommend_shop_platform_price='';
+    $scope.shop_sku_error='商品编号不能为空';
+    $scope.banner_num_error=false;
     //链接
     $scope.recommend_link_url="http://";
     $scope.recommend_link_title='';
