@@ -101,7 +101,7 @@ class Goods extends ActiveRecord
     const ATTRS_RECOMMEND = [
         'platform_price',
         'title',
-        'subtitle'
+        'description' => 'subtitle'
     ];
 
     /**
@@ -1721,9 +1721,9 @@ class Goods extends ActiveRecord
         // recommendation-related attributes should be updated when edit goods
         if (array_intersect(self::ATTRS_RECOMMEND, array_keys($changedAttributes))) {
             $updatedAttrs = [];
-            foreach (self::ATTRS_RECOMMEND as $attr) {
+            foreach (self::ATTRS_RECOMMEND as $k => $attr) {
                 if (isset($changedAttributes[$attr])) {
-                    $field = 'subtitle' != $attr ? $attr : 'description';
+                    $field = is_int($k) ? $attr : $k;
                     $updatedAttrs[$field] = $this->$attr;
                 }
             }
