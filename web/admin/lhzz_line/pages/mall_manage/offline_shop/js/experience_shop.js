@@ -50,15 +50,25 @@ app.controller('experience_shop', ['$scope', '$http', '$timeout', '_ajax', funct
 
     // 开启或者关闭线下店
     $scope.open_or_close = function (status, shop_no) {
-        _ajax.post('/supplier/switch-line-supplier-status', {status: status, shop_no: shop_no}, function (res) {
-            list();
-        })
+        if (status === 1) {
+            _confirm('关闭店铺，将关闭对应所有线下体验商品，是否确认关闭？', function () {
+                _ajax.post('/supplier/switch-line-supplier-status', {status: status, shop_no: shop_no}, function (res) {
+                    list();
+                })
+            })
+        } else {
+            _ajax.post('/supplier/switch-line-supplier-status', {status: status, shop_no: shop_no}, function (res) {
+                list();
+            })
+        }
     };
 
     // 删除线下体验店
     $scope.del_shop = function (shop_no) {
-        _ajax.post('/supplier/del-line-supplier', {shop_no: shop_no}, function (res) {
-            list();
+        _confirm('是否删除？', function () {
+            _ajax.post('/supplier/del-line-supplier', {shop_no: shop_no}, function () {
+                list();
+            })
         })
     };
 

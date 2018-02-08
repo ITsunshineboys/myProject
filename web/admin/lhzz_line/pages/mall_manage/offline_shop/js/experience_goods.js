@@ -57,8 +57,10 @@ app.controller('experience_goods', ['$scope', '$http', '$timeout', '_ajax', func
 
     // 删除线下体验店商品
     $scope.del_goods = function (line_goods_id) {
-        _ajax.post('/supplier/del-line-supplier-goods', {line_goods_id: line_goods_id}, function (res) {
-            list();
+        _confirm('是否删除？', function () {
+            _ajax.post('/supplier/del-line-supplier-goods', {line_goods_id: line_goods_id}, function (res) {
+                list();
+            })
         })
     };
 
