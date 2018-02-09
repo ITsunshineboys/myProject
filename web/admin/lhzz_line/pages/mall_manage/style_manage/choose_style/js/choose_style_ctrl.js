@@ -23,31 +23,64 @@ choose_style.controller("choose_style",function ($scope,$http,$state,_ajax,$root
   })
 	//获取二级
   _ajax.get('/mall/categories', {pid: 1}, function (res) {
-    $scope.second = res.data.categories;
-    $scope.twoColor = $scope.second[0];
-  })
-	//获取三级
-  _ajax.get('/mall/categories', {pid: 2}, function (res) {
-    $scope.three = res.data.categories;
-    for (let [key, value] of  Object.entries($scope.three)) {
-      if ($scope.item_check.length == 0) {
-        value.complete = false
-      } else {
-        for (let [key1, value1] of $scope.item_check.entries()) {
-          if (value.id == value1.id) {
-            value.complete = true
+    if (res.data.categories.length>0) {
+      $scope.second = res.data.categories;
+      $scope.twoColor = $scope.second[0];
+      //获取三级
+      _ajax.get('/mall/categories', {pid: 2}, function (res) {
+        $scope.three = res.data.categories;
+        for (let [key, value] of  Object.entries($scope.three)) {
+          if ($scope.item_check.length == 0) {
+            value.complete = false
+          } else {
+            for (let [key1, value1] of $scope.item_check.entries()) {
+              if (value.id == value1.id) {
+                value.complete = true
+              }
+            }
           }
         }
-      }
+      })
+    } else {
+      $scope.second = []
+      $scope.three = []
     }
   })
+
 	//点击一级 获取相对应的二级
   $scope.getMore = function (n) {
     $scope.oneColor = n;
     _ajax.get('/mall/categories', {pid: n.id}, function (res) {
-      $scope.second = res.data.categories;
-      $scope.twoColor = $scope.second[0];
-      _ajax.get('/mall/categories', {pid: $scope.second[0].id}, function (res) {
+      if (res.data.categories.length>0) {
+        $scope.second = res.data.categories;
+        $scope.twoColor = $scope.second[0];
+        _ajax.get('/mall/categories', {pid: $scope.second[0].id}, function (res) {
+          $scope.three = res.data.categories;
+          for (let [key, value] of $scope.three.entries()) {
+            if ($scope.item_check.length == 0) {
+              value.complete = false
+            } else {
+              for (let [key1, value1] of $scope.item_check.entries()) {
+                if (value.id == value1.id) {
+                  value.complete = true
+                }
+              }
+            }
+          }
+        })
+      } else {
+        $scope.second = []
+        $scope.three = []
+      }
+    })
+  };
+	//点击二级 获取相对应的三级
+    $scope.three = []
+  $scope.getMoreThree = function (n) {
+    $scope.id = n;
+    $scope.twoColor = n;
+    _ajax.get('/mall/categories',{pid:n.id},function (res) {
+      if (res.data.categories.length>0) {
         $scope.three = res.data.categories;
         for (let [key, value] of $scope.three.entries()) {
           if ($scope.item_check.length == 0) {
@@ -60,26 +93,8 @@ choose_style.controller("choose_style",function ($scope,$http,$state,_ajax,$root
             }
           }
         }
-      })
-    })
-  };
-	//点击二级 获取相对应的三级
-    $scope.three = []
-  $scope.getMoreThree = function (n) {
-    $scope.id = n;
-    $scope.twoColor = n;
-    _ajax.get('/mall/categories',{pid:n.id},function (res) {
-      $scope.three = res.data.categories;
-      for (let [key, value] of $scope.three.entries()) {
-        if ($scope.item_check.length == 0) {
-          value.complete = false
-        } else {
-          for (let [key1, value1] of $scope.item_check.entries()) {
-            if (value.id == value1.id) {
-              value.complete = true
-            }
-          }
-        }
+      } else {
+        $scope.three = []
       }
     })
   };

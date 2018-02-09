@@ -86,6 +86,7 @@ online_edit.controller("onlineedit",function ($rootScope,$scope,$http,$statePara
 
   /*===========================系列分类开始==============================*/
   $scope.item_check = [];
+  $scope.three=[];
   //获取一级
   _ajax.get('/mall/categories',{},function (res) {
       $scope.details = res.data.categories;
@@ -93,45 +94,56 @@ online_edit.controller("onlineedit",function ($rootScope,$scope,$http,$statePara
   })
   //获取二级
   _ajax.get('/mall/categories',{pid:1},function (res) {
-      $scope.second = res.data.categories;
-      $scope.twoColor= $scope.second[0];
-  })
-  //获取三级
-  $scope.three=[];
-  _ajax.get('/mall/categories',{pid:2},function (res) {
-      $scope.three = res.data.categories;
-      for(let [key,value] of $scope.three.entries()){
-          if($scope.item_check.length == 0){
+      if (res.data.categories.length>0) {
+        $scope.second = res.data.categories;
+        $scope.twoColor= $scope.second[0];
+        //获取三级
+        _ajax.get('/mall/categories',{pid:2},function (res) {
+          $scope.three = res.data.categories;
+          for(let [key,value] of $scope.three.entries()){
+            if($scope.item_check.length == 0){
               value['complete'] = false
-          }else{
+            }else{
               for(let [key1,value1] of $scope.item_check.entries()){
-                  if(value.id == value1.id){
-                      value.complete = true
-                  }
+                if(value.id == value1.id){
+                  value.complete = true
+                }
               }
+            }
           }
+        });
+      } else {
+        $scope.second = []
+        $scope.three = []
       }
-  });
+  })
+
+
   //点击一级 获取相对应的二级
   $scope.getMore = function (n) {
     $scope.oneColor = n;
     _ajax.get('/mall/categories',{pid:n.id},function (res) {
+      if (res.data.categories.length>0) {
         $scope.second = res.data.categories;
         $scope.twoColor = $scope.second[0];
         _ajax.get('/mall/categories',{pid:+ $scope.second[0].id},function (res) {
-            $scope.three = res.data.categories;
-            for(let [key,value] of $scope.three.entries()){
-                if($scope.item_check.length == 0){
-                    value['complete'] = false
-                }else{
-                    for(let [key1,value1] of $scope.item_check.entries()){
-                        if(value.id == value1.id){
-                            value.complete = true
-                        }
-                    }
+          $scope.three = res.data.categories;
+          for(let [key,value] of $scope.three.entries()){
+            if($scope.item_check.length == 0){
+              value['complete'] = false
+            }else{
+              for(let [key1,value1] of $scope.item_check.entries()){
+                if(value.id == value1.id){
+                  value.complete = true
                 }
+              }
             }
+          }
         })
+      } else {
+        $scope.second = []
+        $scope.three = []
+      }
     })
   };
   //点击二级 获取相对应的三级
@@ -139,18 +151,22 @@ online_edit.controller("onlineedit",function ($rootScope,$scope,$http,$statePara
     $scope.id=n;
     $scope.twoColor = n;
     _ajax.get('/mall/categories',{pid:n.id},function (res) {
+      if (res.data.categories.length>0) {
         $scope.three = res.data.categories;
         for(let [key,value] of $scope.three.entries()){
-            if($scope.item_check.length == 0){
-                value['complete'] = false
-            }else{
-                for(let [key1,value1] of $scope.item_check.entries()){
-                    if(value.id == value1.id){
-                        value.complete = true
-                    }
-                }
+          if($scope.item_check.length == 0){
+            value['complete'] = false
+          }else{
+            for(let [key1,value1] of $scope.item_check.entries()){
+              if(value.id == value1.id){
+                value.complete = true
+              }
             }
+          }
         }
+      } else {
+        $scope.three = []
+      }
     });
   };
   //添加拥有系列的三级
