@@ -70,7 +70,7 @@ app.controller('support_goods_ctrl', function ($uibModal, $state, $stateParams, 
                 console.log(res)
                 $scope.level_two = res.data.categories
                 $scope.cur_level_two = $scope.level_two[0]
-                if($scope.level_two.length == 0){
+                if($scope.level_two.length != 0){
                     _ajax.get('/quote/assort-goods', {
                         pid: $scope.cur_level_two.id
                     }, function (res) {
