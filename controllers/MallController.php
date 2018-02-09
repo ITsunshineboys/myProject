@@ -1330,31 +1330,42 @@ class MallController extends Controller
             ]);
         }
 
-        if (!$model->save()) {
-            $code = 500;
+        $tran = Yii::$app->db->beginTransaction();
+        $code = 500;
+        try {
+            if (!$model->save(false)) {
+                $tran->rollBack();
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if ($model->deleted == GoodsCategory::STATUS_ONLINE) {
+                if ($model->level == GoodsCategory::LEVEL3) {
+                    $categoryIds = [$model->id];
+                } else {
+                    $categoryIds = GoodsCategory::level23Ids($model->id);
+                    GoodsCategory::disableByIds($categoryIds);
+                }
+                Goods::disableGoodsByCategoryIds($categoryIds, $operator);
+            }
+
+//        new EventHandleService();
+//        Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
+
+            $tran->commit();
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'OK'
+            ]);
+        } catch (\Exception $e) {
+            $tran->rollBack();
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
-        if ($model->deleted == GoodsCategory::STATUS_ONLINE) {
-            if ($model->level == GoodsCategory::LEVEL3) {
-                $categoryIds = [$model->id];
-            } else {
-                $categoryIds = GoodsCategory::level23Ids($model->id);
-                GoodsCategory::disableByIds($categoryIds);
-            }
-            Goods::disableGoodsByCategoryIds($categoryIds, $operator);
-        }
-
-//        new EventHandleService();
-//        Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
-
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'OK'
-        ]);
     }
 
     /**
@@ -1387,31 +1398,42 @@ class MallController extends Controller
 
         $where = 'id in(' . $ids . ')';
         $user = Yii::$app->user->identity;
-        if (!GoodsCategory::updateAll([
-            'deleted' => GoodsCategory::STATUS_ONLINE,
-            'offline_time' => time(),
-            'offline_reason' => Yii::$app->request->post('offline_reason', ''),
-            'offline_person' => Lhzz::find()->where(['uid' => $user->id])->one()->nickname
-        ], $where)
-        ) {
-            $code = 500;
+        $tran = Yii::$app->db->beginTransaction();
+        $code = 500;
+        try {
+            if (!GoodsCategory::updateAll([
+                'deleted' => GoodsCategory::STATUS_ONLINE,
+                'offline_time' => time(),
+                'offline_reason' => Yii::$app->request->post('offline_reason', ''),
+                'offline_person' => Lhzz::find()->where(['uid' => $user->id])->one()->nickname
+            ], $where)
+            ) {
+                $tran->rollBack();
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $categoryIds = array_unique(array_merge($idsArr, GoodsCategory::level23IdsByPids($idsArr)));
+            GoodsCategory::disableByIds($categoryIds);
+            Goods::disableGoodsByCategoryIds($categoryIds, Lhzz::findByUser(Yii::$app->user->identity));
+
+//        new EventHandleService();
+//        Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
+
+            $tran->commit();
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'OK'
+            ]);
+        } catch(\Exception $e) {
+            $tran->rollBack();
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
-        $categoryIds = array_unique(array_merge($idsArr, GoodsCategory::level23IdsByPids($idsArr)));
-        GoodsCategory::disableByIds($categoryIds);
-        Goods::disableGoodsByCategoryIds($categoryIds, Lhzz::findByUser(Yii::$app->user->identity));
-
-//        new EventHandleService();
-//        Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
-
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'OK'
-        ]);
     }
 
     /**
