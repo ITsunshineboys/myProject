@@ -35,6 +35,44 @@ class UserRole extends ActiveRecord
     const  REVIEW_BE_AUDITED = 0;
 
     /**
+     * Get review status by user id and role id
+     *
+     * @param $userId user id
+     * @param $roleId role id
+     * @return array
+     */
+    public static function getReviewStatus($userId, $roleId)
+    {
+        $userRole = UserRole::find()
+            ->where(['user_id' => $userId, 'role_id' => $roleId])
+            ->one();
+        $reviewStatus = $userRole ? $userRole->review_status : Role::AUTHENTICATION_STATUS_NO_APPLICATION;
+        return [$reviewStatus, Yii::$app->params['reviewStatuses'][$reviewStatus]];
+    }
+
+    /**
+     * Get review remark by user id and role id
+     *
+     * @param $userId user id
+     * @param $roleId role id
+     * @return mixed|string
+     */
+    public static function getReviewRemark($userId, $roleId)
+    {
+        $userRole = UserRole::find()
+            ->where(['user_id' => $userId, 'role_id' => $roleId])
+            ->one();
+
+        if ($userRole
+            && in_array($userRole->review_status, [self::REVIEW_AGREE, self::REVIEW_DISAGREE])
+        ) {
+            return $userRole->review_remark;
+        }
+
+        return '';
+    }
+
+    /**
      * Get roles status by user id
      *
      * @param $userId

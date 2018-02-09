@@ -1676,20 +1676,12 @@ class User extends ActiveRecord implements IdentityInterface
                     $extraData[$extraField] = $this->getFullAddress();
                     break;
                 case 'review_status':
-                    $userRole = UserRole::find()
-                        ->where(['user_id' => $this->id, 'role_id' => Yii::$app->params['ownerRoleId']])
-                        ->one();
-                    $reviewStatus = $userRole ? $userRole->review_status : Role::AUTHENTICATION_STATUS_NO_APPLICATION;
-                    $extraData[$extraField] = $reviewStatus;
-                    $extraData[$extraField . ModelService::SUFFIX_FIELD_DESCRIPTION] = Yii::$app->params['reviewStatuses'][$reviewStatus];
+                    $reviewData = UserRole::getReviewStatus($this->id, Yii::$app->params['ownerRoleId']);
+                    $extraData[$extraField] = $reviewData[0];
+                    $extraData[$extraField . ModelService::SUFFIX_FIELD_DESCRIPTION] = $reviewData[1];
                     break;
                 case 'review_remark':
-                    $userRole = UserRole::find()
-                        ->where(['user_id' => $this->id, 'role_id' => Yii::$app->params['ownerRoleId']])
-                        ->one();
-                    if ($userRole) {
-                        $extraData[$extraField] = $userRole->review_remark;
-                    }
+                    $extraData[$extraField] = UserRole::getReviewRemark($this->id, Yii::$app->params['ownerRoleId']);
                     break;
                 case 'review_time':
                     $userRole = UserRole::find()

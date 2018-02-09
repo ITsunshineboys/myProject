@@ -101,7 +101,7 @@ class Supplier extends ActiveRecord
         'name',
         'licence',
         'licence_image',
-        'reject_reason',
+//        'reject_reason',
     ];
     const FIELDS_VIEW_MALL_MODEL = [
         'id',
@@ -124,6 +124,7 @@ class Supplier extends ActiveRecord
         'identity_card_front_image',
         'identity_card_back_image',
         'review_status',
+        'review_remark'
     ];
     const FIELDS_VIEW_MALL_EXTRA = [
         'open_shop_time',
@@ -853,34 +854,37 @@ class Supplier extends ActiveRecord
             switch ($extraField) {
                 case 'mobile':
                     $user = User::findOne($this->uid);
-                    $extraData[$extraField] = $user->$extraField;
+                    $user && $extraData[$extraField] = $user->$extraField;
                     break;
                 case 'legal_person':
                     $user = User::findOne($this->uid);
-                    $extraData[$extraField] = $user->$extraField;
+                    $user && $extraData[$extraField] = $user->$extraField;
                     break;
                 case 'identity_no':
                     $user = User::findOne($this->uid);
-                    $extraData[$extraField] = $user->$extraField;
+                    $user && $extraData[$extraField] = User::changeIdentityNo($user->$extraField);
                     break;
                 case 'identity_card_front_image':
                     $user = User::findOne($this->uid);
-                    $extraData[$extraField] = $user->$extraField;
+                    $user && $extraData[$extraField] = $user->$extraField;
                     break;
                 case 'identity_card_back_image':
                     $user = User::findOne($this->uid);
-                    $extraData[$extraField] = $user->$extraField;
+                    $user && $extraData[$extraField] = $user->$extraField;
                     break;
                 case 'open_shop_time':
                     $userRole = UserRole::find()
                         ->where(['user_id' => $this->uid, 'role_id' => Yii::$app->params['supplierRoleId']])
                         ->one();
-                    $extraData[$extraField] = date('Y-m-d', $userRole->review_time);
+                    $userRole && $extraData[$extraField] = date('Y-m-d', $userRole->review_time);
                     break;
                 case 'review_status':
-                    $userRole = UserRole::find()->where(['user_id' => $this->uid, 'role_id' => Yii::$app->params['supplierRoleId']])->one();
-                    $extraData[$extraField] = $userRole->review_status;
-                    $extraData[$extraField . ModelService::SUFFIX_FIELD_DESCRIPTION] = Yii::$app->params['reviewStatuses'][$userRole->review_status];
+                    $reviewData = UserRole::getReviewStatus($this->uid, Yii::$app->params['supplierRoleId']);
+                    $extraData[$extraField] = $reviewData[0];
+                    $extraData[$extraField . ModelService::SUFFIX_FIELD_DESCRIPTION] = $reviewData[1];
+                    break;
+                case 'review_remark':
+                    $extraData[$extraField] = UserRole::getReviewRemark($this->uid, Yii::$app->params['supplierRoleId']);
                     break;
             }
         }
@@ -966,7 +970,6 @@ class Supplier extends ActiveRecord
             ? array_merge($modelData, $this->_extraData(self::FIELDS_VIEW_APP_EXTRA))
             : $modelData;
         $this->_formatData($viewData);
-        isset($viewData['identity_no']) && $viewData['identity_no'] = User::changeIdentityNo($viewData['identity_no']);
         return $viewData;
     }
 
