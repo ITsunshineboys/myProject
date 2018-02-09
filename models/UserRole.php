@@ -102,7 +102,7 @@ class UserRole extends ActiveRecord
     private static function _rolesStatus($userId)
     {
         foreach (Role::appRoles() as $role) {
-            $status = Role::AUTHENTICATION_STATUS_NO_APPLICATION;
+            $status = Role::AUTHENTICATION_STATUS_NOT_ONLINE;
             $userRole = self::find()->where(['user_id' => $userId, 'role_id' => $role['id']])->one();
             $userRole && $status = $userRole->review_status;
             $rolesStatus[] = [

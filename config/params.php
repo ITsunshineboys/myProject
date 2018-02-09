@@ -245,6 +245,7 @@ return [
         '1' => '未通过审核',
         '2' => '审核通过',
         '3' => '未认证',
+        '4' => '敬请期待',
     ],
     'districts' => $districts,
 //    'pinyin'=>$pinyin,
