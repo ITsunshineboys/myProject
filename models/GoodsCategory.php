@@ -541,14 +541,14 @@ class GoodsCategory extends ActiveRecord
     {
         if ($ids) {
             $where = ['in', 'id', $ids];
-
             self::updateAll([
                 'deleted' => self::STATUS_ONLINE,
-                'offline_time' => time()
+                'offline_time' => time(),
+                'has_style' => 0,
+                'has_series' => 0,
             ], $where);
 
             $where = ['in', 'category_id', $ids];
-
             BrandCategory::deleteAll($where);
         }
     }
