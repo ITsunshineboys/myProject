@@ -160,6 +160,7 @@ class UserChat extends \yii\db\ActiveRecord
             $from = $username;
             $target = [$to_user['username']];
             $re = $chat_hx->sendText($from, $target_type = 'users', $target, $content);
+            $content=ChatRecord::userTextEncode($content);
             if($re) {
                 $chat_record = new ChatRecord();
                 $chat_record->to_uid = $to_uid;
