@@ -2079,6 +2079,12 @@ class QuoteController extends Controller
             ->andWhere($where)
             ->asArray()
             ->all();
+        foreach ($goods_list as $cate){
+            $catagory=GoodsCategory::find()->asArray()->where(['id'=>$cate['id']])->one();
+            if($catagory['deleted']==1){
+                AssortGoods::deleteAll(['category_id'=>$cate['id']]);
+            }
+        }
         $goods_classify = GoodsCategory::find()
             ->select(['id','title'])
             ->where(['in','level',[1,2]])
