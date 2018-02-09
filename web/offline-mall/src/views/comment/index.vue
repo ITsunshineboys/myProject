@@ -74,6 +74,9 @@
     mounted () {
       window.addEventListener('scroll', this.handleScroll)
     },
+    beforeDestroy () {
+      window.removeEventListener('scroll', this.handleScroll)
+    },
     methods: {
       // 选项卡切换方法
       tabHandler: function (obj) {
