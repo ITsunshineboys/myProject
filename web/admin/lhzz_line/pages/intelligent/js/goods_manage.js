@@ -56,7 +56,7 @@ app.controller('goods_manage_ctrl',function ($uibModal,$state,$stateParams, _aja
 
                 })
             }else{
-                $scope.level_two = []
+                $scope.level_three = []
             }
         })
     })
@@ -89,7 +89,7 @@ app.controller('goods_manage_ctrl',function ($uibModal,$state,$stateParams, _aja
                         }
                     })
                 }else{
-                    $scope.level_two = []
+                    $scope.level_three = []
                 }
             })
         } else {
