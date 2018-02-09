@@ -25,14 +25,15 @@ class UserRole extends ActiveRecord
         'review_remark',
         'reviewer_uid',
     ];
-    const REVIEW_STATUS=[
-        0 =>'待审核',
-        1 =>'审核不通过',
-        2 =>'审核通过',
+    const REVIEW_STATUS = [
+        self::REVIEW_BE_AUDITED => '待审核',
+        self::REVIEW_DISAGREE => '审核不通过',
+        self::REVIEW_AGREE => '审核通过',
     ];
-    const REVIEW_AGREE=2;
-    const REVIEW_DISAGREE=1;
-    const  REVIEW_BE_AUDITED=0;
+    const REVIEW_AGREE = 2;
+    const REVIEW_DISAGREE = 1;
+    const  REVIEW_BE_AUDITED = 0;
+
     /**
      * Get roles status by user id
      *
@@ -211,32 +212,30 @@ class UserRole extends ActiveRecord
     {
         $offset = ($page - 1) * $size;
         $List = (new Query())
-            ->from(self::tableName().' as L')
-            ->leftJoin(Supplier::tableName(). ' as S','L.user_id=S.uid')
-            ->leftJoin(User::tableName().' as U','U.id=L.user_id')
+            ->from(self::tableName() . ' as L')
+            ->leftJoin(Supplier::tableName() . ' as S', 'L.user_id=S.uid')
+            ->leftJoin(User::tableName() . ' as U', 'U.id=L.user_id')
             ->select($select)
             ->where($where)
             ->orderBy($orderBy)
             ->offset($offset)
             ->limit($size)
             ->all();
-        foreach ($List as &$list)
-        {
-            $list['category']=GoodsCategory::GetCateGoryById($list['category_id']);
+        foreach ($List as &$list) {
+            $list['category'] = GoodsCategory::GetCateGoryById($list['category_id']);
 
-            if ($list['review_time']!=0)
-            {
-                $list['review_time']=date('Y-m-d H:i',$list['review_time']);
+            if ($list['review_time'] != 0) {
+                $list['review_time'] = date('Y-m-d H:i', $list['review_time']);
             }
-            $list['review_apply_time']=date('Y-m-d H:i',$list['review_apply_time']);
-            $list['type_shop']=Supplier::TYPE_SHOP[$list['type_shop']];
-            $list['supplier_id']=$list['id'];
+            $list['review_apply_time'] = date('Y-m-d H:i', $list['review_apply_time']);
+            $list['type_shop'] = Supplier::TYPE_SHOP[$list['type_shop']];
+            $list['supplier_id'] = $list['id'];
             unset($list['id']);
         }
         $total = (new Query())
-            ->from(self::tableName().' as L')
-            ->leftJoin(Supplier::tableName(). ' as S','L.user_id=S.uid')
-            ->leftJoin(User::tableName().' as U','U.id=L.user_id')
+            ->from(self::tableName() . ' as L')
+            ->leftJoin(Supplier::tableName() . ' as S', 'L.user_id=S.uid')
+            ->leftJoin(User::tableName() . ' as U', 'U.id=L.user_id')
             ->where($where)->count();
         return ModelService::pageDeal($List, $total, $page, $size);
     }
@@ -248,49 +247,51 @@ class UserRole extends ActiveRecord
      * @param $orderBy
      * @return array
      */
-    public static function pagination($where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy){
+    public static function pagination($where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy)
+    {
 
         $select = 'ur.*,u.nickname,u.mobile,u.aite_cube_no';
         $UserRoleList = (new Query())
             ->from('user_role as ur')
-            ->leftJoin('user as u','u.id=ur.user_id')
+            ->leftJoin('user as u', 'u.id=ur.user_id')
             ->select($select)
             ->where($where)
             ->orderBy($orderBy);
-        $total=(int)$UserRoleList->count();
+        $total = (int)$UserRoleList->count();
         $pagination = new Pagination(['totalCount' => $total, 'pageSize' => $size, 'pageSizeParam' => false]);
         $arr = $UserRoleList->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
         foreach ($arr as &$UserRole) {
-            $UserRole['review_apply_time']=date('Y-m-d H:i:s',$UserRole['review_apply_time']);
-            $UserRole['review_time']=date('Y-m-d H:i:s',$UserRole['review_time']);
-            $UserRole['review_status']=self::REVIEW_STATUS[$UserRole['review_status']];
-            $UserRole['handle_name']=User::find()->asArray()->select('nickname')->where(['id'=>$UserRole['reviewer_uid']])->one()['nickname'];
+            $UserRole['review_apply_time'] = date('Y-m-d H:i:s', $UserRole['review_apply_time']);
+            $UserRole['review_time'] = date('Y-m-d H:i:s', $UserRole['review_time']);
+            $UserRole['review_status'] = self::REVIEW_STATUS[$UserRole['review_status']];
+            $UserRole['handle_name'] = User::find()->asArray()->select('nickname')->where(['id' => $UserRole['reviewer_uid']])->one()['nickname'];
         }
 
         return ModelService::pageDeal($arr, $total, $page, $size);
 
     }
 
-    public static function userauditview($id){
-        $audits=(new Query())
+    public static function userauditview($id)
+    {
+        $audits = (new Query())
             ->from('user_role as ur')
-            ->leftJoin('user as u','u.id = ur.user_id')
+            ->leftJoin('user as u', 'u.id = ur.user_id')
             ->select('ur.*,u.legal_person as nickname,u.aite_cube_no,u.identity_no,u.identity_card_front_image,u.identity_card_back_image,u.mobile')
-            ->where(['ur.id'=>$id])
+            ->where(['ur.id' => $id])
             ->one();
 
-       if($audits){
-           $audits['review_apply_time']=date('Y-m-d H:i:s',$audits['review_apply_time']);
-           $audits['review_time']=date('Y-m-d H:i:s',$audits['review_time']);
-           $audits['review_status']=self::REVIEW_STATUS[$audits['review_status']];
-           $audits['handle_name']=User::find()->asArray()->select('nickname')->where(['id'=>$audits['reviewer_uid']])->one()['nickname'];
+        if ($audits) {
+            $audits['review_apply_time'] = date('Y-m-d H:i:s', $audits['review_apply_time']);
+            $audits['review_time'] = date('Y-m-d H:i:s', $audits['review_time']);
+            $audits['review_status'] = self::REVIEW_STATUS[$audits['review_status']];
+            $audits['handle_name'] = User::find()->asArray()->select('nickname')->where(['id' => $audits['reviewer_uid']])->one()['nickname'];
 
-           return $audits;
-       }else{
-           return null;
-       }
+            return $audits;
+        } else {
+            return null;
+        }
 
     }
 
@@ -300,38 +301,35 @@ class UserRole extends ActiveRecord
      * @param $role_id
      * @return array
      */
-    public  static function  VerifyRolePermissions($role_id)
+    public static function VerifyRolePermissions($role_id)
     {
-        $user=Yii::$app->user->identity;
-        if (!$user)
-        {
+        $user = Yii::$app->user->identity;
+        if (!$user) {
             return [
-                'code'=>403,
-                'data'=>''
+                'code' => 403,
+                'data' => ''
             ];
         }
-        switch ( $role_id)
-        {
+        switch ($role_id) {
             case \Yii::$app->params['ownerRoleId']:
-                $role=$user;
+                $role = $user;
                 break;
             case \Yii::$app->params['supplierRoleId']:
-                $role=Supplier::find()->select('id')->where(['uid'=>$user->id])->one();
+                $role = Supplier::find()->select('id')->where(['uid' => $user->id])->one();
                 break;
             case \Yii::$app->params['lhzzRoleId']:
-                $role=Lhzz::find()->select('id')->where(['uid'=>$user->id])->one();
+                $role = Lhzz::find()->select('id')->where(['uid' => $user->id])->one();
                 break;
         }
-        if (!$role)
-        {
+        if (!$role) {
             return [
-                'code'=>1034,
-                'data'=>''
+                'code' => 1034,
+                'data' => ''
             ];
         }
         return [
-            'code'=>200,
-            'data'=>$role->id
+            'code' => 200,
+            'data' => $role->id
         ];
     }
 
@@ -353,18 +351,17 @@ class UserRole extends ActiveRecord
     /**
      * @return int
      */
-    public  function  checkIsAuthentication()
+    public function checkIsAuthentication()
     {
-        switch ($this->review_status)
-        {
+        switch ($this->review_status) {
             case self::REVIEW_AGREE:
-                $code= 200;
+                $code = 200;
                 break;
             case self::REVIEW_DISAGREE:
-                $code= 1092;
+                $code = 1092;
                 break;
             case self::REVIEW_BE_AUDITED:
-                $code= 1091;
+                $code = 1091;
                 break;
         }
         return $code;
