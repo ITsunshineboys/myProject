@@ -30,30 +30,34 @@ app.controller('goods_manage_ctrl',function ($uibModal,$state,$stateParams, _aja
             console.log(res)
             $scope.level_two = res.data.categories
             $scope.cur_level_two = $scope.level_two[0]
-            _ajax.get('/quote/assort-goods', {
-                pid: $scope.cur_level_two.id
-            }, function (res) {
-                console.log(res)
-                $scope.level_three = res.data.categories
-                //获取列表
-                _ajax.get('/quote/goods-management-list',{
-                    city:obj.city
-                },function (res) {
+            if($scope.level_two.length != 0){
+                _ajax.get('/quote/assort-goods', {
+                    pid: $scope.cur_level_two.id
+                }, function (res) {
                     console.log(res)
-                    $scope.goods_management_list = res.list
-                    for(let [key,value] of $scope.level_three.entries()){
-                        let index = $scope.goods_management_list.findIndex(function (item) {
-                            return item.id == value.id
-                        })
-                        if(index == -1){
-                            value.flag = false
-                        }else{
-                            value.flag = true
+                    $scope.level_three = res.data.categories
+                    //获取列表
+                    _ajax.get('/quote/goods-management-list',{
+                        city:obj.city
+                    },function (res) {
+                        console.log(res)
+                        $scope.goods_management_list = res.list
+                        for(let [key,value] of $scope.level_three.entries()){
+                            let index = $scope.goods_management_list.findIndex(function (item) {
+                                return item.id == value.id
+                            })
+                            if(index == -1){
+                                value.flag = false
+                            }else{
+                                value.flag = true
+                            }
                         }
-                    }
-                })
+                    })
 
-            })
+                })
+            }else{
+                $scope.level_two = []
+            }
         })
     })
     //改变分类
@@ -66,23 +70,27 @@ app.controller('goods_manage_ctrl',function ($uibModal,$state,$stateParams, _aja
                 console.log(res)
                 $scope.level_two = res.data.categories
                 $scope.cur_level_two = $scope.level_two[0]
-                _ajax.get('/quote/assort-goods', {
-                    pid: $scope.cur_level_two.id
-                }, function (res) {
-                    console.log(res)
-                    $scope.level_three = res.data.categories
-                    // $scope.cur_level_three = $scope.level_three[0]
-                    for(let [key,value] of $scope.level_three.entries()){
-                        let index = $scope.goods_management_list.findIndex(function (item) {
-                            return item.id == value.id
-                        })
-                        if(index == -1){
-                            value.flag = false
-                        }else{
-                            value.flag = true
+                if($scope.level_two.length != 0){
+                    _ajax.get('/quote/assort-goods', {
+                        pid: $scope.cur_level_two.id
+                    }, function (res) {
+                        console.log(res)
+                        $scope.level_three = res.data.categories
+                        // $scope.cur_level_three = $scope.level_three[0]
+                        for(let [key,value] of $scope.level_three.entries()){
+                            let index = $scope.goods_management_list.findIndex(function (item) {
+                                return item.id == value.id
+                            })
+                            if(index == -1){
+                                value.flag = false
+                            }else{
+                                value.flag = true
+                            }
                         }
-                    }
-                })
+                    })
+                }else{
+                    $scope.level_two = []
+                }
             })
         } else {
             $scope.cur_level_two = item
