@@ -540,12 +540,16 @@ class GoodsCategory extends ActiveRecord
     public static function disableByIds(array $ids)
     {
         if ($ids) {
-            $ids = implode(',', $ids);
-            $where = 'id in(' . $ids . ')';
+            $where = ['in', 'id', $ids];
+
             self::updateAll([
                 'deleted' => self::STATUS_ONLINE,
                 'offline_time' => time()
             ], $where);
+
+            $where = ['in', 'category_id', $ids];
+
+            BrandCategory::deleteAll($where);
         }
     }
 
