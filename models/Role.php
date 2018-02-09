@@ -12,6 +12,7 @@ class Role extends ActiveRecord
     const AUTHENTICATION_STATUS_IN_PROCESS = 0;
     const AUTHENTICATION_STATUS_APPROVED = 2;
     const AUTHENTICATION_STATUS_REJECTED = 1;
+    const AUTHENTICATION_STATUS_NOT_ONLINE = 4;
     const FIELDS_ROLES = ['id', 'name'];
 
     /**
