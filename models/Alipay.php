@@ -16,6 +16,7 @@ class Alipay extends  ActiveRecord
     const LINE_PAY_SUCCESS='aitelife-shop-web/#/success';
     const EFFECT_NOTIFY='order/ali-pay-effect-earnest-notify';
     const EFFECT_SUCCESS='owner/mall/index.html#!/pay_success';
+    const ALI_PAY_SITE='https://dev.cdlhzz.cn';
 
 
     /**
@@ -39,7 +40,8 @@ class Alipay extends  ActiveRecord
     public static function  AliPayLineSubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message)
     {
 //        $total_amount=0.01;
-        $notify_url="https://".$_SERVER["SERVER_NAME"].'/'.self::ALIPAY_LINPAY_NOTIFY;
+        $notify_url=\Yii::$app->request->hostInfo.'/'.self::ALIPAY_LINPAY_NOTIFY;
+//        $notify_url=self::ALI_PAY_SITE.'/'.self::ALIPAY_LINPAY_NOTIFY;
         $return_url=Yii::$app->request->hostInfo.'/'.self::LINE_PAY_SUCCESS;
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
         $str=$goods_id.'&'.$goods_num.'&'.$address_id.'&'.$pay_name.'&'.$invoice_id.'&'.$supplier_id.'&'.$freight.'&'.$return_insurance.'&'.$buyer_message;
@@ -68,9 +70,9 @@ class Alipay extends  ActiveRecord
      */
     public  static function  EffectEarnestSubmit($post,$phone,$out_trade_no)
     {
-//        $notify_url=Yii::$app->request->hostInfo."/".self::EFFECT_NOTIFY;
-        $notify_url="https://".$_SERVER["SERVER_NAME"].'/'.self::EFFECT_NOTIFY;
+        $notify_url=Yii::$app->request->hostInfo."/".self::EFFECT_NOTIFY;
         $return_url=Yii::$app->request->hostInfo."/".self::EFFECT_SUCCESS;
+
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
         $user=\Yii::$app->user->identity;
         if (!$user){
@@ -125,8 +127,7 @@ class Alipay extends  ActiveRecord
     {
         $time=time();
         $out_trade_no=date('Y',$time).date('m',$time).date('d',$time).date('H',$time).date('i',$time).date('s',$time);
-//        $notify_url=Yii::$app->request->hostInfo."/order/app-order-pay-database";
-        $notify_url= "https://".$_SERVER["SERVER_NAME"]."/order/app-order-pay-database";
+        $notify_url=Yii::$app->request->hostInfo."/order/app-order-pay-database";
         $return_url='';
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
         $passback_params=urlencode($orders);
@@ -146,19 +147,22 @@ class Alipay extends  ActiveRecord
     }
 
 
-        /**
+    /**
      * app充值
      * @param $money
      * @param $user
      * @return string
+     * @throws \yii\base\Exception
      */
     public  static  function  UserRecharge($money,$user)
     {
         $time=time();
         $out_trade_no=GoodsOrder::SetTransactionNo($user->aite_cube_no);
-//        $notify_url=Yii::$app->request->hostInfo."/withdrawals/ali-pay-user-recharge-database";
         $return_url='';
-        $notify_url="https://".$_SERVER["SERVER_NAME"]."/withdrawals/ali-pay-user-recharge-database";
+        $notify_url=Yii::$app->request->hostInfo."/withdrawals/ali-pay-user-recharge-database";
+
+        //测试地址
+        $notify_url=self::ALI_PAY_SITE.'/'."withdrawals/ali-pay-user-recharge-database";
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
         $passback_params=urlencode($user->last_role_id_app.','.$user->id);
         //超时时间

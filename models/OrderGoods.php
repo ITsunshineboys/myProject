@@ -38,6 +38,10 @@ class OrderGoods extends ActiveRecord
     const UNUSUAL_STATUS_HAVE=1;
     const UNUSUAL_STATUS_NO=2;
 
+    const ORDER_STATUS_UN=0;
+    const ORDER_STATUS_COMPLETED=1;
+    const ORDER_STATUS_CANCEL=2;
+
     /**
      * @return string 返回该AR类关联的数据表名
      */
