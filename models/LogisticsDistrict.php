@@ -258,7 +258,6 @@ class LogisticsDistrict extends ActiveRecord
      */
     public  static  function  GetLineDistrictByDistrictCode($district_code)
     {
-
         return District::fullNameByCode($district_code);
 //        $pro=substr($district_code,0,2);
 //        $ci=substr($district_code,2,2);
