@@ -953,6 +953,10 @@
     padding-bottom: 20px;
   }
 
+  .good-container .view-shop-btn a {
+    border: none;
+  }
+
   .good-container .view-shop-btn button {
     width: 100px;
     height: 34px;
