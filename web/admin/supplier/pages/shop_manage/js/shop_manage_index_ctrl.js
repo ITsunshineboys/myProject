@@ -1,8 +1,7 @@
 /**
  * Created by Administrator on 2017/9/18/018.
  */
-let shopmanage = angular.module("shopmanageModule", []);
-shopmanage.controller("shopmanage_ctrl", function ($rootScope,$scope, $state, $http, $stateParams, _ajax, Upload) {
+app.controller('shopmanage_ctrl', ['$rootScope', '$scope', '$state', '$stateParams', '_ajax', 'Upload', function ($rootScope, $scope, $state, $stateParams, _ajax,Upload) {
     let result;
     let id;
     $rootScope.crumbs = [{
@@ -118,4 +117,4 @@ shopmanage.controller("shopmanage_ctrl", function ($rootScope,$scope, $state, $h
             $scope.authList = data.brand_application_list_admin.details;
         });
     }
-});
+}]);

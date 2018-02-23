@@ -1,288 +1,285 @@
-<link rel="stylesheet" href="pages/shop_manage/css/shop_manage_index.css">
-<div ng-controller="shopmanage_ctrl">
-    <section>
-        <!--选项卡-->
-        <div class="tab clearfix">
-            <ul>
-                <li ng-class="{'tab_blue':basic_flag}" ng-click="tabFunc('basic_flag')">基本信息</li>
-                <li ng-class="{'tab_blue':level_flag}" ng-click="tabFunc('level_flag')">店铺资质</li>
-                <li ng-class="{'tab_blue':authorize_flag}" ng-click="tabFunc('authorize_flag')">品牌授权</li>
-            </ul>
+<section>
+    <!--选项卡-->
+    <div class="tab clearfix">
+        <ul>
+            <li ng-class="{'tab_blue':basic_flag}" ng-click="tabFunc('basic_flag')">基本信息</li>
+            <li ng-class="{'tab_blue':level_flag}" ng-click="tabFunc('level_flag')">店铺资质</li>
+            <li ng-class="{'tab_blue':authorize_flag}" ng-click="tabFunc('authorize_flag')">品牌授权</li>
+        </ul>
+    </div>
+
+    <!----------基本信息---------->
+    <form class="form-horizontal" role="form" ng-if="basic_flag">
+        <div class="form-group">
+            <span class="col-md-2 control-label">店铺名称</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="result.shop_name"></span>
+            </div>
         </div>
 
-        <!----------基本信息---------->
-        <form class="form-horizontal" role="form" ng-if="basic_flag">
-            <div class="form-group">
-                <span class="col-md-2 control-label">店铺名称</span>
-                <div class="col-md-10 form-control-static">
-                    <span ng-bind="result.shop_name"></span>
-                </div>
+        <div class="form-group">
+            <span class="col-md-2 control-label">店铺号</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="result.shop_no"></span>
             </div>
-
-            <div class="form-group">
-                <span class="col-md-2 control-label">店铺号</span>
-                <div class="col-md-10 form-control-static">
-                    <span ng-bind="result.shop_no"></span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <span class="col-md-2 control-label">开店时间</span>
-                <div class="col-md-10 form-control-static">
-                    <span ng-bind="result.create_time"></span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <span class="col-md-2 control-label">登录账号</span>
-                <div class="col-md-10 form-control-static">
-                    <span ng-bind="result.mobile"></span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <span class="col-md-2 control-label">店铺状态</span>
-                <div class="col-md-10 form-control-static">
-                    <span ng-bind="result.status_desc"></span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <span class="col-md-2 control-label">店铺LOGO</span>
-                <div class="col-md-10">
-                    <img ng-src="{{iconpath}}" alt="" class="pic-style">
-                    <h6>图片大小120x120，5M内，支持JPG、PNG、JPGE</h6>
-                    <div class="upload">
-                        <button type="button" class="btn btn-default" ngf-pattern="image/*"
-                                ng-change="upload(data.file)" ngf-select="" ngf-multiple="false" ng-model="data.file">上传
-                        </button>
-                    </div>
-                    <div ng-if="picwarning" class="wrong-warning red">
-                        <span class="glyphicon glyphicon-asterisk"></span>
-                        <span>上传图片格式不正确或尺寸不匹配，请重新上传</span>
-                    </div>
-                </div>
-            </div>
-
-            <hr/>
-
-            <div class="form-group">
-                <span class="col-md-2 control-label">店铺评分</span>
-                <div class="col-md-10 form-control-static">
-                    <div class="col-md-2 score">综合评分</div>
-                    <div class="col-md-1" ng-bind="result.comprehensive_score"></div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <span class="col-md-2 control-label"></span>
-                <div class="col-md-10 form-control-static">
-                    <div class="col-md-2 score">店家服务</div>
-                    <div class="col-md-1" ng-bind="result.store_service_score"></div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <span class="col-md-2 control-label"></span>
-                <div class="col-md-10 form-control-static">
-                    <div class="col-md-2 score">物流速度</div>
-                    <div class="col-md-1" ng-bind="result.logistics_speed_score"></div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <span class="col-md-2 control-label"></span>
-                <div class="col-md-10 form-control-static">
-                    <div class="col-md-2 score">配送员服务</div>
-                    <div class="col-md-1" ng-bind="result.delivery_service_score"></div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <span class="col-md-2 control-label">关注粉丝</span>
-                <div class="col-md-10 form-control-static">
-                    <span ng-bind="result.follower_number"></span>
-                </div>
-            </div>
-
-            <hr/>
-
-            <div class="form-group">
-                <span class="col-md-2 control-label">是否是线下店</span>
-                <div class="col-md-10 form-control-static">
-                    <span ng-bind="result.is_offline_shop"></span>
-                </div>
-            </div>
-
-            <div class="form-group" ng-if="result.is_offline_shop =='是'">
-                <span class="col-md-2 control-label">线下店地址</span>
-                <div class="col-md-10 form-control-static">
-                    <span ng-bind="result.line_district"></span>
-                </div>
-            </div>
-
-            <div class="form-group" ng-if="result.line_mobile">
-                <span class="col-md-2 control-label">电话</span>
-                <div class="col-md-10 form-control-static">
-                    <span ng-bind="result.line_mobile"></span>
-                </div>
-            </div>
-
-            <button ng-click="resetLogo()" class="btn btn-primary pull-left" id="savebtn"><i
-                    class="glyphicon glyphicon-floppy-disk"></i>保存
-            </button>
-        </form>
-        <!----------店铺资质---------->
-        <form class="form-horizontal" role="form" ng-if="level_flag">
-            <div class="form-group">
-                <span class="col-md-2 control-label">单位类型</span>
-                <div class="col-md-10 form-control-static">
-                    <span ng-bind="result.type_org"></span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <span class="col-md-2 control-label">店铺分类</span>
-                <div class="col-md-10 form-control-static">
-                    <span ng-bind="result.category_name"></span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <span class="col-md-2 control-label">店铺类型</span>
-                <div class="col-md-10 form-control-static">
-                    <span ng-bind="result.type_shop"></span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <span class="col-md-2 control-label">资质日期</span>
-                <div class="col-md-10 form-control-static">
-                    <span>{{result.create_time}}至{{onemoreyear}}</span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <span class="col-md-2 control-label">质保金</span>
-                <div class="col-md-10 form-control-static">
-                    <span class="money-handle">{{result.quality_guarantee_deposit | currency:'¥'}}</span>
-                    <span class="red">已免除</span>
-                </div>
-            </div>
-
-            <hr/>
-
-            <div class="form-group">
-                <span class="col-md-2 control-label">公司名称</span>
-                <div class="col-md-10 form-control-static">
-                    <span ng-bind="result.name"></span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <span class="col-md-2 control-label">社会信用代码</span>
-                <div class="col-md-10 form-control-static">
-                    <span ng-bind="result.licence"></span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <span class="col-md-2 control-label">营业执照</span>
-                <div class="col-md-10 form-control-static">
-                    <img class="pic-style" ng-src="{{result.licence_image}}" alt="营业执照">
-                </div>
-            </div>
-
-            <hr/>
-
-            <div class="form-group">
-                <span class="col-md-2 control-label">法人名称</span>
-                <div class="col-md-10 form-control-static">
-                    <span ng-bind="result.legal_person"></span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <span class="col-md-2 control-label">法人身份证号</span>
-                <div class="col-md-10 form-control-static">
-                    <span ng-bind="result.identity_no"></span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <span class="col-md-2 control-label">法人身份证正面</span>
-                <div class="col-md-10 form-control-static">
-                    <img class="pic-style" ng-src="{{result.identity_card_front_image}}" alt="法人身份证正面">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <span class="col-md-2 control-label">法人身份证反面</span>
-                <div class="col-md-10 form-control-static">
-                    <img class="pic-style" ng-src="{{result.identity_card_back_image}}" alt="法人身份证反面">
-                </div>
-            </div>
-        </form>
-
-
-        <!----------品牌授权-------------->
-        <div ng-show='authorize_flag'>
-            <div class="apply_brand">
-                <button class="btn btn-primary" ui-sref="apply_brand"><i class="iconfont icon-add"></i>申请品牌</button>
-            </div>
-
-            <table class="table table-responsive table-hover">
-                <thead>
-                <tr>
-                    <th>品牌名称</th>
-                    <th>申请日期</th>
-                    <th>授权期限</th>
-                    <th>状态</th>
-                    <th>审核备注</th>
-                    <th>详情</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr class="table_content" ng-repeat="obj in authList">
-                    <td>{{obj.brand_name}}</td>
-                    <td>{{obj.create_time}}</td>
-                    <td>{{obj.authorization_start}} 至 {{obj.authorization_end}}</td>
-                    <td>
-                        <span class="status-blue" ng-if="obj.review_status == 0">等待审核</span>
-                        <span class="status-red" ng-if="obj.review_status == 1">审核不通过</span>
-                        <span class="status-green" ng-if="obj.review_status == 2">审核通过</span>
-                    </td>
-                    <td>
-                        <a href="javascript: void (0);" ng-if="obj.review_note != ''"
-                           ng-click="showInfo(obj.review_note)">{{obj.review_note}}</a>
-                        <span ng-if="obj.review_note == ''">无</span>
-                    </td>
-                    <td>
-                        <a href="javascript: void (0);" ng-click="goDetails(obj)">查看</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <tm-pagination conf="pageConfig"></tm-pagination>
-            <!--</div>-->
         </div>
-    </section>
 
-    <!--保存确认模态框-->
-    <div class="modal customer_modal detail_modal fade" id="suresave" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">详情</h4>
+        <div class="form-group">
+            <span class="col-md-2 control-label">开店时间</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="result.create_time"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">登录账号</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="result.mobile"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">店铺状态</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="result.status_desc"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">店铺LOGO</span>
+            <div class="col-md-10">
+                <img ng-src="{{iconpath}}" alt="" class="pic-style">
+                <h6>图片大小120x120，5M内，支持JPG、PNG、JPGE</h6>
+                <div class="upload">
+                    <button type="button" class="btn btn-default" ngf-pattern="image/*"
+                            ng-change="upload(data.file)" ngf-select="" ngf-multiple="false" ng-model="data.file">上传
+                    </button>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <span class="col-md-12">保存成功</span>
-                    </div>
+                <div ng-if="picwarning" class="wrong-warning red">
+                    <span class="glyphicon glyphicon-asterisk"></span>
+                    <span>上传图片格式不正确或尺寸不匹配，请重新上传</span>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" type="submit" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+
+        <hr/>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">店铺评分</span>
+            <div class="col-md-10 form-control-static">
+                <div class="col-md-2 score">综合评分</div>
+                <div class="col-md-1" ng-bind="result.comprehensive_score"></div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label"></span>
+            <div class="col-md-10 form-control-static">
+                <div class="col-md-2 score">店家服务</div>
+                <div class="col-md-1" ng-bind="result.store_service_score"></div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label"></span>
+            <div class="col-md-10 form-control-static">
+                <div class="col-md-2 score">物流速度</div>
+                <div class="col-md-1" ng-bind="result.logistics_speed_score"></div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label"></span>
+            <div class="col-md-10 form-control-static">
+                <div class="col-md-2 score">配送员服务</div>
+                <div class="col-md-1" ng-bind="result.delivery_service_score"></div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">关注粉丝</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="result.follower_number"></span>
+            </div>
+        </div>
+
+        <hr/>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">是否是线下店</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="result.is_offline_shop"></span>
+            </div>
+        </div>
+
+        <div class="form-group" ng-if="result.is_offline_shop =='是'">
+            <span class="col-md-2 control-label">线下店地址</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="result.line_district"></span>
+            </div>
+        </div>
+
+        <div class="form-group" ng-if="result.line_mobile">
+            <span class="col-md-2 control-label">电话</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="result.line_mobile"></span>
+            </div>
+        </div>
+
+        <button ng-click="resetLogo()" class="btn btn-primary pull-left" id="savebtn"><i
+                class="glyphicon glyphicon-floppy-disk"></i>保存
+        </button>
+    </form>
+    <!----------店铺资质---------->
+    <form class="form-horizontal" role="form" ng-if="level_flag">
+        <div class="form-group">
+            <span class="col-md-2 control-label">单位类型</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="result.type_org"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">店铺分类</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="result.category_name"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">店铺类型</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="result.type_shop"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">资质日期</span>
+            <div class="col-md-10 form-control-static">
+                <span>{{result.create_time}}至{{onemoreyear}}</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">质保金</span>
+            <div class="col-md-10 form-control-static">
+                <span class="money-handle">{{result.quality_guarantee_deposit | currency:'¥'}}</span>
+                <span class="red">已免除</span>
+            </div>
+        </div>
+
+        <hr/>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">公司名称</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="result.name"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">社会信用代码</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="result.licence"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">营业执照</span>
+            <div class="col-md-10 form-control-static">
+                <img class="pic-style" ng-src="{{result.licence_image}}" alt="营业执照">
+            </div>
+        </div>
+
+        <hr/>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">法人名称</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="result.legal_person"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">法人身份证号</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="result.identity_no"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">法人身份证正面</span>
+            <div class="col-md-10 form-control-static">
+                <img class="pic-style" ng-src="{{result.identity_card_front_image}}" alt="法人身份证正面">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">法人身份证反面</span>
+            <div class="col-md-10 form-control-static">
+                <img class="pic-style" ng-src="{{result.identity_card_back_image}}" alt="法人身份证反面">
+            </div>
+        </div>
+    </form>
+
+
+    <!----------品牌授权-------------->
+    <div ng-show='authorize_flag'>
+        <div class="apply_brand">
+            <button class="btn btn-primary" ui-sref="apply_brand"><i class="iconfont icon-add"></i>申请品牌</button>
+        </div>
+
+        <table class="table table-responsive table-hover">
+            <thead>
+            <tr>
+                <th>品牌名称</th>
+                <th>申请日期</th>
+                <th>授权期限</th>
+                <th>状态</th>
+                <th>审核备注</th>
+                <th>详情</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="table_content" ng-repeat="obj in authList">
+                <td>{{obj.brand_name}}</td>
+                <td>{{obj.create_time}}</td>
+                <td>{{obj.authorization_start}} 至 {{obj.authorization_end}}</td>
+                <td>
+                    <span class="status-blue" ng-if="obj.review_status == 0">等待审核</span>
+                    <span class="status-red" ng-if="obj.review_status == 1">审核不通过</span>
+                    <span class="status-green" ng-if="obj.review_status == 2">审核通过</span>
+                </td>
+                <td>
+                    <a href="javascript: void (0);" ng-if="obj.review_note != ''"
+                       ng-click="showInfo(obj.review_note)">{{obj.review_note}}</a>
+                    <span ng-if="obj.review_note == ''">无</span>
+                </td>
+                <td>
+                    <a href="javascript: void (0);" ng-click="goDetails(obj)">查看</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <tm-pagination conf="pageConfig"></tm-pagination>
+        <!--</div>-->
+    </div>
+</section>
+
+<!--保存确认模态框-->
+<div class="modal customer_modal detail_modal fade" id="suresave" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">详情</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <span class="col-md-12">保存成功</span>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="submit" data-dismiss="modal">确定</button>
             </div>
         </div>
     </div>

@@ -1,8 +1,7 @@
 /**
  * Created by Administrator on 2017/9/21/021.
  */
-let authorizedetail = angular.module("authorizedetailModule", []);
-authorizedetail.controller("authorizedetail_ctrl", function ($scope,$rootScope) {
+app.controller("authorizedetail_ctrl",['$scope','$rootScope',function ($scope, $rootScope) {
     $rootScope.crumbs = [{
         name: '店铺管理',
         icon: 'icon-dianpuguanli',
@@ -15,4 +14,4 @@ authorizedetail.controller("authorizedetail_ctrl", function ($scope,$rootScope) 
     if (data !== null) {
         $scope.data = JSON.parse(data);
     }
-});
+}])

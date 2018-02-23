@@ -1,6 +1,6 @@
 const app = angular.module("app", ["ui.router", "ng.ueditor","ngFileUpload","angularCSS","shop_style",
     "systemoffline_Module", "wait_online_Module", "commodity_manage",
-    "up_shelves_detail_module", "index_module", "shopmanageModule", "applybrandModule", "authorizedetailModule",
+    "up_shelves_detail_module", "index_module","applybrandModule",
   /*三阶段王杰---开始*/
     "supplier_index","shop_decoration_module","supplier_wallet_module",
     "intelligent_directive","shop_data_module","wallet_detail_module","income_pay_module",
@@ -158,7 +158,9 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         .state("shop_manage", {   //店铺管理
             url: "/shop_manage",
             templateUrl: "pages/shop_manage/shop_manage_index.html",
-            params:{authorize_flag:null}
+            params: {authorize_flag:null},
+            css: "pages/shop_manage/css/shop_manage_index.css",
+            controller: "shopmanage_ctrl"
         })
         .state("apply_brand", {   //申请新品牌
             url: "/apply_brand",
@@ -166,7 +168,8 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         })
         .state("authorize_detail", {   //品牌授权详情
             url: "/authorize_detail",
-            templateUrl: "pages/shop_manage/authorize_detail.html"
+            templateUrl: "pages/shop_manage/authorize_detail.html",
+            controller: "authorizedetail_ctrl"
         })
         .state("commodity_manage", {   //商品管理
             url: "/commodity_manage",
