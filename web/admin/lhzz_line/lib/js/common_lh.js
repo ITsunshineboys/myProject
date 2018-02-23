@@ -470,8 +470,8 @@ function _confirm(info, fun) {
                     <p>${info}</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                     <button id="confirmEnter" type="button" class="btn btn-primary">确认</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 </div>
             </div>
         </div>
