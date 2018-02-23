@@ -17,6 +17,7 @@ return [
     'designerRoleId' => 3,
     'workerRoleId' => 2,
     'lhzzRoleId' => 1,
+    'openRoleIds' => [1, 6,],
     'maxRolesNumber' => 2,
     'errorCodes' => [
         403 => '没有权限',

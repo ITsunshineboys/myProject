@@ -104,7 +104,13 @@ class UserRole extends ActiveRecord
         foreach (Role::appRoles() as $role) {
             $status = Role::AUTHENTICATION_STATUS_NOT_ONLINE;
             $userRole = self::find()->where(['user_id' => $userId, 'role_id' => $role['id']])->one();
-            $userRole && $status = $userRole->review_status;
+            if ($userRole) {
+                $status = $userRole->review_status;
+            } else {
+                if (in_array($role['id'], Yii::$app->params['openRoleIds']) ) {
+                    $status = Role::AUTHENTICATION_STATUS_NO_APPLICATION;
+                }
+            }
             $rolesStatus[] = [
                 'role_id' => $role['id'],
                 'role_name' => $role['name'],
