@@ -4,6 +4,7 @@ form {
 }
 
 .form-group .icon-style {
+    margin-top: 6px;
     padding-left: 0;
     padding-right: 0;
     width: 5%
