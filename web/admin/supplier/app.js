@@ -169,7 +169,8 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         .state("authorize_detail", {   //品牌授权详情
             url: "/authorize_detail",
             templateUrl: "pages/shop_manage/authorize_detail.html",
-            controller: "authorizedetail_ctrl"
+            controller: "authorizedetail_ctrl",
+            css: "pages/shop_manage/css/authorize_detail.css"
         })
         .state("commodity_manage", {   //商品管理
             url: "/commodity_manage",

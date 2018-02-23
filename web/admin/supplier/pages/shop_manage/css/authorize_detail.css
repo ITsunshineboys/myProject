@@ -1,46 +1,19 @@
-/*顶部导航*/
-li{
-    list-style: none;
+.form-horizontal .control-label {
+    text-align: left;
+}
+
+.form-horizontal .form-control-static {
+    text-align: left;
+}
+
+/*内容开始*/
+.authorize-pic {
+    width: 120px;
 }
 
 hr{
     margin-top: 42px;
     margin-bottom: 42px;
-}
-
-/*内容开始*/
-.authorize_detail {
-    margin-left: 40px;
-}
-
-.authorize_detail>div:not(:first-child){
-    margin-top: 18px;
-}
-
-.belong_class span:last-child{
-    margin-left: 58px;
-}
-
-.brand span:last-child{
-    margin-left: 114px;
-}
-
-.authorize_time span:last-child{
-    margin-left: 86px;
-}
-
-.authorize_byclass img{
-    display: block;
-    width: 120px;
-    margin-left: 146px;
-}
-
-.apply_user span:last-child{
-    margin-left: 97px;
-}
-
-.apply_account span:last-child{
-    margin-left: 83px;
 }
 
 #back{

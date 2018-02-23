@@ -1,64 +1,80 @@
-<link rel="stylesheet" href="pages/shop_manage/css/authorize_detail.css">
-<div ng-controller="authorizedetail_ctrl">
-    <section class="authorize_detail">
-       <div class="belong_class">
-           <span>商家所属分类</span>
-           <span>{{data.category_title}}</span>
-       </div>
-
-        <div class="brand">
-            <span>品牌</span>
-            <span>{{data.brand_name}}</span>
+<section class="authorize_detail">
+    <form action="" class="form-horizontal">
+        <div class="form-group">
+            <span class="col-md-2 control-label">商家所属分类</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="data.category_title"></span>
+            </div>
         </div>
 
-        <div class="authorize_time">
-            <span>授权期限</span>
-            <span>{{data.authorization_start}} 至 {{data.authorization_end}}</span>
+        <div class="form-group">
+            <span class="col-md-2 control-label">品牌</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="data.brand_name"></span>
+            </div>
         </div>
 
-        <hr>
-
-        <div class="authorize_byclass">
-            <span>授权书上传</span>
-        </div>
-        <div class="authorize_byclass" ng-repeat="obj in data.images">
-            <span>{{obj.authorization_name}}</span>
-            <img ng-src="{{obj.image}}">
+        <div class="form-group">
+            <span class="col-md-2 control-label">授权期限</span>
+            <div class="col-md-10 form-control-static">
+                <span>{{data.authorization_start}}至{{data.authorization_end}}</span>
+            </div>
         </div>
 
-        <hr>
+        <div class="form-group">
+            <span class="col-md-2 control-label">授权书上传</span>
+        </div>
+        <div class="form-group" ng-repeat="obj in data.images">
+            <span class="col-md-2 control-label">{{obj.authorization_name}}</span>
+            <div class="col-md-10 form-control-static">
+                <img ng-src="{{obj.image}}" class="authorize-pic">
+            </div>
+        </div>
+        <hr/>
 
-        <div class="apply_user">
-            <span>申请店铺</span>
-            <span>{{data.supplier_name}}</span>
+        <div class="form-group">
+            <span class="col-md-2 control-label">申请店铺</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="data.supplier_name"></span>
+            </div>
         </div>
 
-        <div class="apply_user">
-            <span>申请账户</span>
-            <span>{{data.mobile}}</span>
+        <div class="form-group">
+            <span class="col-md-2 control-label">申请账户</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="data.mobile"></span>
+            </div>
         </div>
 
-        <div class="apply_user">
-            <span>申请时间</span>
-            <span>{{data.create_time}}</span>
+        <div class="form-group">
+            <span class="col-md-2 control-label">申请时间</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="data.create_timebile"></span>
+            </div>
         </div>
 
-        <hr>
+        <hr/>
 
-        <div class="apply_user">
-            <span>审核状态</span>
-            <span>{{data.review_status_desc}}</span>
+        <div class="form-group">
+            <span class="col-md-2 control-label">审核状态</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="data.review_status_desc"></span>
+            </div>
         </div>
 
-        <div class="apply_user">
-            <span>审核备注</span>
-            <span>{{data.review_note}}</span>
+        <div class="form-group">
+            <span class="col-md-2 control-label">审核备注</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="data.review_note"></span>
+            </div>
         </div>
 
-        <div class="apply_user">
-            <span>审核时间</span>
-            <span>{{data.review_time}}</span>
+        <div class="form-group">
+            <span class="col-md-2 control-label">审核时间</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="data.review_time"></span>
+            </div>
         </div>
-        <button class="btn btn-default" id="back" ui-sref="shop_manage({authorize_flag:true})">返回</button>
-    </section>
-</div>
+    </form>
+    <button class="btn btn-default" id="back" ui-sref="shop_manage({authorize_flag:true})">返回</button>
+</section>
