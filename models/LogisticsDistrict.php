@@ -151,38 +151,7 @@ class LogisticsDistrict extends ActiveRecord
     }
 
 
-    /**
-     *
-     * @param $province
-     * @param $city
-     * @param $district
-     * @return array
-     */
-    public function getdistrictcode($province, $city, $district){
-        $code=Yii::$app->params['districts'][0];
-        foreach($code[86] as $k=>$v){
-            if ($code[86][$k]==$province){
-                $provincecode=$k;
-            }
-        }
-        foreach($code[$provincecode] as $k =>$v ){
-            if ($code[$provincecode][$k]==$city){
-                $citycode=$k;
-            }
-        }
-        foreach ($code[$citycode] as $k =>$v ){
-            if ($code[$citycode][$k]==$district){
-                $districtcode=$k;
-            }
-        }
-        $arr=array(
-            'provincecode'=>$provincecode,
-            'citycode'    =>$citycode,
-            'districtcode'=>$districtcode
 
-        );
-        return $arr;
-    }
 
 
    /**
