@@ -125,26 +125,27 @@ class UserAddress extends  ActiveRecord
             ->one();
         if ($array){
             $array['adCode']=$array['district'];
-            $districtcode=$array['district'];
-            $pro=substr($districtcode,0,2);
-            $ci=substr($districtcode,2,2);
-            $dis=substr($districtcode,4,2);
-            $code=Yii::$app->params['districts'][0];
-            if ($ci==0){
-                $position=$code[86][$pro.'0000'];
-            }else if($dis==0){
-                $position=$code[86][$pro.'0000'].','.$code[$pro.'0000'][$pro.$ci.'00'];
-            }else{
-                if (!array_key_exists($pro.$ci.'00',$code))
-                {
-                    $ci_f='0'.($ci-1);
-                    $position=$code[86][$pro.'0000'].','.$code[$pro.'0000'][$pro.$ci_f.'00'].','.$code[$pro.$ci_f.'00'][$pro.$ci.$dis];
-                }else
-                {
-                    $position=$code[86][$pro.'0000'].','.$code[$pro.'0000'][$pro.$ci.'00'].','.$code[$pro.$ci.'00'][$pro.$ci.$dis];
-                }
+//            $districtcode=$array['district'];
+//            $pro=substr($districtcode,0,2);
+//            $ci=substr($districtcode,2,2);
+//            $dis=substr($districtcode,4,2);
+//            $code=Yii::$app->params['districts'][0];
+//            if ($ci==0){
+//                $position=$code[86][$pro.'0000'];
+//            }else if($dis==0){
+//                $position=$code[86][$pro.'0000'].','.$code[$pro.'0000'][$pro.$ci.'00'];
+//            }else{
+//                if (!array_key_exists($pro.$ci.'00',$code))
+//                {
+//                    $ci_f='0'.($ci-1);
+//                    $position=$code[86][$pro.'0000'].','.$code[$pro.'0000'][$pro.$ci_f.'00'].','.$code[$pro.$ci_f.'00'][$pro.$ci.$dis];
+//                }else
+//                {
+//                    $position=$code[86][$pro.'0000'].','.$code[$pro.'0000'][$pro.$ci.'00'].','.$code[$pro.$ci.'00'][$pro.$ci.$dis];
+//                }
 
-            }
+//            }
+            $position=District::fullNameByCode($array['district'],LogisticsDistrict::SEPARATOR_NAMES);
             $array['district']=$position;
             return $array;
         }else
