@@ -1644,7 +1644,7 @@ class WithdrawalsController extends Controller
         ];
         switch ($access['access_type'])
         {
-            case 1:
+            case UserAccessdetail::ACCESS_TYPE_RECHARGE:
                 switch ($access['recharge_pay_type'])
                 {
                     case 1:
@@ -1670,7 +1670,7 @@ class WithdrawalsController extends Controller
                     'value'=>$access['transaction_no']
                 ];
                 break;
-            case 2:
+            case UserAccessdetail::ACCESS_TYPE_DEBIT:
 
                 //此处有改动未修复
                 $list[]=[
@@ -1686,7 +1686,7 @@ class WithdrawalsController extends Controller
                     'value'=>$transaction_no
                 ];
                 break;
-            case 3:
+            case UserAccessdetail::ACCESS_TYPE_CASH:
                 $cashData=(new Query())
                     ->from(UserCashregister::tableName().' as c')
                     ->leftJoin(BankinfoLog::tableName().' as b','c.bank_log_id=b.id')
@@ -1709,7 +1709,7 @@ class WithdrawalsController extends Controller
                     'value'=>$transaction_no
                 ];
                 break;
-            case 4:
+            case UserAccessdetail::ACCESS_TYPE_UNCASH_IN:
                 $cashData=(new Query())
                     ->from(UserCashregister::tableName().' as c')
                     ->leftJoin(BankinfoLog::tableName().' as b','c.bank_log_id=b.id')
@@ -1729,7 +1729,7 @@ class WithdrawalsController extends Controller
                     'value'=>$transaction_no
                 ];
                 break;
-            case 5:
+            case UserAccessdetail::ACCESS_TYPE_DISAGREE:
                 $cashData=(new Query())
                     ->from(UserCashregister::tableName().' as c')
                     ->leftJoin(BankinfoLog::tableName().' as b','c.bank_log_id=b.id')
@@ -1756,7 +1756,7 @@ class WithdrawalsController extends Controller
                     'value'=>$cashData['supplier_reason']
                 ];
                 break;
-            case 6:
+            case UserAccessdetail::ACCESS_TYPE_PAYMENT_GOODS:
                 $list[]=[
                     'name'=>'时间',
                     'value'=>date('Y-m-d H:i',$access['create_time'])
@@ -1771,7 +1771,7 @@ class WithdrawalsController extends Controller
                     'value'=>$access['order_no']
                 ];
                 break;
-            case 7:
+            case UserAccessdetail::ACCESS_TYPE_PAYMENT_BUY:
                 $accessList=UserAccessdetail::find()
                     ->where(['transaction_no'=>$transaction_no])
                     ->asArray()

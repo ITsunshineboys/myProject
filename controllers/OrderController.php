@@ -3752,8 +3752,10 @@ class OrderController extends Controller
                             echo 'fail';
                             exit;
                         }
+                        $time=time();
                         $GoodsOrder->pay_status=GoodsOrder::PAY_STATUS_PAID;
                         $GoodsOrder->pay_name=PayService::ALI_APP_PAY;
+                        $GoodsOrder->paytime=$time;
                         if (!$GoodsOrder->save(false))
                         {
                             $tran->rollBack();
@@ -3763,9 +3765,9 @@ class OrderController extends Controller
                         $access=new UserAccessdetail();
                         $access->uid=$user->id;
                         $access->role_id=$role_id;
-                        $access->access_type=7;
+                        $access->access_type=UserAccessdetail::ACCESS_TYPE_PAYMENT_BUY;
                         $access->access_money=$GoodsOrder['amount_order'];
-                        $access->create_time=time();
+                        $access->create_time=$time;
                         $access->order_no=$orders[$k];
                         $access->transaction_no=$transaction_no;
                         $res3=$access->save(false);
@@ -4892,6 +4894,7 @@ class OrderController extends Controller
                 return false;
             }
             $tran = Yii::$app->db->beginTransaction();
+            $time=time();
             try{
                 $Ord= GoodsOrder::find()
                     ->where(['order_no'=>$orders[0]])
@@ -4932,6 +4935,7 @@ class OrderController extends Controller
                     }
                     $GoodsOrder->pay_status=GoodsOrder::PAY_STATUS_PAID;
                     $GoodsOrder->pay_name=PayService::WE_CHAT_APP_PAY;
+                    $GoodsOrder->paytime=$time;
                     $res=$GoodsOrder->save(false);
                     if (!$res)
                     {
@@ -4941,9 +4945,9 @@ class OrderController extends Controller
                     $access=new UserAccessdetail();
                     $access->uid=$user->id;
                     $access->role_id=$role_id;
-                    $access->access_type=7;
+                    $access->access_type=UserAccessdetail::ACCESS_TYPE_PAYMENT_BUY;
                     $access->access_money=$GoodsOrder['amount_order'];
-                    $access->create_time=time();
+                    $access->create_time=$time;
                     $access->order_no=$orders[$k];
                     $access->transaction_no=$transaction_no;
                     $res3=$access->save(false);

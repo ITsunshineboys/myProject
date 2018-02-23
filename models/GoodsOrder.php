@@ -2089,6 +2089,7 @@ class GoodsOrder extends ActiveRecord
             return $code;
         };
         $tran = Yii::$app->db->beginTransaction();
+        $time=time();
         try{
             $role=Role::GetRoleByRoleId($user->last_role_id_app,$user);
             switch ($user->last_role_id_app)
@@ -2122,7 +2123,7 @@ class GoodsOrder extends ActiveRecord
                 $access->role_id=$user->last_role_id_app;
                 $access->access_type=7;
                 $access->access_money=$GoodsOrder['amount_order'];
-                $access->create_time=time();
+                $access->create_time=$time;
                 $access->transaction_no=$transaction_no;
                 $access->order_no=$orders[$k];
                 $res3=$access->save(false);
@@ -2163,7 +2164,7 @@ class GoodsOrder extends ActiveRecord
                 $order_money=$GoodsOrder->amount_order;
                 $GoodsOrder->pay_status=self::PAY_STATUS_PAID;
                 $GoodsOrder->pay_name=PayService::BALANCE_PAY;
-                $GoodsOrder->paytime=time();
+                $GoodsOrder->paytime=$time;
                 $res=$GoodsOrder->save(false);
                 if ($user->last_role_id_app==0)
                 {
@@ -2187,8 +2188,6 @@ class GoodsOrder extends ActiveRecord
                     return $code;
                 }
             }
-
-
             $tran->commit();
         }catch (\Exception $e){
             $tran->rollBack();
