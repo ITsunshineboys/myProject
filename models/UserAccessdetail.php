@@ -356,7 +356,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
             ];
             $data[]=[
                 'name'=>'收货地址',
-                'value'=>LogisticsDistrict::getdistrict($GoodsOrder['district_code']).$GoodsOrder['region']
+                'value'=>LogisticsDistrict::getDistrict($GoodsOrder['district_code']).$GoodsOrder['region']
             ];
            if ($type=='Goods')
            {

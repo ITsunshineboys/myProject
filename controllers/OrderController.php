@@ -5712,7 +5712,7 @@ class OrderController extends Controller
             ]);
         }
         $addressList['district_code'] = $addressList['district'];
-        $addressList['district'] = LogisticsDistrict::getdistrict($addressList['district']);
+        $addressList['district'] = LogisticsDistrict::getDistrict($addressList['district']);
         $code=200;
         return Json::encode([
             'code' => $code,

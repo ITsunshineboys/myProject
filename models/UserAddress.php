@@ -103,7 +103,7 @@ class UserAddress extends  ActiveRecord
             ->one();
         if ($array){
                 $array['adCode']=$array['district'];
-                $array['district']=LogisticsDistrict::getdistrict($array['district']);
+                $array['district']=LogisticsDistrict::getDistrict($array['district']);
             return $array;
         }else
         {

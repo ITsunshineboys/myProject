@@ -247,7 +247,7 @@ class LineSupplier extends \yii\db\ActiveRecord
             ->all();
         foreach ($data as &$list)
         {
-            $list['district']=LogisticsDistrict::getdistrict($list['district_code']).$list['address'];
+            $list['district']=LogisticsDistrict::getDistrict($list['district_code']).$list['address'];
             unset($list['address']);
             unset($list['district_code']);
         }

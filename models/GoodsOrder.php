@@ -2861,7 +2861,7 @@ class GoodsOrder extends ActiveRecord
             }
 
             $output['consignee'] = $arr[0]['consignee'];
-            $output['district'] = LogisticsDistrict::getdistrict($arr[0]['district_code']) . $arr[0]['region'];
+            $output['district'] = LogisticsDistrict::getDistrict($arr[0]['district_code']) . $arr[0]['region'];
             $output['invoice_information'] = $arr[0]['invoice_content'] . '-' . $arr[0]['invoice_header'];
             if (empty($arr[0]['invoice_header'])) {
                 $output['invoice_information'] = $arr[0]['invoice_content'];

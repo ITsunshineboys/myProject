@@ -1534,7 +1534,7 @@ class SiteController extends Controller
         foreach ($addressList as &$list) {
             $list['address_id']=$list['id'];
             $list['district_code'] = $list['district'];
-            $list['district'] = LogisticsDistrict::getdistrict($list['district']);
+            $list['district'] = LogisticsDistrict::getDistrict($list['district']);
             $list['select']=$list['default'];
         }
         $code = 200;
