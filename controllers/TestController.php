@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Bank;
 use app\models\Carousel;
+use app\models\ChatRecord;
 use app\models\Express;
 use app\models\Goods;
 use app\models\GoodsAttr;
@@ -34,6 +35,7 @@ use app\models\Supplier;
 use app\models\User;
 use app\models\UserAddress;
 use app\models\UserBankInfo;
+use app\models\UserNewsRecord;
 use app\models\UserRole;
 use app\services\BasisDecorationService;
 use app\services\ExceptionHandleService;
@@ -541,8 +543,18 @@ class TestController extends Controller
     public  function  actionTest()
     {
 
-        $data=OrderRefund::find()->where(['order_no'=>'0206188775','sku'=>'12300001635'])->all();
-        var_dump($data);
+        $user = Yii::$app->user->identity;
+        $userNews=UserNewsRecord::find()
+            ->where(['uid'=>$user->id])
+            ->andWhere(['role_id'=>$user->last_role_id_app])
+            ->andWhere(['status'=>0])
+            ->count();
+
+        var_dump($userNews);
+            $chatNews=ChatRecord::find()->where(['to_uid'=>$user->id])->andWhere(['to_role_id'=>$user->last_role_id_app])
+                ->andWhere(['status'=>0])->all();
+           var_dump($chatNews);
+die;
     }
 
 }
