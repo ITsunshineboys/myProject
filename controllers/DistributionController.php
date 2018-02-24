@@ -991,15 +991,6 @@ class DistributionController extends Controller
 
     }
 
-    public  function actionTestData()
-    {
-
-        $Distribution=Distribution::find()->all();
-        foreach ($Distribution as &$list)
-        {
-            $list->delete();
-        }
-    }
 
 
     /**
