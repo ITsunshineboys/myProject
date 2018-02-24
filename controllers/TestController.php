@@ -548,6 +548,7 @@ class TestController extends Controller
             ->where(['uid'=>$user->id])
             ->andWhere(['role_id'=>$user->last_role_id_app])
             ->andWhere(['status'=>0])
+            ->asArray()
             ->all();
 
         var_dump($userNews);
