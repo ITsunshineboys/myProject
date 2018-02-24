@@ -493,6 +493,21 @@ class OrderGoods extends ActiveRecord
             ->andWhere(['role_id'=>$user->last_role_id_app])
             ->andWhere(['status'=>0])
             ->count();
+        if ($userNews==0)
+        {
+            $chatNews=ChatRecord::find()->where(['to_uid'=>$user->id])->andWhere(['to_role_id'=>$user->last_role_id_app])
+                ->andWhere(['status'=>0])->count();
+            if ($chatNews>0)
+            {
+                $status=1;
+            }else
+            {
+                $status=2;
+            }
+        }else
+        {
+            $status=1;
+        }
         return [
             'all'=>$data['all_order']>99?99:$data['all_order'],
             'unpaid'=>$data['unpaid']>99?99:$data['unpaid'],
@@ -501,7 +516,7 @@ class OrderGoods extends ActiveRecord
             'completed'=>$data['completed']>99?99:$data['completed'],
             'canceled'=>$data['canceled']>99?99:$data['canceled'],
             'customer_service'=>$data['customer_service']>99?99:$data['customer_service'],
-            'have_read_news'=>$userNews>0?1:2,
+            'have_read_news'=>$status,
             'uncomment'=>$data['uncomment']>99?99:$data['uncomment']
         ];
     }
