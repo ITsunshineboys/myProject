@@ -12,6 +12,7 @@ class UserAddress extends  ActiveRecord
     const ADDRESS_MSG_NORMAL='收货地址正常';
     const ADDRESS_MSG_ABNORMAL='收货地址异常';
     const ADDRESS_SELECT=1;
+    const ADDRESS_UN_SELECT=0;
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -125,26 +126,6 @@ class UserAddress extends  ActiveRecord
             ->one();
         if ($array){
             $array['adCode']=$array['district'];
-//            $districtcode=$array['district'];
-//            $pro=substr($districtcode,0,2);
-//            $ci=substr($districtcode,2,2);
-//            $dis=substr($districtcode,4,2);
-//            $code=Yii::$app->params['districts'][0];
-//            if ($ci==0){
-//                $position=$code[86][$pro.'0000'];
-//            }else if($dis==0){
-//                $position=$code[86][$pro.'0000'].','.$code[$pro.'0000'][$pro.$ci.'00'];
-//            }else{
-//                if (!array_key_exists($pro.$ci.'00',$code))
-//                {
-//                    $ci_f='0'.($ci-1);
-//                    $position=$code[86][$pro.'0000'].','.$code[$pro.'0000'][$pro.$ci_f.'00'].','.$code[$pro.$ci_f.'00'][$pro.$ci.$dis];
-//                }else
-//                {
-//                    $position=$code[86][$pro.'0000'].','.$code[$pro.'0000'][$pro.$ci.'00'].','.$code[$pro.$ci.'00'][$pro.$ci.$dis];
-//                }
-
-//            }
             $position=District::fullNameByCode($array['district'],LogisticsDistrict::SEPARATOR_NAMES);
             $array['district']=$position;
             return $array;
@@ -175,12 +156,12 @@ class UserAddress extends  ActiveRecord
 
         try{
 
-            if ($default==1)
+            if ($default==self::ADDRESS_SELECT)
             {
                 $address=self::find()->where(['uid'=>$user_id])->all();
                 foreach ($address as &$list)
                 {
-                    $list->default=0;
+                    $list->default=self::ADDRESS_UN_SELECT;
                     $res=$list->save(false);
                     if (!$res){
                         $code=500;
@@ -194,7 +175,7 @@ class UserAddress extends  ActiveRecord
                 $user_address->mobile=$mobile;
                 $user_address->district=$district_code;
                 $user_address->uid=$user_id;
-                $user_address->default=1;
+                $user_address->default=self::ADDRESS_SELECT;
                 $res =$user_address->save(false);
                 if (!$res){
                     $code=500;
@@ -208,7 +189,7 @@ class UserAddress extends  ActiveRecord
                 $user_address->mobile=$mobile;
                 $user_address->district=$district_code;
                 $user_address->uid=$user_id;
-                $user_address->default=0;
+                $user_address->default=self::ADDRESS_UN_SELECT;
                 $res =$user_address->save(false);
                 if (!$res){
                     $code=500;
@@ -243,7 +224,7 @@ class UserAddress extends  ActiveRecord
         }
         $tran = Yii::$app->db->beginTransaction();
         try{
-            $user_address->default=1;
+            $user_address->default=self::ADDRESS_SELECT;
             $res =$user_address->save(false);
             if (!$res){
                 $code=500;
@@ -256,7 +237,7 @@ class UserAddress extends  ActiveRecord
                 ->all();
             foreach ($address as &$list)
             {
-                $list->default=0;
+                $list->default=self::ADDRESS_UN_SELECT;
                 $res=$list->save(false);
                 if (!$res){
                     $code=500;
@@ -296,7 +277,7 @@ class UserAddress extends  ActiveRecord
                 $address=self::find()->where(['uid'=>$user->id])->all();
                 foreach ($address as &$list)
                 {
-                    $list->default=0;
+                    $list->default=self::ADDRESS_UN_SELECT;
                     $res=$list->save(false);
                     if (!$res){
                         $code=500;
@@ -309,7 +290,7 @@ class UserAddress extends  ActiveRecord
                 $user_address->region=$region;
                 $user_address->mobile=$mobile;
                 $user_address->district=$district_code;
-                $user_address->default=1;
+                $user_address->default=self::ADDRESS_SELECT;
                 $res =$user_address->save(false);
                 if (!$res){
                     $code=500;
@@ -355,7 +336,7 @@ class UserAddress extends  ActiveRecord
         $user = Yii::$app->user->identity;
         $tran = Yii::$app->db->beginTransaction();
         try{
-            if ($address->default==1)
+            if ($address->default==self::ADDRESS_SELECT)
             {
                 $res=$address->delete();
                 if (!$res)
@@ -366,11 +347,11 @@ class UserAddress extends  ActiveRecord
                 }
                 $addressData=self::find()
                     ->where(['uid'=>$user->id])
-                    ->andWhere(['default'=>0])
+                    ->andWhere(['default'=>self::ADDRESS_UN_SELECT])
                     ->one();
                 if ($addressData)
                 {
-                    $addressData->default=1;
+                    $addressData->default=self::ADDRESS_SELECT;
                     $res1=$addressData->save(false);
                     if (!$res1)
                     {
@@ -408,7 +389,7 @@ class UserAddress extends  ActiveRecord
     {
         $address=self::find()
             ->where(['uid'=>$user_id])
-            ->andWhere(['default'=>1])
+            ->andWhere(['default'=>self::ADDRESS_SELECT])
             ->asArray()
             ->one();
         if (!$address)
@@ -432,7 +413,7 @@ class UserAddress extends  ActiveRecord
         $userAddress=UserAddress::find()
             ->select('district')
             ->where(['uid'=>$user_id])
-            ->andWhere(['default'=>UserAddress::ADDRESS_SELECT])
+            ->andWhere(['default'=>self::ADDRESS_SELECT])
             ->one();
         $data['district_name']=$userAddress?LogisticsDistrict::GetLineDistrictByDistrictCode($userAddress->district):'';
     }
