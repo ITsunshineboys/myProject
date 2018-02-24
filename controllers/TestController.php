@@ -548,7 +548,7 @@ class TestController extends Controller
             ->where(['uid'=>$user->id])
             ->andWhere(['role_id'=>$user->last_role_id_app])
             ->andWhere(['status'=>0])
-            ->count();
+            ->all();
 
         var_dump($userNews);
             $chatNews=ChatRecord::find()->where(['to_uid'=>$user->id])->andWhere(['to_role_id'=>$user->last_role_id_app])
