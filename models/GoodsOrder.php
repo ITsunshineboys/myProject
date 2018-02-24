@@ -473,7 +473,7 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
-            $date=date('Ymd',time());
+            $date=date('Ymd',$time);
             $GoodsStat=GoodsStat::find()
                 ->where(['supplier_id'=>$Goods->supplier_id])
                 ->andWhere(['create_date'=>$date])

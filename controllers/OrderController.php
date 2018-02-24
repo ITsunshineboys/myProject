@@ -3682,6 +3682,7 @@ class OrderController extends Controller
         $model=new Alipay();
         $alipaySevice=$model->Alipaylinenotify();
         $result = $alipaySevice->check($post);
+        $time=time();
         if ($result){
             if ($post['trade_status'] == 'TRADE_SUCCESS'){
                 $orders=explode(',',urldecode($post['passback_params']));
@@ -3714,10 +3715,10 @@ class OrderController extends Controller
                         case 5:
                             $role_number=$role->id;
                             break;
-                        case 6:
+                        case \Yii::$app->params['supplierRoleId']:
                             $role_number=$role->shop_no;
                             break;
-                        case 7:
+                        case \Yii::$app->params['ownerRoleId']:
                             $role_number=$role->aite_cube_no;
                             break;
                     }
@@ -3752,7 +3753,7 @@ class OrderController extends Controller
                             echo 'fail';
                             exit;
                         }
-                        $time=time();
+
                         $GoodsOrder->pay_status=GoodsOrder::PAY_STATUS_PAID;
                         $GoodsOrder->pay_name=PayService::ALI_APP_PAY;
                         $GoodsOrder->paytime=$time;
