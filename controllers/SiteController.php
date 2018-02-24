@@ -1887,6 +1887,7 @@ class SiteController extends Controller
         $userNews=UserNewsRecord::find()
             ->where(['uid'=>$user->id])
             ->andWhere(['role_id'=>$user->last_role_id_app])
+            ->andWhere("send_time>=".strtotime("-2 week"))
             ->andWhere(['status'=>0])
             ->count();
         if ($userNews==0)
