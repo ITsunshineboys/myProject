@@ -6,20 +6,14 @@ namespace app\controllers;
 use app\models\ChatRecord;
 use app\models\OrderGoods;
 use app\models\Supplier;
-use app\models\UploadForm;
 use app\models\User;
 use app\models\UserChat;
-use app\models\UserFreezelist;
 use app\models\UserNewsRecord;
-use app\models\Worker;
 use app\services\ChatService;
-use app\services\FileService;
-use app\services\ModelService;
-use yii\data\Pagination;
 use yii\db\Query;
 use yii\helpers\Json;
 use yii\web\Controller;
-use yii\web\UploadedFile;
+
 
 class ChatController extends Controller
 {

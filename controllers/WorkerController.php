@@ -10,7 +10,6 @@ use app\models\WorkerOrder;
 use app\models\WorkerOrderItem;
 use app\models\WorkerRank;
 use app\models\WorkerService;
-use app\models\WorkerType;
 use app\models\WorkerValuedetails;
 use app\models\WorkerWorks;
 use app\models\WorkerWorksReview;

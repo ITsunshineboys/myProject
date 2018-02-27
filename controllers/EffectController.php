@@ -3,14 +3,11 @@ namespace app\controllers;
 
 use app\models\Effect;
 use app\models\EffectEarnest;
-use app\models\EffectMaterial;
 use app\models\User;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
 use app\services\StringService;
 use app\services\AuthService;
-use yii\base\Model;
-use yii\db\Query;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
