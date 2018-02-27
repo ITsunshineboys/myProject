@@ -2443,6 +2443,7 @@ class OrderController extends Controller
     }
 
     /**
+     *
      * 获取订单详情
      * @return string
      * @throws Exception

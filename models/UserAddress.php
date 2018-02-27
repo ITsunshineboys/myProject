@@ -415,6 +415,13 @@ class UserAddress extends  ActiveRecord
             ->where(['uid'=>$user_id])
             ->andWhere(['default'=>self::ADDRESS_SELECT])
             ->one();
+        if (!$userAddress)
+        {
+            $userAddress=UserAddress::find()
+                ->select('district')
+                ->where(['uid'=>$user_id])
+                ->one();
+        }
         $data['district_name']=$userAddress?LogisticsDistrict::GetLineDistrictByDistrictCode($userAddress->district):'';
     }
 
