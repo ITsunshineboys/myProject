@@ -115,3 +115,9 @@ h3 {
 .reviews-name::after {
     content: '：';
 }
+
+.font-length {
+    position: absolute;
+    bottom: 4px;
+    right: 20px;
+}

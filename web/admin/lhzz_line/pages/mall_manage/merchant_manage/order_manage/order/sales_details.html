@@ -369,7 +369,8 @@
         <div class="form-group">
             <label class="col-xs-2 control-label">说明</label>
             <div class="col-xs-8">
-                <textarea class="form-control" rows="5" placeholder="请输入操作理由" ng-model="interOper.reason"></textarea>
+                <textarea class="form-control" rows="7" placeholder="请输入操作理由" ng-model="interOper.reason" maxlength="300"></textarea>
+                <span class="font-length">{{interOper.reason.length}}/300</span>
             </div>
         </div>
     </div>
