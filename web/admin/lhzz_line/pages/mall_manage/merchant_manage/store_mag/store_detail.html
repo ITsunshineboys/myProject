@@ -220,13 +220,14 @@
                 <td ng-bind="item.brand_name"></td>
                 <td ng-bind="item.create_time"></td>
                 <td>{{item.authorization_start}} 至 {{item.authorization_end}}</td>
-                <td ng-bind="item.review_status_desc" ng-class="{'red':item.review_status_desc=='不通过','green':item.review_status_desc=='通过','blue':item.review_status_desc=='等待审核'}"></td>
+                <td ng-bind="item.review_status_desc"
+                    ng-class="{'red':item.review_status_desc=='不通过','green':item.review_status_desc=='通过','blue':item.review_status_desc=='等待审核'}"></td>
                 <td ng-if="!item.review_note">
                     <span ng-bind="item.review_note" class="review_note"></span>
                 </td>
-                <td ng-if="item.review_note" data-toggle="modal" data-target=".bs-example-modal-md"
+                <td ng-if="item.review_note" data-toggle="modal" data-target="#remark"
                     ng-click="showNote(item.review_note)">
-                    <span ng-bind="item.review_note" class="review_note"></span>
+                    <span ng-bind="item.review_note" class="review-note"></span>
                 </td>
                 <td><a ui-sref="merchant_details({itemdetail:item,store:store})">查看</a></td>
             </tr>
@@ -234,18 +235,29 @@
         </table>
         <tm-pagination conf="pageConfig"></tm-pagination>
     </div>
-    <!--模态框-->
-    <div class="modal fade bs-example-modal-md" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content modal_size">
-                <h4>审核备注</h4>
-                <hr/>
-                <span>说明</span>
-                <span ng-bind="notedetail"></span>
-                <br/>
-                <button class="modal_size_btn" data-dismiss="modal">确认</button>
-            </div>
 
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="remark">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">审核备注</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <span class="col-md-2 control-label">说明</span>
+                        <div class="col-md-10 remark-detail">
+                        <p ng-bind="notedetail"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

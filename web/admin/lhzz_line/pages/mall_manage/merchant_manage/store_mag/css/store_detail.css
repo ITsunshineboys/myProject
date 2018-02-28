@@ -211,3 +211,17 @@ hr {
 .store_level {
     color: #666F80;
 }
+
+
+.review-note {
+    display: inline-block;
+    width: 110px;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.remark-detail {
+    word-break: break-all;
+}
