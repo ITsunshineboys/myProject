@@ -1938,9 +1938,7 @@ class User extends ActiveRecord implements IdentityInterface
             || in_array($roleId, [Yii::$app->params['lhzzRoleId']])
             || !in_array($roleId, UserRole::findRoleIdsByUserIdAndReviewStatus($this->id))
         ) {
-            if (!in_array($roleId, UserRole::findRoleIdsByUserIdAndReviewStatus($this->id)) {
-                StringService::writeLog('test', json_encode(['role_id' => $roleId, 'user_id' => $this->id, 'role_ids' => UserRole::findRoleIdsByUserIdAndReviewStatus($this->id)]));
-            };
+            StringService::writeLog('test', json_encode(['role_id' => $roleId, 'user_id' => $this->id, 'role_ids' => UserRole::findRoleIdsByUserIdAndReviewStatus($this->id)]));
             return 1000;
         }
 
