@@ -41,6 +41,15 @@
     left: calc(50% - 0.735rem)!important;
     text-align: center;
     box-sizing: content-box;
+    position: relative;
+}
+.logo img{
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
 }
 .personal_center  .avatar > p{
     width: 100%;
