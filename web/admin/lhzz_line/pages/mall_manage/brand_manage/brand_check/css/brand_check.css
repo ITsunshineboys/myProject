@@ -21,6 +21,14 @@ p{
     border-radius: 4px;
     vertical-align: text-top;
 }
+.remark-box{
+    position: relative;
+}
+.word-num{
+    position: absolute;
+    bottom: 0;
+    right: 15px;
+}
 .btn_top{
     margin-top: 30px;
 }

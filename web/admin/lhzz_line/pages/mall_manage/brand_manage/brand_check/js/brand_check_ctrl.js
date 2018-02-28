@@ -32,6 +32,14 @@ brand_check.controller("brand_check_ctrl",function ($rootScope,$scope,$http,$sta
             $state.go('brand_index',{check_flag:true})
         },300)
     })
-
   }
+  // 多行文本框
+  $scope.review_txt = ''
+  $scope.change_txt=function (value) {
+    if(value==undefined){
+      $scope.review_txt='';
+    }else{
+      $scope.review_txt=value;
+    }
+  };
 });
