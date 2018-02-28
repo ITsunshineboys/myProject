@@ -1938,6 +1938,8 @@ class User extends ActiveRecord implements IdentityInterface
             || in_array($roleId, [Yii::$app->params['lhzzRoleId']])
             || !in_array($roleId, UserRole::findRoleIdsByUserIdAndReviewStatus($this->id))
         ) {
+            !$roleId && StringService::writeLog('test', 'no role id');
+            !in_array($roleId, UserRole::findRoleIdsByUserIdAndReviewStatus($this->id)) && StringService::writeLog('test', 'not authorized');
             return 1000;
         }
 
