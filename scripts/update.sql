@@ -301,5 +301,6 @@ ALTER TABLE `app_version`  ADD  `version_code` varchar(30) DEFAULT NULL;
 --all 2018.02.06 hj
 ALTER TABLE `line_supplier_goods` ADD `supplier_id` int(11) NOT NULL COMMENT '商家id' AFTER `goods_id`;
 
-
+--all 2018.02.28 hyz
+ALTER TABLE `user_role` MODIFY  `review_remark`  varchar(100) NOT NULL DEFAULT '' COMMENT '审核备注';
 
