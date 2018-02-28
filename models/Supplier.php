@@ -211,7 +211,7 @@ class Supplier extends ActiveRecord
         $supplier->category_id = isset($attrs['category_id']) ? (int)$attrs['category_id'] : 0;
         $supplier->type_shop = isset($attrs['type_shop']) ? (int)$attrs['type_shop'] : 0;
         $supplier->name = isset($attrs['name']) ? trim($attrs['name']) : '';
-        $supplier->licence = isset($attrs['licence']) ? trim($attrs['licence']) : '';
+        $supplier->licence = isset($attrs['licence']) ? strtoupper(trim($attrs['licence'])) : '';
         $supplier->licence_image = isset($attrs['licence_image']) ? trim($attrs['licence_image']) : '';
         $supplier->uid = $user->id;
         $supplier->create_time = time();
