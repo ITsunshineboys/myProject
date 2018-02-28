@@ -4637,7 +4637,7 @@ class OrderController extends Controller
                 $supplier_user=User::find()
                     ->where(['id'=>$supplier->uid])
                     ->one();
-                $content = "订单号{$order_no},{$OrderGoods->goods_name}...";
+                $content = "订单号{$order_no},{$OrderGoods->goods_name}";
                 $record=new UserNewsRecord();
                 $record->uid=$supplier_user->id;
                 $record->role_id=Yii::$app->params['supplierRoleId'];

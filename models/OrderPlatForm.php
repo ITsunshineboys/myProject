@@ -281,7 +281,7 @@ class OrderPlatForm extends ActiveRecord
                 return $code;
             };
             //退款，已从您的余额扣除
-            $data1=UserNewsRecord::AddOrderNewRecord(User::findOne($supplier->uid), '平台介入，关闭订单退款', \Yii::$app->params['supplierRoleId'],"订单号{$order_no},商品编号{$sku}已进行平台介入关闭并".StringService::formatPrice($reduce_money*0.01)."元,若有疑问请联系客服。", $order_no, $sku,GoodsOrder::STATUS_DESC_DETAILS);
+            $data1=UserNewsRecord::AddOrderNewRecord(User::findOne($supplier->uid), '平台介入，关闭订单退款', \Yii::$app->params['supplierRoleId'],"订单号{$order_no},商品编号{$sku}已进行平台介入关闭并退款".StringService::formatPrice($reduce_money*0.01)."元,若有疑问请联系客服。", $order_no, $sku,GoodsOrder::STATUS_DESC_DETAILS);
             if ($data1!=200)
             {
                 $code= $data;
