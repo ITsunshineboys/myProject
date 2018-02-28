@@ -31,3 +31,18 @@
     right: 18px;
     z-index: 10;
 }
+
+/*审核备注*/
+.remark {
+    position: relative;
+}
+
+.remark span {
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
+}
+
+
+
+

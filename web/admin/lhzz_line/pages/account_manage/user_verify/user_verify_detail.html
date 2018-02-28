@@ -64,8 +64,9 @@
 
         <div class="form-group">
             <span class="col-md-2 control-label">审核备注</span>
-            <div class="col-md-8 form-control-static">
-                <textarea class="form-control" rows="5" ng-model="params.remark" placeholder="请填写不通过/通过原因"></textarea>
+            <div class="col-md-8 form-control-static remark">
+                <textarea class="form-control" rows="5" maxlength="100" ng-model="params.remark" placeholder="请填写不通过/通过原因"></textarea>
+                <span>{{params.remark.length}}/100</span>
             </div>
         </div>
     </div>

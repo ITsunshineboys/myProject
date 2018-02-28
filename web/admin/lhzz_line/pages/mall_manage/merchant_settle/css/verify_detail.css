@@ -31,3 +31,14 @@
     right: 18px;
     z-index: 10;
 }
+
+/*审核备注*/
+.review-remark {
+    position: relative;
+}
+
+.review-remark span {
+    position: absolute;
+    right: 22px;
+    bottom: 10px;
+}
