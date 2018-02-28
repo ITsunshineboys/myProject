@@ -650,6 +650,21 @@ class Goods extends ActiveRecord
         return $row;
     }
 
+    public  static function maxProfit($c_id)
+    {
+        $select = $select = 'sku,supplier_id,id,category_id,platform_price,purchase_price_decoration_company,max(profit_rate) as profit_rate,cover_image,title,status';
+        $where = ['in','category_id',$c_id];
+        $rows = self::find()
+            ->select($select)
+            ->where($where)
+            ->andWhere(['in','status',self::STATUS_ONLINE_OFFLINE])
+//            ->max('profit_rate')
+            ->groupBy('category_id')
+            ->all();
+
+        return $rows;
+    }
+
     /**
      * @param $level
      * @param $title

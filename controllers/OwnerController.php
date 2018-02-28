@@ -47,7 +47,8 @@ class OwnerController extends Controller
     /**
      * 基础装修有计算公式的必要材料id
      */
-    const CIRCUIT_MATERIAL    = [43,30,40,32];       // 强弱电材料id
+    const CIRCUIT_MATERIAL   = [43,30,40,32];    // 强弱电材料id
+    const CIRCUIT_MATERIALS  = [43,30,40,32,33,37];    // 强弱电材料id
     const WATERWAY_MATERIAL  = [33,37];          // 水路材料id
     const WATERPROOF_MATERIAL= [56];             // 防水材料id
     const CARPENTRY_MATERIAL = [22,9,12,13];     // 木作材料id
@@ -302,6 +303,46 @@ class OwnerController extends Controller
             ]
         ]);
     }
+
+    public function actionBasics()
+    {
+        $get = Yii::$app->request->get();
+
+        $p_where = 'id in ('.self::PROJECT_DETAILS['strong_current'].','.self::PROJECT_DETAILS['weak_current'].','.self::PROJECT_DETAILS['waterway'].')';
+        $points = Points::findByIds('id,title',$p_where);
+        foreach ($points as $p){
+            // 弱电
+            if ($p['id'] ==  self::PROJECT_DETAILS['weak_current']){
+                $w_where      = 'pid = '.$p['id'];
+                $w_points     = Points::findByPid('title,count',$w_where);
+                $w_sum_points = BasisDecorationService::weakPoints($w_points,$get);
+            }
+
+            // 强电
+            if ($p['id'] ==  self::PROJECT_DETAILS['strong_current']){
+                $s_where      = 'pid = '.$p['id'];
+                $s_points     = Points::findByPid('title,count',$s_where);
+                $s_sum_points = BasisDecorationService::strongPoints($s_points,$get);
+            }
+
+            //防水
+            if ($p['id'] == self::PROJECT_DETAILS['waterway']) {
+                $waterway_where      = 'pid = ' . $p['id'];
+                $waterway_points     = Points::findByPid('title,count', $waterway_where);
+                $waterway_sum_points = BasisDecorationService::waterwayPoints($waterway_points, $get);
+            }
+        }
+
+        // 强弱电总点位
+        $total_points = BasisDecorationService::algorithm(3,$w_sum_points,$s_sum_points);
+
+
+        // 所需要材料查询
+        $goods = Goods::maxProfit(self::CIRCUIT_MATERIALS);
+        var_dump($goods);die;
+        $judge = BasisDecorationService::judge($goods,$get);
+    }
+
 
     /**
      * 强弱电价格
