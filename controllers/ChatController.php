@@ -98,6 +98,7 @@ class ChatController extends Controller
         }
         list($u_id, $role_id) = $user;
         $code=1000;
+        $path_data=\Yii::$app->request->get('path_data');
         $to_uid=trim(\Yii::$app->request->get('to_uid'));
         $to_role_id=trim(\Yii::$app->request->get('role_id'));
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
@@ -116,7 +117,12 @@ class ChatController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $filepath=UserChat::upload();
+        if($path_data){
+            $filepath=$path_data;
+        }else{
+            $filepath=UserChat::upload();
+        }
+
 
         if(is_numeric($filepath)){
             $code=$filepath;
