@@ -377,11 +377,10 @@ class BasisDecorationService
         if (is_array($goods)){
             foreach ($goods as $one){
                 if ($one['three_c'] == $value){
-                    $o_goods[] = $one;
+                    $o_goods = $one;
                 }
             }
         }
-
 
         if (!$o_goods){
             return null;
@@ -393,6 +392,7 @@ class BasisDecorationService
                 break;
             case $int == 2 ;
                 $g_attr = GoodsAttr::findByGoodsIdUnits($o_goods['id'],$name);
+                break;
         }
 
         return [$o_goods,$g_attr];
