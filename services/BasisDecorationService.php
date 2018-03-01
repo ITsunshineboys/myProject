@@ -514,6 +514,7 @@ class BasisDecorationService
         $goods[0]['quantity'] = $value['quantity'];
         $goods[0]['cost'] = $value['cost'];
         $goods[0]['procurement'] = $value['procurement'];
+        unset($goods[0]['purchase_price_decoration_company']);
 
         return $goods[0];
     }
@@ -633,6 +634,7 @@ class BasisDecorationService
         $goods[0]['quantity'] = $value ['quantity'];
         $goods[0]['cost'] = $value ['cost'];
         $goods[0]['procurement'] = $value ['procurement'];
+        unset($goods[0]['purchase_price_decoration_company']);
 
         return $goods[0];
     }
@@ -697,6 +699,7 @@ class BasisDecorationService
         $goods[0]['quantity'] = $value['quantity'];
         $goods[0]['cost'] = $value['cost'];
         $goods[0]['procurement'] = $value['procurement'];
+        unset($goods[0]['purchase_price_decoration_company']);
 
         return $goods[0];
     }
@@ -1449,6 +1452,7 @@ class BasisDecorationService
         $goods[0]['quantity'] = $max['quantity'];
         $goods[0]['cost'] = $max['cost'];
         $goods[0]['procurement'] = $max['procurement'];
+        unset($goods[0]['purchase_price_decoration_company']);
 
         return $goods[0];
 
