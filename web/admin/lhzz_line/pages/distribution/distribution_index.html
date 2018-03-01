@@ -1,5 +1,5 @@
 <div class="distribution_index">
-    <p><span>今日新加入：{{vm.nowday_add}}</span><span>分销总人数：{{vm.total_add}}</span></p>
+    <p><span class="header_span">今日新加入：{{vm.nowday_add}}</span><span class="header_span">分销总人数：{{vm.total_add}}</span></p>
     <div class="search form-inline clearfix">
         <select ng-model="params.time_type" ng-change="getDistribution()"
                 ng-options="item.value as item.name for item in time_types" class="form-control"></select>

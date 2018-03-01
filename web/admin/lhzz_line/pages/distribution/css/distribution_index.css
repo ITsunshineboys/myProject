@@ -1,5 +1,5 @@
 /*分销主页样式*/
-.distribution_index span{
+.distribution_index .header_span{
     margin-right:15px;
 }
 .distribution_index > div{

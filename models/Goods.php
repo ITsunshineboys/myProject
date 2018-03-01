@@ -664,8 +664,17 @@ class Goods extends ActiveRecord
             ->all();
 
         foreach ($rows as &$row){
-            $three_c = GoodsCategory::find()->select('title')->where(['id'=>$row['category_id']])->one();
+            $three_c = GoodsCategory::find()->select('title,path')->where(['id'=>$row['category_id']])->one();
             $brand_n=GoodsBrand::find()->select('name')->where(['id'=>$row['brand_id']])->one();
+            $where = 'id in (' .rtrim($three_c->path,','). ')';
+            $path = GoodsCategory::find()->asArray()->select('title')->where($where)->all();
+
+            $array = [];
+            foreach ($path as $value){
+                $array[] = $value['title'];
+            }
+
+            $row['path'] = implode(',',$array);
             $row['three_c']=$three_c->title;
             $row['brand_name']=$brand_n->name;
             $row['platform_price'] =  $row['platform_price'] / 100;
