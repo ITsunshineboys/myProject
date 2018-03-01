@@ -3194,11 +3194,51 @@ class QuoteController extends Controller
             'msg'=>$code==200?'ok':\Yii::$app->params['errorCodes'][$code]
         ]);
     }
-
+    /**
+     * 固定抓取 商品详情
+     * @return string
+     */
     public function actionFixedGoodsView(){
         $sku=trim(\Yii::$app->request->get('sku'));
-        $data=[];
+        if(!$sku){
+            $code=1000;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $goods=FixedGrabbingGoods::goodsview($sku);
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'goods'=>$goods
+        ]);
+
+    }
+
+    /**
+     * 固定抓取 总计商品数量
+     * @return string
+     */
+    public function actionFistGoodsList(){
+        $city_code=(int)\Yii::$app->request->get('city_code',510010);
+        $first_list=GoodsCategory::find()
+            ->select('id,title')
+            ->where(['pid'=>0])
+            ->asArray()
+            ->all();
+
+        foreach ($first_list as &$list){
+            $list['count']=FixedGrabbingGoods::find()
+                ->where(['city_code'=>$city_code,'first_cate_id'=>$list['id']])
+                ->count('first_cate_id');
+        }
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'list'=>$first_list
+        ]);
+
     }
     /**
      * 测试功能
