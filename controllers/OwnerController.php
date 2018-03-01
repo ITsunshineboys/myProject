@@ -305,6 +305,11 @@ class OwnerController extends Controller
         ]);
     }
 
+
+    /**
+     * 水电价格
+     * @return string
+     */
     public function actionBasics()
     {
         $get = Yii::$app->request->get();
