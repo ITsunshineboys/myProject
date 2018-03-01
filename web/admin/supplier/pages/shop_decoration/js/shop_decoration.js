@@ -188,7 +188,7 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
 	  $scope.upload_txt='上传中...';
     console.log($scope.data);
     Upload.upload({
-      url:'/site/upload',
+      url:'http://common.cdlhzz.cn/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
       console.log(response);
