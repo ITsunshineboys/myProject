@@ -48,6 +48,7 @@ use app\models\WorksData;
 use app\models\WorksWorkerData;
 use app\services\BasisDecorationService;
 use app\services\ExceptionHandleService;
+use app\services\FileService;
 use app\services\ModelService;
 use app\services\StringService;
 use yii\db\Exception;
@@ -3195,14 +3196,16 @@ class QuoteController extends Controller
     }
 
     public function actionFixedGoodsView(){
-
+        $sku=trim(\Yii::$app->request->get('sku'));
+        $data=[];
+        $goods=FixedGrabbingGoods::goodsview($sku);
     }
     /**
      * 测试功能
      */
     public function actionTest()
     {
-        $data=User::find()->where(['mobile'=>13308197780])->asArray()->one();
-        var_dump($data);
+        $filepath=FileService::upload();
+        var_dump($filepath);
     }
 }
