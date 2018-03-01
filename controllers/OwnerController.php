@@ -341,12 +341,8 @@ class OwnerController extends Controller
 
         // 强弱电总点位
         $total_points = BasisDecorationService::algorithm(3,$w_sum_points,$s_sum_points);
-
-
         // 所需要材料查询
         $goods = Goods::maxProfit(self::CIRCUIT_MATERIALS);
-
-
         // 当地水电工艺
         $p_craft = WorkerType::craft1(self::CRAFT_NAME['plumber'],$get['city']);
         foreach ($p_craft as $oneCraft){
@@ -400,8 +396,6 @@ class OwnerController extends Controller
         $material[] = BasisDecorationService::plumberFormula(2,$total_points,$b_attr);
         $material[] = BasisDecorationService::waterwayGoods(1,$waterway_sum_points,$ppr_,$ppr);
         $material[] = BasisDecorationService::waterwayGoods(1,$waterway_sum_points,$pvc_,$pvc);
-
-
         $total_cost = round($material[0]['cost']+$material[1]['cost']+$material[2]['cost']+$material[3]['cost']+$material[4]['cost']+$material[5]['cost'],2);
 
 
