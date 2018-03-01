@@ -156,6 +156,7 @@ class ChatController extends Controller
         }
         list($u_id, $role_id) = $user;
         $code=1000;
+        $path_data=trim(\Yii::$app->request->get('path_data'));//IOS
         $to_uid=trim(\Yii::$app->request->get('to_uid'));
         $to_role_id=trim(\Yii::$app->request->get('role_id'));
         $length=trim(\Yii::$app->request->get('length'));//语音长度
@@ -175,7 +176,12 @@ class ChatController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $filepath=UserChat::upload();
+        if($path_data){
+            $filepath=substr($path_data,1);
+        }else{
+            $filepath=UserChat::upload();
+        }
+
         if(is_numeric($filepath)){
             $code=$filepath;
             return Json::encode([
