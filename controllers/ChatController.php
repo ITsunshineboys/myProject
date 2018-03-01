@@ -208,9 +208,10 @@ class ChatController extends Controller
             return $user;
         }
         list($u_id, $role_id) = $user;
-
+        $weak_t2=strtotime("-2 week");
         $res['news']=UserNewsRecord::find()
             ->where(['uid'=>$u_id,'role_id'=>$role_id])
+            ->andWhere("send_time>=$weak_t2")
             ->asArray()
             ->orderBy('send_time Desc')
             ->one();
