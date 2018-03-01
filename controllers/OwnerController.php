@@ -575,47 +575,48 @@ class OwnerController extends Controller
         $labor = LaborCost::profession($get['city'],self::WORK_CATEGORY['plumber']);
         $day_workload = WorkerCraftNorm::findByLaborCostAll($labor['id']);
 
-        foreach ($day_workload as $one_day){
-            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['strong_current']){
-                $strong = $one_day['quantity'];
+        foreach ($day_workload as $o_day)
+        {
+            if ($o_day['worker_type_id'] == self::POINTS_CATEGORY['strong_current']){
+                $strong = $o_day['quantity'];
             }
 
-            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['weak_current']){
-                $weak = $one_day['quantity'];
+            if ($o_day['worker_type_id'] == self::POINTS_CATEGORY['weak_current']){
+                $weak = $o_day['quantity'];
             }
 
-            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['waterway']){
-                $waterway = $one_day['quantity'];
+            if ($o_day['worker_type_id'] == self::POINTS_CATEGORY['waterway']){
+                $waterway = $o_day['quantity'];
             }
         }
 
         $points = Points::find()->asArray()->select('id,title,count')->where(['in','id',[1,2,3]])->all();
         foreach ($points  as $p){
             if ($p['id'] == self::PROJECT_DETAILS['waterway']){
-                $waterway_where = 'pid = '.$p['id'];
-                $waterway_points = Points::findByPid('title,count',$waterway_where);
-                $waterway_overall_points = BasisDecorationService::waterwayPoints($waterway_points,$get);
+                $water_where = 'pid = '.$p['id'];
+                $water_points = Points::findByPid('title,count',$water_where);
+                $water_points = BasisDecorationService::waterwayPoints($water_points,$get);
             }
 
             if ($p['id'] == self::PROJECT_DETAILS['weak_current']){
-                $weak_where = 'pid = '.$p['id'];
-                $weak_points = Points::findByPid('title,count',$weak_where);
-                $weak_overall_points = BasisDecorationService::weakPoints($weak_points,$get);
+                $w_where = 'pid = '.$p['id'];
+                $w_points = Points::findByPid('title,count',$w_where);
+                $w_points = BasisDecorationService::weakPoints($w_points,$get);
             }
 
             if ($p['id'] == self::PROJECT_DETAILS['strong_current']){
-                $strong_where = 'pid = '.$p['id'];
-                $strong_points = Points::findByPid('title,count',$strong_where);
-                $strong_overall_points = BasisDecorationService::strongPoints($strong_points,$get);
+                $s_where = 'pid = '.$p['id'];
+                $s_points = Points::findByPid('title,count',$s_where);
+                $s_points = BasisDecorationService::strongPoints($s_points,$get);
                 }
 
         }
 
 
         //人工总费用    $points['count'],$workers['univalence'],$worker_kind_details['quantity']
-        $waterway_ = BasisDecorationService::laborFormula($waterway_overall_points,$waterway);
-        $weak_     = BasisDecorationService::laborFormula($weak_overall_points,$weak);
-        $strong_   = BasisDecorationService::laborFormula($strong_overall_points,$strong);
+        $waterway_ = BasisDecorationService::laborFormula($water_points,$waterway);
+        $weak_     = BasisDecorationService::laborFormula($w_points,$weak);
+        $strong_   = BasisDecorationService::laborFormula($s_points,$strong);
         $total = ceil(BasisDecorationService::algorithm(5,$waterway_,$weak_,$strong_));
 
 
