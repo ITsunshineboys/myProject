@@ -117,9 +117,7 @@ class ChatController extends Controller
             ]);
         }
         $filepath=UserChat::upload();
-        var_dump($filepath);
-        var_dump($to_uid);
-        var_dump($to_role_id);die;
+
         if(is_numeric($filepath)){
             $code=$filepath;
             return Json::encode([
