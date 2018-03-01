@@ -429,4 +429,23 @@ class ChatController extends Controller
         ]);
     }
 
+    public function actionUpload()
+    {
+        $uploadRet = UserChat::upload();
+        if (is_int($uploadRet)) {
+            return Json::encode([
+                'code' => $uploadRet,
+                'msg' => \Yii::$app->params['errorCodes'][$uploadRet],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'file_path' => $uploadRet,
+            ],
+        ]);
+    }
+
 }
