@@ -227,7 +227,7 @@ class UserChat extends \yii\db\ActiveRecord
             return 200;
 
         } catch (Exception $e) {
-            var_dump($e);
+
             $trans->rollBack();
             return $code = 500;
 
@@ -235,6 +235,7 @@ class UserChat extends \yii\db\ActiveRecord
     }
 
     public static function SendAudio($username,$send_uid,$send_role_id,$to_uid,$filepath,$length,$to_role_id){
+
 
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $trans = \Yii::$app->db->beginTransaction();

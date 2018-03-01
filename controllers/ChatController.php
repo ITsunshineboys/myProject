@@ -118,7 +118,7 @@ class ChatController extends Controller
             ]);
         }
         if($path_data){
-            $filepath=substr($path_data,1);
+            $filepath=$path_data;
         }else{
             $filepath=UserChat::upload();
         }
@@ -177,7 +177,7 @@ class ChatController extends Controller
             ]);
         }
         if($path_data){
-            $filepath=substr($path_data,1);
+            $filepath=$path_data;
         }else{
             $filepath=UserChat::upload();
         }
