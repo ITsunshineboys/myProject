@@ -23,7 +23,8 @@
     </div>
 
     <!--轮播-->
-    <swiper loop auto :list="banner_list" height="375px" dots-class="bottom-dots" dots-position="center" :show-desc-mask="false"></swiper>
+    <swiper loop auto :list="banner_list" height="375px" dots-class="bottom-dots" dots-position="center"
+            :show-desc-mask="false"></swiper>
     <div class="good-detail">
       <div class="title-container">
         <p>{{good_detail.title}}</p>
@@ -37,6 +38,7 @@
       <group>
         <cell-box is-link class="choose-count" @click.native="showCount('count')">
           选择数量
+
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -80,15 +82,18 @@
           <div>
             <span>{{good_detail.supplier.goods_number}}</span><br/>商品数
 
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.follower_number}}</span><br/>粉丝数
 
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
+
 
           </div>
         </flexbox>
@@ -155,25 +160,29 @@
         <flexbox-item @click.native="contactShop" :span="76/375">
           <i class="iconfont icon-service1"></i><br/>联系商家
 
+
         </flexbox-item>
         <span></span>
         <flexbox-item @click.native="androidCart" :span="77/375">
           <i class="iconfont icon-cart"></i><br/>购物车
 
+
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('cart')" :span="110/375">
           加入购物车
 
+
         </flexbox-item>
         <flexbox-item @click.native="bottomAdd('now')" :span="110/375">
           立即购买
+
 
         </flexbox-item>
       </flexbox>
     </div>
 
     <!-- 选择数量弹窗 -->
-    <popup v-model="show_count" @on-hide="showCount('all')">
+    <popup id="choose-count-pop" v-model="show_count" @on-hide="showCount('all')" @on-show="testFunc">
       <div>
         <group>
           <div class="count-top">
@@ -195,9 +204,11 @@
           <flexbox-item alt="cart" v-if="count_cart||default_count" @click.native="addCart">
             加入购物车
 
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
+
 
           </flexbox-item>
         </flexbox>
@@ -234,7 +245,8 @@
     </popup>
 
     <!--线下商品介绍弹窗-->
-    <offlinealert :offlineInfo="offlineInfo" :show="show_offlinegood" :isOffline="false" @isShow="showOfflineAlert"></offlinealert>
+    <offlinealert :offlineInfo="offlineInfo" :show="show_offlinegood" :isOffline="false"
+                  @isShow="showOfflineAlert"></offlinealert>
 
     <!--加入购物车成功提示-->
     <toast v-model="show_cart_success" width="200px" position="middle" :time="2000" :is-show-mask="true">
@@ -251,13 +263,14 @@
     </alert>
 
     <!--<alert class="goodshort-alert" v-model="test" :hide-on-blur="true">-->
-      <!--<slot name="default" class="alert-content">-->
-        <!--{{testcontent}}-->
-      <!--</slot>-->
+    <!--<slot name="default" class="alert-content">-->
+    <!--{{testcontent}}-->
+    <!--</slot>-->
     <!--</alert>-->
 
     <!--商品已下架提示-->
-    <popup class="offline-warning" v-model="show_offline" position="bottom" height="49px" :hide-on-blur="true" :show-mask="false">
+    <popup class="offline-warning" v-model="show_offline" position="bottom" height="49px" :hide-on-blur="true"
+           :show-mask="false">
       <div>该商品已下架</div>
     </popup>
   </div>
@@ -283,6 +296,27 @@
   import comment from '../good_detail/comment'
   import offlinealert from '@/components/OfflineAlert'
   const afterserviceArr = ['上门维修', '上门退货', '上门换货', '退货', '换货']
+  var ModalHelper = (function (bodyCls) {
+    var scrollTop // 在闭包中定义一个用来保存滚动位置的变量
+    return {
+      afterOpen: function () { // 弹出之后记录保存滚动位置，并且给body添加.modal-open
+        if (document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset) {
+          scrollTop = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset
+        } else {
+          scrollTop = 0
+        }
+        document.body.setAttribute('class', bodyCls)
+        document.body.style.top = -scrollTop + 'px'
+      },
+      beforeClose: function () { // 关闭时将.modal-open移除并还原之前保存滚动位置
+        document.body.setAttribute('class', '')
+        document.documentElement.scrollTop = scrollTop
+        document.body.scrollTop = scrollTop
+        window.pageYOffset = scrollTop
+//              scrollTop = 0 + 'px'
+      }
+    }
+  })('modal-open')
 
   export default {
     name: 'GoodDetail',
@@ -417,6 +451,7 @@
       // 选择数量 弹出层按钮显示处理
       showCount: function (obj) {
         if (obj === 'all') {
+          ModalHelper.beforeClose()
           this.show_count = false
           this.count_cart = false
           this.count_now = false
@@ -550,12 +585,20 @@
       // 联系商家
       contactShop () {
         this.contactStore(this.good_detail.supplier.uid, this.role_id)
+      },
+      testFunc () {
+        ModalHelper.afterOpen()
       }
     }
   }
 </script>
 
 <style>
+  body.modal-open {
+    position: fixed;
+    width: 100%;
+  }
+
   .good-container {
     background: rgba(255, 255, 255, 1);
     position: relative;
@@ -694,8 +737,8 @@
   .good-container .vux-slider > .vux-indicator.bottom-dots > a > .vux-icon-dot.active {
     background: #222;
   }
-  /*轮播样式 end*/
 
+  /*轮播样式 end*/
 
   /*商品信息 start*/
   .good-container .title-container {
@@ -732,6 +775,7 @@
     color: rgba(153, 153, 153, 1);
     line-height: 17px;
   }
+
   /*商品信息 end*/
 
   /*选择数量cell start*/
@@ -750,7 +794,7 @@
     line-height: 16px;
   }
 
-  @media (max-width: 360px){
+  @media (max-width: 360px) {
     .good-container .weui-cell {
       padding: 16px 14px;
       font-size: 14px;
@@ -758,6 +802,7 @@
       line-height: 16px;
     }
   }
+
   /*选择数量cell end*/
 
   /*选择数量弹窗 start*/
@@ -794,13 +839,13 @@
     line-height: 14px;
   }
 
-    /*购买数量 start*/
+  /*购买数量 start*/
   .good-container .buy-count > div:first-child p {
     font-size: 14px;
     color: rgba(153, 153, 153, 1);
   }
 
-   /*购买数量-Xnumber start*/
+  /*购买数量-Xnumber start*/
   .good-container .vux-number-selector svg {
     width: 15px;
     height: 15px;
@@ -831,6 +876,7 @@
   .good-container .vux-number-selector-plus {
     border-left: 0;
   }
+
   /*购买数量-Xnumber end*/
 
   /*购买数量-button start*/
@@ -864,6 +910,7 @@
     width: 30px;
     height: 30px;
   }
+
   /*购买数量-button end*/
   /*购买数量 end*/
   /*选择数量弹窗 end*/
@@ -889,7 +936,7 @@
     vertical-align: text-top;
   }
 
-  @media (max-width: 360px){
+  @media (max-width: 360px) {
     .good-container .icon-blue {
       font-size: 18px;
       color: #222222;
@@ -902,10 +949,10 @@
     }
   }
 
-  @media (max-width: 320px){
+  @media (max-width: 320px) {
     .good-container .service {
       line-height: 18px;
-      margin-right:16px;
+      margin-right: 16px;
     }
 
     .good-container .icon-blue {
@@ -919,6 +966,7 @@
       vertical-align: text-top;
     }
   }
+
   /*售后服务cell end*/
 
   /* 售后弹窗服务弹窗 start */
@@ -1008,8 +1056,8 @@
   .good-container .comment-count span:first-child {
     margin-right: 10px;
   }
-  /*评价flex end*/
 
+  /*评价flex end*/
 
   /*查看全部评价 start*/
   .good-container .view-all {
@@ -1025,7 +1073,8 @@
   .good-container .view-all .iconfont {
     margin-top: 2px;
   }
-    /*查看全部评价 end*/
+
+  /*查看全部评价 end*/
 
   /*店铺简介 start*/
   .good-container .shop-card {
@@ -1080,7 +1129,7 @@
     background: #e9edee;
   }
 
-    /*进店逛逛 start*/
+  /*进店逛逛 start*/
   .good-container .view-shop-btn {
     padding-bottom: 20px;
   }
@@ -1099,7 +1148,8 @@
     color: rgba(34, 34, 34, 1);
     background: rgba(255, 255, 255, 1);;
   }
-    /*进店逛逛 start*/
+
+  /*进店逛逛 start*/
 
   /*店铺简介 end*/
 
@@ -1126,9 +1176,10 @@
   .good-container .description img {
     max-width: 100%;
   }
-    /*图文详情 end*/
 
-    /*产品参数 start*/
+  /*图文详情 end*/
+
+  /*产品参数 start*/
   .good-container .pro-params {
     margin-top: 39px;
   }
@@ -1154,7 +1205,8 @@
     text-align: right;
     line-height: 18px;
   }
-    /*产品参数 end*/
+
+  /*产品参数 end*/
   /*图文详情&产品参数 end*/
 
   /*底部选项卡 start*/
@@ -1164,8 +1216,8 @@
     text-align: center;
     height: 48px;
     background: #fff;
-    box-shadow: 0 -1px 0 rgba(0,0,0,0.05);
-    -webkit-box-shadow: 0 -1px 0 rgba(0,0,0,0.05);
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
+    -webkit-box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
   }
 
   .good-container .bottom-tabbar > div {
@@ -1207,8 +1259,8 @@
     font-size: 16px;
     color: rgba(255, 255, 255, 1);
   }
-  /*底部选项卡 end*/
 
+  /*底部选项卡 end*/
 
   /*添加购物车成功弹窗 start*/
   .good-container .weui-toast {
@@ -1274,5 +1326,6 @@
     font-size: 18px;
     color: rgba(255, 255, 255, 1);
   }
+
   /*商品下架弹窗 end*/
 </style>
