@@ -348,7 +348,7 @@ class OwnerController extends Controller
 
 
         // 当地水电工艺
-        $p_craft = WorkerType::craft12(self::CRAFT_NAME['plumber'],$get['city']);
+        $p_craft = WorkerType::craft1(self::CRAFT_NAME['plumber'],$get['city']);
         foreach ($p_craft as $oneCraft){
             switch ($oneCraft['pid'])
             {

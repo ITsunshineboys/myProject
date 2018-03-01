@@ -373,32 +373,29 @@ class BasisDecorationService
 
     public static function goodsAttr1($goods,$value,$name,$int = 1)
     {
-        $one_goods = [];
+        $o_goods = [];
         if (is_array($goods)){
             foreach ($goods as $one){
                 if ($one['three_c'] == $value){
-                    $one_goods[] = $one;
+                    $o_goods[] = $one;
                 }
             }
         }
 
 
-        if (!$one_goods){
+        if (!$o_goods){
             return null;
         }
 
-//        $style = self::style($one_goods);
-        //  抓取利润最大的商品
-        $max_goods = self::profitMargin($one_goods);
         switch ($int){
             case $int == 1 ;
-                $goods_attr = GoodsAttr::findByGoodsIdUnit($max_goods['id'],$name);
+                $g_attr = GoodsAttr::findByGoodsIdUnit($o_goods['id'],$name);
                 break;
             case $int == 2 ;
-                $goods_attr = GoodsAttr::findByGoodsIdUnits($max_goods['id'],$name);
+                $g_attr = GoodsAttr::findByGoodsIdUnits($o_goods['id'],$name);
         }
 
-        return [$max_goods,$goods_attr];
+        return [$o_goods,$g_attr];
     }
 
 

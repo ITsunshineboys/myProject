@@ -187,7 +187,7 @@ class WorkerType extends \yii\db\ActiveRecord
         return $rows;
     }
 
-    public function craft12($pid,$city)
+    public function craft1($pid,$city)
     {
         $rows = self::find()
             ->asArray()
