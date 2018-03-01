@@ -378,25 +378,26 @@ class OwnerController extends Controller
                     if ($oneCraft['worker_name'] == 'PVC管用料' ){
                         $pvc_ = $oneCraft['material'];
                     }
+                    break;
             }
 
         }
 
 
         //商品属性抓取
-        $reticle_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['reticle'],'长');
-        $wire_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['wire'],'长');
-        $spool_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['spool'],'长');
-        $bottom_case_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['bottom_case'],'长');
+        $r_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['reticle'],'长');
+        $w_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['wire'],'长');
+        $s_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['spool'],'长');
+        $b_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['bottom_case'],'长');
         $ppr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['ppr'],'长');
         $pvc = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['pvc'],'长');
 
 
         // 商品价格
-        $material[] = BasisDecorationService::plumberFormula(1,$w_sum_points,$reticle_attr,$reticle);
-        $material[] = BasisDecorationService::plumberFormula(1,$s_sum_points,$wire_attr,$wire);
-        $material[] = BasisDecorationService::plumberFormula(3,$s_sum_points,$spool_attr,$spool,$spool1,$w_sum_points);
-        $material[] = BasisDecorationService::plumberFormula(2,$total_points,$bottom_case_attr);
+        $material[] = BasisDecorationService::plumberFormula(1,$w_sum_points,$r_attr,$reticle);
+        $material[] = BasisDecorationService::plumberFormula(1,$s_sum_points,$w_attr,$wire);
+        $material[] = BasisDecorationService::plumberFormula(3,$s_sum_points,$s_attr,$spool,$spool1,$w_sum_points);
+        $material[] = BasisDecorationService::plumberFormula(2,$total_points,$b_attr);
         $material[] = BasisDecorationService::waterwayGoods(1,$waterway_sum_points,$ppr_,$ppr);
         $material[] = BasisDecorationService::waterwayGoods(1,$waterway_sum_points,$pvc_,$pvc);
 
