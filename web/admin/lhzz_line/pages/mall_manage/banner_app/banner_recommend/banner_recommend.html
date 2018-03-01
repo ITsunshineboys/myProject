@@ -140,7 +140,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="modal_tab">
-                                <button class="btn btn-primary">商家</button>
+                                <button class="btn btn-primary">商品</button>
                                 <span data-dismiss="modal" data-toggle="modal" data-target="#recommend_link_modal_add" ng-click="clear_add_content()">链接</span>
                             </div>
                             <div id="shop_num_null" ng-if="(shop_form.shop_num_name.$invalid &&submitted)||(shop_form.shop_num_name.$error.required && num_blur)||banner_num_error">
@@ -163,7 +163,7 @@
                             <div class="form-group">
                                 <div class="col-sm-3 control-label">
                                     <i class="red">*</i>
-                                    <span>商品标题</span>
+                                    <span>商品名称</span>
                                 </div>
                                 <div class="col-sm-9">
                                     <input class="still form-control" name="shop_title_name" disabled="disabled" ng-model="recommend_shop_title" type="text" />
@@ -227,7 +227,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="modal_tab">
-                                <span data-dismiss="modal" data-toggle="modal" data-target="#recommend_shop_modal_add" ng-click="clear_add_content()">商家</span>
+                                <span data-dismiss="modal" data-toggle="modal" data-target="#recommend_shop_modal_add" ng-click="clear_add_content()">商品</span>
                                 <button class="btn btn-primary">链接</button>
                             </div>
                             <div class="form-group">
@@ -390,7 +390,7 @@
                 <div class="modal-content">
                     <form class="form-horizontal" name="edit_form" novalidate>
                         <div class="modal-header">
-                            <h4 class="modal-title">推荐——{{edit_item.from_type}}编辑</h4>
+                            <h4 class="modal-title">编辑Banner</h4>
                         </div>
                         <!--商家-->
                         <div class="modal-body" ng-if="edit_item.from_type=='商家'">
@@ -400,7 +400,7 @@
                             <div class="form-group">
                                 <div class="col-sm-3 control-label">
                                     <i class="red">*</i>
-                                    <span>商铺编号</span>
+                                    <span>商品编号</span>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group">
@@ -423,7 +423,7 @@
                             <div class="form-group">
                                 <div class="col-sm-3 control-label">
                                     <i class="red">*</i>
-                                    <span>标题</span>
+                                    <span>商品名称</span>
                                 </div>
                                 <div class="col-sm-9">
                                 <input name="edit_shop_title" class="still form-control" disabled="disabled" ng-model="myng.recommend_shop_edit_title" type="text" />
@@ -527,7 +527,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h4 class="modal-title">推荐——商家详情</h4>
+                        <h4 class="modal-title">详情</h4>
                     </div>
                     <!--商铺详情模态框-->
                     <div class="modal-body" >
@@ -574,7 +574,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h4 class="modal-title">推荐——链接详情</h4>
+                        <h4 class="modal-title">详情</h4>
                     </div>
                     <!--商铺详情模态框-->
                     <div class="modal-body">
