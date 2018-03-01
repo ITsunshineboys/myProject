@@ -186,4 +186,26 @@ class WorkerType extends \yii\db\ActiveRecord
         }
         return $rows;
     }
+
+    public function craft12($pid,$city)
+    {
+        $rows = self::find()
+            ->asArray()
+            ->select('pid,worker_name')
+            ->where(['pid'=>$pid])
+            ->all();
+
+        foreach ($rows as &$row)
+        {
+            $material = EngineeringStandardCraft::find()
+                ->select('material')
+                ->where(['city_code'=>$city])
+                ->one();
+            $row['material']= $material->material;
+            $row['material'] =  $row['material'] / 100;
+        }
+
+        return $rows;
+    }
+
 }

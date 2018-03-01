@@ -343,11 +343,40 @@ class BasisDecorationService
      */
     public static function goodsAttr($goods,$value,$name,$int = 1)
     {
-
         $one_goods = [];
         if (is_array($goods)){
             foreach ($goods as $one){
                 if ($one['title'] == $value){
+                    $one_goods[] = $one;
+                }
+            }
+        }
+
+
+        if (!$one_goods){
+            return null;
+        }
+
+//        $style = self::style($one_goods);
+        //  抓取利润最大的商品
+        $max_goods = self::profitMargin($one_goods);
+        switch ($int){
+            case $int == 1 ;
+                $goods_attr = GoodsAttr::findByGoodsIdUnit($max_goods['id'],$name);
+                break;
+            case $int == 2 ;
+                $goods_attr = GoodsAttr::findByGoodsIdUnits($max_goods['id'],$name);
+        }
+
+        return [$max_goods,$goods_attr];
+    }
+
+    public static function goodsAttr1($goods,$value,$name,$int = 1)
+    {
+        $one_goods = [];
+        if (is_array($goods)){
+            foreach ($goods as $one){
+                if ($one['three_c'] == $value){
                     $one_goods[] = $one;
                 }
             }
@@ -407,6 +436,8 @@ class BasisDecorationService
         $goods[0]['cost'] = $electricity['cost'];
         $goods[0]['procurement'] = $electricity['procurement'];
 
+        unset($goods[0]['purchase_price_decoration_company']);
+
         return  $goods[0];
     }
 
@@ -430,6 +461,8 @@ class BasisDecorationService
         $goods[0]['quantity'] = $value['quantity'];
         $goods[0]['cost'] = $value['cost'];
         $goods[0]['procurement'] = $value['procurement'];
+
+        unset($goods[0]['purchase_price_decoration_company']);
 
         return $goods[0];
     }

@@ -123,6 +123,7 @@ class OwnerController extends Controller
         'weak'      => 25,  // 弱电工艺
         'strong'    => 29,  // 强电工艺
         'waterway'  => 32,  //'水路工艺',
+        'plumber'   =>[25,29,32], //水电工
         'waterproof'=> 35,  //'防水工艺',
         'carpentry' => 37,  //'木作工艺',
         'oil_paint' => 47,  //'油漆工艺',
@@ -339,8 +340,72 @@ class OwnerController extends Controller
 
         // 所需要材料查询
         $goods = Goods::maxProfit(self::CIRCUIT_MATERIALS);
-        var_dump($goods);die;
-        $judge = BasisDecorationService::judge($goods,$get);
+
+
+        // 当地水电工艺
+        $p_craft = WorkerType::craft12(self::CRAFT_NAME['plumber'],$get['city']);
+        foreach ($p_craft as $oneCraft){
+            switch ($oneCraft['pid'])
+            {
+                case $oneCraft['pid'] == self::CRAFT_NAME['weak']:// 弱点工艺
+                    if ($oneCraft['worker_name'] == '网线用量' ){
+                        $reticle = $oneCraft['material'];
+                    }
+
+                    if ($oneCraft['worker_name'] == '线管用料' ){
+                        $spool = $oneCraft['material'];
+                    }
+                    break;
+                case $oneCraft['pid'] == self::CRAFT_NAME['strong']:// 弱点工艺
+                    if ($oneCraft['worker_name'] == '电线用料' ){
+                        $wire = $oneCraft['material'];
+                    }
+
+                    if ($oneCraft['worker_name'] == '线管用料' ){
+                        $spool1 = $oneCraft['material'];
+                    }
+                    break;
+                case $oneCraft['pid'] == self::CRAFT_NAME['waterway']:// 水路工艺
+                    if ($oneCraft['worker_name'] == 'PPR水管用料' ){
+                        $ppr_ = $oneCraft['material'];
+                    }
+
+                    if ($oneCraft['worker_name'] == 'PVC管用料' ){
+                        $pvc_ = $oneCraft['material'];
+                    }
+            }
+
+        }
+
+
+        //商品属性抓取
+        $reticle_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['reticle'],'长');
+        $wire_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['wire'],'长');
+        $spool_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['spool'],'长');
+        $bottom_case_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['bottom_case'],'长');
+        $ppr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['ppr'],'长');
+        $pvc = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['pvc'],'长');
+
+
+        // 商品价格
+        $material[] = BasisDecorationService::plumberFormula(1,$w_sum_points,$reticle_attr,$reticle);
+        $material[] = BasisDecorationService::plumberFormula(1,$s_sum_points,$wire_attr,$wire);
+        $material[] = BasisDecorationService::plumberFormula(3,$s_sum_points,$spool_attr,$spool,$spool1,$w_sum_points);
+        $material[] = BasisDecorationService::plumberFormula(2,$total_points,$bottom_case_attr);
+        $material[] = BasisDecorationService::waterwayGoods(1,$waterway_sum_points,$ppr_,$ppr);
+        $material[] = BasisDecorationService::waterwayGoods(1,$waterway_sum_points,$pvc_,$pvc);
+
+
+        $total_cost = round($material[0]['cost']+$material[1]['cost']+$material[2]['cost']+$material[3]['cost']+$material[4]['cost']+$material[5]['cost'],2);
+
+
+
+        return Json::encode([
+            'code' => 200,
+            'msg'  => 'ok',
+            'data'=> $material,
+            'total_cost'=> $total_cost,
+        ]);
     }
 
 
