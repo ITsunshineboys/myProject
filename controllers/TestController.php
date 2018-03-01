@@ -544,6 +544,7 @@ class TestController extends Controller
     {
 
         $user = Yii::$app->user->identity;
+        var_dump($user);
 
     }
 
