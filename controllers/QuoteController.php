@@ -27,6 +27,7 @@ use app\models\EngineeringCraftName;
 use app\models\EngineeringStandardCarpentryCoefficient;
 use app\models\EngineeringStandardCarpentryCraft;
 use app\models\EngineeringStandardCraft;
+use app\models\FixedGrabbingGoods;
 use app\models\Goods;
 use app\models\GoodsAttr;
 use app\models\GoodsCategory;
@@ -3111,12 +3112,97 @@ class QuoteController extends Controller
 
     }
 
+    /**
+     * 固定抓取 添加详情
+     */
+    public function actionFixedAddView(){
+        $category_id=(int)\Yii::$app->request->get('category_id');
+        $category=GoodsCategory::find()
+            ->where(['id'=>$category_id])
+            ->asArray()
+            ->select('level,path,parent_title,title')
+            ->one();
+        if (isset($category['level']) && isset($category['path'])) {
+            $category['titles'] = '';
+            if ($category['level'] == GoodsCategory::LEVEL3) {
+                $path = trim($category['path'], ',');
+                list($rootId, $parentId, $id) = explode(',', $path);
+                $rootCategory = GoodsCategory::findOne($rootId);
+                $category['titles'] = $rootCategory->title
+                    . GoodsCategory::SEPARATOR_TITLES
+                    . $category['parent_title']
+                    . GoodsCategory::SEPARATOR_TITLES
+                    . $category['title'];
+            } elseif ($category['level'] == GoodsCategory::LEVEL2) {
+                $category['titles'] = $category['parent_title']
+                    . GoodsCategory::SEPARATOR_TITLES
+                    . $category['title'];
+            } elseif ($category['level'] == GoodsCategory::LEVEL1) {
+                $category['titles'] = $category['title'];
+            }
+            $category['level'] = GoodsCategory::$levels[$category['level']];
+        }
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'list'=>$category
+        ]);
+    }
 
+    /**
+     * 固定抓取 添加商品
+     * @return string
+     */
+    public function actionFixedGrabbingAdd(){
+        $user_id=\Yii::$app->user->identity->getId();
+        if(!$user_id){
+            $code=403;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $path=trim(\Yii::$app->request->post('path'));
+        $sku=trim(\Yii::$app->request->post('sku'));
+        $start_time=trim(\Yii::$app->request->post('start_time'));
+        $end_time=trim(\Yii::$app->request->post('end_time'));
+        $city_code=trim(\Yii::$app->request->post('city_code'));
+
+        if(!$path || !$sku){
+            $code=1000;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+
+        }
+        $sku_res=FixedGrabbingGoods::find()
+            ->where(['sku'=>$sku])
+            ->one();
+        if($sku_res){
+            $code=1109;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>'请勿重复添加固定商品!'
+            ]);
+        }
+        $path=explode(',',$path);
+        $code=FixedGrabbingGoods::add($path,$sku,$start_time,$end_time,$city_code,$user_id);
+        return Json::encode([
+            'code'=>$code,
+            'msg'=>$code==200?'ok':\Yii::$app->params['errorCodes'][$code]
+        ]);
+    }
+
+    public function actionFixedGoodsView(){
+
+    }
     /**
      * 测试功能
      */
     public function actionTest()
     {
-
+        $data=User::find()->where(['mobile'=>13308197780])->asArray()->one();
+        var_dump($data);
     }
 }
