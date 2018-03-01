@@ -34,7 +34,7 @@
     <card :header="{title:'推荐'}" class="command">
       <flexbox align="flex-start" :gutter="0" slot="content" wrap="wrap">
 
-          <flexbox-item @click.native="getClickRecord(item)"  style="margin-left: 3.46%!important;border-bottom: 3px solid #F6F6F6;" :span="56/125" class="command_list" :class="{odd_col:index%2==0,even_col:index%2==1}"
+          <flexbox-item @click.native="getClickRecord(item)"  style="margin-left: 3.46%!important;" :span="56/125" class="command_list" :class="{odd_col:index%2==0,even_col:index%2==1}"
                         v-for="(item,index) in recommended_list" :key="index">
             <router-link :to="'/good-detail/' + item.url">
               <!--<div style="width: 160px;height: 160px;border-radius: 2px;overflow: hidden;" :style="{'background-image':'url('+item.image+')',backgroundSize:'contain',backgroundRepeat:'no-repeat',backgroundPosition:'center center' }">-->
@@ -258,7 +258,7 @@
 
   .command_list { /*推荐列表项*/
     margin-bottom: 9px;
-    /*box-shadow: 0px 2px 4px 0px #F6F6F6;*/
+    box-shadow: 0px 2px 4px 0px #F6F6F6;
   }
 
   .command_title { /*推荐商品名称*/
