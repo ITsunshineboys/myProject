@@ -3178,17 +3178,16 @@ class QuoteController extends Controller
             ]);
 
         }
-//        $sku_res=FixedGrabbingGoods::find()
-//            ->where(['sku'=>$sku])
-//            ->one();
-//        if($sku_res){
-//            $code=1109;
-//            return Json::encode([
-//                'code'=>$code,
-//                'msg'=>'请勿重复添加固定商品!'
-//            ]);
-//        }
         $path=explode(',',$path);
+        $goods_category=Goods::find()->where(['sku'=>$sku])->select('category_id')->asArray()->one()['category_id'];
+
+        if($goods_category!=$path[2]){
+            $code=1043;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $code=FixedGrabbingGoods::add($path,$sku,$start_time,$end_time,$city_code,$user_id);
         return Json::encode([
             'code'=>$code,
@@ -3298,16 +3297,74 @@ class QuoteController extends Controller
         ]);
     }
 
+
+    /**固定抓取商品 编辑详情
+     * @return string
+     */
     public function actionFixedGoodsEditView(){
         $id=(int)\Yii::$app->request->get('id');
-
+        if(!$id){
+            $code=1000;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $data=FixedGrabbingGoods::find()
             ->where(['id'=>$id])
             ->asArray()
             ->one();
+        $data['start_time']=date('Y-m-d',$data['start_time']);
+        $data['end_time']=date('Y-m-d',$data['end_time']);
+        $data['operat_time']=date('Y-m-d H:i:s',$data['operat_time']);
+        $data['status']=FixedGrabbingGoods::FIXED_GOODS_STATUS[$data['status']];
+        $one_title=GoodsCategory::find()->where(['id'=>$data['first_cate_id']])->select('title')->one()->title;
+        $two_title=GoodsCategory::find()->where(['id'=>$data['two_cate_id']])->select('title')->one()->title;
+        $data['title']=GoodsCategory::find()->where(['id'=>$data['three_cate_id']])->select('title')->one()->title;
+
+        $data['titles']=$one_title.'-'.$two_title.'-'.$data['title'];
+
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
 
     }
 
+    /**
+     * 固定住区商品 修改
+     * @return string
+     */
+    public function actionFixedGrabbingEdit(){
+        $user_id=\Yii::$app->user->identity->getId();
+        if(!$user_id){
+            $code=403;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $id=(int)(\Yii::$app->request->post('id'));
+        $sku=trim(\Yii::$app->request->post('sku'));
+        $start_time=trim(\Yii::$app->request->post('start_time'));
+        $end_time=trim(\Yii::$app->request->post('end_time'));
+
+
+        if(!$sku){
+            $code=1000;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+
+        }
+        $code=FixedGrabbingGoods::edit($id,$sku,$start_time,$end_time,$user_id);
+        return Json::encode([
+            'code'=>$code,
+            'msg'=>$code==200?'ok':\Yii::$app->params['errorCodes'][$code]
+        ]);
+    }
     /**
      * 测试功能
      */

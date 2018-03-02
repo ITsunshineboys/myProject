@@ -80,6 +80,9 @@ class FixedGrabbingGoods extends \yii\db\ActiveRecord
 
 
     public static function add($path,$sku,$start_time,$end_time,$city_code,$user_id){
+            if($start_time>$end_time){
+                return 1000;
+            }
             if($start_time && $end_time){
                 $start_time=strtotime($start_time);
                 $end_time=strtotime($end_time);
@@ -88,6 +91,7 @@ class FixedGrabbingGoods extends \yii\db\ActiveRecord
                 ->where(['sku'=>$sku])
                 ->andWhere(['status'=>2])
                 ->one();
+
             if (!$goods){
                 $code = 1043;
                 return $code;
@@ -111,6 +115,40 @@ class FixedGrabbingGoods extends \yii\db\ActiveRecord
             }
 
             return 200;
+    }
+
+    public static function edit($id,$sku,$start_time,$end_time,$user_id){
+
+        if($start_time>$end_time){
+            return 1000;
+        }
+        if($start_time && $end_time){
+            $start_time=strtotime($start_time);
+            $end_time=strtotime($end_time);
+        }
+
+        $edit_fixed=FixedGrabbingGoods::find()->where(['id'=>$id])->one();
+
+        $goods = Goods::find()
+            ->where(['sku'=>$sku])
+            ->andWhere(['status'=>2])
+            ->one();
+        if (!$goods || $goods->category_id!=$edit_fixed->three_cate_id){
+            $code = 1043;
+            return $code;
+        }
+        $edit_fixed->start_time=$start_time;
+        $edit_fixed->end_time=$end_time;
+        $edit_fixed->sku=$sku;
+        $edit_fixed->operat_time=time();
+        $edit_fixed->operator=User::find()->select('nickname')->where(['id'=>$user_id])->one()->nickname;
+        $res=$edit_fixed->save();
+        if(!$res){
+            $code=500;
+            return $code;
+        }
+
+        return 200;
     }
 
     public static function goodsview($sku){
