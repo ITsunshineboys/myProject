@@ -182,7 +182,7 @@
     </div>
 
     <!-- 选择数量弹窗 -->
-    <popup id="choose-count-pop" v-model="show_count" @on-hide="showCount('all')" @on-show="testFunc">
+    <popup id="choose-count-pop" v-model="show_count" @on-hide="showCount('all')" @on-show="ModalHelper.afterOpen">
       <div>
         <group>
           <div class="count-top">
@@ -296,27 +296,6 @@
   import comment from '../good_detail/comment'
   import offlinealert from '@/components/OfflineAlert'
   const afterserviceArr = ['上门维修', '上门退货', '上门换货', '退货', '换货']
-  var ModalHelper = (function (bodyCls) {
-    var scrollTop // 在闭包中定义一个用来保存滚动位置的变量
-    return {
-      afterOpen: function () { // 弹出之后记录保存滚动位置，并且给body添加.modal-open
-        if (document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset) {
-          scrollTop = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset
-        } else {
-          scrollTop = 0
-        }
-        document.body.setAttribute('class', bodyCls)
-        document.body.style.top = -scrollTop + 'px'
-      },
-      beforeClose: function () { // 关闭时将.modal-open移除并还原之前保存滚动位置
-        document.body.setAttribute('class', '')
-        document.documentElement.scrollTop = scrollTop
-        document.body.scrollTop = scrollTop
-        window.pageYOffset = scrollTop
-//              scrollTop = 0 + 'px'
-      }
-    }
-  })('modal-open')
 
   export default {
     name: 'GoodDetail',
@@ -340,7 +319,6 @@
     },
     data () {
       return {
-//        test: false,
         isFromAndroid: false,       // 由安卓页面跳转至此页面
         good_id: '',                // 商品id
         role_id: 6,                 // 角色id
@@ -451,7 +429,7 @@
       // 选择数量 弹出层按钮显示处理
       showCount: function (obj) {
         if (obj === 'all') {
-          ModalHelper.beforeClose()
+          this.ModalHelper.beforeClose()
           this.show_count = false
           this.count_cart = false
           this.count_now = false
@@ -585,20 +563,12 @@
       // 联系商家
       contactShop () {
         this.contactStore(this.good_detail.supplier.uid, this.role_id)
-      },
-      testFunc () {
-        ModalHelper.afterOpen()
       }
     }
   }
 </script>
 
 <style>
-  body.modal-open {
-    position: fixed;
-    width: 100%;
-  }
-
   .good-container {
     background: rgba(255, 255, 255, 1);
     position: relative;
