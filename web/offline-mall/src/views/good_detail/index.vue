@@ -994,7 +994,7 @@
   }
 
   .good-container .safe-guard > div:last-child {
-    margin-bottom: 200px;
+    margin-bottom: 78px;
   }
 
   .good-container .weui-cells:after {
