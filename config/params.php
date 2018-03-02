@@ -19,7 +19,7 @@ return [
     'lhzzRoleId' => 1,
     'openRoleIds' => [1, 6,],
     'maxRolesNumber' => 2,
-    'errorCodes' => [
+    'errorCodes' => [l
         403 => '没有权限',
         500 => '接口服务器异常',
         1000 => '请求的参数不正确',
@@ -43,7 +43,7 @@ return [
         1018 => '昵称已存在',
         1019 => '该手机号已被注册',
         1020 => '验证码超时，请重新输入',
-        1021 => '请上传jpg/jpeg/png/amr/mp3/m4a类型的文件',
+        1021 => '请上传jpg/jpeg/png/amr/mp3/mp4/m4a类型的文件',
         1022 => '商品所在分类风格或系列已移除，请商家重新添加新商品。',
         1023 => '您的账户在另一地点登录',
         1024 => '今日修改次数已达5次',
@@ -171,7 +171,7 @@ return [
     ],
     'uploadPublic' => [
         'maxSize' => 5 * 1024 * 1024 , // 5M
-        'extensions' => ['png', 'jpg', 'jpeg', 'amr', 'mp3', 'm4a'],
+        'extensions' => ['png', 'jpg', 'jpeg', 'amr', 'mp3', 'm4a', 'mp4'],
         'compress' => [
             'minSize' => 100 * 1024, // 100K
             'extensions' => ['jpg', 'jpeg'],
