@@ -319,28 +319,28 @@ class OwnerController extends Controller
         foreach ($points as $p){
             // 弱电
             if ($p['id'] ==  self::PROJECT_DETAILS['weak_current']){
-                $w_where      = 'pid = '.$p['id'];
-                $w_points     = Points::findByPid('title,count',$w_where);
-                $w_sum_points = BasisDecorationService::weakPoints($w_points,$get);
+                $w_where   = 'pid = '.$p['id'];
+                $w_points  = Points::findByPid('title,count',$w_where);
+                $WS_points = BasisDecorationService::weakPoints($w_points,$get);
             }
 
             // 强电
             if ($p['id'] ==  self::PROJECT_DETAILS['strong_current']){
-                $s_where      = 'pid = '.$p['id'];
-                $s_points     = Points::findByPid('title,count',$s_where);
-                $s_sum_points = BasisDecorationService::strongPoints($s_points,$get);
+                $s_where   = 'pid = '.$p['id'];
+                $s_points  = Points::findByPid('title,count',$s_where);
+                $SS_points = BasisDecorationService::strongPoints($s_points,$get);
             }
 
             //防水
             if ($p['id'] == self::PROJECT_DETAILS['waterway']) {
-                $waterway_where      = 'pid = ' . $p['id'];
-                $waterway_points     = Points::findByPid('title,count', $waterway_where);
-                $waterway_sum_points = BasisDecorationService::waterwayPoints($waterway_points, $get);
+                $W_where     = 'pid = ' . $p['id'];
+                $W_points    = Points::findByPid('title,count', $W_where);
+                $wSum_points = BasisDecorationService::waterwayPoints($W_points, $get);
             }
         }
 
         // 强弱电总点位
-        $total_points = BasisDecorationService::algorithm(3,$w_sum_points,$s_sum_points);
+        $total_points = BasisDecorationService::algorithm(3,$WS_points,$SS_points);
         // 所需要材料查询
         $goods = Goods::maxProfit(self::CIRCUIT_MATERIALS);
         // 当地水电工艺
@@ -385,19 +385,18 @@ class OwnerController extends Controller
         $w_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['wire'],'长');
         $s_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['spool'],'长');
         $b_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['bottom_case'],'长');
-        $ppr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['ppr'],'长');
-        $pvc = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['pvc'],'长');
+        $ppr    = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['ppr'],'长');
+        $pvc    = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['pvc'],'长');
 
 
         // 商品价格
-        $material[] = BasisDecorationService::plumberFormula(1,$w_sum_points,$r_attr,$reticle);
-        $material[] = BasisDecorationService::plumberFormula(1,$s_sum_points,$w_attr,$wire);
-        $material[] = BasisDecorationService::plumberFormula(3,$s_sum_points,$s_attr,$spool,$spool1,$w_sum_points);
+        $material[] = BasisDecorationService::plumberFormula(1,$WS_points,$r_attr,$reticle);
+        $material[] = BasisDecorationService::plumberFormula(1,$SS_points,$w_attr,$wire);
+        $material[] = BasisDecorationService::plumberFormula(3,$SS_points,$s_attr,$spool,$spool1,$WS_points);
         $material[] = BasisDecorationService::plumberFormula(2,$total_points,$b_attr);
-        $material[] = BasisDecorationService::waterwayGoods(1,$waterway_sum_points,$ppr_,$ppr);
-        $material[] = BasisDecorationService::waterwayGoods(1,$waterway_sum_points,$pvc_,$pvc);
+        $material[] = BasisDecorationService::waterwayGoods(1,$wSum_points,$ppr_,$ppr);
+        $material[] = BasisDecorationService::waterwayGoods(1,$wSum_points,$pvc_,$pvc);
         $total_cost = round($material[0]['cost']+$material[1]['cost']+$material[2]['cost']+$material[3]['cost']+$material[4]['cost']+$material[5]['cost'],2);
-
 
 
         return Json::encode([
