@@ -540,12 +540,6 @@ class TestController extends Controller
         return 'ok';
     }
 
-    public  function  actionTest()
-    {
 
-        $user = Yii::$app->user->identity;
-        var_dump($user);
-
-    }
 
 }

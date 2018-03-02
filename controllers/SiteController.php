@@ -1849,25 +1849,6 @@ class SiteController extends Controller
     }
 
 
-    public function actionCheckSignature()
-    {
-
-        $signature = Yii::$app->request->get('signature');
-        $timestamp = Yii::$app->request->get('timestamp');
-        $nonce = Yii::$app->request->get('nonce');
-        $echostr = Yii::$app->request->get('echostr');
-        //        $tmpArr = array($timestamp, $nonce);
-        //        sort($tmpArr, SORT_STRING);
-        //        $tmpStr = implode( $tmpArr );
-        //        $tmpStr = sha1( $tmpStr );
-        if ($signature) {
-
-            echo $echostr;
-        } else {
-            return false;
-        }
-    }
-
 
     /**
      * 获取是否有消息
