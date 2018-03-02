@@ -395,6 +395,11 @@ class BasisDecorationService
                 break;
         }
 
+        if (!$g_attr){
+            return null;
+        }
+
+
         return [$o_goods,$g_attr];
     }
 
@@ -411,27 +416,27 @@ class BasisDecorationService
     {
         switch ($int){
             case $int == 1:
-                $electricity['quantity'] = (int)ceil(self::algorithm(4,$points,$craft,$goods[1]['value']));
-                $electricity['cost'] = round(self::algorithm(1,$electricity['quantity'],$goods[0]['platform_price']),2);
-                $electricity['procurement'] = round(self::algorithm(1,$electricity['quantity'],$goods[0]['purchase_price_decoration_company']),2);
+                $e['quantity']   = (int)ceil(self::algorithm(4,$points,$craft,$goods[1]['value']));
+                $e['cost']       = round(self::algorithm(1,$e['quantity'],$goods[0]['platform_price']),2);
+                $e['procurement']= round(self::algorithm(1,$e['quantity'],$goods[0]['purchase_price_decoration_company']),2);
                 break;
             case $int == 2:
-                $electricity['quantity'] = (int)ceil($points);
-                $electricity['cost'] = round(self::algorithm(1,$points,$goods[0]['platform_price']),2);
-                $electricity['procurement'] = round(self::algorithm(1,$points,$goods[0]['purchase_price_decoration_company']),2);
+                $e['quantity']   = (int)ceil($points);
+                $e['cost']       = round(self::algorithm(1,$points,$goods[0]['platform_price']),2);
+                $e['procurement']= round(self::algorithm(1,$points,$goods[0]['purchase_price_decoration_company']),2);
                 break;
             case $int == 3:
-                $quantity = self::algorithm(4,$points1,$craft,$goods[1]['value']);
-                $quantity1 = self::algorithm(4,$points,$craft1,$goods[1]['value']);
-                $electricity['quantity'] = (int)ceil(self::algorithm(3,$quantity,$quantity1));
-                $electricity['cost'] = round(self::algorithm(1,$electricity['quantity'],$goods[0]['platform_price']),2);
-                $electricity['procurement'] = round(self::algorithm(1,$electricity['quantity'],$goods[0]['purchase_price_decoration_company']),2);
+                $q  = self::algorithm(4,$points1,$craft,$goods[1]['value']);
+                $q1 = self::algorithm(4,$points,$craft1,$goods[1]['value']);
+                $e['quantity']    = (int)ceil(self::algorithm(3,$q,$q1));
+                $e['cost']        = round(self::algorithm(1,$e['quantity'],$goods[0]['platform_price']),2);
+                $e['procurement'] = round(self::algorithm(1,$e['quantity'],$goods[0]['purchase_price_decoration_company']),2);
                 break;
         }
 
-        $goods[0]['quantity'] = $electricity['quantity'];
-        $goods[0]['cost'] = $electricity['cost'];
-        $goods[0]['procurement'] = $electricity['procurement'];
+        $goods[0]['quantity']   = $e['quantity'];
+        $goods[0]['cost']       = $e['cost'];
+        $goods[0]['procurement']= $e['procurement'];
 
         unset($goods[0]['purchase_price_decoration_company']);
 
@@ -450,14 +455,14 @@ class BasisDecorationService
     {
         switch ($int){
             case $int == 1:
-                $value['quantity'] = (int)ceil(self::algorithm(4,$points,$craft,$goods[1]['value']));
-                $value['cost'] =  round(self::algorithm(1,$value['quantity'],$goods[0]['platform_price']),2);
-                $value['procurement'] = round(self::algorithm(1,$value['quantity'],$goods[0]['purchase_price_decoration_company']),2);
+                $v['quantity']   = (int)ceil(self::algorithm(4,$points,$craft,$goods[1]['value']));
+                $v['cost']       =  round(self::algorithm(1,$v['quantity'],$goods[0]['platform_price']),2);
+                $v['procurement']= round(self::algorithm(1,$v['quantity'],$goods[0]['purchase_price_decoration_company']),2);
                 break;
         }
-        $goods[0]['quantity'] = $value['quantity'];
-        $goods[0]['cost'] = $value['cost'];
-        $goods[0]['procurement'] = $value['procurement'];
+        $goods[0]['quantity']   = $v['quantity'];
+        $goods[0]['cost']       = $v['cost'];
+        $goods[0]['procurement']= $v['procurement'];
 
         unset($goods[0]['purchase_price_decoration_company']);
 

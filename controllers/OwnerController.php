@@ -110,6 +110,7 @@ class OwnerController extends Controller
         'weak_current'      => 2,//弱电Id
         'strong_current'    => 1,//强电id
         'waterway'          => 3,//水路id
+        'hydropower'        => '1,2,3', // 水电
         'waterproof'        => 69,// 防水-修改 防水id
         'carpentry'         => 4, // 木作
         'emulsion_varnish'  => '乳胶漆',
@@ -314,7 +315,7 @@ class OwnerController extends Controller
     {
         $get = Yii::$app->request->get();
 
-        $p_where = 'id in ('.self::PROJECT_DETAILS['strong_current'].','.self::PROJECT_DETAILS['weak_current'].','.self::PROJECT_DETAILS['waterway'].')';
+        $p_where = 'id in ('.self::PROJECT_DETAILS['hydropower'].')';
         $points = Points::findByIds('id,title',$p_where);
         foreach ($points as $p){
             // 弱电
@@ -387,6 +388,12 @@ class OwnerController extends Controller
         $b_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['bottom_case'],'长');
         $ppr    = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['ppr'],'长');
         $pvc    = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['pvc'],'长');
+        if (!$r_attr || $w_attr || $s_attr || $b_attr || $ppr || $pvc){
+            return Json::encode([
+                'code' => 1000,
+                'msg'  => '水电材料或者水电材料属性为null'
+            ]);
+        }
 
 
         // 商品价格
@@ -402,7 +409,7 @@ class OwnerController extends Controller
         return Json::encode([
             'code' => 200,
             'msg'  => 'ok',
-            'data'=> $material,
+            'data' => $material,
             'total_cost'=> $total_cost,
         ]);
     }
