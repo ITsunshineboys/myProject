@@ -149,7 +149,7 @@
     </div>
 
     <!-- 选择数量弹窗 -->
-    <popup v-model="show_count" @on-hide="showCount('close')">
+    <popup v-model="show_count" @on-hide="showCount('close')" @on-show="ModalHelper.afterOpen">
       <div>
         <group>
           <div class="count-top">
@@ -359,6 +359,7 @@
       // 选择数量 弹出层按钮显示处理
       showCount: function (obj) {
         if (obj === 'close') {
+          this.ModalHelper.beforeClose()
           this.show_count = false
           this.count = 1
           this.watchCount()

@@ -182,7 +182,7 @@
     </div>
 
     <!-- 选择数量弹窗 -->
-    <popup id="choose-count-pop" v-model="show_count" @on-hide="showCount('all')" @on-show="ModalHelper.afterOpen">
+    <popup v-model="show_count" @on-hide="showCount('all')" @on-show="ModalHelper.afterOpen">
       <div>
         <group>
           <div class="count-top">
