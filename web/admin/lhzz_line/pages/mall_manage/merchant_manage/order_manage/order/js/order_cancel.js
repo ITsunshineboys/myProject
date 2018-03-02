@@ -1,4 +1,4 @@
-app.controller('order_cancel',['$scope', '$stateParams', '_ajax', function ($scope, $stateParams, _ajax) {
+app.controller('order_cancel',['$rootScope', '$scope', '$stateParams', '_ajax', function ($rootScope, $scope, $stateParams, _ajax) {
 // 筛选器
     $scope.orderFilter = {
         orderNum: true,     // 订单编号

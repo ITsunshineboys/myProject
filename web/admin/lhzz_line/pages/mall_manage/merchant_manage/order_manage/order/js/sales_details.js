@@ -104,6 +104,7 @@ app.controller('sales_details', ['$rootScope', '$scope', '$interval', '$state', 
     $scope.confirmAction = function () {
         _ajax.post('/order/platformhandlesubmit', $scope.interOper, function (res) {
             console.log(res, '平台介入操作');
+            sessionStorage.setItem('isOperation', '1');
             window.history.go(-1);
         })
     };
@@ -121,13 +122,13 @@ app.controller('sales_details', ['$rootScope', '$scope', '$interval', '$state', 
     // 确认关闭订单
     $scope.enter_close_order = function () {
         _ajax.post('/order/close-order', $scope.close_order_params, function (res) {
+            sessionStorage.setItem('isOperation', '1');
+            $('#closeOrderModal').one('hidden.bs.modal', function () {
+                history.go(-1);
+            });
             $('#closeOrderModal').modal('hide')
         })
     };
-
-    $('#closeOrderModal').on('hidden.bs.modal', function () {
-        history.back();
-    })
 
     /**
      * 评论回复信息函数
