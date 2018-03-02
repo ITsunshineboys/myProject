@@ -1,5 +1,4 @@
 app.controller('order_details', ['$rootScope', '$scope', '$interval', '$state', '$stateParams', '_ajax', function ($rootScope, $scope, $interval, $state, $stateParams, _ajax) {
-    console.log($rootScope.fromState_name);
     let fromState = $rootScope.fromState_name;
     if (fromState !== '' && fromState !== 'goods_details') {
         sessionStorage.setItem('fromState', fromState);
@@ -128,7 +127,8 @@ app.controller('order_details', ['$rootScope', '$scope', '$interval', '$state', 
     $scope.confirmAction = function () {
         _ajax.post('/order/platformhandlesubmit', $scope.interOper,function (res) {
             console.log(res, '平台介入操作');
-            window.history.go(-1);
+            sessionStorage.setItem('isOperation', '1');
+            history.go(-1);
         })
     };
     /**
