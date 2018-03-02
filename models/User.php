@@ -216,6 +216,15 @@ class User extends ActiveRecord implements IdentityInterface
             return $code;
         }
 
+        $user = self::findOne($data['mobile']);
+        if ($user) {
+            $code = 200;
+            return [
+                'code' => $code,
+                'id' => $user->id
+            ];
+        }
+
         if ($checkValidationCode) {
             if (empty($data['validation_code'])) {
                 return $code;
