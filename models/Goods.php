@@ -18,7 +18,8 @@ use yii\helpers\Url;
 
 class Goods extends ActiveRecord
 {
-    const GOODS_DETAIL_URL_PREFIX = 'mall/product_details.html?id=';
+//    const GOODS_DETAIL_URL_PREFIX = 'mall/product_details.html?id=';
+    const GOODS_DETAIL_URL_PREFIX = 'aitelife-shop-web/#/good-detail/';
     const GOODS_QR_PREFIX = 'goods_';
     const ORDERBY_SEPARATOR = ':';
     const PAGE_SIZE_DEFAULT = 12;
