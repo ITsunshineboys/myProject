@@ -3333,7 +3333,7 @@ class QuoteController extends Controller
     }
 
     /**
-     * 固定住区商品 修改
+     * 固定抓取商品 修改
      * @return string
      */
     public function actionFixedGrabbingEdit(){
@@ -3365,6 +3365,9 @@ class QuoteController extends Controller
             'msg'=>$code==200?'ok':\Yii::$app->params['errorCodes'][$code]
         ]);
     }
+
+
+
     /**
      * 测试功能
      */
