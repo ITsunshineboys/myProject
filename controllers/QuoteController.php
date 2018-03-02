@@ -3373,7 +3373,6 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-        $filepath=FileService::upload();
-        var_dump($filepath);
+
     }
 }

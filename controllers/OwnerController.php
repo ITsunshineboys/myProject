@@ -702,7 +702,14 @@ class OwnerController extends Controller
         $labor_all_cost['worker_kind'] = $labor_cost['worker_name'];
 
         // 商品属性
-        $goods_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['waterproof_coating'],'重');
+        $g_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['waterproof_coating'],'重');
+        if (!$g_attr){
+            return Json::encode([
+                'code' => 1000,
+                'msg'  => '防水材料或者防水材料属性为null'
+            ]);
+        }
+
 
         //材料总费用
         $material_price = BasisDecorationService::waterproofGoods($total_area,$craft[0]['material'],$goods_attr);
@@ -801,33 +808,21 @@ class OwnerController extends Controller
 
 
         //造型长度  平顶面积
-        $modelling_length = BasisDecorationService::algorithm(1,$defaults_modelling,$coefficient2);
-        $flat_area_ = $defaults_flat_area;
+        $m_length = BasisDecorationService::algorithm(1,$defaults_modelling,$coefficient2);
+        $f_area_ = $defaults_flat_area;
 
         //造型天数 造型长度÷【每天做造型长度】×系列系数1×风格系数1    //平顶天数  平顶面积÷【每天做平顶面积】×系列系数3×风格系数2
-        $modelling_day = ceil(BasisDecorationService::algorithm(7,$modelling_length,$modelling,$coefficient1,$coefficient3));
-        $flat_area_day = ceil(BasisDecorationService::algorithm(7,$flat_area_,$flat_area,$coefficient4,$coefficient5));
+        $m_day = ceil(BasisDecorationService::algorithm(7,$m_length,$modelling,$coefficient1,$coefficient3));
+        $FA_day = ceil(BasisDecorationService::algorithm(7,$f_area_,$flat_area,$coefficient4,$coefficient5));
 
         //人工费
-        $labour_charges['price'] = BasisDecorationService::algorithm(8,$modelling_day,$flat_area_day,$labor_cost['univalence']);
+        $labour_charges['price'] = BasisDecorationService::algorithm(8,$m_day,$FA_day,$labor_cost['univalence']);
         $labour_charges['worker_kind'] = $labor_cost['worker_name'];
 
 
         //材料
         $goods = Goods::priceDetail(self::WALL_SPACE, self::CARPENTRY_MATERIAL);
-        if ($goods == null){
-            $code = 1061;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-                'data' => [
-                    'carpentry_labor_price' => [],
-                    'carpentry_material' => [],
-                    'carpentry_add_price' => [],
-                ]
-            ]);
-        }
-        $goods_price = BasisDecorationService::judge($goods,$get);
+        $g_price = BasisDecorationService::judge($goods,$get);
 
 
         //当地工艺
@@ -836,27 +831,27 @@ class OwnerController extends Controller
             switch ($one_craft){
                 case  $one_craft['id'] == self::ROOM['keel_height']:
                     //1根龙骨做造型长度
-                    $keel_height = $one_craft['material'];
+                    $k_height = $one_craft['material'];
                     break;
                 case  $one_craft['id'] == self::ROOM['keel_area']:
                     //1根龙骨做平顶面积
-                    $keel_area = $one_craft['material'];
+                    $k_area = $one_craft['material'];
                     break;
                 case  $one_craft['id'] == self::ROOM['screw_height']:
                     //1根丝杆做造型长度
-                    $screw_height = $one_craft['material'];
+                    $s_height = $one_craft['material'];
                     break;
                 case  $one_craft['id'] == self::ROOM['screw_area']:
                     //1根丝杆做平顶面积
-                    $screw_area = $one_craft['material'];
+                    $s_area = $one_craft['material'];
                     break;
                 case  $one_craft['id'] == self::ROOM['plaster_height']:
                     //1张石膏板做造型长度
-                    $plaster_height = $one_craft['material'];
+                    $p_height = $one_craft['material'];
                     break;
                 case  $one_craft['id'] == self::ROOM['plaster_area']:
                     //1张石膏板做平顶面积
-                    $plaster_area = $one_craft['material'];
+                    $p_area = $one_craft['material'];
                     break;
                 case  $one_craft['id'] == self::ROOM['tv_day']:
                     //电视墙需要天数
@@ -874,17 +869,23 @@ class OwnerController extends Controller
         }
 
         // 商品属性  石膏板   龙骨 丝杆 木工板
-        $plaster_attr = BasisDecorationService::goodsAttr($goods_price,BasisDecorationService::goodsNames()['plasterboard'],'面积');
-        $keel_attr = BasisDecorationService::goodsAttr($goods_price,BasisDecorationService::goodsNames()['keel'],'长度');
-        $screw_attr = BasisDecorationService::goodsAttr($goods_price,BasisDecorationService::goodsNames()['lead_screw'],'长度');
-        $board_attr = BasisDecorationService::goodsAttr($goods_price,BasisDecorationService::goodsNames()['slab'],'',2);
+        $p_attr = BasisDecorationService::goodsAttr($g_price,BasisDecorationService::goodsNames()['plasterboard'],'面积');
+        $k_attr = BasisDecorationService::goodsAttr($g_price,BasisDecorationService::goodsNames()['keel'],'长度');
+        $s_attr = BasisDecorationService::goodsAttr($g_price,BasisDecorationService::goodsNames()['lead_screw'],'长度');
+        $b_attr = BasisDecorationService::goodsAttr($g_price,BasisDecorationService::goodsNames()['slab'],'',2);
+        if (!$p_attr || !$k_attr || !$s_attr || !$b_attr){
+            return Json::encode([
+                'code' => 1000,
+                'msg'  => '木作材料或者木作材料属性为null'
+            ]);
+        }
 
 
         //石膏板费用  //龙骨费用   //丝杆费用 //木工板
-        $material_total[] = BasisDecorationService::carpentryPlasterboardCost(1,$modelling_length,$flat_area_,$plaster_attr,$plaster_height,$plaster_area,$tv_plaster);
-        $material_total[] = BasisDecorationService::carpentryPlasterboardCost(2,$modelling_length,$flat_area_,$keel_attr,$keel_height,$keel_area);
-        $material_total[] = BasisDecorationService::carpentryPlasterboardCost(2,$modelling_length,$flat_area_,$screw_attr,$screw_height,$screw_area);
-        $material_total[] = BasisDecorationService::carpentryPlasterboardCost(3,$tv_board,'',$board_attr);
+        $material_total[] = BasisDecorationService::carpentryPlasterboardCost(1,$m_length,$f_area_,$p_attr,$p_height,$p_area,$tv_plaster);
+        $material_total[] = BasisDecorationService::carpentryPlasterboardCost(2,$m_length,$f_area_,$k_attr,$k_height,$k_area);
+        $material_total[] = BasisDecorationService::carpentryPlasterboardCost(2,$m_length,$f_area_,$s_attr,$s_height,$s_area);
+        $material_total[] = BasisDecorationService::carpentryPlasterboardCost(3,$tv_board,'',$b_attr);
 
         // 总费用
         $total_area = 0;
@@ -1019,20 +1020,25 @@ class OwnerController extends Controller
         }
 
         // 商品属性
-        $putty_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['putty'],'');
-        $undercoat_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['emulsion_varnish_primer'],'体积');
-        $finishing_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['emulsion_varnish_surface'],'体积');
-        $wire_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['concave_line'],'长');
-        $land_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['land_plaster'],'');
-
+        $p_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['putty'],'');
+        $u_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['emulsion_varnish_primer'],'体积');
+        $f_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['emulsion_varnish_surface'],'体积');
+        $w_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['concave_line'],'长');
+        $l_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['land_plaster'],'');
+        if (!$p_attr || !$u_attr || !$f_attr || !$w_attr || !$l_attr){
+            return Json::encode([
+                'code' => 1000,
+                'msg'  => '乳胶漆材料或者乳胶漆材料属性为null'
+            ]);
+        }
 
 
 //        腻子费用   底漆费用  面漆费用   阴角线费用   石膏粉费用
-        $material_total[] = BasisDecorationService::paintedCost(1,$putty_area,$putty,$putty_attr);
-        $material_total[] = BasisDecorationService::paintedCost(1,$primer_area,$undercoat,$undercoat_attr);
-        $material_total[] = BasisDecorationService::paintedCost(1,$finishing_coat_area,$finishing,$finishing_attr);
-        $material_total[] = BasisDecorationService::paintedCost(1,$concave_line_length,$wire,$wire_attr);
-        $material_total[] = BasisDecorationService::paintedCost(2,$finishing_coat_area,$land,$land_attr);
+        $material_total[] = BasisDecorationService::paintedCost(1,$putty_area,$putty,$p_attr);
+        $material_total[] = BasisDecorationService::paintedCost(1,$primer_area,$undercoat,$u_attr);
+        $material_total[] = BasisDecorationService::paintedCost(1,$finishing_coat_area,$finishing,$f_attr);
+        $material_total[] = BasisDecorationService::paintedCost(1,$concave_line_length,$wire,$w_attr);
+        $material_total[] = BasisDecorationService::paintedCost(2,$finishing_coat_area,$land,$l_attr);
 
 
 
@@ -1179,10 +1185,16 @@ class OwnerController extends Controller
         $goods = Goods::maxProfit(self::TILER_MATERIAL);
 
         //商品属性
-        $cement_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['cement'],'重');
-        $self_leveling_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['self_leveling'],'重');
-        $river_sand_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['river_sand'],'重');
-        $wall_brick_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['wall_brick'],'',2);
+        $c_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['cement'],'重');
+        $SL_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['self_leveling'],'重');
+        $RS_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['river_sand'],'重');
+        $WB_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['wall_brick'],'',2);
+        if (!$c_attr || !$SL_attr || !$RS_attr || !$WB_attr){
+            return Json::encode([
+                'code' => 1000,
+                'msg'  => '泥作材料或者泥作材料属性为null'
+            ]);
+        }
 
         //地砖 商品查询   44
         $brick = Goods::priceDetail(self::WALL_SPACE,self::BRICK);
@@ -1200,7 +1212,7 @@ class OwnerController extends Controller
                      && strpos($oneBrick['series_name'],$series->series) !== false
                      && strpos($oneBrick['style_name'],$style->style) !== false
                 ){
-                    $toilet_goods[] = $oneBrick;
+                    $t_goods[] = $oneBrick;
                 }
 
 
@@ -1208,7 +1220,7 @@ class OwnerController extends Controller
                     && strpos($oneBrick['series_name'],$series->series) !== false
                     && strpos($oneBrick['style_name'],$style->style) !== false
                 ){
-                    $kitchen_goods[] = $oneBrick;
+                    $k_goods[] = $oneBrick;
                 }
 
 
@@ -1216,24 +1228,24 @@ class OwnerController extends Controller
                     && strpos($oneBrick['series_name'],$series->series) !== false
                     && strpos($oneBrick['style_name'],$style->style) !== false
                 ){
-                    $hall_goods[] = $oneBrick;
+                    $h_goods[] = $oneBrick;
                 }
             }
 
         }
 
-        $max_toilet_goods[] = BasisDecorationService::profitMargin($toilet_goods);
-        $max_kitchen_goods[] = BasisDecorationService::profitMargin($kitchen_goods);
-        $max_hall_goods[] = BasisDecorationService::profitMargin($hall_goods);
+        $max_toilet_goods[] = BasisDecorationService::profitMargin($t_goods);
+        $max_kitchen_goods[] = BasisDecorationService::profitMargin($k_goods);
+        $max_hall_goods[] = BasisDecorationService::profitMargin($h_goods);
 
 
 //        水泥费用    自流平费用  河沙费用  墙砖费用 卫生间
         $self_leveling_area = $drawing_room_area;
         $cement_area = BasisDecorationService::algorithm(5,$covering_layer_area,$floor_tile_area,$wall_area);
-        $material_total[] = BasisDecorationService::mudMakeCost(1,$cement_area,$concrete,$cement_attr);
-        $material_total[] = BasisDecorationService::mudMakeCost(1,$self_leveling_area,$self_leveling,$self_leveling_attr);
-        $material_total[] = BasisDecorationService::mudMakeCost(1,$cement_area,$river_sand,$river_sand_attr);
-        $material_total[] = BasisDecorationService::mudMakeCost(2,$wall_area,'',$wall_brick_attr);
+        $material_total[] = BasisDecorationService::mudMakeCost(1,$cement_area,$concrete,$c_attr);
+        $material_total[] = BasisDecorationService::mudMakeCost(1,$self_leveling_area,$self_leveling,$SL_attr);
+        $material_total[] = BasisDecorationService::mudMakeCost(1,$cement_area,$river_sand,$RS_attr);
+        $material_total[] = BasisDecorationService::mudMakeCost(2,$wall_area,'',$WB_attr);
         $material_total[] = BasisDecorationService::mudMakeCost(3,$toilet_area,'',$max_toilet_goods);
         $material_total[] = BasisDecorationService::mudMakeCost(3,$kitchen_area,'',$max_kitchen_goods);
         $material_total[] = BasisDecorationService::mudMakeCost(3,$drawing_room_area,'',$max_hall_goods);
@@ -1322,19 +1334,19 @@ class OwnerController extends Controller
         foreach ($craft as $one_craft){
             // 12墙建渣运到楼下
             if ($one_craft['id'] == self::ROOM['rubbish_12']){
-                $rubbish_12 = $one_craft['material'];
+                $r_12 = $one_craft['material'];
             }
             // 24墙建渣运到楼下
             if ($one_craft['id'] == self::ROOM['rubbish_24']){
-                $rubbish_24 = $one_craft['material'];
+                $r_24 = $one_craft['material'];
             }
             // 车拉12墙面积
             if ($one_craft['id'] == self::ROOM['vehicle_12']){
-                $vehicle_12 = $one_craft['material'];
+                $v_12 = $one_craft['material'];
             }
             // 车拉24墙面积
             if ($one_craft['id'] == self::ROOM['vehicle_24']){
-                $vehicle_24 = $one_craft['material'];
+                $v_24 = $one_craft['material'];
             }
             // 车费用
             if ($one_craft['id'] == self::ROOM['fare']){
@@ -1342,38 +1354,38 @@ class OwnerController extends Controller
             }
             // 12墙新建水泥用量
             if ($one_craft['id'] == self::ROOM['concrete_12']){
-                $concrete_12 = $one_craft['material'];
+                $c_12 = $one_craft['material'];
             }
             // 24墙新建水泥用量
             if ($one_craft['id'] == self::ROOM['concrete_24']){
-                $concrete_24 = $one_craft['material'];
+                $c_24 = $one_craft['material'];
             }
             // 补烂水泥
             if ($one_craft['id'] == self::ROOM['concrete_repair']){
-                $concrete_repair = $one_craft['material'];
+                $c_repair = $one_craft['material'];
             }
             // 12墙新建河沙用量
             if ($one_craft['id'] == self::ROOM['river_sand_12']){
-                $river_sand_12 = $one_craft['material'];
+                $RS_12 = $one_craft['material'];
             }
             // 24墙新建河沙用量
             if ($one_craft['id'] == self::ROOM['river_sand_24']){
-                $river_sand_24 = $one_craft['material'];
+                $RS_24 = $one_craft['material'];
             }
             // 补烂河沙
             if ($one_craft['id'] == self::ROOM['river_sand_repair']){
-                $river_sand_repair = $one_craft['material'];
+                $RS_repair = $one_craft['material'];
             }
         }
 
 
         if ($get['building_scrap'] == 1) {
-            $cost_12 = BasisDecorationService::haveBuildingScrap(1,$get['12_dismantle'],$rubbish_12);
-            $cost_24 = BasisDecorationService::haveBuildingScrap(1,$get['24_dismantle'],$rubbish_24);
+            $cost_12 = BasisDecorationService::haveBuildingScrap(1,$get['12_dismantle'],$r_12);
+            $cost_24 = BasisDecorationService::haveBuildingScrap(1,$get['24_dismantle'],$r_24);
             $building_scrap = ceil(BasisDecorationService::algorithm(3,$cost_12['cost'],$cost_24['cost']));
         } else {
-            $cost_12 = BasisDecorationService::haveBuildingScrap(2,$get['12_dismantle'],$rubbish_12,$vehicle_12,$fare);
-            $cost_24 = BasisDecorationService::haveBuildingScrap(2,$get['24_dismantle'],$rubbish_24,$vehicle_24,$fare);
+            $cost_12 = BasisDecorationService::haveBuildingScrap(2,$get['12_dismantle'],$r_12,$v_12,$fare);
+            $cost_24 = BasisDecorationService::haveBuildingScrap(2,$get['24_dismantle'],$r_24,$v_24,$fare);
             $building_scrap = ceil(BasisDecorationService::algorithm(3,$cost_12['cost'],$cost_24['cost']));
 
         }
@@ -1388,14 +1400,21 @@ class OwnerController extends Controller
 
 
         // 商品属性
-        $air_brick_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['air_brick'],'',2);
-        $river_sand_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['river_sand'],'重');
-        $cement_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['cement'],'重');
+        $AB_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['air_brick'],'',2);
+        $RS_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['river_sand'],'重');
+        $c_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['cement'],'重');
+        if (!$AB_attr || !$RS_attr || !$c_attr){
+            return Json::encode([
+                'code' => 1000,
+                'msg'  => '杂工材料或者杂工材料属性为null'
+            ]);
+        }
+
 
         //水泥费用   河沙费用   空心砖费用
-        $material_total[] = BasisDecorationService::handyman(1,$get,$concrete_repair,$concrete_12,$concrete_24,$cement_attr);
-        $material_total[] = BasisDecorationService::handyman(1,$get,$river_sand_repair,$river_sand_12,$river_sand_24,$river_sand_attr);
-        $material_total[] = BasisDecorationService::handyman(2,$get,'','','',$air_brick_attr);
+        $material_total[] = BasisDecorationService::handyman(1,$get,$c_repair,$c_12,$c_24,$c_attr);
+        $material_total[] = BasisDecorationService::handyman(1,$get,$RS_repair,$RS_12,$RS_24,$RS_attr);
+        $material_total[] = BasisDecorationService::handyman(2,$get,'','','',$AB_attr);
 
 
         //总费用

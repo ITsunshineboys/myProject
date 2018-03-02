@@ -78,7 +78,16 @@ class FixedGrabbingGoods extends \yii\db\ActiveRecord
     }
 
 
-
+    /**
+     * 添加
+     * @param $path
+     * @param $sku
+     * @param $start_time
+     * @param $end_time
+     * @param $city_code
+     * @param $user_id
+     * @return int
+     */
     public static function add($path,$sku,$start_time,$end_time,$city_code,$user_id){
             if($start_time>$end_time){
                 return 1000;
@@ -117,6 +126,16 @@ class FixedGrabbingGoods extends \yii\db\ActiveRecord
             return 200;
     }
 
+
+    /**
+     * 修改
+     * @param $id
+     * @param $sku
+     * @param $start_time
+     * @param $end_time
+     * @param $user_id
+     * @return int
+     */
     public static function edit($id,$sku,$start_time,$end_time,$user_id){
 
         if($start_time>$end_time){
@@ -151,6 +170,12 @@ class FixedGrabbingGoods extends \yii\db\ActiveRecord
         return 200;
     }
 
+
+    /**
+     * 商品详情
+     * @param $sku
+     * @return array|null|\yii\db\ActiveRecord
+     */
     public static function goodsview($sku){
 
         $goods_data=Goods::find()
@@ -171,6 +196,17 @@ class FixedGrabbingGoods extends \yii\db\ActiveRecord
 
     }
 
+
+
+    /**
+     * 列表分页
+     * @param array $where
+     * @param array $select
+     * @param int $page
+     * @param int $size
+     * @param string $orderBy
+     * @return array
+     */
     public static function pagination($where = [], $select = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC'){
         $query = (new Query())
             ->from( 'fixed_grabbing_goods as fg')

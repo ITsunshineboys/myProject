@@ -362,10 +362,14 @@ class BasisDecorationService
         $max_goods = self::profitMargin($one_goods);
         switch ($int){
             case $int == 1 ;
-                $goods_attr = GoodsAttr::findByGoodsIdUnit($max_goods['id'],$name);
+                $g_attr = GoodsAttr::findByGoodsIdUnit($max_goods['id'],$name);
                 break;
             case $int == 2 ;
-                $goods_attr = GoodsAttr::findByGoodsIdUnits($max_goods['id'],$name);
+                $g_attr = GoodsAttr::findByGoodsIdUnits($max_goods['id'],$name);
+        }
+
+        if (!$g_attr){
+            return null;
         }
 
         return [$max_goods,$goods_attr];
