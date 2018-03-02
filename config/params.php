@@ -19,7 +19,7 @@ return [
     'lhzzRoleId' => 1,
     'openRoleIds' => [1, 6,],
     'maxRolesNumber' => 2,
-    'errorCodes' => [l
+    'errorCodes' => [
         403 => '没有权限',
         500 => '接口服务器异常',
         1000 => '请求的参数不正确',
