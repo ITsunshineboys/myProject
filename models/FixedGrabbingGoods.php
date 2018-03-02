@@ -2,7 +2,10 @@
 
 namespace app\models;
 
+use app\services\ModelService;
 use Yii;
+use yii\data\Pagination;
+use yii\db\Query;
 
 /**
  * This is the model class for table "fixed_grabbing_goods".
@@ -21,6 +24,26 @@ use Yii;
  */
 class FixedGrabbingGoods extends \yii\db\ActiveRecord
 {
+
+
+    const FIXED_GOODS_SEACRH=[
+        'fg.id',
+        'fg.two_cate_id',
+        'fg.three_cate_id',
+        'fg.start_time',
+        'fg.end_time',
+        'fg.status',
+        'gc.title',
+        'gc.parent_title'
+
+    ];
+
+    const FIXED_GOODS_STATUS = [
+        0 => '未开始',
+        1 => '已开始',
+        2 => '已逾期',
+
+    ];
     const FIXED_GOODS_SELET=[
         'goods.id',
         'goods.series_id',
@@ -61,7 +84,14 @@ class FixedGrabbingGoods extends \yii\db\ActiveRecord
                 $start_time=strtotime($start_time);
                 $end_time=strtotime($end_time);
             }
-
+            $goods = Goods::find()
+                ->where(['sku'=>$sku])
+                ->andWhere(['status'=>2])
+                ->one();
+            if (!$goods){
+                $code = 1043;
+                return $code;
+            }
             $FixedGoods=new FixedGrabbingGoods();
             $FixedGoods->city_code=$city_code;
             $FixedGoods->sku=$sku;
@@ -101,5 +131,36 @@ class FixedGrabbingGoods extends \yii\db\ActiveRecord
         return $goods_data;
 
 
+    }
+
+    public static function pagination($where = [], $select = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC'){
+        $query = (new Query())
+            ->from( 'fixed_grabbing_goods as fg')
+            ->leftJoin('goods_category as gc', 'gc.id = fg.three_cate_id')
+            ->select($select)
+            ->where($where);
+        $count = $query->count();
+
+        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $size, 'pageSizeParam' => false]);
+        $arr = $query->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+        foreach ($arr as &$value){
+            if($value['start_time']){
+                $value['start_time']=date('Y.m.d',$value['start_time']);
+                $value['end_time']=date('Y.m.d',$value['end_time']);
+                $value['time']=$value['start_time'].'-'.$value['end_time'];
+            }
+            if(isset($value['status'])){
+                $value['status']=self::FIXED_GOODS_STATUS[$value['status']];
+            }
+
+        }
+        return [
+            'total' => (int)$count,
+            'page'=>$page,
+            'size'=>$size,
+            'list' => $arr
+        ];
     }
 }

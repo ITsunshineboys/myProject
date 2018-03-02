@@ -37,6 +37,7 @@ use app\models\ProjectView;
 use app\models\Series;
 use app\models\StairsDetails;
 use app\models\Style;
+use app\models\Supplier;
 use app\models\Toponymy;
 use app\models\User;
 use app\models\UserNewsRecord;
@@ -3177,16 +3178,16 @@ class QuoteController extends Controller
             ]);
 
         }
-        $sku_res=FixedGrabbingGoods::find()
-            ->where(['sku'=>$sku])
-            ->one();
-        if($sku_res){
-            $code=1109;
-            return Json::encode([
-                'code'=>$code,
-                'msg'=>'请勿重复添加固定商品!'
-            ]);
-        }
+//        $sku_res=FixedGrabbingGoods::find()
+//            ->where(['sku'=>$sku])
+//            ->one();
+//        if($sku_res){
+//            $code=1109;
+//            return Json::encode([
+//                'code'=>$code,
+//                'msg'=>'请勿重复添加固定商品!'
+//            ]);
+//        }
         $path=explode(',',$path);
         $code=FixedGrabbingGoods::add($path,$sku,$start_time,$end_time,$city_code,$user_id);
         return Json::encode([
@@ -3220,7 +3221,7 @@ class QuoteController extends Controller
      * 固定抓取 总计商品数量
      * @return string
      */
-    public function actionFistGoodsList(){
+    public function actionFirstGoodsList(){
         $city_code=(int)\Yii::$app->request->get('city_code',510010);
         $first_list=GoodsCategory::find()
             ->select('id,title')
@@ -3240,6 +3241,73 @@ class QuoteController extends Controller
         ]);
 
     }
+
+    /**
+     * 固定抓取 商品列表
+     * @return string
+     */
+    public function actionFixedGrabbingList(){
+
+
+        $vaue_all=\Yii::$app->params['value_all'];
+        $first_cate_id=(int)\Yii::$app->request->get('first_cate_id');
+        $status=(int)\Yii::$app->request->get('status',$vaue_all);
+        $keyword=trim(\Yii::$app->request->get('keyword',''));
+        $category_id=(int)(\Yii::$app->request->get('category_id',''));
+        if(!$first_cate_id){
+            $code=1000;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $where='fg.first_cate_id='.$first_cate_id;
+
+        if(!$keyword){
+            if ($category_id) {
+
+                $cate_ids=Supplier::getcategory($category_id);
+                if(is_array($cate_ids)){
+                    $ids=  implode(',',$cate_ids);
+                    $where.=" and fg.three_cate_id in ({$ids})";
+
+                }else{
+                    $where.=" and fg.three_cate_id ={$category_id}";
+                }
+            }
+            if ($status != $vaue_all){
+                $where.= " and fg.status ={$status} ";
+            }else{
+                $keys=implode(',',array_keys(FixedGrabbingGoods::FIXED_GOODS_STATUS));
+                $where.= " and fg.status in ({$keys}) ";
+
+            }
+
+        }else{
+            $where=" gc.title like '%{$keyword}%' or gc.parent_title  like '%{$keyword}%'";
+        }
+        $page = (int)\Yii::$app->request->get('page', 1);
+        $size = (int)\Yii::$app->request->get('size', Supplier::PAGE_SIZE_DEFAULT);
+        $paginationData = FixedGrabbingGoods::pagination($where, FixedGrabbingGoods::FIXED_GOODS_SEACRH, $page, $size);
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' =>
+                $paginationData
+
+        ]);
+    }
+
+    public function actionFixedGoodsEditView(){
+        $id=(int)\Yii::$app->request->get('id');
+
+        $data=FixedGrabbingGoods::find()
+            ->where(['id'=>$id])
+            ->asArray()
+            ->one();
+
+    }
+
     /**
      * 测试功能
      */
