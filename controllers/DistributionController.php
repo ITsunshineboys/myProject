@@ -956,41 +956,7 @@ class DistributionController extends Controller
         }
     }
 
-    /**
-     * @return string
-     */
-    public  function  actionAddTest()
-    {
-        $request = Yii::$app->request;
-        $mobile= trim($request->get('mobile'));
-//        $user=User::find()->asArray()->all();
-//        $supplier=Supplier::find()->asArray()->all();
-        $user=User::find()->where(['mobile'=>$mobile])->one();
-        if (!$user)
-        {
-            $code=1010;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $supplier=Supplier::find()->where(['id'=>1])->one();
-        $supplier->uid=$user->id;
-        $res=$supplier->save(false);
-        if (!$res)
-        {
-            $code=500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        return Json::encode([
-            'user'=>$user,
-            'supplier'=>$supplier
-        ]);
 
-    }
 
 
 
