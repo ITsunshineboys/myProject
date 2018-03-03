@@ -540,6 +540,13 @@ class TestController extends Controller
         return 'ok';
     }
 
-
+    public function actionUserView()
+    {
+        $id = (int)Yii::$app->request->get('id', 0);
+        if ($id) {
+            $data = User::findOne($id);
+            return json_encode($data->attributes);
+        }
+    }
 
 }
