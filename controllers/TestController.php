@@ -170,7 +170,7 @@ class TestController extends Controller
     {
         $res = User::register(Yii::$app->request->post(), false);
         echo is_array($res) ? 'ok' : 'failed';
-        Yii::$app->trigger(Yii::$app->params['events']['async']);
+        is_array($res) && Yii::$app->trigger(Yii::$app->params['events']['async']);
     }
 
     /**

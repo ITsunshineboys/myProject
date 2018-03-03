@@ -239,7 +239,7 @@ class SiteController extends Controller
         $code = is_array($res) ? 200 : $res;
         $msg = is_array($res) ? '注册成功' : Yii::$app->params['errorCodes'][$code];
         echo Json::encode(compact('code', 'msg'));
-        Yii::$app->trigger(Yii::$app->params['events']['async']);
+        is_array($res) && Yii::$app->trigger(Yii::$app->params['events']['async']);
     }
 
     /**
