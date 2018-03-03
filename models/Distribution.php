@@ -298,16 +298,4 @@ class Distribution extends ActiveRecord
 
 
 
-    public  static  function  GetDistributionCorrelateList($mobile,$page,$size)
-    {
-
-        $offset = ($page - 1) * $size;
-//        $DisList = (new Query())->select()->all();
-//        foreach ($DisList as &$list) {
-//            $list['create_time']=date('Y-m-d H:i',$list['create_time']);
-//            $list['applydis_time']=date('Y-m-d H:i',$list['applydis_time']);
-//        }
-//        $total=(int)self::find()->where($where)->asArray()->count();
-//        return ModelService::pageDeal($DisList, $total, $page, $size);
-    }
 }
