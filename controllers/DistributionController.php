@@ -95,6 +95,29 @@ class DistributionController extends Controller
     }
 
 
+    /**
+     * 新分销注册接口
+     * @return string
+     */
+    public  function  actionRegister()
+    {
+        $post=\Yii::$app->request->post();
+        $res = User::register($post);
+        $code = is_array($res) ? 200 : $res;
+        if ($code!==200)
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=Distribution::register($post);
+        return Json::encode([
+            'code' => $code,
+            'msg'  => $code==200?'ok':Yii::$app->params['errorCodes'][$code]
+        ]);
+    }
+
      /**
      * 输入手机号获取验证码
      * 登录状态判断并保存手机号

@@ -297,5 +297,11 @@ class Distribution extends ActiveRecord
     }
 
 
+    public  static  function  Register(array $data)
+    {
+
+    }
+
+
 
 }
