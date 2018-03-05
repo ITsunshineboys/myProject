@@ -6,6 +6,7 @@ namespace app\controllers;
 use app\models\ChatRecord;
 use app\models\OrderGoods;
 use app\models\Supplier;
+use app\models\SupplierCashManager;
 use app\models\User;
 use app\models\UserChat;
 use app\models\UserNewsRecord;
@@ -300,6 +301,9 @@ class ChatController extends Controller
           $v['lxr']=$v['uid'];
           $v['last_role_id_app']=$v['role_id'];
           $v['send_time']=date('Y-m-d',$v['send_time']);
+          if(SupplierCashManager::getToday()>=$v['send_time'] && SupplierCashManager::getToday()<=$v['send_time']){
+              $v['send_time']=date('H:i',$v['send_time']);
+          }
           unset($v['role_id']);
           unset($v['uid']);
 
