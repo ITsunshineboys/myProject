@@ -48,6 +48,7 @@ use app\models\WorksBackmanData;
 use app\models\WorksData;
 use app\models\WorksWorkerData;
 use app\services\BasisDecorationService;
+use app\services\ChatService;
 use app\services\ExceptionHandleService;
 use app\services\FileService;
 use app\services\ModelService;
@@ -3436,10 +3437,33 @@ class QuoteController extends Controller
     }
 
     /**
+     * 优化:小区户型 列表
+     * @return string
+     */
+    public function actionVillageHomeList(){
+        $village_id=(int)\Yii::$app->request->get('village_id');
+        if(!$village_id){
+            $code=1000;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $houselist=Effect::HoseList($village_id);
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'list'=>$houselist
+        ]);
+    }
+
+    /**
      * 测试功能
      */
     public function actionTest()
     {
-
+        $res=new ChatService();
+       $a= $res->getUser('18101795837304455113979583');
+       var_dump($a);die;
     }
 }

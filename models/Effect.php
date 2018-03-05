@@ -49,6 +49,20 @@ class Effect extends ActiveRecord
         'type',
         'stair_id',
     ];
+
+    const VILLAGE_LIST=[
+        'e.id',
+        'e.type',
+        'e.particulars',
+        'e.add_time',
+        'ep.series_id',
+        'ep.style_id'
+    ];
+
+    const EFFECT_TYPE=[
+        0=>'普通户型',
+        1=>'案例户型',
+    ];
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -717,4 +731,32 @@ class Effect extends ActiveRecord
             ->asArray()
             ->one();
     }
+
+
+    public static function HoseList($village_id){
+
+        $list=(new Query())
+            ->from('effect as e')
+            ->select(self::VILLAGE_LIST)
+            ->leftJoin('effect_picture as ep','ep.effect_id=e.id')
+            ->where(['e.toponymy_id'=>$village_id])
+            ->andWhere("e.type in (0,1)")
+            ->all();
+
+        foreach ($list as &$value){
+            $value['add_time']=date('Y-m-d H:i:s',$value['add_time']);
+            $value['type']=self::EFFECT_TYPE[$value['type']];
+            $series=Series::find()->where(['id'=>$value['series_id']])->asArray()->one()['series'];
+            $style=Style::find()->where(['id'=>$value['style_id']])->asArray()->one()['style'];
+            if(!$style || !$series){
+                $value['seriesAndStyle']='';
+            }else{
+                $value['seriesAndStyle']=$series.','.$style;
+            }
+
+        }
+
+        return $list;
+
+}
 }
