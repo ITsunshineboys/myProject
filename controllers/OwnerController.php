@@ -882,14 +882,14 @@ class OwnerController extends Controller
 
 
         //石膏板费用  //龙骨费用   //丝杆费用 //木工板
-        $material_total[] = BasisDecorationService::carpentryPlasterboardCost(1,$m_length,$f_area_,$p_attr,$p_height,$p_area,$tv_plaster);
-        $material_total[] = BasisDecorationService::carpentryPlasterboardCost(2,$m_length,$f_area_,$k_attr,$k_height,$k_area);
-        $material_total[] = BasisDecorationService::carpentryPlasterboardCost(2,$m_length,$f_area_,$s_attr,$s_height,$s_area);
-        $material_total[] = BasisDecorationService::carpentryPlasterboardCost(3,$tv_board,'',$b_attr);
+        $m_total[] = BasisDecorationService::carpentryPlasterboardCost(1,$m_length,$f_area_,$p_attr,$p_height,$p_area,$tv_plaster);
+        $m_total[] = BasisDecorationService::carpentryPlasterboardCost(2,$m_length,$f_area_,$k_attr,$k_height,$k_area);
+        $m_total[] = BasisDecorationService::carpentryPlasterboardCost(2,$m_length,$f_area_,$s_attr,$s_height,$s_area);
+        $m_total[] = BasisDecorationService::carpentryPlasterboardCost(3,$tv_board,'',$b_attr);
 
         // 总费用
         $total_area = 0;
-        foreach ($material_total as $total){
+        foreach ($m_total as $total){
             $total_area +=  $total['cost'];
         }
 
@@ -897,7 +897,7 @@ class OwnerController extends Controller
             'code' => 200,
             'msg' => '成功',
             'labor_all_cost' => $labour_charges,
-            'data' => $material_total,
+            'data' => $m_total,
             'total_cost' => round($total_area,2),
         ]);
     }
