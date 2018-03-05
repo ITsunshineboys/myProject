@@ -115,7 +115,7 @@ class FixedGrabbingGoods extends \yii\db\ActiveRecord
             $FixedGoods->three_cate_id=$path[2];
             $FixedGoods->operat_time=time();
             $FixedGoods->status=self::STATUS;
-            $FixedGoods->operator=User::find()->select('nickname')->where(['id'=>$user_id])->one()->nickname;
+            $FixedGoods->operator_id=$user_id;
 
             $res=$FixedGoods->save();
             if(!$res){
@@ -160,7 +160,7 @@ class FixedGrabbingGoods extends \yii\db\ActiveRecord
         $edit_fixed->end_time=$end_time;
         $edit_fixed->sku=$sku;
         $edit_fixed->operat_time=time();
-        $edit_fixed->operator=User::find()->select('nickname')->where(['id'=>$user_id])->one()->nickname;
+        $edit_fixed->operator_id=$user_id;
         $res=$edit_fixed->save();
         if(!$res){
             $code=500;

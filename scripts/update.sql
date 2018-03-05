@@ -322,3 +322,5 @@ CREATE TABLE `fixed_grabbing_goods` (
   `city_code` int(11) NOT NULL COMMENT '城市编码',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+alter table  fixed_grabbing_goods change operator operator_id int(10) not null COMMENT '操作人id'

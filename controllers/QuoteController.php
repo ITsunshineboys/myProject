@@ -3316,6 +3316,7 @@ class QuoteController extends Controller
             ->one();
         $data['start_time']=date('Y-m-d',$data['start_time']);
         $data['end_time']=date('Y-m-d',$data['end_time']);
+        $data['operator']=User::find()->where(['id'=>$data['operator_id']])->one()->nickname;
         $data['operat_time']=date('Y-m-d H:i:s',$data['operat_time']);
         $data['status']=FixedGrabbingGoods::FIXED_GOODS_STATUS[$data['status']];
         $one_title=GoodsCategory::find()->where(['id'=>$data['first_cate_id']])->select('title')->one()->title;
@@ -3366,7 +3367,73 @@ class QuoteController extends Controller
         ]);
     }
 
+    /**
+     * 优化:小区添加
+     * @return string
+     */
+    public function actionVillageAdd(){
+        $province_code=(int)\Yii::$app->request->post('province_code',510000);
+        $city_code=(int)\Yii::$app->request->post('city_code',510100);
+        $district_code=(int)\Yii::$app->request->post('district_code','');
+        $village_name=trim(\Yii::$app->request->post('village_name',''));
+        $street=trim(\Yii::$app->request->post('street',''));
 
+        $village=new EffectToponymy();
+
+        $village->province_code=$province_code;
+        $village->city_code=$city_code;
+        $village->district_code=$district_code;
+        $village->toponymy=$village_name;
+        $village->add_time=time();
+        $village->street=$street;
+
+        if(!$village->save(false)){
+            $code=500;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok'
+        ]);
+
+    }
+
+    /**
+     * 优化:小区编辑
+     * @return string
+     */
+    public function actionVillageEdit(){
+        $village_id=(int)\Yii::$app->request->post('village_id');
+        $district_code=(int)\Yii::$app->request->post('district_code');
+        $village_name=trim(\Yii::$app->request->post('village_name',''));
+        $street=trim(\Yii::$app->request->post('street',''));
+        if(!$village_id){
+            $code=1000;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $res=EffectToponymy::find()->where(['id'=>$village_id])->one();
+        $res->district_code=$district_code;
+        $res->toponymy=$village_name;
+        $res->street=$street;
+        if(!$res->save(false)){
+            $code=500;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok'
+        ]);
+    }
 
     /**
      * 测试功能
