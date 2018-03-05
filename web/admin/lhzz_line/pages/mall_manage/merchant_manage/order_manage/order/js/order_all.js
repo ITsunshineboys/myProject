@@ -53,7 +53,6 @@ app.controller('order_all', ['$rootScope', '$scope', '$stateParams', '_ajax', fu
         let saveTempStatus = sessionStorage.getItem('saveStatus');
         if (saveTempStatus !== null) {      // 判断是否保存参数状态
             saveTempStatus = JSON.parse(saveTempStatus);
-            console.log(saveTempStatus);
             $scope.params = saveTempStatus;
             $scope.search_input.keyword = saveTempStatus.keyword;
             $scope.pageConfig.currentPage = saveTempStatus.page
