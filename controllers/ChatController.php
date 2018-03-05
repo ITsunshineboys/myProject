@@ -4,6 +4,7 @@ namespace app\controllers;
 
 
 use app\models\ChatRecord;
+use app\models\EffectToponymy;
 use app\models\OrderGoods;
 use app\models\Supplier;
 use app\models\SupplierCashManager;
@@ -234,6 +235,7 @@ class ChatController extends Controller
         }
 
         $data=ChatRecord::userlog($u_id,$role_id);
+        $data=EffectToponymy::arraySequence($data,'SORT_DESC');
         var_dump($data);die;
 
         if(!$data){
