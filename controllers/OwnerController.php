@@ -406,9 +406,65 @@ class OwnerController extends Controller
         $total_cost = round($material[0]['cost']+$material[1]['cost']+$material[2]['cost']+$material[3]['cost']+$material[4]['cost']+$material[5]['cost'],2);
 
 
+
+        //水电价格
+        //人工价格
+        $labor = LaborCost::profession($get['city'],self::WORK_CATEGORY['plumber']);
+        $day_workload = WorkerCraftNorm::findByLaborCostAll($labor['id']);
+
+        foreach ($day_workload as $o_day)
+        {
+            if ($o_day['worker_type_id'] == self::POINTS_CATEGORY['strong_current']){
+                $strong = $o_day['quantity'];
+            }
+
+            if ($o_day['worker_type_id'] == self::POINTS_CATEGORY['weak_current']){
+                $weak = $o_day['quantity'];
+            }
+
+            if ($o_day['worker_type_id'] == self::POINTS_CATEGORY['waterway']){
+                $waterway = $o_day['quantity'];
+            }
+        }
+
+        $points = Points::find()->asArray()->select('id,title,count')->where(['in','id',[1,2,3]])->all();
+        foreach ($points  as $p){
+            if ($p['id'] == self::PROJECT_DETAILS['waterway']){
+                $water_where = 'pid = '.$p['id'];
+                $water_points = Points::findByPid('title,count',$water_where);
+                $water_points = BasisDecorationService::waterwayPoints($water_points,$get);
+            }
+
+            if ($p['id'] == self::PROJECT_DETAILS['weak_current']){
+                $w_where = 'pid = '.$p['id'];
+                $w_points = Points::findByPid('title,count',$w_where);
+                $w_points = BasisDecorationService::weakPoints($w_points,$get);
+            }
+
+            if ($p['id'] == self::PROJECT_DETAILS['strong_current']){
+                $s_where = 'pid = '.$p['id'];
+                $s_points = Points::findByPid('title,count',$s_where);
+                $s_points = BasisDecorationService::strongPoints($s_points,$get);
+            }
+
+        }
+
+
+        //人工总费用    $points['count'],$workers['univalence'],$worker_kind_details['quantity']
+        $waterway_ = BasisDecorationService::laborFormula($water_points,$waterway);
+        $weak_     = BasisDecorationService::laborFormula($w_points,$weak);
+        $strong_   = BasisDecorationService::laborFormula($s_points,$strong);
+        $total = ceil(BasisDecorationService::algorithm(5,$waterway_,$weak_,$strong_));
+
+
+        $LA_cost['price'] = round(BasisDecorationService::algorithm(1,$total,$labor['univalence']),2);
+        $LA_cost['worker_kind'] = $labor['worker_name'];
+
+
         return Json::encode([
             'code' => 200,
             'msg'  => 'ok',
+            'LA_cost' => $LA_cost,
             'data' => $material,
             'total_cost'=> $total_cost,
         ]);

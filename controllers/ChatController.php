@@ -4,6 +4,7 @@ namespace app\controllers;
 
 
 use app\models\ChatRecord;
+use app\models\EffectToponymy;
 use app\models\OrderGoods;
 use app\models\Supplier;
 use app\models\SupplierCashManager;
@@ -234,7 +235,8 @@ class ChatController extends Controller
         }
 
         $data=ChatRecord::userlog($u_id,$role_id);
-
+        $data=EffectToponymy::arraySequence($data,'send_time','SORT_DESC');
+//        var_dump($data);die;
 
         if(!$data){
             $data=[];
@@ -300,10 +302,6 @@ class ChatController extends Controller
            $v['icon']==null?[]:$v['icon'];
           $v['lxr']=$v['uid'];
           $v['last_role_id_app']=$v['role_id'];
-//          $v['send_time']=date('Y-m-d',$v['send_time']);
-//          var_dump($v['send_time']);
-//          var_dump(SupplierCashManager::getToday()[0]);
-//          var_dump(SupplierCashManager::getToday()[1]);die;
           if(SupplierCashManager::getToday()[0]<=$v['send_time'] && SupplierCashManager::getToday()[1]>=$v['send_time']){
               $v['send_time']=date('H:i',$v['send_time']);
           }else{
