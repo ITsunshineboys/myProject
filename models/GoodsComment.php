@@ -41,6 +41,22 @@ class GoodsComment extends ActiveRecord
     }
 
     /**
+     * Do some ops after updated goods comment model
+     *
+     * @param bool $insert
+     * @param array $changedAttributes
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        if ($insert) {
+            $cacheKey = Goods::GOODS_QR_PREFIX . $this->goods_id;
+            Yii::$app->cache->delete($cacheKey);
+        }
+    }
+
+    /**
      * Get goods comment list
      *
      * @param  array $where search condition
