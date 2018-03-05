@@ -139,7 +139,7 @@ app.controller('order_all', ['$rootScope', '$scope', '$stateParams', '_ajax', fu
         orderList();
     };
 
-    $scope.saveStatus = saveParams
+    $scope.saveStatus = saveParams;
 
     // 列表数据请求
     function orderList() {

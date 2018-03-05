@@ -1,4 +1,9 @@
-app.controller('order_unshipped',['$scope', '$stateParams', '_ajax', function ($scope, $stateParams, _ajax) {
+app.controller('order_unshipped',['$rootScope', '$scope', '$stateParams', '_ajax', function ($rootScope, $scope, $stateParams, _ajax) {
+    let fromState = $rootScope.fromState_name === 'order_details';  // 判断页面是否从详情页进到当前页面
+    if (!fromState) {
+        sessionStorage.removeItem('saveStatus');
+        sessionStorage.removeItem('isOperation')
+    }
 // 筛选器
     $scope.orderFilter = {
         orderNum: true,     // 订单编号
@@ -41,6 +46,18 @@ app.controller('order_unshipped',['$scope', '$stateParams', '_ajax', function ($
     // 搜索-输入框值
     $scope.search_input = {
         keyword: ''
+    }
+
+    let isOperation = sessionStorage.getItem('isOperation');
+    if (isOperation === null) {     // 判断详情是否是操作数据后跳转到当前页面的
+        let saveTempStatus = sessionStorage.getItem('saveStatus');
+        if (saveTempStatus !== null) {      // 判断是否保存参数状态
+            saveTempStatus = JSON.parse(saveTempStatus);
+            console.log(saveTempStatus);
+            $scope.params = saveTempStatus;
+            $scope.search_input.keyword = saveTempStatus.keyword;
+            $scope.pageConfig.currentPage = saveTempStatus.page
+        }
     }
 
     // 时间筛选器
@@ -120,6 +137,8 @@ app.controller('order_unshipped',['$scope', '$stateParams', '_ajax', function ($
         orderList();
     };
 
+    $scope.saveStatus = saveParams;
+
     // 列表数据请求
     function orderList() {
         $scope.params.page = $scope.pageConfig.currentPage;
@@ -127,5 +146,12 @@ app.controller('order_unshipped',['$scope', '$stateParams', '_ajax', function ($
             $scope.pageConfig.totalItems = res.data.count;
             $scope.list = res.data.details;
         })
+    }
+
+    // 缓存当前页面状态参数
+    function saveParams() {
+        console.log($scope.params);
+        let temp = JSON.stringify($scope.params);
+        sessionStorage.setItem('saveStatus', temp)
     }
 }]);

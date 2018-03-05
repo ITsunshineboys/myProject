@@ -1,4 +1,8 @@
 app.controller('comments', ['$rootScope', '$scope', '$stateParams', '_ajax', function ($rootScope, $scope, $stateParams, _ajax) {
+    let fromState = $rootScope.fromState_name === 'comm_details';  // 判断页面是否从详情页进到当前页面
+    if (!fromState) {
+        sessionStorage.removeItem('saveStatus');
+    }
     sessionStorage.setItem('shopID', $stateParams.id);
     $rootScope.crumbs = [{
         name: '商城管理',
@@ -39,6 +43,15 @@ app.controller('comments', ['$rootScope', '$scope', '$stateParams', '_ajax', fun
         start_time: '',                 // 开始时间
         end_time: ''                    // 结束时间
     };
+
+    let saveTempStatus = sessionStorage.getItem('saveStatus');
+    if (saveTempStatus !== null) {      // 判断是否保存参数状态
+        saveTempStatus = JSON.parse(saveTempStatus);
+        console.log(saveTempStatus);
+        $scope.params = saveTempStatus;
+        $scope.search_input.keyword = saveTempStatus.keyword;
+        $scope.pageConfig.currentPage = saveTempStatus.page
+    }
 
     // 查询事件
     $scope.search = function () {
@@ -92,6 +105,8 @@ app.controller('comments', ['$rootScope', '$scope', '$stateParams', '_ajax', fun
         }
     });
 
+    $scope.saveStatus = saveParams;
+
     // 列表数据请求
     function orderList() {
         $scope.params.page = $scope.pageConfig.currentPage;
@@ -100,6 +115,13 @@ app.controller('comments', ['$rootScope', '$scope', '$stateParams', '_ajax', fun
             $scope.list = res.data.details;
             console.log(res, '删除评论列表');
         })
+    }
+
+    // 缓存当前页面状态参数
+    function saveParams() {
+        console.log($scope.params);
+        let temp = JSON.stringify($scope.params);
+        sessionStorage.setItem('saveStatus', temp)
     }
 }])
     .controller('comments_details', ['$rootScope', '$scope', '$stateParams', '_ajax', function ($rootScope, $scope, $stateParams, _ajax) {
