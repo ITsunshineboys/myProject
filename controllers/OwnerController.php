@@ -12,6 +12,7 @@ use app\models\Effect;
 use app\models\EffectPicture;
 use app\models\EffectToponymy;
 use app\models\EngineeringStandardCarpentryCoefficient;
+use app\models\FixedGrabbingGoods;
 use app\models\Goods;
 use app\models\GoodsAttr;
 use app\models\GoodsCategory;
@@ -343,6 +344,7 @@ class OwnerController extends Controller
         // 强弱电总点位
         $total_points = BasisDecorationService::algorithm(3,$WS_points,$SS_points);
         // 所需要材料查询
+        $goods = BasisDecorationService::fixedGoods($get['city'],self::CIRCUIT_MATERIALS);
         $goods = Goods::maxProfit(self::CIRCUIT_MATERIALS);
         // 当地水电工艺
         $p_craft = WorkerType::craft1(self::CRAFT_NAME['plumber'],$get['city']);

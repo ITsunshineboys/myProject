@@ -12,6 +12,7 @@ use app\models\Apartment;
 use app\models\Effect;
 use app\models\EngineeringStandardCarpentryCoefficient;
 use app\models\EngineeringStandardCraft;
+use app\models\FixedGrabbingGoods;
 use app\models\Goods;
 use app\models\GoodsAttr;
 use app\models\GoodsCategory;
@@ -1671,6 +1672,22 @@ class BasisDecorationService
         $style = array_values(self::style($goods_material));
 
         return $style;
+    }
+
+
+    public static function fixedGoods($get,$c_ids)
+    {
+        if (!$c_ids ){
+            return false;
+        }
+
+        $fixed = [];
+        foreach ($c_ids as $c_id){
+            $fixed[] = FixedGrabbingGoods::findByOne($get['city'],$c_id);
+        }
+
+
+
     }
 
 }

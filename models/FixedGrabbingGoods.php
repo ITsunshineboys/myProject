@@ -237,4 +237,18 @@ class FixedGrabbingGoods extends \yii\db\ActiveRecord
             'list' => $arr
         ];
     }
+
+    public static function findByOne($code,$c_id)
+    {
+        $rows = self::find()
+            ->select('id,three_cate_id,sku')
+            ->where(['city_code'=>$code])
+            ->andWhere(['three_cate_id'=>$c_id])
+            ->andWhere(['status'=>self::STATUS])
+            ->andWhere(['>=','end_time',time()])
+            ->andWhere(['<=','start_time',time()])
+            ->one();
+
+        return $rows;
+    }
 }
