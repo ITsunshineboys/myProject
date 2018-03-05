@@ -235,8 +235,8 @@ class ChatController extends Controller
         }
 
         $data=ChatRecord::userlog($u_id,$role_id);
-        $data=EffectToponymy::arraySequence($data,'SORT_DESC');
-        var_dump($data);die;
+        $data=EffectToponymy::arraySequence($data,'send_time','SORT_DESC');
+//        var_dump($data);die;
 
         if(!$data){
             $data=[];
