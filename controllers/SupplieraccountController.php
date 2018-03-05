@@ -121,7 +121,7 @@ class SupplieraccountController extends  Controller{
             return Json::encode([
                 'code' => 200,
                 'msg' => 'OK',
-                'data' =>null
+                'data' =>[]
             ]);
         }
 
