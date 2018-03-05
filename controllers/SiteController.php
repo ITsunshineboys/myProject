@@ -191,6 +191,7 @@ class SiteController extends Controller
                         'last_login_role' => [
                             'id' => $user->last_role_id_app,
                         ],
+                        'username_im' => $user->username,
                     ],
                 ]);
 
