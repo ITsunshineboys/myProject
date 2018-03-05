@@ -372,7 +372,7 @@ class BasisDecorationService
             return null;
         }
 
-        return [$max_goods,$goods_attr];
+        return [$max_goods,$g_attr];
     }
 
     public static function goodsAttr1($goods,$value,$name,$int = 1)
