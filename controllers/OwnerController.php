@@ -407,8 +407,7 @@ class OwnerController extends Controller
 
 
 
-        //水电价格
-        //人工价格
+        //水电价格   人工价格
         $labor = LaborCost::profession($get['city'],self::WORK_CATEGORY['plumber']);
         $day_workload = WorkerCraftNorm::findByLaborCostAll($labor['id']);
 
