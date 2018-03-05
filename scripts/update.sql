@@ -304,3 +304,21 @@ ALTER TABLE `line_supplier_goods` ADD `supplier_id` int(11) NOT NULL COMMENT '�
 --all 2018.02.28 hyz
 ALTER TABLE `user_role` MODIFY  `review_remark`  varchar(100) NOT NULL DEFAULT '' COMMENT '审核备注';
 
+--all 2018.03.05 yr
+
+ALTER TABLE `effect_earnest` MODIFY  `requirement`  varchar(300) NOT NULL DEFAULT '' COMMENT '特殊要求';
+
+CREATE TABLE `fixed_grabbing_goods` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `first_cate_id` int(11) NOT NULL COMMENT '一级分类id',
+  `two_cate_id` int(11) NOT NULL COMMENT '二级分类id',
+  `three_cate_id` int(11) NOT NULL COMMENT '三级分类id',
+  `start_time` int(11) DEFAULT NULL,
+  `end_time` int(11) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT NULL COMMENT '状态 0：未开始 1：已开始 2：已逾期',
+  `sku` bigint(20) NOT NULL COMMENT '商品编码',
+  `operat_time` int(11) NOT NULL COMMENT '操作时间',
+  `operator` varchar(100) DEFAULT '' COMMENT '操作人',
+  `city_code` int(11) NOT NULL COMMENT '城市编码',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
