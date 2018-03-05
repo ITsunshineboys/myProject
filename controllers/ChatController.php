@@ -301,7 +301,7 @@ class ChatController extends Controller
           $v['lxr']=$v['uid'];
           $v['last_role_id_app']=$v['role_id'];
           $v['send_time']=date('Y-m-d',$v['send_time']);
-          if(SupplierCashManager::getToday()>=$v['send_time'] && SupplierCashManager::getToday()<=$v['send_time']){
+          if(SupplierCashManager::getToday()[0]>=$v['send_time'] && SupplierCashManager::getToday()[1]<=$v['send_time']){
               $v['send_time']=date('H:i',$v['send_time']);
           }
           unset($v['role_id']);
