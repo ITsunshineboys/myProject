@@ -297,9 +297,32 @@ class Distribution extends ActiveRecord
     }
 
 
-    public  static  function  Register(array $data)
+    /**
+     * @param array $data
+     * @return int
+     * @throws \yii\db\Exception
+     */
+    public  static  function  register(array $data)
     {
-
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $distribution=new self();
+            $distribution->uid=$data['id'];
+            $distribution->create_time=time();
+            if (!$distribution->save(false))
+            {
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (\Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
     }
 
 
