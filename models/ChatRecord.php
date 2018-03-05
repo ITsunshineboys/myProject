@@ -46,7 +46,7 @@ select * from (
 SELECT to_uid uid, to_role_id role_id,id,content,`type`,send_time,status,del_status FROM (select * from chat_record  where send_role_id=$role_id and send_uid=$u_id order by send_time desc) tmp group by to_uid,to_role_id
 union
 SELECT send_uid uid, send_role_id role_id,id,content,`type`,send_time,status,del_status FROM (select * from chat_record  where to_role_id=$role_id and to_uid=$u_id order by send_time desc) tmp group by send_uid,send_role_id
-)  t order by t.id desc) t2 where del_status=0 group by t2.uid,t2.role_id ;";
+)  t order by t.send_time desc) t2 where del_status=0 group by t2.uid,t2.role_id ;";
         $user_log=Yii::$app->db->createCommand($sql_log)->queryAll();
 
         if(!$user_log){
