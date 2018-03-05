@@ -12,7 +12,6 @@ var app = angular.module("app", ["ng.ueditor", "ui.router", "ngFileUpload",
     "brand_index_module",
     "brand_check_module",
     "edit_attribute_module",
-    "add_user_module",
     "checklist-model",
     "new_brand_module",
     "new_class_module",
@@ -138,12 +137,6 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         /*---------------------------王杰结束--------------------------------------*/
 
         /*---------------------------谢力开始--------------------------------------*/
-        .state("add_user", {   //账户管理——添加新用户
-            url: "/add_user",
-            templateUrl: "pages/account_manage/user_list/add_user/add_user.html",
-            css: "pages/account_manage/user_list/add_user/css/add_user.css"
-        })
-
         .state("choose_series", {
             /*系列/风格/属性管理-选择拥有系列的分类*/
             url: "/choose_series",
@@ -153,6 +146,12 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             /*系列/风格/属性管理-风格-选择拥有风格的分类*/
             url: "/choose_style",
             templateUrl: "pages/mall_manage/style_manage/choose_style/choose_style.html"
+        })
+        .state("add_user", {   //添加新用户
+            url: '/add_user',
+            templateUrl: 'pages/account_manage/user_list/add_user/add_user.html',
+            css: 'pages/account_manage/user_list/add_user/css/add_user.css',
+            controller: 'add_user_ctrl'
         })
 
         /*---------------------------谢力结束--------------------------------------*/
@@ -293,7 +292,6 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css: 'pages/account_manage/user_list/account_mag/css/user_list.css',
             controller: 'account_user_list_closed'
         })
-
         .state("account_mag_detail", { //账户详情
             url: "/account_mag_detail?id",
             params: {new_num:null},
