@@ -2,14 +2,6 @@
  * Created by tiger on 2017/12/12/012.
  */
 app.controller('settle_verify_pass', ['$rootScope', '$scope', '$state', '$stateParams', '_ajax', function ($rootScope, $scope, $state, $stateParams, _ajax) {
-    $rootScope.crumbs = [{
-        name: '商城管理',
-        icon: 'icon-shangchengguanli',
-        link: $rootScope.mall_click
-    }, {
-        name: '商家入驻审核'
-    }];
-
     let fromState = $rootScope.fromState_name === 'verify_detail';
     if (!fromState) {
         sessionStorage.removeItem('saveStatus');

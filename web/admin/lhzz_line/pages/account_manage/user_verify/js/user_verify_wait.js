@@ -2,6 +2,14 @@
  * Created by Administrator on 2017/12/13/013.
  */
 app.controller('account_user_verify_wait', ['$rootScope', '$scope', '$state', '$stateParams', '_ajax', function ($rootScope, $scope, $state, $stateParams, _ajax) {
+    console.log($rootScope.fromState_name);
+
+    let fromState = $rootScope.fromState_name === 'user_verify_detail';
+    if (!fromState) {
+        sessionStorage.removeItem('saveStatus');
+        sessionStorage.removeItem('isOperation')
+    }
+
     /*请求参数*/
     $scope.params = {
         time_type: 'all',               // 时间类型
@@ -25,6 +33,17 @@ app.controller('account_user_verify_wait', ['$rootScope', '$scope', '$state', '$
 
     $scope.table = {
         keyword : ''  // 搜索输入框
+    }
+
+    let isOperation = sessionStorage.getItem('isOperation');
+    if (isOperation === null) {     // 判断详情是否是操作数据后跳转到当前页面的
+        let saveTempStatus = sessionStorage.getItem('saveStatus');
+        if (saveTempStatus !== null) {      // 判断是否保存参数状态
+            saveTempStatus = JSON.parse(saveTempStatus);
+            $scope.params = saveTempStatus;
+            $scope.table.keyword = saveTempStatus.keyword;
+            $scope.pageConfig.currentPage = saveTempStatus.page
+        }
     }
 
     // 时间筛选器
@@ -102,4 +121,13 @@ app.controller('account_user_verify_wait', ['$rootScope', '$scope', '$state', '$
             $scope.listdata = res.data.list;
         })
     }
+
+    $scope.saveStatus = saveParams
+
+    // 缓存当前页面状态参数
+    function saveParams() {
+        let temp = JSON.stringify($scope.params);
+        sessionStorage.setItem('saveStatus', temp)
+    }
+
 }]);
