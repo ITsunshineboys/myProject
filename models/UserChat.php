@@ -197,8 +197,10 @@ class UserChat extends \yii\db\ActiveRecord
      * @return int|mixed
      */
     public static function SendImg($username,$send_uid,$send_role_id,$to_uid,$filepath,$to_role_id,$size=''){
-        $size=json_decode($size);
-        $size=implode(',',$size);
+
+
+        $size=implode(',',(array)json_decode($size));
+
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $trans = \Yii::$app->db->beginTransaction();
         try {
