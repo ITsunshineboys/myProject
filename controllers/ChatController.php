@@ -100,7 +100,7 @@ class ChatController extends Controller
         }
         list($u_id, $role_id) = $user;
         $code=1000;
-        $size=\Yii::$app->request->get('size',[]);
+        $size=\Yii::$app->request->get('size');
         $path_data=\Yii::$app->request->get('path_data');
         $to_uid=trim(\Yii::$app->request->get('to_uid'));
         $to_role_id=trim(\Yii::$app->request->get('role_id'));
