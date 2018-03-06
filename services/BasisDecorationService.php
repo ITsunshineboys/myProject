@@ -386,7 +386,6 @@ class BasisDecorationService
                 }
             }
         }
-
         if (!$o_goods){
             return null;
         }
@@ -1675,18 +1674,33 @@ class BasisDecorationService
     }
 
 
-    public static function fixedGoods($get,$c_ids)
+    /**
+     * 商品抓取规则
+     * @param $code
+     *  市编码
+     * @param $c_ids
+     * 分类id
+     * @return array
+     */
+    public static function ruleGoods($code,$c_ids)
     {
-        if (!$c_ids ){
-            return false;
-        }
-
-        $fixed = [];
+        $g_value = [];
         foreach ($c_ids as $c_id){
-            $fixed[] = FixedGrabbingGoods::findByOne($get['city'],$c_id);
+            $fixed = FixedGrabbingGoods::findByOne($code,$c_id);
+            if (!$fixed){
+                $goods = Goods::maxProfit($c_id);
+                foreach ($goods as $g){
+                    $g_value[] = $g;
+                }
+            }else {
+                $goods[] = Goods::findBySkuAll1($fixed['sku']);
+                foreach ($goods as $g){
+                    $g_value[] = $g;
+                }
+            }
         }
 
-
+        return $g_value;
 
     }
 

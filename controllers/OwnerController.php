@@ -344,8 +344,11 @@ class OwnerController extends Controller
         // 强弱电总点位
         $total_points = BasisDecorationService::algorithm(3,$WS_points,$SS_points);
         // 所需要材料查询
-        $goods = BasisDecorationService::fixedGoods($get['city'],self::CIRCUIT_MATERIALS);
-        $goods = Goods::maxProfit(self::CIRCUIT_MATERIALS);
+        $goods = BasisDecorationService::ruleGoods($get['city'],self::CIRCUIT_MATERIALS);
+
+
+
+
         // 当地水电工艺
         $p_craft = WorkerType::craft1(self::CRAFT_NAME['plumber'],$get['city']);
         foreach ($p_craft as $oneCraft){
@@ -387,10 +390,11 @@ class OwnerController extends Controller
         $r_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['reticle'],'长');
         $w_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['wire'],'长');
         $s_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['spool'],'长');
-        $b_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['bottom_case'],'长');
+        $b_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['bottom_case'],'');
         $ppr    = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['ppr'],'长');
         $pvc    = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['pvc'],'长');
-        if (!$r_attr || $w_attr || $s_attr || $b_attr || $ppr || $pvc){
+
+        if (!$r_attr || !$w_attr || !$s_attr || !$b_attr || !$ppr || !$pvc){
             return Json::encode([
                 'code' => 1000,
                 'msg'  => '水电材料或者水电材料属性为null'
