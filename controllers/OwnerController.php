@@ -710,7 +710,7 @@ class OwnerController extends Controller
 
 
         //防水所需材料
-        $goods = Goods::maxProfit(self::WATERPROOF_MATERIAL);
+        $goods = BasisDecorationService::ruleGoods($get['city'],self::WATERPROOF_MATERIAL);
 
 
         $points = Points::find()
@@ -1052,7 +1052,7 @@ class OwnerController extends Controller
         $putty_area = BasisDecorationService::algorithm(3,$primer_area,0);
         $putty_day = BasisDecorationService::algorithm(6,$putty_area,$putty);
 
-        $goods = Goods::maxProfit(self::LATEX_MATERIAL);
+        $goods = BasisDecorationService::ruleGoods($get['city'],self::LATEX_MATERIAL);
 
 
         //当地工艺
@@ -1243,7 +1243,7 @@ class OwnerController extends Controller
 
 
         //材料费
-        $goods = Goods::maxProfit(self::TILER_MATERIAL);
+        $goods = BasisDecorationService::ruleGoods($get['city'],self::TILER_MATERIAL);
 
         //商品属性
         $c_attr = BasisDecorationService::goodsAttr1($goods,BasisDecorationService::goodsNames()['cement'],'重');
@@ -1457,7 +1457,7 @@ class OwnerController extends Controller
 
 
         //材料费
-        $goods = Goods::maxProfit(self::BACKMAN_MATERIAL);
+        $goods = BasisDecorationService::ruleGoods($get['city'],self::BACKMAN_MATERIAL);
 
 
         // 商品属性
