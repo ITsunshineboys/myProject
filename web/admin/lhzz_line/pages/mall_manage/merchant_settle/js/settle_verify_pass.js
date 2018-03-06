@@ -10,6 +10,11 @@ app.controller('settle_verify_pass', ['$rootScope', '$scope', '$state', '$stateP
         name: '商家入驻审核'
     }];
 
+    let fromState = $rootScope.fromState_name === 'verify_detail';
+    if (!fromState) {
+        sessionStorage.removeItem('saveStatus');
+        sessionStorage.removeItem('isOperation')
+    }
 
     $scope.params = {
         time_type: 'all',               // 时间类型
@@ -38,6 +43,17 @@ app.controller('settle_verify_pass', ['$rootScope', '$scope', '$state', '$stateP
     /*排序按钮样式控制*/
     $scope.sortStyleFunc = () => {
         return $scope.params['sort[]'].split(':')[1]
+    }
+
+    let isOperation = sessionStorage.getItem('isOperation');
+    if (isOperation === null) {     // 判断详情是否是操作数据后跳转到当前页面的
+        let saveTempStatus = sessionStorage.getItem('saveStatus');
+        if (saveTempStatus !== null) {      // 判断是否保存参数状态
+            saveTempStatus = JSON.parse(saveTempStatus);
+            $scope.params = saveTempStatus;
+            $scope.table.keyword = saveTempStatus.keyword;
+            $scope.pageConfig.currentPage = saveTempStatus.page
+        }
     }
 
     // 时间筛选器
@@ -113,6 +129,14 @@ app.controller('settle_verify_pass', ['$rootScope', '$scope', '$state', '$stateP
             $scope.pageConfig.totalItems = res.data.list.count;
             $scope.listdata = res.data.list.list;
         })
+    }
+
+    $scope.saveStatus = saveParams
+
+    // 缓存当前页面状态参数
+    function saveParams() {
+        let temp = JSON.stringify($scope.params);
+        sessionStorage.setItem('saveStatus', temp)
     }
 
 

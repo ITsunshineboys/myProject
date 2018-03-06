@@ -43,6 +43,7 @@ app.controller('verify_detail', ['$rootScope', '$scope', '$state', '$stateParams
     // 返回
     $scope.backPage = function (obj) {
         if(arguments[0]=='modal'){
+            sessionStorage.setItem('isOperation', '1');
             setTimeout(function () {
                 $state.go('settle_verify.wait');
             },200)
