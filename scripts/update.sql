@@ -323,7 +323,7 @@ CREATE TABLE `fixed_grabbing_goods` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-alter table  fixed_grabbing_goods change operator operator_id int(10) not null COMMENT '操作人id'
+alter table  fixed_grabbing_goods change operator operator_id int(10) not null COMMENT '操作人id';
 
 --all 2018.03.06 yr
 ALTER TABLE `chat_record` ADD `size` VARCHAR(50) DEFAULT NULL COMMENT '图片大小';
