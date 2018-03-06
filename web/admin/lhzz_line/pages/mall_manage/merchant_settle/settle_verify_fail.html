@@ -57,7 +57,7 @@
         <td ng-bind="item.type_shop"></td>
         <td ng-bind="item.category"></td>
         <td data-toggle="modal" data-target="#show-remark" ng-click="tempRemark(item.review_remark)"><span class="remark" ng-bind="item.review_remark"></span></td>
-        <td><a ui-sref="verify_detail({id:item.supplier_id})">查看</a></td>
+        <td><a ng-click="saveStatus()" ui-sref="verify_detail({id:item.supplier_id})">查看</a></td>
     </tr>
     </tbody>
 </table>

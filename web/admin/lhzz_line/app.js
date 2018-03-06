@@ -1,6 +1,6 @@
 var app = angular.module("app", ["ng.ueditor", "ui.router", "ngFileUpload",
     "addclassModule", 'brand_details_module',
-    "mallmagModule", "storemagModule", "addstoreModule", "onlineeditModule", "offlineeditModule", "addbrandModule",
+    "mallmagModule", "addstoreModule", "onlineeditModule", "offlineeditModule", "addbrandModule",
     "styleindexModule", "chooseseriesModule", "addseriesModule", "seriesdetailModule", "addstyleModule",
     "choose_styleModule", "styledetailModule", "merchant_details", "intelligent_index",
     'angularCSS',
@@ -208,7 +208,8 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         .state("store_mag", {       //商家管理
             url: "/store_mag",
             templateUrl: "pages/mall_manage/merchant_manage/store_mag/store_mag.html",
-            css: "pages/mall_manage/merchant_manage/store_mag/css/store_mag.css"
+            css: "pages/mall_manage/merchant_manage/store_mag/css/store_mag.css",
+            controller: "store_mag"
         })
         .state("add_store", {       //添加商家
             url: "/add_store",
