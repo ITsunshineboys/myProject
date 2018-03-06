@@ -114,9 +114,9 @@ app.controller('mall_account_ctrl', function ($scope, $rootScope, _ajax, $state,
         if (newVal.page != oldVal.page) {
 
         } else {
-            if(newVal.keyword === oldVal.keyword){
-                $scope.keyword = ''
-            }
+            // if(newVal.keyword === oldVal.keyword){
+            //     $scope.keyword = ''
+            // }
             console.log($rootScope.curState_name);
             console.log($rootScope.fromState_name);
             $scope.Config.currentPage = 1

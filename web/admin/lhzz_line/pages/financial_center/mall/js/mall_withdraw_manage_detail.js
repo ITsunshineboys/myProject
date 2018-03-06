@@ -43,6 +43,8 @@ app.controller('mall_manage_detail_ctrl', function ($scope, _ajax, $rootScope, $
             history.go(-1)
             if($rootScope.fromState_name == 'mall_money_list'){
                 sessionStorage.setItem('isTrueFlag',true)
+            }else if($rootScope.fromState_name == 'mall_withdraw_manage'){
+                sessionStorage.setItem('isMallFlag',true)
             }
         }
     }
@@ -69,5 +71,6 @@ app.controller('mall_manage_detail_ctrl', function ($scope, _ajax, $rootScope, $
         $scope.submitted = false
         history.go(-1)
         sessionStorage.removeItem('isTrueFlag')
+        sessionStorage.removeItem('isMallFlag')
     }
 })

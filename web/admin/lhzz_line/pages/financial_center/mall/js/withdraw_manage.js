@@ -1,4 +1,9 @@
 app.controller('mall_withdraw_manage_ctrl',function ($scope,$stateParams,_ajax,$uibModal,$state,$rootScope) {
+    let fromState = $rootScope.fromState_name == 'mall_withdraw_manage_detail'
+    if(!fromState){
+        sessionStorage.removeItem('mallWithdrawManage')
+        sessionStorage.removeItem('isMallFlag')
+    }
     //面包屑
     $rootScope.crumbs = [
         {
@@ -14,12 +19,9 @@ app.controller('mall_withdraw_manage_ctrl',function ($scope,$stateParams,_ajax,$
     ]
     $scope.vm = $scope
     $scope.cash_data = JSON.parse(sessionStorage.getItem('mall_finance_data'))
-    //时间类型
-    _ajax.get('/site/time-types',{},function (res) {
-        console.log(res)
-        $scope.time_types = res.data.time_types
-    })
     $scope.keyword = ''
+    let mallWithdrawManage = sessionStorage.getItem('mallWithdrawManage')
+    let isFlag = sessionStorage.getItem('isMallFlag')
     //状态选择
     $scope.all_status = [
         {num:'0',status:'全部'},
@@ -45,40 +47,64 @@ app.controller('mall_withdraw_manage_ctrl',function ($scope,$stateParams,_ajax,$
         })
     };
     $scope.params = {
-        time_type: $stateParams.time_type,
-        status: $stateParams.status,
+        time_type: mallWithdrawManage!=null&&!isFlag?JSON.parse(mallWithdrawManage).time_type:$stateParams.time_type,
+        status: mallWithdrawManage!=null&&!isFlag?JSON.parse(mallWithdrawManage).status:$stateParams.status,
         time_start: '',
         time_end: '',
         search: ''
     };
-    //获取列表数据
-    $scope.getMallList = function (index) {
-        if(index == 1){
-            if($scope.params.time_type == 'custom'){
-                if($scope.params.time_start!=''||$scope.params.time_end!=''){
-                    $scope.Config.currentPage = 1
-                    tablePages()
-                }
-            }else{
-                $scope.params.time_start = ''
-                $scope.params.time_end = ''
-                $scope.Config.currentPage = 1
-                tablePages()
+    //时间类型
+    _ajax.get('/site/time-types',{},function (res) {
+        console.log(res)
+        $scope.time_types = res.data.time_types
+        if(!isFlag){
+            if(mallWithdrawManage != null){
+                let params = JSON.parse(mallWithdrawManage)
+                $scope.params = params
+                $scope.keyword = params.search
+                $scope.Config.currentPage = params.page
             }
-        }else{
-            $scope.Config.currentPage = 1
-            tablePages()
-        }
-        $scope.keyword = ''
-        $scope.params.search = ''
-    }
-    $scope.$watch('keyword',function (newVal,oldVal) {
-        if(newVal == ''&&oldVal!=''){
-            $scope.params.search = ''
-            $scope.Config.currentPage = 1
-            tablePages()
         }
     })
+    $scope.$watch('params',function (newVal,oldVal) {
+        if (newVal.page != oldVal.page) {
+
+        } else {
+            // if(newVal.keyword === oldVal.keyword){
+            //     $scope.keyword = ''
+            // }
+            $scope.Config.currentPage = 1
+            tablePages()
+        }
+    },true)
+    //获取列表数据
+    // $scope.getMallList = function (index) {
+    //     if(index == 1){
+    //         if($scope.params.time_type == 'custom'){
+    //             if($scope.params.time_start!=''||$scope.params.time_end!=''){
+    //                 $scope.Config.currentPage = 1
+    //                 tablePages()
+    //             }
+    //         }else{
+    //             $scope.params.time_start = ''
+    //             $scope.params.time_end = ''
+    //             $scope.Config.currentPage = 1
+    //             tablePages()
+    //         }
+    //     }else{
+    //         $scope.Config.currentPage = 1
+    //         tablePages()
+    //     }
+    //     $scope.keyword = ''
+    //     $scope.params.search = ''
+    // }
+    // $scope.$watch('keyword',function (newVal,oldVal) {
+    //     if(newVal == ''&&oldVal!=''){
+    //         $scope.params.search = ''
+    //         $scope.Config.currentPage = 1
+    //         tablePages()
+    //     }
+    // })
     $scope.inquire = function () {
         if($scope.keyword!=''){
             $scope.params.search = $scope.keyword
@@ -88,6 +114,14 @@ app.controller('mall_withdraw_manage_ctrl',function ($scope,$stateParams,_ajax,$
             $scope.params.status = '0'
             $scope.Config.currentPage = 1
             tablePages()
+        }else if($scope.params.time_type == 'all'&&
+        $scope.params.status==0&&$scope.keyword == ''){
+            $scope.params.keyword = ''
+            $scope.Config.currentPage = 1
         }
+    }
+    //跳转页面时保存状态
+    $scope.goInner = function () {
+        sessionStorage.setItem('mallWithdrawManage',JSON.stringify($scope.params))
     }
 })
