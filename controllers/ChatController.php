@@ -100,6 +100,7 @@ class ChatController extends Controller
         }
         list($u_id, $role_id) = $user;
         $code=1000;
+        $size=\Yii::$app->request->get('size',[]);
         $path_data=\Yii::$app->request->get('path_data');
         $to_uid=trim(\Yii::$app->request->get('to_uid'));
         $to_role_id=trim(\Yii::$app->request->get('role_id'));
@@ -141,7 +142,7 @@ class ChatController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $code=UserChat::SendImg($send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_uid,$filepath,$to_role_id);
+        $code=UserChat::SendImg($send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_uid,$filepath,$to_role_id,$size);
         return Json::encode([
             'code'=>$code,
             'msg'=>$code==200?'ok':\Yii::$app->params['errorCodes'][$code]
