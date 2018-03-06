@@ -1,4 +1,10 @@
 app.controller('account_ctrl',function ($state,$rootScope,$scope,_ajax) {
+    let fromState = $rootScope.fromState_name == 'account_detail'||$rootScope.fromState_name == 'freeze_money'
+    ||$rootScope.fromState_name == 'freeze_list' ||$rootScope.fromState_name == 'money_list'
+    if(!fromState){
+        sessionStorage.removeItem('financeAccount')
+    }
+    let financeAccount = sessionStorage.getItem('financeAccount')
     //面包屑
     $rootScope.crumbs = [
         {
@@ -42,25 +48,51 @@ app.controller('account_ctrl',function ($state,$rootScope,$scope,_ajax) {
         status:$scope.all_status[0].num,
         keyword:''
     }
-    $scope.getAccount = function () {
-        $scope.Config.currentPage = 1
-        $scope.params.keyword = ''
-        $scope.keyword = ''
-        tablePages()
+    if(financeAccount != null){
+        let params = JSON.parse(financeAccount)
+        $scope.params = params
+        $scope.keyword = params.keyword
+        $scope.Config.currentPage = params.page
     }
+    // $scope.getAccount = function () {
+    //     $scope.Config.currentPage = 1
+    //     $scope.params.keyword = ''
+    //     $scope.keyword = ''
+    //     tablePages()
+    // }
+    $scope.$watch('params',function (newVal,oldVal) {
+        if (newVal.page != oldVal.page) {
+
+        } else {
+            // if(newVal.keyword === oldVal.keyword){
+            //     $scope.keyword = ''
+            // }
+            if(newVal.status != oldVal.status){
+                $scope.Config.currentPage = 1
+            }
+            tablePages()
+        }
+    },true)
     $scope.getAccountList = function () {
-        $scope.Config.currentPage = 1
         if($scope.keyword!=''){
             $scope.params.keyword = $scope.keyword
             $scope.params.status = $scope.all_status[0].num
+            $scope.Config.currentPage = 1
             tablePages()
+        }else if ($scope.params.status == 0&&$scope.keyword == ''){
+            $scope.params.keyword = ''
+            $scope.Config.currentPage = 1
         }
     }
-    $scope.$watch('keyword',function (newVal,oldVal) {
-        if(newVal == ''&&oldVal!=''){
-            $scope.Config.currentPage = 1
-            $scope.params.keyword = ''
-            tablePages()
-        }
-    })
+    // $scope.$watch('keyword',function (newVal,oldVal) {
+    //     if(newVal == ''&&oldVal!=''){
+    //         $scope.Config.currentPage = 1
+    //         $scope.params.keyword = ''
+    //         tablePages()
+    //     }
+    // })
+    //跳转内页保存状态
+    $scope.goInner = function () {
+        sessionStorage.setItem('financeAccount',JSON.stringify($scope.params))
+    }
 })

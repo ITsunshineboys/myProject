@@ -1,4 +1,11 @@
 app.controller('withdraw_manage_ctrl',function ($rootScope,$state,_ajax,$scope,$stateParams) {
+    let fromState = $rootScope.fromState_name == 'withdraw_detail'
+    if(!fromState){
+        sessionStorage.removeItem('withdrawDetail')
+        sessionStorage.removeItem('isOwnerFlag')
+    }
+    let withdrawDetail = sessionStorage.getItem('withdrawDetail')
+    let isOwnerFlag = sessionStorage.getItem('isOwnerFlag')
     console.log($stateParams)
     $rootScope.crumbs = [
         {
@@ -19,6 +26,14 @@ app.controller('withdraw_manage_ctrl',function ($rootScope,$state,_ajax,$scope,$
     _ajax.get('/site/time-types',{},function (res) {
         console.log(res)
         $scope.time_types = res.data.time_types
+        if(!isOwnerFlag){
+            if(withdrawDetail != null){
+                let params = JSON.parse(withdrawDetail)
+                $scope.params = params
+                $scope.keyword = params.keyword
+                $scope.Config.currentPage = params.page
+            }
+        }
     })
     $scope.keyword = ''
     //状态选择
@@ -34,7 +49,7 @@ app.controller('withdraw_manage_ctrl',function ($rootScope,$state,_ajax,$scope,$
         itemsPerPage: 12,
         currentPage: 1,
         onChange: function () {
-            $scope.params.time_type!=''&&$scope.params.status!=''?tablePages():'';
+            tablePages()
         }
     }
     let tablePages = function () {
@@ -46,39 +61,55 @@ app.controller('withdraw_manage_ctrl',function ($rootScope,$state,_ajax,$scope,$
         })
     };
     $scope.params = {
-        time_type: $stateParams.time_type,
+        time_type: withdrawDetail!=null&&!isOwnerFlag?JSON.parse(withdrawDetail).time_type:$stateParams.time_type,
         time_start: '',
         time_end: '',
-        status:$stateParams.status,
+        status:withdrawDetail!=null&&!isOwnerFlag?JSON.parse(withdrawDetail).status:$stateParams.status,
         keyword:''
     };
-    $scope.getWithdraw = function (index) {
-        if(index == 1){
-            if($scope.params.time_type == 'custom'){
-                if($scope.params.time_start!=''||$scope.params.time_end!=''){
-                    $scope.Config.currentPage = 1
-                    tablePages()
-                }
-            }else{
-                $scope.params.time_start = ''
-                $scope.params.time_end = ''
-                $scope.Config.currentPage = 1
-                tablePages()
+    // $scope.getWithdraw = function (index) {
+    //     if(index == 1){
+    //         if($scope.params.time_type == 'custom'){
+    //             if($scope.params.time_start!=''||$scope.params.time_end!=''){
+    //                 $scope.Config.currentPage = 1
+    //                 tablePages()
+    //             }
+    //         }else{
+    //             $scope.params.time_start = ''
+    //             $scope.params.time_end = ''
+    //             $scope.Config.currentPage = 1
+    //             tablePages()
+    //         }
+    //     }else{
+    //         $scope.Config.currentPage = 1
+    //         tablePages()
+    //     }
+    //     $scope.keyword = ''
+    //     $scope.params.keyword = ''
+    // }
+    // $scope.$watch('keyword',function (newVal,oldVal) {
+    //     if(newVal == ''&&oldVal!=''){
+    //         $scope.params.keyword = ''
+    //         $scope.Config.currentPage = 1
+    //         tablePages()
+    //     }
+    // })
+    $scope.$watch('params',function (newVal,oldVal) {
+        if (newVal.page != oldVal.page) {
+
+        } else {
+            if(newVal.keyword === oldVal.keyword){
+                $scope.keyword = ''
             }
-        }else{
             $scope.Config.currentPage = 1
             tablePages()
         }
-        $scope.keyword = ''
-        $scope.params.keyword = ''
-    }
-    $scope.$watch('keyword',function (newVal,oldVal) {
-        if(newVal == ''&&oldVal!=''){
-            $scope.params.keyword = ''
-            $scope.Config.currentPage = 1
-            tablePages()
+        if(newVal.time_type!='custom'){
+            newVal.time_start = ''
+            newVal.time_end = ''
+            return
         }
-    })
+    },true)
     $scope.inquire = function () {
         if($scope.keyword!=''){
             $scope.params.keyword = $scope.keyword
@@ -88,6 +119,14 @@ app.controller('withdraw_manage_ctrl',function ($rootScope,$state,_ajax,$scope,$
             $scope.params.status = '0'
             $scope.Config.currentPage = 1
             tablePages()
+        }else if($scope.params.time_type == 'all'&&
+            $scope.params.status==0&&$scope.keyword == ''){
+            $scope.params.search = ''
+            $scope.Config.currentPage = 1
         }
+    }
+    //跳转内页保存状态
+    $scope.goInner = function () {
+        sessionStorage.setItem('withdrawDetail',JSON.stringify($scope.params))
     }
 })

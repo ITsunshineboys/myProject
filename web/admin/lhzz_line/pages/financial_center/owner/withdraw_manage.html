@@ -1,5 +1,5 @@
 <div class="withdraw_manage">
-    <p><span>今日已提现：{{owner_finance_data.cashes_today | currency:'￥'}}</span><span>已处理提现：{{owner_finance_data.payed_cashes_count}}</span><span>未处理提现：{{owner_finance_data.not_payed_cashes_count}}</span>
+    <p><span style="margin-right: 10px;">今日已提现：{{owner_finance_data.cashes_today | currency:'￥'}}</span><span style="margin-right: 10px;">已处理提现：{{owner_finance_data.payed_cashes_count}}</span><span style="margin-right: 10px;">未处理提现：{{owner_finance_data.not_payed_cashes_count}}</span>
     </p>
     <div class="search form-inline clearfix">
         <select ng-model="params.time_type" ng-options="item.value as item.name for item in time_types"
@@ -42,7 +42,7 @@
             <td>{{item.status}}</td>
             <td>{{item.nickname}}</td>
             <td>{{item.aite_cube_no}}</td>
-            <td><a ui-sref="withdraw_detail({transaction_no:item.transaction_no})">查看</a></td>
+            <td><a ng-click="goInner()" ui-sref="withdraw_detail({transaction_no:item.transaction_no})">查看</a></td>
         </tr>
     </table>
     <tm-pagination conf="Config"></tm-pagination>

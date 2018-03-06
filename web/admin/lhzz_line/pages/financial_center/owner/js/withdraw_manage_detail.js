@@ -41,6 +41,9 @@ app.controller('withdraw_detail_ctrl', function ($uibModal,$rootScope, $state, $
         $scope.common_house = function () {
         $uibModalInstance.close()
         history.go(-1)
+            if($rootScope.fromState_name == 'withdraw_manage'){
+            sessionStorage.setItem('isOwnerFlag',true)
+            }
     }
 }
 all_modal.$inject = ['$scope', '$uibModalInstance']
@@ -65,5 +68,6 @@ all_modal.$inject = ['$scope', '$uibModalInstance']
     $scope.goPrev = function () {
         $scope.submitted = false
         history.go(-1)
+        sessionStorage.removeItem('isOwnerFlag')
     }
 })

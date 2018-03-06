@@ -89,6 +89,11 @@ app.controller('recorded_list_ctrl',function ($scope,$rootScope,$state,$statePar
             $scope.Config.currentPage = 1
             tablePages()
         }
+        if(newVal.time_type!='custom'){
+            newVal.time_start = ''
+            newVal.time_end = ''
+            return
+        }
     }, true)
     $scope.inquire = function () {
         if($scope.keyword!=''){

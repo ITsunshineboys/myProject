@@ -1,7 +1,7 @@
 <div class="account">
     <div class="search form-inline clearfix">
         <span>状态</span>
-        <select ng-model="params.status" ng-change="getAccount()" ng-options="item.num as item.status for item in all_status" ng-change="getCategory(1)"  class="form-control"></select>
+        <select ng-model="params.status" ng-options="item.num as item.status for item in all_status" ng-change="getCategory(1)"  class="form-control"></select>
         <div class="form-group pull-right">
             <div class="input-group">
                 <input class="form-control" ng-model="vm.keyword" placeholder="搜索业主名称、手机号或魔方号" type="text">
@@ -25,7 +25,7 @@
             <td>{{item.mobile}}</td>
             <td>{{item.balance}}</td>
             <td ng-class="{true:'blue',false:'red'}[item.status=='正常']">{{item.status}}</td>
-            <td><a ui-sref="account_detail({id:item.id})">详情</a></td>
+            <td><a ng-click="goInner()" ui-sref="account_detail({id:item.id})">详情</a></td>
         </tr>
     </table>
     <tm-pagination conf="Config"></tm-pagination>

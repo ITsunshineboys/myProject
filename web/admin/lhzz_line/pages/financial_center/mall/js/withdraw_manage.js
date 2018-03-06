@@ -76,6 +76,11 @@ app.controller('mall_withdraw_manage_ctrl',function ($scope,$stateParams,_ajax,$
             $scope.Config.currentPage = 1
             tablePages()
         }
+        if(newVal.time_type!='custom'){
+            newVal.time_start = ''
+            newVal.time_end = ''
+            return
+        }
     },true)
     //获取列表数据
     // $scope.getMallList = function (index) {
