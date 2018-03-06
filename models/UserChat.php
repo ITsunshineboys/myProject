@@ -196,15 +196,15 @@ class UserChat extends \yii\db\ActiveRecord
      * @param $filepath
      * @return int|mixed
      */
-    public static function SendImg($username,$send_uid,$send_role_id,$to_uid,$filepath,$to_role_id){
-
+    public static function SendImg($username,$send_uid,$send_role_id,$to_uid,$filepath,$to_role_id,$size){
+        $size=implode(',',$size);
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $trans = \Yii::$app->db->beginTransaction();
         try {
             $chat_hx = new ChatService();
             $from = $username;
             $target = [$to_user['username']];
-            $re = $chat_hx->sendImage($filepath,$from, $target_type = 'users', $target);
+            $re = $chat_hx->sendImage($filepath,$from, $target_type = 'users', $target,$size);
             if($re) {
                 $chat_record = new ChatRecord();
                 $chat_record->to_uid = $to_uid;
@@ -215,6 +215,7 @@ class UserChat extends \yii\db\ActiveRecord
                 $chat_record->status=0;
                 $chat_record->send_time = time();
                 $chat_record->type =  self::TYPE_IMG;
+                $chat_record->size=$size;
                 if (!$chat_record->save(false)) {
                     $trans->rollBack();
                     return $code = 500;
