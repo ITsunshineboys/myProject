@@ -507,7 +507,7 @@ class ChatService
      * @param $ext
      * @return mixed
      */
-    function sendImage($filePath, $from = "admin", $target_type, $target,$size)
+    function sendImage($filePath, $from = "admin", $target_type, $target,$size=['width'=>'480','height'=>720])
     {
         $result = $this->uploadFile($filePath);
         $uri = $result['uri'];
