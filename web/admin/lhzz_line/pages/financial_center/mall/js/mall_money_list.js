@@ -1,4 +1,9 @@
 app.controller('mall_money_list_ctrl',function ($scope,$rootScope,$state,$stateParams,$uibModal,_ajax) {
+    let fromState = $rootScope.fromState_name === 'mall_withdraw_manage_detail';  // 判断页面是否从详情页进到当前页面
+    if (!fromState) {
+        sessionStorage.removeItem('mallMoneyListStatus');
+        sessionStorage.removeItem('ifTrueFlag')
+    }
     //面包屑
     $rootScope.crumbs = [
         {
@@ -39,6 +44,16 @@ app.controller('mall_money_list_ctrl',function ($scope,$rootScope,$state,$stateP
         console.log(res)
         $scope.time_types = res.data.time_types
         $scope.params.time_type = $scope.time_types[0].value
+        let mallMoneyList = sessionStorage.getItem('mallMoneyListStatus')
+        let isFlag = sessionStorage.getItem('isTrueFlag')
+        if(!isFlag){
+            if(mallMoneyList != null){
+                let params = JSON.parse(mallMoneyList)
+                $scope.params = params
+                $scope.keyword = params.keyword
+                $scope.Config.currentPage = params.page
+            }
+        }
         // tablePages()
     })
     $scope.all_type = [
@@ -66,42 +81,53 @@ app.controller('mall_money_list_ctrl',function ($scope,$rootScope,$state,$stateP
             $scope.Config.totalItems = res.data.count
         })
     };
-    $scope.changeMoneyList = function (index) {
-        if($scope.params.uid != ''){
-            $scope.Config.currentPage = 1
-            if(index == 1){
-                if($scope.params.time_type != 'custom'){
-                    $scope.params.start_time = ''
-                    $scope.params.end_time = ''
-                    $scope.Config.currentPage = 1
-                    tablePages()
-                }else{
-                    if($scope.params.start_time!=''||$scope.params.end_time!=''){
-                        $scope.Config.currentPage = 1
-                        tablePages()
-                    }
-                }
+    $scope.$watch('params',function (newVal,oldVal) {
+        if (newVal.page != oldVal.page) {
+
+        } else {
+            if(newVal.keyword === oldVal.keyword){
                 $scope.keyword = ''
-                $scope.params.keyword = ''
-            }else if(index == 2){
-                $scope.params.sort_time = $scope.params.sort_time==1?2:1
-                $scope.Config.currentPage = 1
-                tablePages()
-            }else{
-                $scope.Config.currentPage = 1
-                tablePages()
-                $scope.keyword = ''
-                $scope.params.keyword = ''
             }
-        }
-    }
-    $scope.$watch('keyword',function (newVal,oldVal) {
-        if(newVal == ''&&oldVal!=''&&$scope.params.uid!=''){
             $scope.Config.currentPage = 1
-            $scope.params.keyword = newVal
             tablePages()
         }
-    })
+    },true)
+    // $scope.changeMoneyList = function (index) {
+    //     if($scope.params.uid != ''){
+    //         $scope.Config.currentPage = 1
+    //         if(index == 1){
+    //             if($scope.params.time_type != 'custom'){
+    //                 $scope.params.start_time = ''
+    //                 $scope.params.end_time = ''
+    //                 $scope.Config.currentPage = 1
+    //                 tablePages()
+    //             }else{
+    //                 if($scope.params.start_time!=''||$scope.params.end_time!=''){
+    //                     $scope.Config.currentPage = 1
+    //                     tablePages()
+    //                 }
+    //             }
+    //             $scope.keyword = ''
+    //             $scope.params.keyword = ''
+    //         }else if(index == 2){
+    //             $scope.params.sort_time = $scope.params.sort_time==1?2:1
+    //             $scope.Config.currentPage = 1
+    //             tablePages()
+    //         }else{
+    //             $scope.Config.currentPage = 1
+    //             tablePages()
+    //             $scope.keyword = ''
+    //             $scope.params.keyword = ''
+    //         }
+    //     }
+    // }
+    // $scope.$watch('keyword',function (newVal,oldVal) {
+    //     if(newVal == ''&&oldVal!=''&&$scope.params.uid!=''){
+    //         $scope.Config.currentPage = 1
+    //         $scope.params.keyword = newVal
+    //         tablePages()
+    //     }
+    // })
     //关键词查询
     $scope.inquire = function () {
         if($scope.keyword!=''){
@@ -112,6 +138,10 @@ app.controller('mall_money_list_ctrl',function ($scope,$rootScope,$state,$stateP
             $scope.params.start_time = ''
             $scope.params.end_time = ''
             tablePages()
+        }else if($scope.params.time_type == 'all'&&$scope.params.type == 0&&
+        $scope.keyword == ''){
+            $scope.params.keyword = ''
+            $scope.Config.currentPage = 1
         }
     }
     // 查看货款详情
@@ -135,6 +165,7 @@ app.controller('mall_money_list_ctrl',function ($scope,$rootScope,$state,$stateP
                 controller: all_modal
             })
         }else{
+            sessionStorage.setItem('mallMoneyListStatus',JSON.stringify($scope.params))
             $state.go('mall_withdraw_manage_detail',{transaction_no: item.transaction_no})
         }
     }

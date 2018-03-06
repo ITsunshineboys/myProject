@@ -41,6 +41,9 @@ app.controller('mall_manage_detail_ctrl', function ($scope, _ajax, $rootScope, $
         $scope.common_house = function () {
             $uibModalInstance.close()
             history.go(-1)
+            if($rootScope.fromState_name == 'mall_money_list'){
+                sessionStorage.setItem('isTrueFlag',true)
+            }
         }
     }
     all_modal.$inject = ['$scope', '$uibModalInstance']
@@ -65,5 +68,6 @@ app.controller('mall_manage_detail_ctrl', function ($scope, _ajax, $rootScope, $
     $scope.goPrev = function () {
         $scope.submitted = false
         history.go(-1)
+        sessionStorage.removeItem('isTrueFlag')
     }
 })
