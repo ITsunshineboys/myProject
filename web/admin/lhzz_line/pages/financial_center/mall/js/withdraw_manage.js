@@ -70,9 +70,9 @@ app.controller('mall_withdraw_manage_ctrl',function ($scope,$stateParams,_ajax,$
         if (newVal.page != oldVal.page) {
 
         } else {
-            // if(newVal.keyword === oldVal.keyword){
-            //     $scope.keyword = ''
-            // }
+            if(newVal.search === oldVal.search){
+                $scope.keyword = ''
+            }
             $scope.Config.currentPage = 1
             tablePages()
         }
@@ -116,7 +116,7 @@ app.controller('mall_withdraw_manage_ctrl',function ($scope,$stateParams,_ajax,$
             tablePages()
         }else if($scope.params.time_type == 'all'&&
         $scope.params.status==0&&$scope.keyword == ''){
-            $scope.params.keyword = ''
+            $scope.params.search = ''
             $scope.Config.currentPage = 1
         }
     }

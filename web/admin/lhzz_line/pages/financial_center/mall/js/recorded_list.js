@@ -1,4 +1,9 @@
 app.controller('recorded_list_ctrl',function ($scope,$rootScope,$state,$stateParams,$uibModal,_ajax) {
+    let fromState = $rootScope.fromState_name === 'order_details'
+    if(!fromState){
+        sessionStorage.removeItem('mallRecordedDetail')
+    }
+    let mallRecordedDetail = sessionStorage.getItem('mallRecordedDetail')
     //面包屑
     $rootScope.crumbs = [
         {
@@ -14,7 +19,7 @@ app.controller('recorded_list_ctrl',function ($scope,$rootScope,$state,$statePar
     ]
     $scope.vm = $scope
     $scope.params = {
-        time_type: 'today',
+        time_type:mallRecordedDetail!=null?JSON.parse(mallRecordedDetail).time_type:'today',
         time_start: '',
         time_end: '',
         search: ''
@@ -24,8 +29,14 @@ app.controller('recorded_list_ctrl',function ($scope,$rootScope,$state,$statePar
     _ajax.get('/site/time-types',{},function (res) {
         console.log(res)
         $scope.time_types = res.data.time_types
+        if(mallRecordedDetail != null){
+            let params = JSON.parse(mallRecordedDetail)
+            $scope.params = params
+            $scope.keyword = params.search
+            $scope.Config.currentPage = params.page
+        }
         // $scope.params.time_type = $scope.time_types[0].value
-        tablePages()
+        // tablePages()
     })
     /*分页配置*/
     $scope.Config = {
@@ -44,30 +55,41 @@ app.controller('recorded_list_ctrl',function ($scope,$rootScope,$state,$statePar
             $scope.Config.totalItems = res.data.count
         })
     };
-    $scope.getRecordList = function () {
-        if($scope.params.time_type!=''){
-            if($scope.params.time_type == 'custom'){
-                if($scope.params.time_start!=''||$scope.params.time_end!=''){
-                    $scope.Config.currentPage = 1
-                    tablePages()
-                }
-            }else{
-                $scope.params.time_start = ''
-                $scope.params.time_end = ''
+    // $scope.getRecordList = function () {
+    //     if($scope.params.time_type!=''){
+    //         if($scope.params.time_type == 'custom'){
+    //             if($scope.params.time_start!=''||$scope.params.time_end!=''){
+    //                 $scope.Config.currentPage = 1
+    //                 tablePages()
+    //             }
+    //         }else{
+    //             $scope.params.time_start = ''
+    //             $scope.params.time_end = ''
+    //             $scope.keyword = ''
+    //             $scope.params.search = ''
+    //             $scope.Config.currentPage = 1
+    //             tablePages()
+    //         }
+    //     }
+    // }
+    // $scope.$watch('keyword',function (newVal,oldVal) {
+    //     if(newVal==''&&oldVal!=''&&$scope.params.time_type!=''){
+    //         $scope.Config.currentPage = 1
+    //         $scope.params.search = ''
+    //         tablePages()
+    //     }
+    // })
+    $scope.$watch('params', function (newVal, oldVal) {
+        if (newVal.page != oldVal.page) {
+
+        } else {
+            if(newVal.search === oldVal.search){
                 $scope.keyword = ''
-                $scope.params.search = ''
-                $scope.Config.currentPage = 1
-                tablePages()
             }
-        }
-    }
-    $scope.$watch('keyword',function (newVal,oldVal) {
-        if(newVal==''&&oldVal!=''&&$scope.params.time_type!=''){
             $scope.Config.currentPage = 1
-            $scope.params.search = ''
             tablePages()
         }
-    })
+    }, true)
     $scope.inquire = function () {
         if($scope.keyword!=''){
             $scope.params = {
@@ -78,6 +100,13 @@ app.controller('recorded_list_ctrl',function ($scope,$rootScope,$state,$statePar
             };
             $scope.Config.currentPage = 1
             tablePages()
+        }else if($scope.params.time_type == 'all'&&$scope.keyword == ''){
+            $scope.params.search = ''
+            $scope.Config.currentPage = 1
         }
+    }
+    //跳转页面保存数据
+    $scope.goInner = function () {
+        sessionStorage.setItem('mallRecordedDetail',JSON.stringify($scope.params))
     }
 })
