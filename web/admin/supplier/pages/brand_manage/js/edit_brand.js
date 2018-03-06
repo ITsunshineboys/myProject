@@ -229,6 +229,7 @@ angular.module("edit_brand_module",[])
 				},function (res) {
 					if(res.code==200){
 						$('#edit_modal').modal('show');
+						sessionStorage.removeItem('saveStatus');
 					}else{
 						$scope.edit_title_red=true;
 						$anchorScroll.yOffset = 150;

@@ -37,7 +37,7 @@
                 <td>{{item.lost_money}}</td>
                 <td>{{item.status}}</td>
                 <td class="blue supplier_reason">{{item.supplier_reason}}</td>
-                <td><a ui-sref="wallet_detail({transaction_no:item.transaction_no})">查看</a></td>
+                <td><a ng-click="saveStatus()" ui-sref="wallet_detail({transaction_no:item.transaction_no})">查看</a></td>
             </tr>
             </tbody>
         </table>

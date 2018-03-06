@@ -42,9 +42,8 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: "pages/supplier_wallet/supplier_wallet.html"
         })
         .state("wallet_detail", {   //钱包详情
-            url: "/wallet_detail",
+            url: "/wallet_detail?transaction_no&income",
             templateUrl: "pages/supplier_wallet/wallet_detail.html",
-            params:{transaction_no:null,income:null}
         })
         .state("income_pay", {   //收支详情
             url: "/income_pay",
@@ -228,3 +227,13 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             }
         }
     })
+		.run(["$rootScope", "$state", function ($rootScope, $state) {
+			$rootScope.$on("$stateChangeSuccess", function (event, toState, toParams, fromState, fromParams) {
+				document.body.scrollTop = document.documentElement.scrollTop = 0
+				$rootScope.fromState_name = fromState.name
+				$rootScope.curState_name = toState.name
+			})
+			$rootScope.goPrev = function () {
+				$state.go($rootScope.fromState_name)
+			}
+		}]);

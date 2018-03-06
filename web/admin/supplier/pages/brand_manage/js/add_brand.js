@@ -230,6 +230,7 @@ angular.module("add_brand_module",[])
 					console.log(res);
 					if(res.code==200){
 						$('#add_brand_modal').modal('show');
+						sessionStorage.removeItem('saveStatus');
 					}else{
 						$scope.brand_name_flag=true;
 						$anchorScroll.yOffset = 150;

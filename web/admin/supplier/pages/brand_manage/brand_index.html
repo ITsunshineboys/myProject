@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="pages/brand_manage/css/brand_index.css">
 <div ng-controller="brand_index_ctrl">
     <div class="form-inline clearfix">
-        <button class="btn btn-primary" ui-sref="add_brand"><i class="iconfont icon-add"></i> 添加</button>
+        <button class="btn btn-primary" ui-sref="add_brand" ng-click="saveStatus()"><i class="iconfont icon-add"></i> 添加</button>
     </div>
     <table class="table table-hover table-responsive">
         <thead>
@@ -26,7 +26,7 @@
             <td>{{item.create_time}}</td>
             <td ng-class="{'blue':item.review_status=='待审核','red':item.review_status=='不通过','green':item.review_status=='通过'}">{{item.review_status}}</td>
             <td class="ellipsis"><a ng-click=remark(item.reason)>{{item.reason}}</a></td>
-            <td><a ui-sref="brand_detail({brand_id:{{item.id}}})">查看</a></td>
+            <td><a ng-click="saveStatus()" ui-sref="brand_detail({brand_id:{{item.id}}})">查看</a></td>
         </tr>
         </tbody>
     </table>
