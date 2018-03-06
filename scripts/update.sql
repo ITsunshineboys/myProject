@@ -326,4 +326,4 @@ CREATE TABLE `fixed_grabbing_goods` (
 alter table  fixed_grabbing_goods change operator operator_id int(10) not null COMMENT '操作人id';
 
 --all 2018.03.06 yr
-ALTER TABLE `chat_record` ADD `size` VARCHAR(12) DEFAULT NULL COMMENT '图片大小';
+ALTER TABLE `chat_record` ADD `size` VARCHAR(12) NOT NULL DEFAULT '' COMMENT '图片大小';
